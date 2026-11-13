@@ -1,0 +1,41 @@
+---
+title: ncurses documentation
+description: Guides and every manual page for ncurses, the new curses library.
+template: splash
+hero:
+  tagline: The guides and every manual page for ncurses, the free implementation of the System V curses API, in one searchable site.
+  actions:
+    - text: Forms library guide
+      link: guides/forms/
+      icon: right-arrow
+    - text: Library reference
+      link: man/3x/ncurses/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Written by the ncurses authors
+
+ncurses and its documentation are the work of its maintainer and contributors. All the text on this site is theirs.
+
+<CardGrid>
+  <Card title="Maintainer">
+    **Thomas E. Dickey** has maintained ncurses since 1.9.9e and wrote or revised most of the manual pages.
+  </Card>
+  <Card title="Principal authors">
+    **Juergen Pfeifer**, **Eric S. Raymond**, **Alexander V. Lukyanov**, **G. Branden Robinson**, **Philippe Blain**, **Sven Verdoolaege** and **Nicolas Boulenguez**, in the order of their contributions in the project's AUTHORS file.
+  </Card>
+  <Card title="Originators">
+    **Pavel Curtis** originated ncurses, and **Zeyd M. Ben-Halim** was its original maintainer.
+  </Card>
+  <Card title="Guides">
+    *Writing Programs with NCURSES* by **Eric S. Raymond** and **Zeyd M. Ben-Halim**, *A Hacker's Guide to NCURSES* by **Eric S. Raymond**, and the *NCURSES Programming HOWTO* by **Pradeep Padala**.
+  </Card>
+</CardGrid>
+
+Many more people contributed patches, reports and analysis. The project's NEWS file records each of them. See [Credits](credits/) for the full list and sources.
+
+---
+
+*Edited by [betsalel-williamson](https://github.com/betsalel-williamson) with [Merlon Docs](https://github.com/Merlon-Docs/merlon): the existing documentation, reorganized so each fact appears once. The manual pages are generated from the same troff sources the project ships. This is an unofficial edition. The official ncurses site is [invisible-island.net/ncurses](https://invisible-island.net/ncurses/).*
