@@ -1,0 +1,61 @@
+.SH OPTIONS
+.TP 9n \" "-T type" + 2n
+.B \-S
+retrieves more than one capability per invocation of
+.BR \%@TPUT@ "."
+The capabilities must be passed to
+.B \%@TPUT@
+from the standard
+input stream instead of from the command line
+(see section \*(``EXAMPLES\*('' below).
+Only one
+.I cap-code
+is allowed per line.
+The
+.B \-S
+option changes the meanings of the
+.B 0
+and
+.B 1
+exit statuses
+(see section \*(``EXIT STATUS\*('' below).
+.IP
+Some capabilities use string parameters rather than numeric ones.
+.B \%@TPUT@
+employs a built-in table and the presence of parameters
+in its input to decide how to interpret them,
+and whether to use \fB\%tparm\fP(3X).
+.TP
+.BI \-T\  type
+indicates the terminal's
+.IR type "."
+Normally this option is unnecessary,
+because a default is taken from the
+.I TERM
+environment variable.
+If specified,
+the environment variables
+.I LINES
+and
+.I \%COLUMNS
+are also ignored.
+.TP
+.B \-v
+causes
+.B \%@TPUT@
+to operate verbosely,
+reporting warnings.
+.TP
+.B \-V
+reports the version of
+.I \%ncurses
+associated with
+.BR \%@TPUT@ ","
+and exits with a successful status.
+.TP
+.B \-x
+prevents
+\%\*(``\c
+.B "@TPUT@ clear\c"
+\*(''
+from attempting to clear the scrollback buffer.

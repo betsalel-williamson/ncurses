@@ -1,0 +1,626 @@
+.SH ENVIRONMENT
+The following symbols from the process environment customize the
+runtime behavior of
+.I \%ncurses
+applications.
+The library may be configured to disregard the variables
+.IR \%TERMINFO ","
+.IR \%TERMINFO_DIRS ","
+.IR \%TERMPATH ","
+and
+.I HOME
+if the user is the superuser (root),
+or if the application uses \fI\%setuid\fP(2) or \fI\%setgid\fP(2).
+.SS "\fIBAUDRATE\fP"
+The debugging library checks this variable when the application has
+redirected output to a file.
+.I \%ncurses
+interprets its integral value as the terminal's line speed
+in bits per second.
+If that value is absent or invalid,
+.I \%ncurses
+uses 9600.
+This feature allows developers to construct repeatable test cases
+that take into account optimization decisions that depend
+on the terminal's line speed.
+.SS "\fICC\fP (command character)"
+When set,
+the
+.B \%command_character
+.RB \%( cmdch )
+capability value of loaded
+.I \%term\%info
+entries changes to the value of this variable.
+Very few
+.I \%term\%info
+entries provide this feature.
+.PP
+Because this variable
+is also used in development environments to store the C compiler's name,
+.I \%ncurses
+ignores its value if it is not one character in length.
+.SS "\fICOLUMNS\fP"
+This variable specifies the width of the screen in character cells.
+Applications running in a windowing environment usually are able to
+obtain the width of the window in which they are executing.
+.I \%ncurses
+enforces an upper limit of 512 when reading the value.
+If
+.I \%COLUMNS
+is not defined and the terminal's screen size is not available from the
+terminal driver,
+.I \%ncurses
+uses the size specified by the
+.B \%columns
+.RB \%( cols )
+capability of the terminal type's entry in the
+.I \%term\%info
+database,
+if any.
+.PP
+It is important that your application use the correct screen size.
+Automatic detection thereof is not always possible because an
+application may be running on a host that does not honor NAWS
+(Negotiations About Window Size)
+or as a different user ID than the owner of the terminal device file.
+Setting
+.I \%COLUMNS
+and/or
+.I \%LINES
+overrides the library's use of the screen size obtained from the
+operating system.
+.PP
+The
+.I \%COLUMNS
+and
+.I \%LINES
+variables may be specified independently.
+This property is useful to circumvent misfeatures of legacy terminal
+type descriptions;
+\fI\%xterm\fP(1) descriptions specifying 65 lines were once notorious.
+For best results,
+avoid specifying
+.B cols
+and
+.B lines
+capability codes in
+.I \%term\%info
+descriptions of terminal emulators.
+.PP
+\fBuse_env\fP(3X) can disable use of the process environment
+in determining the screen size.
+\fBuse_tioctl\fP(3X) can update
+.I \%COLUMNS
+and
+.I \%LINES
+to match the screen size obtained from system calls or the terminal
+database.
+.SS "\fIESCDELAY\fP"
+For
+.I curses
+to distinguish the ESC character resulting from a user's press of the
+\*(``Escape\*('' key on the input device from one beginning an
+.I "escape sequence"
+(as commonly produced by function keys),
+it waits after receiving the escape character to see if further
+characters are available on the input stream within a short interval.
+A global variable
+.B \%ESCDELAY
+stores this interval in milliseconds.
+The default value of 1000
+(one second)
+is adequate for most uses.
+This environment variable overrides it;
+.I \%ncurses
+enforces an upper limit of 30,000
+(30 seconds)
+when reading the value.
+.PP
+The most common instance where you may wish to change this value
+is to work with a remote host over a slow communication channel.
+If the host running a
+.I curses
+application does not receive the characters of an escape sequence in a
+timely manner,
+the library can interpret them as multiple key stroke events.
+Conversely,
+a fast typist on a low-latency connection
+who happens to input an ESC
+followed by characters that match an escape sequence
+(or the common prefix of multiple key-defining string capabilities)
+may experience confusing application behavior.
+.PP
+\fI\%xterm\fP(1) mouse events are a form of escape sequence;
+therefore,
+if your application makes heavy use of multiple-clicking,
+you may wish to lengthen the default value because the delay applies
+to the composite multi-click event as well as the individual clicks.
+.PP
+Portable applications should not rely upon the presence of
+.B \%ESCDELAY
+in either form,
+but setting the environment variable rather than the global variable
+does not create problems when compiling an application.
+.PP
+If \fB\%keypad\fP(3X) is disabled for the
+.I curses
+window receiving input,
+.B \%ESCDELAY
+is irrelevant
+and a program must disambiguate escape sequences itself.
+.SS "\fIHOME\fP"
+.I \%ncurses
+may read and write auxiliary terminal descriptions in
+.I \%.termcap
+and
+.I \%.terminfo
+files in the user's home directory.
+.SS "\fILINES\fP"
+This counterpart to
+.I \%COLUMNS
+specifies the height of the screen in characters.
+The corresponding
+.I \%term\%info
+capability and code is
+.BR \%lines "."
+See the description of the
+.I \%COLUMNS
+variable above.
+.SS "\fIMOUSE_BUTTONS_123\fP"
+(OS/2 EMX port only)
+OS/2 numbers a three-button mouse inconsistently with other platforms,
+such that 1 is the left button,
+2 the right,
+and 3 the middle.
+This variable customizes the mouse button numbering.
+Its value must be three digits 1\-3 in any order.
+By default,
+.I \%ncurses
+assumes a numbering of \*(``132\*(''.
+.SS "\fINCURSES_ASSUMED_COLORS\fP"
+If set,
+this variable overrides the
+.I \%ncurses
+library's compiled-in assumption that the terminal's default colors are
+white on black;
+see \fB\%default_colors\fP(3X).
+Set the foreground and background color values with this environment
+variable by assigning it two integer values separated by a comma,
+indicating foregound and background color numbers,
+respectively.
+.PP
+For example,
+to tell
+.I \%ncurses
+not to assume anything about the colors,
+use a value of \*(``\-1,\-1\*(''.
+To make the default color scheme green on black on a terminal
+that uses ANSI\ X3.64/ECMA-48/ISO\ 6429 color assignments,
+use \*(``2,0\*(''.
+.I \%ncurses
+accepts integral values from \-1 up to the value of the
+.I \%term\%info
+.B \%max_colors
+.RB ( colors )
+capability for the selected terminal type.
+.SS "\fINCURSES_CONSOLE2\fP"
+(MinGW port only)
+The
+.I \%Console2
+.\" https://www.hanselman.com/blog/console2-a-better-windows-command-prompt
+program defectively handles the Microsoft Console API call
+.IR \%Create\%Console\%Screen\%Buffer "."
+Applications that use it will hang.
+However,
+it is possible to simulate the action of this call by mapping
+coordinates,
+explicitly saving and restoring the original screen contents.
+Setting the environment variable
+.I \%NCGDB
+has the same effect.
+.SS "\fINCURSES_GPM_TERMS\fP"
+(Linux only)
+When
+.I \%ncurses
+is configured to use the GPM interface,
+this variable may list one or more terminal type names,
+separated by vertical bars
+.RB ( | )
+or colons
+.RB ( : ),
+against which the
+.I TERM
+variable
+(see below)
+is matched.
+An empty value disables the GPM interface,
+using
+.IR \%ncurses 's
+built-in support for \fI\%xterm\fP(1) mouse protocols instead.
+If the variable is absent,
+.I \%ncurses
+attempts to open GPM if
+.I TERM
+contains \*(``linux\*(''.
+.SS "\fINCURSES_NO_HARD_TABS\fP"
+.I \%ncurses
+may use tab characters in cursor movement optimization.
+In some cases,
+your terminal driver may not handle them properly.
+Set this environment variable to any value to disable the feature.
+You can also adjust your \fI\%stty\fP(1) settings to avoid the problem.
+.SS "\fINCURSES_NO_MAGIC_COOKIE\fP"
+Many terminals store video attributes as properties of a character cell,
+as
+.I curses
+does.
+Historically,
+some recorded changes in video attributes as data
+that logically
+(but invisibly)
+.I occupied
+character cells on the display,
+switching attributes on or off,
+similarly to tags in a markup language,
+which then had to be overprinted to depict the cells' desired contents;
+these are termed \*(``magic cookies\*(''.
+If the
+.I \%term\%info
+entry for your terminal type does not adequately describe its handling
+of magic cookies,
+set this variable to any value to instruct
+.I \%ncurses
+to disable attributes entirely.
+.SS "\fINCURSES_NO_PADDING\fP"
+Most terminal type descriptions in the
+.I \%term\%info
+database detail hardware devices.
+Many people use
+.IR curses -based
+applications in terminal emulator programs that run in a windowing
+environment.
+These programs can duplicate all of the important features of a hardware
+terminal,
+but often lack their limitations.
+Chief among these absent drawbacks is the problem of data flow
+management;
+that is,
+limiting the speed of communication to what the hardware could handle.
+Unless a hardware terminal is interfaced into a terminal concentrator
+(which does flow control),
+an application must manage flow itself to prevent overruns and data
+loss.
+.PP
+A solution that comes at no hardware cost
+is for an application to pause transmission
+after directing a terminal to execute an operation
+that it performs slowly,
+such as clearing the display.
+Many terminal type descriptions,
+including that for the VT100,
+embed delay specifications in capabilities.
+You may wish to use these terminal descriptions without paying the
+performance penalty.
+Set
+.I \%NCURSES_NO_PADDING
+to any value to disable all but mandatory padding.
+Mandatory padding is used by such terminal capabilities as
+.B \%flash_screen
+.RB ( flash ).
+.SS "\fINCURSES_NO_SETBUF\fP"
+(Obsolete)
+Prior to internal changes developed in
+.I \%ncurses
+5.9
+(patches 20120825 through 20130126),
+the library used \fI\%setbuf\fP(3) to enable fully buffered output when
+initializing the terminal.
+This was done,
+as in SVr4
+.IR curses ","
+to increase performance.
+For testing purposes,
+both of
+.I \%ncurses
+and of certain applications,
+this feature was made optional.
+Setting this variable disabled output buffering,
+leaving the output stream in the original
+(usually line-buffered)
+mode.
+.PP
+Nowadays,
+.I \%ncurses
+performs its own buffering and does not require this workaround;
+it does not modify the buffering of the standard output stream.
+This approach makes the library's handling of keyboard-initiated signals
+more robust.
+A drawback is that certain unconventional programs mixed
+\fI\%stdio\fP(3) calls with
+.I \%ncurses
+calls and (usually)
+got the behavior they expected,
+but no longer do:
+.I \%ncurses
+does not write to the standard output file descriptor through a
+.IR stdio -buffered
+stream.
+.PP
+As a special case,
+low-level API calls such as \fB\%putp\fP(3X) still use the
+standard output stream.
+High-level
+.I curses
+calls such as \fB\%printw\fP(3X) do not.
+.SS "\fINCURSES_NO_UTF8_ACS\fP"
+At initialization,
+.I \%ncurses
+inspects the
+.I TERM
+environment variable for special cases where VT100 forms-drawing
+characters
+(and the corresponding alternate character set
+.I \%term\%info
+capabilities)
+are known to be unsupported by terminal types that otherwise claim VT100
+compatibility.
+Specifically,
+when running in a UTF-8 locale,
+the Linux virtual console device and the GNU \fI\%screen\fP(1)
+program ignore them.
+Set this variable to a nonzero value to instruct
+.I \%ncurses
+that the terminal's ACS support is broken;
+the library then outputs Unicode code points that correspond to the
+forms-drawing
+characters.
+Set it to zero
+(or a non-integer)
+to disable the special check for terminal type names matching
+\*(``linux\*('' or \*(``screen\*('',
+directing
+.I \%ncurses
+to assume that the ACS feature works if the terminal type description
+advertises it.
+.PP
+As an alternative to use of this variable,
+.I \%ncurses
+checks for an extended
+.I \%term\%info
+numeric capability \fBU8\fP
+that can be compiled using
+.RB \*(`` "@TIC@ \-x" \*(''.
+Examples follow.
+.PP
+.RS 3
+.EX
+.nf
+# linux console, if patched to provide working
+# VT100 shift\-in/shift\-out, with corresponding font.
+linux\-vt100|linux console with VT100 line\-graphics,
+        U8#0, use=linux,
+\&
+# uxterm with vt100Graphics resource set to false
+xterm\-utf8|xterm relying on UTF\-8 line\-graphics,
+        U8#1, use=xterm,
+.fi
+.EE
+.RE
+.PP
+The two-character code \*(``U8\*('' was chosen to permit its use via
+.IR \%ncurses 's
+.I termcap
+interface.
+.SS "\fINCURSES_TRACE\fP"
+At initialization,
+.I \%ncurses
+(in its debugging configuration)
+checks for this variable's presence.
+If defined with an integral value,
+the library calls \fB\%curses_trace\fP(3X) with that value as the
+argument.
+.SS "\fITERM\fP"
+The
+.I TERM
+variable denotes the terminal type.
+Each is distinct,
+though many are similar.
+It is commonly set by terminal emulators to help applications find a
+workable terminal description.
+Some choose a popular approximation such as \*(``ansi\*('',
+\*(``vt100\*('', or \*(``xterm\*('' rather than an exact fit to their
+capabilities.
+Not infrequently,
+an application will have problems with that approach;
+for example,
+a key stroke may not operate correctly,
+or produce no effect but seeming garbage characters on the screen.
+.PP
+Setting
+.I TERM
+has no effect on hardware operation;
+it affects the way applications communicate with the terminal.
+Likewise,
+as a general rule
+(\fIxterm\fP(1) being a rare exception),
+terminal emulators that allow you to specify
+.I TERM
+as a parameter or configuration value do not change their behavior to
+match that setting.
+.SS "\fITERMCAP\fP"
+If
+.I \%ncurses
+is configured with
+.I termcap
+support,
+it checks for a terminal type description in
+.I termcap
+format if one in
+.I \%term\%info
+format is not available.
+Setting this variable directs
+.I \%ncurses
+to ignore the usual
+.I termcap
+database location,
+.IR \%/etc/termcap ;
+see
+.I \%TERMPATH
+below.
+.I \%TERMCAP
+should contain either a terminal description
+(with newlines stripped out),
+or a file name indicating where the information required by the
+.I TERM
+environment variable is stored.
+.SS "\fITERMINFO\fP"
+.I \%ncurses
+can be configured to read terminal type description databases in various
+locations using different formats.
+This variable overrides the default location.
+.bP
+Descriptions in
+.I \%term\%info
+format are normally stored in a directory tree using subdirectories
+named for the common first letters of the terminal types named therein.
+System\ V used this scheme.
+.bP
+If
+.I \%ncurses
+is configured to use hashed databases,
+then
+.I \%TERM\%INFO
+may name its location,
+such as
+.IR \%/usr/share/terminfo.db ","
+rather than
+.IR \%/usr/share/terminfo/ "."
+.PP
+The hashed database uses less disk space and is a little faster than the
+directory tree.
+However,
+some applications assume the existence of the directory tree
+and read it directly,
+ignoring the
+.I \%term\%info
+API.
+.bP
+If
+.I \%ncurses
+is configured with
+.I termcap
+support,
+this variable may contain the location of a
+.I \%termcap
+file.
+.bP
+If the value of
+.I \%TERM\%INFO
+begins with \*(``hex:\*('' or \*(``b64:\*('',
+.I \%ncurses
+uses the remainder of the value as a compiled
+.I \%term\%info
+description.
+You might produce the base64 format using \fB\%infocmp\fP(1M).
+.RS 4
+.IP
+.EX
+.nf
+TERMINFO=$(infocmp \-0 \-Q2 \-q)
+export TERMINFO
+.fi
+.EE
+.RE
+.IP
+.I \%ncurses
+uses the compiled description only if it corresponds
+to the terminal type identified by
+.IR TERM "."
+.PP
+Setting
+.I \%TERM\%INFO
+is the simplest,
+but not the only,
+way to direct
+.I \%ncurses
+to a terminal database.
+The search path is as follows.
+.bP
+the last terminal database to which the running
+.I \%ncurses
+application wrote,
+if any
+.bP
+the location specified by the
+.I \%TERM\%INFO
+environment variable
+.bP
+.I $HOME/.terminfo
+.bP
+locations listed in the
+.I \%TERMINFO_DIRS
+environment variable
+.ds td \" empty
+.if !'@TERMINFO_DIRS@'no default value' .as td @TERMINFO_DIRS@
+.if !'@TERMINFO@\*(td'' \{\
+.bP
+location(s) configured and compiled into
+.I \%ncurses
+.RS
+.if !'\*(td'' \{\
+.bP
+.I \%@TERMINFO_DIRS@
+.\}
+.if !'@TERMINFO'' .if !'\*(td'@TERMINFO@' \{\
+.bP
+.I \%@TERMINFO@
+.\}
+.\}
+.RE
+.SS "\fITERMINFO_DIRS\fP"
+This variable specifies a list of locations,
+akin to
+.IR PATH ","
+in which
+.I \%ncurses
+searches for the terminal type descriptions described by
+.I \%TERMINFO
+above.
+The list items are separated by colons on Unix
+and semicolons on OS/2 EMX.
+System\ V
+.I \%term\%info
+lacks a corresponding feature;
+.I \%TERMINFO_DIRS
+is an
+.I \%ncurses
+extension.
+.SS "\fITERMPATH\fP"
+If
+.I \%TERMCAP
+does not hold a terminal type description or file name,
+then
+.I \%ncurses
+checks the contents of
+.IR \%TERMPATH ","
+a list of locations,
+akin to
+.IR PATH ","
+in which it searches for
+.I termcap
+terminal type descriptions.
+The list items are separated by colons on Unix
+and semicolons on OS/2 EMX.
+.PP
+If both
+.I \%TERMCAP
+and
+.I \%TERMPATH
+are unset or invalid,
+.I \%ncurses
+searches for the files
+.IR \%/etc/termcap ","
+.IR \%/usr/share/misc/termcap ","
+and
+.IR \%$HOME/.termcap ","
+in that order.

@@ -1,0 +1,53 @@
+.SS "Application Structure"
+A
+.I curses
+application uses information from the system locale;
+\fI\%setlocale\fP(3) prepares it for
+.I curses
+library calls.
+.PP
+.RS 4
+.EX
+setlocale(LC_ALL, "");
+.EE
+.RE
+.PP
+If the locale is not thus initialized,
+the library assumes that characters are printable as in ISO\ 8859-1,
+to work with certain legacy programs.
+You should initialize the locale;
+do not expect consistent behavior from the library when the locale has
+not been set up.
+.PP
+\fB\%initscr\fP(3X) or \fB\%newterm\fP(3X)
+must be called to initialize
+.I curses
+before use of any functions
+that access or manipulate windows or screens.
+.PP
+To get character-at-a-time input without echoing \(em
+most interactive,
+screen-oriented programs want this \(em
+use the following sequence.
+.PP
+.RS 4
+.EX
+initscr(); cbreak(); noecho();
+.EE
+.RE
+.PP
+Most applications would perform further setup as follows.
+.PP
+.RS 4
+.EX
+.nf
+noqiflush();
+keypad(stdscr, TRUE);
+.fi
+.EE
+.RE
+.PP
+A
+.I curses
+program then often enters an event-handling loop.
+Call \fB\%endwin\fP(3X) before exiting.

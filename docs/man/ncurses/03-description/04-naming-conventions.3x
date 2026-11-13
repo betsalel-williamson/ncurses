@@ -1,0 +1,36 @@
+.SS "Naming Conventions"
+.I curses
+offers many functions in variant forms using a regular set of
+alternatives to the name of an elemental one.
+Those prefixed with \*(``w\*('' require a
+.I \%WINDOW
+pointer argument;
+those with a \*(``mv\*('' prefix first perform cursor movement using
+\fB\%wmove\fP(3X);
+a \*(``mvw\*('' prefix indicates both.
+The \*(``w\*('' function is typically the elemental one;
+the removal of this prefix usually indicates operation on
+.BR \%stdscr "."
+.PP
+Four functions prefixed with \*(``p\*('' require a
+.I pad
+argument;
+see below.
+.PP
+In function synopses,
+.I \%ncurses
+man pages apply the following names to parameters.
+We introduce the character types in the next subsection.
+.PP
+.TS
+center;
+Li L.
+bf	a \fIbool\fP (\fBTRUE\fP or \fBFALSE\fP)
+c	a \fIchar\fP or \fIint\fP
+ch	a \fIchtype\fP
+wc	a \fIwchar_t\fP or \fIwint_t\fP
+wch	a \fIcchar_t\fP
+win	pointer to a \fIWINDOW\fP
+pad	pointer to a \fIWINDOW\fP that is a pad
+pair	a foreground/background color pair identifier
+.TE

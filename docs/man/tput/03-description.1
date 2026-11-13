@@ -1,0 +1,305 @@
+.SH DESCRIPTION
+.B \%@TPUT@
+uses the
+.I \%term\%info
+library and database to make terminal-specific capabilities and
+information available to the shell,
+to initialize or reset the terminal,
+or
+to report a description of the current
+(or specified)
+terminal type.
+Terminal capabilities are accessed by
+.IR cap-code "."
+.PP
+\fB\%terminfo\fP(5) discusses terminal capabilities at length
+and presents a complete list of standardized
+.IR cap-codes "."
+\fB\%user_caps\fP(5) presents other widely used
+but non-standard capabilities.
+.PP
+When retrieving capability values,
+the result depends upon the capability's type.
+.TP 9 \" "Boolean" + 2n
+Boolean
+.B \%@TPUT@
+sets its exit status to
+.B 0
+if the terminal possesses
+.IR cap-code ","
+and
+.B 1
+if it does not.
+.TP
+numeric
+.B \%@TPUT@
+writes
+.IR cap-code 's
+decimal value to the standard output stream if defined
+.RB ( \-1
+if it is not)
+followed by a newline.
+.TP
+string
+.B \%@TPUT@
+writes
+.IR cap-code 's
+value to the standard output stream if defined,
+without a trailing newline.
+.PP
+Before using a value returned on the standard output,
+the application should test
+.BR \%@TPUT@ 's
+exit status
+to be sure it is 0;
+see section \*(``EXIT STATUS\*('' below.
+.SS Operands
+Generally,
+an operand is a
+.IR cap-code ","
+a capability code from the terminal database,
+or a parameter thereto.
+Three others are specially recognized by
+.BR \%@TPUT@ ":"
+.BR init ","
+.BR \%reset ","
+and
+.BR \%longname "."
+Although these resemble capability codes,
+they in fact receive special handling;
+we term them \*(``pseudo-capabilities\*(''.
+.TP 11n \" "longname" + 2n + adjustment for PDF
+.I cap-code
+indicates a capability from the terminal database.
+.IP
+If
+.I cap-code
+is of string type and takes parameters,
+.B \%@TPUT@
+interprets arguments following
+.I cap-code
+as the parameters,
+up to the (fixed) quantity the capability requires.
+.IP
+Most parameters are numeric.
+Only a few terminal capabilities require string parameters;
+.B \%@TPUT@
+uses a table to decide which to pass as strings.
+Normally
+.B \%@TPUT@
+uses \fB\%tparm\fP(3X) to perform the
+substitution.
+If no parameters are given for the capability,
+.B \%@TPUT@
+writes the string without performing the substitution.
+.TP
+.B init
+initializes the terminal.
+If the terminal database is present
+and an entry for the user's terminal type exists,
+the following occur.
+.RS
+.TP 5
+(1)
+.B \%@TPUT@
+retrieves the terminal's mode settings.
+It successively tests the file descriptors corresponding to
+.RS
+.bP
+the standard error stream,
+.bP
+the standard output stream,
+.bP
+the standard input stream,
+and
+.bP
+.I \%/dev/tty
+.RE
+.IP
+to obtain terminal settings.
+Having retrieved them,
+.B \%@TPUT@
+remembers which descriptor to use for further updates.
+.TP
+(2)
+If the terminal dimensions cannot be obtained from the operating system,
+but the environment or terminal type database entry describes them,
+.B \%@TPUT@
+updates the operating system's notion of them.
+.TP
+(3)
+.B \%@TPUT@
+updates the terminal modes.
+.RS
+.bP
+Tab expansion is turned on or off per the specification in the entry,
+and
+.bP
+if tabs are not expanded,
+standard tabs
+(every 8 spaces)
+are set.
+.RE
+.TP
+(4)
+If initialization capabilities,
+detailed in subsection \*(``Tabs and Initialization\*('' of
+\fB\%terminfo\fP(5),
+are present,
+.B \%@TPUT@
+writes them to the standard output stream.
+.TP
+(5)
+.B \%@TPUT@
+flushes the standard output stream.
+.RE
+.IP
+If an entry lacks the information needed for an activity above,
+that activity is silently skipped.
+.TP
+.B reset
+re-initializes the terminal.
+A reset differs from initialization in two ways.
+.RS
+.TP 5
+(1)
+.B \%@TPUT@
+sets the terminal modes to a \*(``sane\*('' state,
+.RS
+.bP
+enabling canonical (\*(``cooked\*('') and echo modes,
+.bP
+disabling cbreak and raw modes,
+.bP
+enabling newline translation,
+and
+.bP
+setting any special input characters to their default values.
+.RE
+.TP 5
+(2)
+If any reset capabilities are defined for the terminal type,
+.B \%@TPUT@
+writes them to the output stream.
+Otherwise,
+.B \%@TPUT@
+uses any defined initialization capabilities.
+Reset capabilities are detailed in subsection
+\*(``Tabs and Initialization\*('' of \fB\%terminfo\fP(5).
+.RE
+.TP
+.B longname
+A
+.I \%term\%info
+entry begins with one or more names by which an application
+can refer to the entry,
+before the list of terminal capabilities.
+The names are separated by \*(``|\*('' characters.
+X/Open Curses terms the last name the \*(``long name\*('',
+and indicates that it may include blanks.
+.IP
+.B \%@TIC@
+warns if the last name does not include blanks,
+to accommodate old
+.I \%term\%info
+entries that treated the long name as an optional feature.
+The long name is often referred to as the description field.
+.IP
+If the terminal database is present and an entry for the user's terminal
+type exists,
+.B \%@TPUT@
+reports its description to the standard output stream,
+without a trailing newline.
+See \fB\%terminfo\fP(5).
+.PP
+.I Note:
+Redirecting the output of
+\*(``\c
+.B "@TPUT@ init\c"
+\*(''
+or
+\*(``\c
+.B "@TPUT@ reset\c"
+\*(''
+to a file will capture only part of their actions.
+Changes to the terminal modes are not affected by file descriptor
+redirection,
+since the terminal modes are altered via \fI\%ioctl\fP(2).
+.SS Aliases
+If
+.B \%@TPUT@
+is invoked via link with any of the names
+.BR clear ","
+.BR init ","
+or
+.BR \%reset ","
+it operates as if run with the corresponding (pseudo-)capability
+operand.
+For example,
+executing a link named
+.B \%reset
+that points to
+.B \%@TPUT@
+has the same effect as
+\%\*(``\c
+.B "@TPUT@ \%reset\c"
+\*(''.
+.PP
+This feature was introduced by
+.I \%ncurses
+5.2 in 2000.
+It is rarely used.
+.TP
+.B \%clear
+is a separate program,
+which is both smaller and more frequently executed.
+.TP
+.B init
+has the same name as another program in widespread use.
+.TP
+.B \%reset
+is provided
+by the \fB\%@TSET@\fP(1) utility (also via a link named
+.BR \%reset ).
+.SS "Terminal Size"
+Besides the pseudo-capabilities
+(such as
+.BR init ),
+.B \%@TPUT@
+treats the
+.B lines
+and
+.B cols
+.I cap-codes
+specially:
+it may call \fB\%setupterm\fP(3X) to obtain the terminal size.
+.bP
+First,
+.B \%@TPUT@
+attempts to obtain these capabilities from the terminal
+database.
+This generally fails for terminal emulators,
+which lack a fixed window size and thus omit the capabilities.
+.bP
+It then asks the operating system for the terminal's size,
+which generally works,
+unless the connection is via a serial line that
+does not support \*(``NAWS\*('': negotiations about window size.
+.bP
+Finally,
+it inspects the environment variables
+.I LINES
+and
+.IR \%COLUMNS ","
+which may override the terminal size.
+.PP
+If the
+.B \-T
+option is given,
+.B \%@TPUT@
+ignores the environment variables by calling
+.BR \%use_tioctl(TRUE) ","
+relying upon the operating system
+(or,
+ultimately,
+the terminal database).

@@ -1,0 +1,12 @@
+{
+  "configVersion": "1.1.0",
+  "sources": [
+    { "glob": "man/**/*.3x", "format": "man" },
+    { "glob": "man/**/*.1", "format": "man" },
+    { "glob": "man/**/*.1m", "format": "man" },
+    { "glob": "man/**/*.5", "format": "man" },
+    { "glob": "man/**/*.7", "format": "man" }
+  ],
+  "roots": [],
+  "man": { "quiet": ["defaults"] }
+}

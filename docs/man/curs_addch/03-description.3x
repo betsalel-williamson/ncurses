@@ -1,0 +1,244 @@
+.SH DESCRIPTION
+.SS waddch
+.B \%waddch
+writes the
+.I curses
+character
+.I ch
+to the window
+.IR win ","
+then advances the cursor position,
+analogously to the standard C library's \fI\%putchar\fP(3).
+\fB\%ncurses\fP(3X) describes the variants of this function.
+.PP
+Construct a
+.I curses
+character
+from a
+.I char
+by assignment or typecast.
+Subsection \*(``Video Attributes\*('' of \fB\%attron\fP(3X) describes
+how to manipulate its attributes and color pair.
+(A color pair selection is not honored unless initialized;
+see \fB\%start_color\fP(3X).)
+.PP
+The object or expression
+.I ch
+may contain attributes and/or a color pair identifier.
+(A
+.I \%chtype
+can be copied from place to place using \fB\%winch\fP(3X) and
+.BR \%waddch .)
+.I curses
+defines constants to aid the manipulation of character attributes;
+see \fB\%curs_attr\fP(3X).
+A
+.I ch
+whose character component is a space,
+and whose only attribute is
+.BR \%A_NORMAL ,
+is a
+.IR "blank character" ","
+and therefore combines with the window's background character;
+see \fB\%curs_bkgd\fP(3X).
+.PP
+If
+.I ch
+is a
+backspace,
+carriage return,
+line feed,
+or
+tab,
+the cursor moves appropriately within the window.
+.bP
+Backspace moves the cursor one character left;
+at the left margin of a window,
+it does nothing.
+.bP
+Carriage return moves the cursor to the left margin on the same line of
+the window.
+.bP
+Line feed performs \fB\%clrtoeol\fP(3X),
+then advances as if from the right margin
+(see below).
+.bP
+Tab advances the cursor to the next tab stop
+(possibly on the next line);
+these are placed at every eighth column by default.
+.IP
+You can alter the tab interval with the
+.B \%TABSIZE
+extension;
+see \fB\%curs_variables\fP(3X).
+.PP
+If
+.I ch
+is any other nonprintable character,
+.I curses
+draws it in printable form using the same convention as
+\fB\%unctrl\fP(3X).
+Calling \fB\%winch\fP(3X) on the location of a nonprintable character
+does not return the character itself,
+but its \fB\%unctrl\fP(3X) representation.
+.PP
+Adding printable characters with \fB\%waddch\fP
+causes it to wrap at the right margin of the window.
+.bP
+If the cursor is not at the bottom of the scrolling region
+and advancement occurs at the right margin,
+the cursor automatically wraps to the beginning of the next line.
+.bP
+If the cursor is at the bottom of the scrolling region
+when advancement occurs at the right margin,
+and \fB\%scrollok\fP(3X) is enabled for
+.IR win ,
+the scrolling region scrolls up one line
+and the cursor wraps as above.
+Otherwise,
+advancement and scrolling do not occur,
+and
+.B \%waddch
+returns
+.BR ERR "."
+.PP
+A window's margins may coincide with the screen boundaries.
+This may be a problem when
+.I \%ncurses
+updates the screen to match the
+.I curses
+window.
+When their right and bottom margins coincide,
+.I \%ncurses
+employs varying strategies
+to handle the ways in which scrolling and wrapping behaviors
+combine at the lower-right corner of the terminal display
+by detecting and configuring the terminal's capabilities.
+.bP
+If the terminal does not wrap its cursor to the next line
+when a character is written to the rightmost cell on a line \(em
+.RI \%( terminfo
+capability
+.B \%auto_right_margin
+.RB ( am )
+\(em
+.I \%ncurses
+simply writes the character.
+.bP
+If the terminal possesses the \*(lqauto right margin\*(rq
+capability,
+but also enables it to be configured on and off,
+.I \%ncurses
+disables auto right margin temporarily
+when writing a character to lower-right cell of the terminal display.
+.bP
+If the terminal does not permit auto right margin deconfiguration,
+but has an \*(lqinsert mode\*(rq \(em
+.I \%terminfo
+capabilities
+.B \%enter_insert_mode
+.RB ( smir )
+and
+.B \%exit_insert_mode
+.RB ( rmir )
+\(em
+.I \%ncurses
+saves the contents of the character cell
+preceding that at the bottom right,
+writes the character with which the application wishes to populate
+the bottom right character cell
+to the cell preceding it on the same line,
+then uses the terminal's insert mode to rewrite the contents
+of the saved character cell to that location,
+\*(lqpushing\*(rq the desired character
+into the bottom right cell.
+.SS wechochar
+.B \%echochar
+and
+.B \%wechochar
+are equivalent to calling
+.RB \%( w ) addch
+followed by
+.RB \%( w ) refresh
+on
+.B \%stdscr
+or the specified window.
+.I curses
+interprets these functions as a hint to its optimizer
+that only a single character cell in the window
+is being altered between refreshes;
+for non-control characters,
+a considerable performance gain may be enjoyed by employing them.
+.\" TODO: Combine the following with the "Line Drawing" subsection of
+.\" terminfo(5) and replace this with a cross reference there.
+.SS "Forms-Drawing Characters"
+.I curses
+defines macros starting with
+.B \%ACS_
+that can be used with
+.B \%waddch
+to write line-drawing and other symbols to the screen.
+.I \%ncurses
+terms these
+.I "forms-drawing characters."
+.I curses
+uses the ACS default listed below if the terminal type lacks the
+.B \%acs_chars
+.RB \%( acsc )
+capability;
+that capability does not define a replacement for the character;
+or if the terminal type and locale configuration
+require Unicode to access these characters,
+but the library is unable to use Unicode.
+The \*(``acsc char\*('' column corresponds to how the characters are
+specified in the
+.B \%acs_chars
+.RB \%( acsc )
+string capability,
+and the characters in it may appear on the screen if the terminal type's
+database entry incorrectly advertises ACS support.
+The name \*(``ACS\*('' originates in the Alternate Character Set feature
+of the DEC VT100 terminal.
+.PP
+.ie t .ne 4v
+.el   .ne 5v
+.TS
+Lb Lb Lb Lb
+Lb Lb Lb Lb
+Lb L  L  Lx.
+\&	ACS	acsc	\&
+Symbol	Default	char	Glyph Name
+_
+ACS_BLOCK	#	0	solid square block
+ACS_BOARD	#	h	board of squares
+ACS_BTEE	+	v	bottom tee
+ACS_BULLET	o	\*~	bullet
+ACS_CKBOARD	:	a	checker board (stipple)
+ACS_DARROW	v	.	arrow pointing down
+ACS_DEGREE	\*'	f	degree symbol
+ACS_DIAMOND	+	\(ga	diamond
+ACS_GEQUAL	>	>	greater-than-or-equal-to
+ACS_HLINE	\-	q	horizontal line
+ACS_LANTERN	#	i	lantern symbol
+ACS_LARROW	<	,	arrow pointing left
+ACS_LEQUAL	<	y	less-than-or-equal-to
+ACS_LLCORNER	+	m	lower left-hand corner
+ACS_LRCORNER	+	j	lower right-hand corner
+ACS_LTEE	+	t	left tee
+ACS_NEQUAL	!	|	not-equal
+ACS_PI	*	{	greek pi
+ACS_PLMINUS	#	g	plus/minus
+ACS_PLUS	+	n	plus
+ACS_RARROW	>	+	arrow pointing right
+ACS_RTEE	+	u	right tee
+ACS_S1	\-	o	scan line 1
+ACS_S3	\-	p	scan line 3
+ACS_S7	\-	r	scan line 7
+ACS_S9	\&_	s	scan line 9
+ACS_STERLING	f	}	pound-sterling symbol
+ACS_TTEE	+	w	top tee
+ACS_UARROW	\*^	\-	arrow pointing up
+ACS_ULCORNER	+	l	upper left-hand corner
+ACS_URCORNER	+	k	upper right-hand corner
+ACS_VLINE	|	x	vertical line
+.TE

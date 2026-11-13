@@ -1,0 +1,311 @@
+.SH PORTABILITY
+Over time
+.I \%ncurses
+.B \%@TPUT@
+has differed from that of System\ V in two important respects,
+one now mostly historical.
+.bP
+.RB \%\*(`` @TPUT@
+.IR cap-code \*(''
+writes to the standard output,
+which need not be a terminal device.
+However,
+the operands that manipulate terminal modes might not use the standard
+output.
+.IP
+System\ V
+.IR tput 's
+.B init
+and
+.B \%reset
+operands use logic from 4.1cBSD
+.IR tset ","
+manipulating terminal modes.
+It checks the same file descriptors
+(and
+.IR \%/dev/tty ")"
+for association with a terminal device as
+.I \%ncurses
+now does,
+and if none are,
+finally assumes a 1200 baud terminal.
+When updating terminal modes,
+it ignores errors.
+.IP
+Until
+.I \%ncurses
+6.1
+(see section \*(``HISTORY\*('' below),
+.B \%@TPUT@
+did not modify terminal modes.
+It now employs a scheme similar to System\ V,
+using functions shared with
+.B \%@TSET@
+(and ultimately based on 4.4BSD
+.IR tset ).
+If it is not able to open a terminal
+(for instance,
+when run by \fIcron\fP(1)),
+.B \%@TPUT@
+exits with an error status.
+.bP
+System\ V
+.I tput
+assumes that the type of a
+.I cap-code
+operand is numeric if all the characters of its value are decimal
+numbers;
+if they are not,
+it treats
+.I cap-code
+as a string capability.
+.IP
+Most implementations that provide support for
+.I cap-code
+operands use the \fB\%tparm\fP(3X) function to expand its parameters.
+That function expects a mixture of numeric and string parameters,
+requiring
+.B \%@TPUT@
+to know which type to use.
+.IP
+.I \%ncurses
+.B \%@TPUT@
+uses a table to determine the parameter types for
+the standard
+.I cap-code
+operands,
+and an internal function to analyze nonstandard
+.I cap-code
+operands.
+.IP
+While more reliable than System\ V's utility,
+a portability problem is introduced by this analysis.
+An OpenBSD developer adapted the internal library function from
+.I \%ncurses
+to port NetBSD's
+.IR termcap -based
+.I tput
+to
+.IR \%term\%info ","
+and modified it to interpret multiple
+.I cap-codes
+(and parameters)
+on the command line.
+Portable applications should not rely upon this feature;
+.I \%ncurses
+offers it to support applications written specifically for OpenBSD.
+.PP
+.IR \%ncurses 's
+implementation of
+.IR tput ","\" generic
+unlike others,
+accepts both
+.I termcap
+and
+.I \%term\%info
+.I cap-codes
+if
+.I termcap
+support is compiled in.
+In that case,
+however,
+.I termcap
+and
+.I \%term\%info
+codes have two
+ambiguities;
+.I \%ncurses
+assumes the
+.I \%term\%info
+code.
+.bP
+The
+.I cap-code
+.B dl
+means
+.B \%delete_line
+to
+.I termcap
+but
+.B \%parm_delete_line
+to
+.IR \%term\%info "."
+.I termcap
+uses the code
+.B DL
+for
+.BR \%parm_delete_line "."
+.I \%term\%info
+uses the code
+.B dl1
+for
+.BR \%delete_line "."
+.bP
+The
+.I cap-code
+.B ed
+means
+.B \%exit_delete_mode
+to
+.I termcap
+but
+.B \%clr_eos
+to
+.IR \%term\%info "."
+.I termcap
+uses the code
+.B cd
+for
+.BR \%clr_eos "."
+.I \%term\%info
+uses the code
+.B rmdc
+for
+.BR \%exit_delete_mode "."
+.PP
+The
+.B \%longname
+operand,
+.B \-S
+option,
+and the parameter-substitution features used in the
+.B cup
+example below,
+were not supported in
+AT&T/USL
+.I curses
+before SVr4 (1989).
+Later,
+4.3BSD-Reno (1990) added support for
+.BR \%longname ","
+.\" longname was added in October 1989.
+and in 1994,
+NetBSD added support for the parameter-substitution features.
+.PP
+IEEE Std 1003.1/The Open Group Base Specifications Issue\ 7
+(POSIX.1-2008)
+documents only the
+.BR clear ","
+.BR init ","
+and
+.B \%reset
+operands.
+A few observations of interest arise from that selection.
+.bP
+.I \%ncurses
+supports
+.B clear
+as it does any other standard
+.IR cap-code "."
+The others
+.RB ( init
+and
+.BR \%longname ")"
+do not correspond to terminal capabilities.
+.bP
+The
+.I tput
+on SVr4-based systems such as Solaris,
+IRIX64,
+and HP-UX,
+as well as others such as AIX and Tru64,
+also support standard
+.I cap-code
+operands.
+.bP
+A few platforms such as FreeBSD recognize
+.I termcap
+codes rather than
+.I \%term\%info
+capability codes in their respective
+.I tput
+commands.
+Since 2010,
+NetBSD's
+.I tput
+uses
+.I \%term\%info
+codes.
+Before that,
+it
+(like FreeBSD)
+recognized
+.I termcap
+codes.
+.IP
+Beginning in 2021,
+FreeBSD uses
+.I \%ncurses
+.BR tput ","
+configured for both
+.I \%term\%info
+(tested first)
+and
+.I termcap
+(as a fallback).
+.PP
+Because (apparently) all
+.I certified
+Unix systems support the full set of capability codes,
+the reason for documenting only a few may not be apparent.
+.bP
+X/Open Curses Issue\ 7 documents
+.B tput
+differently,
+with
+.I cap-code
+and the other features used in this implementation.
+.bP
+That is,
+there are two standards for
+.IR tput ":"
+POSIX (a subset) and X/Open Curses (the full implementation).
+POSIX documents a subset to avoid the complication of including
+X/Open Curses and the terminal capability database.
+.bP
+While it is certainly possible to write a
+.I tput
+program without using
+.IR curses ","
+no system with a
+.I curses
+implementation provides a
+.I tput
+utility that does not also support standard
+.IR cap-codes "."
+.PP
+X/Open Curses Issue\ 7 (2009) is the first version to document utilities.
+However that part of X/Open Curses does not follow existing practice
+(that is,
+System\ V
+.I curses
+behavior).
+.bP
+It assigns exit status 4 to \*(``invalid operand\*('',
+which may have the same meaning as \*(``unknown capability\*(''.
+For instance,
+the source code for
+Solaris
+.I xcurses
+uses the term \*(``invalid\*('' in this case.
+.bP
+It assigns exit status 255 to a numeric variable that is not specified
+in the
+.I \%term\%info
+database.
+That likely is a documentation error,
+mistaking the \*(``\-1\*('' written to the standard output to indicate
+an absent or canceled numeric capability for an (unsigned) exit status.
+.PP
+The various System\ V implementations
+(AIX,
+HP-UX,
+Solaris)
+use the same exit statuses as
+.IR \%ncurses "."
+.PP
+NetBSD
+.I curses
+documents exit statuses that correspond to neither
+.I \%ncurses
+nor X/Open Curses.

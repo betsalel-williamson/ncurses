@@ -1,0 +1,166 @@
+.SS "Wide and Non-wide Character Configurations"
+This man page primarily surveys functions that appear in any
+configuration of the library.
+There are two common configurations;
+for others,
+see section \*(``ALTERNATE CONFIGURATIONS\*('' below.
+.TP 10 \" "ncursesw" + 2n
+.I \%ncurses
+is the library in its \*(``non-wide\*('' configuration,
+handling only eight-bit characters.
+It stores a character combined with attributes
+and a color pair identifier
+in a
+.I \%chtype
+datum,
+which is often an alias of
+.IR int "."
+A string of
+.I curses
+characters is similar to a C
+.I char
+string;
+a
+.I chtype
+string ends with an integral
+.BR 0 ","
+the null
+.I curses
+character.
+.IP
+Attributes and a color pair identifier
+(with no corresponding character)
+can be stored in variables of
+.I \%chtype
+or
+.I \%attr_t
+type.
+In either case,
+they are accessed via an integral bit mask.
+.IP
+.I \%ncurses
+stores each cell of a
+.I \%WINDOW
+as a
+.IR \%chtype "."
+X/Open Curses does not specify the sizes of the character code or
+color pair identifier,
+nor the quantity of attribute bits,
+in
+.IR chtype ";"
+these are implementation-dependent.
+.I \%ncurses
+uses eight bits for the character code.
+An application requiring a wider character type,
+for instance to represent Unicode,
+should use the wide-character API.
+.TP 10
+.I \%ncursesw
+is the library in its \*(``wide\*('' configuration,
+which handles character encodings requiring a larger data type than
+.I \%char
+(a byte-sized type)
+can represent.
+It provides additional functions that complement those in
+the non-wide library where the size of the underlying character type is
+significant.
+A somewhat regular naming convention relates many of the wide variants
+to their non-wide counterparts;
+where a non-wide function name contains \*(``ch\*('' or \*(``str\*('',
+prefix it with \*(``_w\*('' to obtain the wide counterpart.
+For example,
+\fB\%waddch\fP becomes \fB\%wadd_wch\fP.
+An exception is
+.B \%ins_nwstr
+(and its variants),
+spelled thus instead of \*(``insn_wstr\*(''.
+(Exceptions that add only \*(``w\*('' comprise
+.BR \%addwstr ","
+.BR \%inwstr ","
+and their variants.)
+.\" This is because they operate on "plain" wide-character strings
+.\" (`wchar_t*`) and not curses complex character strings (`cchar_t*`).
+.\" SVID 4 did specify functions like `addwch()` and `inswch()` that
+.\" operated on `chtype`s assuming that they were wide enough for a
+.\" `wchar_t` plus attribute and color pair bits; X/Open Curses did not
+.\" standardize these.
+.IP
+This convention is inapplicable to some non-wide function names,
+so other transformations are used for the wide configuration:
+the window background management function \*(``bkgd\*('' becomes
+\*(``bkgrnd\*('';
+the window border-drawing and -clearing functions are suffixed with
+\*(``_set\*('';
+and character attribute manipulation functions like
+\*(``attron\*('' become \*(``attr_on\*(''.
+.RS 10 \" same as foregoing tag width
+.TP 9 \" "cchar_t" + 2n
+.I \%cchar_t
+is a
+.I "curses complex character"
+and corresponds to the non-wide-character configuration's
+.IR \%chtype "."
+It is a structure type
+because it requires more storage than a standard scalar type offers.
+A character code may not be representable as a
+.IR \%char ","
+and moreover more than one character may occupy a cell
+(as with accent marks and other diacritics).
+Each character is of type
+.IR \%wchar_t ;
+a complex character contains one spacing character and zero or more
+non-spacing characters
+(see below).
+A string of complex characters ends with a
+.I \%cchar_t
+whose
+.I \%wchar_t
+member is the null wide character.
+Attributes and a color pair identifier are stored in separate fields of
+the structure,
+not combined into an integer as in
+.IR \%chtype "."
+.PP
+.I \%ncurses
+stores each cell of a
+.I \%WINDOW
+as a
+.IR \%cchar_t "."
+\fB\%setcchar\fP(3X) and \fB\%getcchar\fP(3X)
+store and retrieve
+.I \%cchar_t
+data.
+.PP
+The wide library API of
+.I \%ncurses
+depends on two data types standardized by ISO C95.
+.TP 9
+.I \%wchar_t
+stores a wide character.
+Like
+.IR \%chtype ","
+it may be an alias of
+.IR int "."
+Depending on the character encoding,
+a wide character may be
+.IR spacing ","
+meaning that it occupies a character cell by itself and typically
+accompanies cursor advancement,
+or
+.IR non-spacing ","
+meaning that it occupies the same cell as a spacing character,
+is often regarded as a \*(``modifier\*('' of the base glyph with which
+it combines,
+and typically does not advance the cursor.
+.TP 9
+.I \%wint_t
+can store a
+.I \%wchar_t
+or the constant
+.IR \%WEOF ","
+analogously to the
+.IR int -sized
+character manipulation functions of ISO C and its constant
+.IR \%EOF "."
+.RE
+.\"

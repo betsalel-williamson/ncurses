@@ -1,0 +1,49 @@
+.SS "Initialization"
+The selection of an appropriate value of
+.I TERM
+in the process environment is essential to correct
+.I curses
+and
+.I \%term\%info
+library operation.
+A well-configured system selects a correct
+.I TERM
+value automatically;
+\fB\%tset\fP(1) may assist with troubleshooting exotic situations.
+.PP
+If you change the terminal type from a shell,
+export
+.IR TERM ","
+then run \fB\%tset\fP(1) or the
+.RB \*(`` "@TPUT@ init" \*(''
+command.
+See subsection \*(``Tabs and Initialization\*('' of \fB\%terminfo\fP(5).
+.PP
+If the environment variables
+.I \%LINES
+and
+.I \%COLUMNS
+are set,
+or if the
+.I curses
+program is executing in a graphical windowing environment,
+the information obtained thence overrides that obtained by
+.IR \%term\%info "."
+An
+.I \%ncurses
+extension supports resizable terminal displays;
+see \fB\%wresize\fP(3X).
+.PP
+If the environment variable
+.I \%TERMINFO
+is defined,
+a
+.I curses
+program checks first for a terminal type description in the location it
+identifies.
+.I \%TERMINFO
+is useful for developing type descriptions or when write permission to
+.I \%@TERMINFO@
+is not available.
+.PP
+See section \*(``ENVIRONMENT\*('' below.

@@ -1,0 +1,170 @@
+.SH HISTORY
+Bill Joy wrote a
+.I tput
+command during development of 4BSD in October 1980.
+This initial version only cleared the screen,
+and did not ship with official distributions.
+.\" It also exited with backwards exit status (1 on success, 0 on
+.\" failure), and was characterized by Bostic in 1988 as "pretty
+.\" unreasonable".
+.\" See Spinellis's "unix-history-repo" on GitHub.
+.PP
+System\ V developed a different
+.I tput
+command.
+.bP
+SVr2 (1984) provided a rudimentary
+.I tput
+that checked the parameter against each
+capability name and returned the corresponding value.
+This version of
+.I tput
+did not use \fB\%tparm\fP(3X) for parameterized capabilities.
+.bP
+SVr3 (1987) replaced that
+.\" SVr3 released in 1987, not 1985.
+.\" https://unix.org/what_is_unix/history_timeline.html
+with a more extensive program
+whose support for
+.B init
+and
+.B \%reset
+operands
+(more than half the program)
+incorporated the
+.B \%reset
+feature of BSD
+.I tset
+written by Eric Allman.
+.bP
+SVr4 (1989) added color initialization by using the
+.B \%orig_colors
+.RB ( oc )
+and
+.B \%orig_pair
+.RB ( op )
+capabilities in its
+.B init
+logic.
+.PP
+Keith Bostic refactored BSD
+.I tput
+for shipment in 4.3BSD-Reno (1990),
+making it follow the interface of System\ V
+.I tput
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD-Reno/src/usr.bin/tput/tput.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=Net2/usr/src/usr.bin/tput/tput.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.4BSD/usr/src/usr.bin/tput/tput.c
+by accepting some parameters named for
+.I \%term\%info
+(pseudo-)capabilities:
+.BR clear ","
+.BR init ","
+.BR \%longname ","
+and
+.BR \%reset "."
+However,
+because he had only
+.I termcap
+available,
+it accepted
+.I termcap
+codes for other capabilities.
+Also,
+Bostic's BSD
+.I tput
+did not modify the terminal modes as the earlier BSD
+.I tset
+had done.
+At the same time,
+Bostic added a shell script named \*(``clear\*('' that used
+.I tput
+to clear the screen.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD-Reno/src/usr.bin/tput/clear.sh
+These became the \*(``modern\*('' BSD implementation of
+.IR tput "."
+.PP
+The origin of
+.I \%ncurses
+.B \%@TPUT@
+lies outside both System\ V and BSD,
+in Ross Ridge's
+.I \%mytinfo
+package,
+published on
+.I comp.sources.unix
+in December 1992.
+Ridge's program made more sophisticated use of the terminal capabilities
+than the BSD program.
+Eric Raymond used that
+.I tput
+program
+(and other parts of
+.IR \%mytinfo ")"
+in
+.I \%ncurses
+in June 1995.
+Incorporating the portions dealing with terminal capabilities
+almost without change,
+Raymond made improvements to the way command-line parameters
+were handled.
+.PP
+Before
+.I \%ncurses
+6.1 (2018),
+its
+.B \%@TSET@
+and
+.B \%@TPUT@
+utilities differed.
+.bP
+.B \%@TSET@
+was more effective,
+resetting the terminal's modes and special input characters.
+.bP
+On the other hand,
+.BR \%@TSET@ "'s"
+repertoire of terminal capabilities for resetting the
+terminal was more limited;
+it had only equivalents of
+.B \%reset_1string
+.RB ( rs1 ),
+.B \%reset_2string
+.RB ( rs2 ),
+and
+.B \%reset_file
+.RB ( rf ),
+and not the tab stop and margin update features of
+.BR \%@TPUT@ "."
+.PP
+The
+.I \%reset
+program is traditionally an alias for
+.B \%@TSET@
+due to its ability
+to reset the terminal's modes and special input characters.
+.PP
+As of
+.I \%ncurses
+6.1,
+the \*(``reset\*('' features of the two programs are (mostly) the same.
+Two minor differences remain.
+.bP
+When issuing a reset,
+the
+.B \%@TSET@
+program
+checks whether the device appears to be a pseudoterminal
+(as might be used by a terminal emulator program),
+and,
+if it does not,
+waits one second in case it is communicating with a hardware terminal.
+.bP
+The two programs write the terminal initialization strings
+to different streams;
+that is,
+standard error for
+.B \%@TSET@
+and
+standard output for
+.BR \%@TPUT@ "."
