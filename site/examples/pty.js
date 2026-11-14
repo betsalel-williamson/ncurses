@@ -50,11 +50,15 @@ addToLibrary({
     HEAPU32[pnum >> 2] = n;
     return 0;
   },
-  fd_read__deps: ['$PTY', '$ptyWinch'],
+  fd_read__deps: ['$PTY', '$ptyWinch', '$doReadv'],
   fd_read__async: true,
   fd_read: (fd, iov, iovcnt, pnum) => {
+    // Anything but stdin is a file the program opened (the attributes pager reads one).
+    if (fd !== 0) {
+      HEAPU32[pnum >> 2] = doReadv(SYSCALLS.getStreamFromFD(fd), iov, iovcnt);
+      return 0;
+    }
     const r = Asyncify.handleAsync(async () => {
-      if (fd !== 0) { HEAPU32[pnum >> 2] = 0; return 0; }
       while (!PTY.input.length && !PTY.winch) await PTY.wait(-1);
       let n = 0;
       for (let i = 0; i < iovcnt && PTY.input.length; i++) {

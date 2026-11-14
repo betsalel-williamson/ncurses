@@ -24,7 +24,7 @@ type Pty = {
 type Variant = { define: string; id: string };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[] };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[] };
 
 const REASONS: Record<string, string> = {
   'compile-error': "doesn't compile",
@@ -62,7 +62,7 @@ function flag(box: HTMLElement, text: string, detail?: string) {
   }
 }
 
-function setup(box: HTMLElement, variants: Variant[]) {
+function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
   box.innerHTML = '';
@@ -165,6 +165,8 @@ function setup(box: HTMLElement, variants: Variant[]) {
       const { default: create } = await import(/* @vite-ignore */ `${base}/examples/${example}.mjs`);
       await create({
         locateFile: (f: string) => `${base}/examples/${f}`,
+        // A program that reads a file gets its own listing, embedded in the build as example.c.
+        arguments: args,
         preRun: [
           (m: { ENV: Record<string, string>; pty: Pty }) => {
             m.ENV.TERM = 'xterm-256color';
@@ -198,7 +200,7 @@ if (boxes.length) {
   void statuses().then((all) => {
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
-      if (s?.status === 'runs') setup(box, s.variants ?? []);
+      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? []);
       else if (s) flag(box, `This program doesn't run in the browser yet: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }

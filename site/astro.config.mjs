@@ -24,6 +24,7 @@ export default defineConfig({
         { label: 'Windows and screen updates', items: [{ autogenerate: { directory: 'guides/windows' } }] },
         { label: 'Output', items: [{ autogenerate: { directory: 'guides/output' } }] },
         { label: 'Input', items: [{ autogenerate: { directory: 'guides/input' } }] },
+        { label: 'Attributes and colors', items: [{ autogenerate: { directory: 'guides/attributes' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
