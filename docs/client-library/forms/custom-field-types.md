@@ -72,7 +72,7 @@ This function is called by form library functions that allocate new field instan
 `free_str`  
 This function is called by field- and type-deallocation routines in the library. It takes a pile pointer argument, and is expected to free the storage of that pile.
 
-The `make_str` and `copy_str` functions may return NULL to signal allocation failure. The library routines will that call them will return error indication when this happens. Thus, your validation functions should never see a NULL file pointer and need not check specially for it.
+The `make_str` and `copy_str` functions may return NULL to signal allocation failure. The library routines that call them will return an error indication when this happens. Thus, your validation functions should never see a NULL pile pointer and need not check specially for it.
 
 ### Order Functions For Custom Types
 
