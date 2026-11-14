@@ -28,6 +28,7 @@
   ],
   "roots": [
     "client-library/forms/index.md",
+    "client-library/menus/index.md",
     "appendix/index.md"
   ],
   "man": {

@@ -5,7 +5,7 @@
  */
 
 /** Guide shard directories, relative to the repository root. */
-export const GUIDE_DIRS = ['docs/client-library/forms'];
+export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus'];
 
 const BLOCK = /^```c\n([\s\S]*?)^```$/gm;
 const MAIN = /^(?:int\s+|void\s+)?main\s*\(/m;

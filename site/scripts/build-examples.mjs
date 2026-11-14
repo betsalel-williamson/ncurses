@@ -64,12 +64,21 @@ for (const dir of GUIDE_DIRS) {
       const obj = join(src, `${ex.id}.o`);
       writeFileSync(c, ex.code);
       const quiet = { stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' };
+      // main() is renamed to example_main() in the compiled IR, not with -Dmain=: C gives
+      // main(), and only main(), an implicit "return 0" at its closing brace, so a listing that
+      // ends without a return would otherwise report a garbage exit status.
+      const ll = join(src, `${ex.id}.ll`);
       try {
         execFileSync('emcc', [
-          '-O2', '-DNCURSES_STATIC', '-Dmain=example_main', '-c', c, '-o', obj,
+          '-O2', '-DNCURSES_STATIC', '-S', '-emit-llvm', c, '-o', ll,
           '-I', join(build, 'include'),
           ...ex.libs.map((l) => ['-I', join(repo, l)]).flat(),
         ], quiet);
+        const ir = readFileSync(ll, 'utf8')
+          .replace(/^@__main_void = .*\n/m, '')
+          .replace(/@main\b/g, '@example_main');
+        writeFileSync(ll, ir);
+        execFileSync('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
       } catch (e) {
         Object.assign(entry, { status: 'compile-error', detail: tail(e) });
         continue;
