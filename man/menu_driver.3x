@@ -162,12 +162,12 @@ into a menu request an \fBE_REQUEST_DENIED\fP is returned.
 .SS "Application-defined Commands"
 If the second argument is neither printable nor one of the above
 pre-defined menu requests or KEY_MOUSE,
-the drive assumes it is an application-specific
+the driver assumes it is an application-specific
 command and returns \fBE_UNKNOWN_COMMAND\fP.  Application-defined commands
 should be defined relative to \fBMAX_COMMAND\fP, the maximum value of these
 pre-defined requests.
 .SH RETURN VALUE
-\fBmenu_driver\fP return one of the following error codes:
+\fBmenu_driver\fP returns one of the following error codes:
 .TP 5
 .B E_OK
 The routine succeeded.
