@@ -2,7 +2,7 @@
 
 This edition is built from the ncurses documentation by Thomas E. Dickey, Zeyd M. Ben-Halim, Eric S. Raymond, Juergen Pfeifer, Pradeep Padala and the other [contributors](https://betsalel-williamson.github.io/ncurses/credits/). This page lists every change it makes to that text: errors corrected in the original, errors this edition introduced and then fixed, formatting, and new material. Errors found but not yet fixed are listed too, so they can be reported upstream.
 
-Each entry names where the change is, what it was, what it is now, where the error came from, and the pull request that made it. Every pull request that changes the guides' content adds its entries here.
+Each entry names where the change is, what it was, what it is now, where the error came from, and the pull request that made it. The list grows with the migration: every pull request that changes a guide or a manual page adds its entries here, and the site's workflow fails a pull request that changes the docs without touching this page.
 
 ## Errors corrected in the original text
 

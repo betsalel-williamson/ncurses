@@ -30,6 +30,19 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y pandoc
       - name: Check the stitched man pages match man/
         run: docs/man/stitch.sh && git diff --exit-code man/
+      - name: Require an errata entry when a pull request changes the docs
+        # docs/appendix/index.md is the running list of every change this edition makes. A pull
+        # request that changes a shard adds its entries there, or says "no errata" in its body.
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.body, 'no errata')
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE"
+          changed=$(git diff --name-only "$BASE" HEAD)
+          if echo "$changed" | grep -qE '^docs/(client-library|man)/' && ! echo "$changed" | grep -qx 'docs/appendix/index.md'; then
+            echo "::error file=docs/appendix/index.md::This pull request changes the docs; add its changes to docs/appendix/index.md, or write 'no errata' in the pull request body."
+            exit 1
+          fi
       - name: Lint the guides with Vale
         run: |
           curl -sSL https://github.com/errata-ai/vale/releases/download/v3.15.1/vale_3.15.1_Linux_64-bit.tar.gz | tar -xz -C /tmp vale
