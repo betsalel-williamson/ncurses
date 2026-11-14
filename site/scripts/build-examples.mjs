@@ -29,9 +29,9 @@ try {
   process.exit(0);
 }
 
-const build = join(site, '.generated/ncurses-wasm');
-if (!existsSync(join(build, 'lib/libncursesw.a'))) {
-  mkdirSync(build, { recursive: true });
+const wasmBuild = join(site, '.generated/ncurses-wasm');
+if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
+  mkdirSync(wasmBuild, { recursive: true });
   run('emconfigure', [
     join(repo, 'configure'),
     '--host=wasm32-unknown-emscripten',
@@ -41,8 +41,8 @@ if (!existsSync(join(build, 'lib/libncursesw.a'))) {
     '--without-progs', '--without-tests', '--without-manpages', '--without-debug',
     '--disable-database', '--with-fallbacks=xterm-256color',
     '--disable-stripping', '--enable-widec', '--without-pthread',
-  ], { cwd: build, stdio: ['ignore', 'ignore', 'inherit'] });
-  run('emmake', ['make', '-j4', 'libs'], { cwd: build, stdio: ['ignore', 'ignore', 'inherit'] });
+  ], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'] });
+  run('emmake', ['make', '-j4', 'libs'], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'] });
 }
 
 const out = join(site, 'public/examples');
@@ -60,48 +60,63 @@ for (const dir of GUIDE_DIRS) {
     for (const ex of findPrograms(readFileSync(join(repo, shard), 'utf8'), shard)) {
       const entry = { id: ex.id, title: ex.title, shard };
       status.push(entry);
-      const c = join(src, `${ex.id}.c`);
-      const obj = join(src, `${ex.id}.o`);
-      writeFileSync(c, ex.code);
-      const quiet = { stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' };
-      // main() is renamed to example_main() in the compiled IR, not with -Dmain=: C gives
-      // main(), and only main(), an implicit "return 0" at its closing brace, so a listing that
-      // ends without a return would otherwise report a garbage exit status.
-      const ll = join(src, `${ex.id}.ll`);
-      try {
-        execFileSync('emcc', [
-          '-O2', '-DNCURSES_STATIC', '-S', '-emit-llvm', c, '-o', ll,
-          '-I', join(build, 'include'),
-          ...ex.libs.map((l) => ['-I', join(repo, l)]).flat(),
-        ], quiet);
-        const ir = readFileSync(ll, 'utf8')
-          .replace(/^@__main_void = .*\n/m, '')
-          .replace(/@main\b/g, '@example_main');
-        writeFileSync(ll, ir);
-        execFileSync('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
-      } catch (e) {
-        Object.assign(entry, { status: 'compile-error', detail: tail(e) });
-        continue;
+      Object.assign(entry, buildExample(ex, ex.id, []));
+      if (entry.status !== 'runs') continue;
+      // A listing that tests a macro of its own (#ifdef _DEBUG) gets a second build with the
+      // macro defined, so a reader can run the code it hides.
+      const variants = [];
+      for (const name of ex.macros) {
+        const vid = `${ex.id}--${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+        const result = buildExample(ex, vid, [name]);
+        if (result.status === 'runs') variants.push({ define: name, id: vid });
+        else console.log(`--- ${vid}: ${result.status} with -D${name}\n${result.detail}`);
       }
-      const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(build, `lib/lib${l}.a`));
-      try {
-        execFileSync('emcc', [
-          '-O2', obj, join(site, 'examples/main.c'), ...libs,
-          '-o', join(out, `${ex.id}.mjs`),
-          '--js-library', join(site, 'examples/pty.js'),
-          '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll"]',
-          '-sMODULARIZE', '-sEXPORT_ES6', '-sENVIRONMENT=web,node', '-sEXIT_RUNTIME=1',
-          '-sEXPORTED_RUNTIME_METHODS=["ENV"]', '-sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE=["$PTY"]',
-        ], quiet);
-      } catch (e) {
-        Object.assign(entry, { status: 'link-error', detail: tail(e) });
-        continue;
-      }
-      const smoke = execFileSync('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${ex.id}.mjs`)], quiet);
-      Object.assign(entry, JSON.parse(smoke.trim().split('\n').pop()));
-      if (entry.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${ex.id}.${ext}`), { force: true });
+      if (variants.length) entry.variants = variants;
     }
   }
+}
+
+/** Compile, link and smoke-test one build of a listing; returns { status, detail }. */
+function buildExample(ex, id, defines) {
+  const c = join(src, `${id}.c`);
+  const obj = join(src, `${id}.o`);
+  writeFileSync(c, ex.code);
+  const quiet = { stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' };
+  // main() is renamed to example_main() in the compiled IR, not with -Dmain=: C gives
+  // main(), and only main(), an implicit "return 0" at its closing brace, so a listing that
+  // ends without a return would otherwise report a garbage exit status.
+  const ll = join(src, `${id}.ll`);
+  try {
+    execFileSync('emcc', [
+      '-O2', '-DNCURSES_STATIC', ...defines.map((d) => `-D${d}`), '-S', '-emit-llvm', c, '-o', ll,
+      '-I', join(wasmBuild, 'include'),
+      ...ex.libs.map((l) => ['-I', join(repo, l)]).flat(),
+    ], quiet);
+    const ir = readFileSync(ll, 'utf8')
+      .replace(/^@__main_void = .*\n/m, '')
+      .replace(/@main\b/g, '@example_main');
+    writeFileSync(ll, ir);
+    execFileSync('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
+  } catch (e) {
+    return { status: 'compile-error', detail: tail(e) };
+  }
+  const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(wasmBuild, `lib/lib${l}.a`));
+  try {
+    execFileSync('emcc', [
+      '-O2', obj, join(site, 'examples/main.c'), ...libs,
+      '-o', join(out, `${id}.mjs`),
+      '--js-library', join(site, 'examples/pty.js'),
+      '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll"]',
+      '-sMODULARIZE', '-sEXPORT_ES6', '-sENVIRONMENT=web,node', '-sEXIT_RUNTIME=1',
+      '-sEXPORTED_RUNTIME_METHODS=["ENV"]', '-sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE=["$PTY"]',
+    ], quiet);
+  } catch (e) {
+    return { status: 'link-error', detail: tail(e) };
+  }
+  const smoke = execFileSync('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`)], quiet);
+  const result = JSON.parse(smoke.trim().split('\n').pop());
+  if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
+  return result;
 }
 writeFileSync(join(out, 'status.json'), JSON.stringify(status, null, 2));
 

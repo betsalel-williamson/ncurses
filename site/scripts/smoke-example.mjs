@@ -28,7 +28,7 @@ let pty;
 create({
   preRun: [
     (m) => {
-      Object.assign(m.ENV, { TERM: 'xterm-256color', LINES: '24', COLUMNS: '80', ESCDELAY: '25' });
+      Object.assign(m.ENV, { TERM: 'xterm-256color', ESCDELAY: '25' });
       pty = m.pty;
       pty.write = (bytes) => (output += bytes.length);
     },

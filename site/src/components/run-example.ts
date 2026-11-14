@@ -8,14 +8,23 @@ import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const COLS = 80;
-const ROWS = 24;
 const FONT_SIZE = 16;
+/** Terminal sizes a reader can pick, columns by rows. The first is the default. */
+const SIZES: [number, number][] = [[80, 24], [100, 30], [60, 20]];
 
-type Pty = { write: (bytes: Uint8Array) => void; push: (bytes: Uint8Array) => void };
+type Pty = {
+  write: (bytes: Uint8Array) => void;
+  push: (bytes: Uint8Array) => void;
+  resize: (rows: number, cols: number) => void;
+  rows: number;
+  cols: number;
+};
+
+/** A second build of a listing with one of its own macros defined (build-examples.mjs). */
+type Variant = { define: string; id: string };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[] };
 
 const REASONS: Record<string, string> = {
   'compile-error': "doesn't compile",
@@ -53,35 +62,72 @@ function flag(box: HTMLElement, text: string, detail?: string) {
   }
 }
 
-function setup(box: HTMLElement) {
+function setup(box: HTMLElement, variants: Variant[]) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
   box.innerHTML = '';
   const bar = document.createElement('div');
   bar.className = 'run-example-bar';
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.textContent = '▶ Run this example';
+  const button = (text: string) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = text;
+    return b;
+  };
+  const main = button('▶ Run this example');
+  const extra = variants.map((v) => ({ v, b: button(`▶ Run with ${v.define} defined`) }));
+  const sizeLabel = document.createElement('label');
+  sizeLabel.className = 'run-example-size';
+  sizeLabel.textContent = 'Terminal ';
+  const size = document.createElement('select');
+  for (const [c, r] of SIZES) size.add(new Option(`${c}×${r}`, `${c}x${r}`));
+  sizeLabel.append(size);
   const note = document.createElement('span');
   note.className = 'run-example-note';
   note.textContent = 'Runs the listing above, compiled to WebAssembly. Press F1 to quit.';
-  bar.append(button, note);
+  bar.append(main, ...extra.map((x) => x.b), sizeLabel, note);
   const screen = document.createElement('div');
   screen.className = 'run-example-screen not-content';
   screen.hidden = true;
   box.append(bar, screen);
 
+  const chosen = () => SIZES[size.selectedIndex];
   let term: Terminal | null = null;
+  let pty: Pty | null = null;
   let running = false;
-  button.addEventListener('click', async () => {
+
+  // A wide terminal is wider than the content column. Shrink the font until every column
+  // fits, down to 9px, then scroll.
+  const fit = () => {
+    if (!term) return;
+    const style = getComputedStyle(screen);
+    const avail = box.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const width = () => screen.querySelector('.xterm-screen')?.getBoundingClientRect().width ?? 0;
+    let px = FONT_SIZE;
+    term.options.fontSize = px;
+    while (width() > avail && px > 9) term.options.fontSize = px -= 0.5;
+  };
+
+  // A new size applies at once: the terminal changes, and a running program gets SIGWINCH and
+  // sees KEY_RESIZE, as it would when a real terminal window is resized.
+  size.addEventListener('change', () => {
+    const [cols, rows] = chosen();
+    if (!term) return;
+    term.resize(cols, rows);
+    fit();
+    if (running) pty?.resize(rows, cols);
+  });
+
+  const run = async (example: string, label: string, clicked: HTMLButtonElement) => {
     if (running) return;
     running = true;
-    button.disabled = true;
+    for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
     screen.hidden = false;
+    const [cols, rows] = chosen();
     if (!term) {
       term = new Terminal({
-        cols: COLS,
-        rows: ROWS,
+        cols,
+        rows,
         cursorBlink: true,
         fontSize: FONT_SIZE,
         theme: { background: '#1e1e1e', black: '#1e1e1e' },
@@ -97,52 +143,48 @@ function setup(box: HTMLElement) {
       } catch {
         // no WebGL: keep the DOM renderer
       }
-      // An 80-column terminal at the default 16px is wider than the content column on a
-      // 1280px screen. Shrink the font until all 80 columns fit, down to 9px, then scroll.
-      const fit = () => {
-        const style = getComputedStyle(screen);
-        const avail = box.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-        const width = () => screen.querySelector('.xterm-screen')?.getBoundingClientRect().width ?? 0;
-        let size = FONT_SIZE;
-        term!.options.fontSize = size;
-        while (width() > avail && size > 9) term!.options.fontSize = size -= 0.5;
-      };
-      fit();
       window.addEventListener('resize', fit);
+    } else {
+      term.resize(cols, rows);
     }
+    fit();
     term.reset();
     term.focus();
     const encoder = new TextEncoder();
-    let pty: Pty | null = null;
+    pty = null;
     const input = term.onData((d) => pty?.push(encoder.encode(d)));
     const done = (message: string) => {
       input.dispose();
+      pty = null;
       term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
       running = false;
-      button.disabled = false;
-      button.textContent = '↻ Run again';
+      for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = false;
+      if (clicked === main) main.textContent = '↻ Run again';
     };
     try {
-      const { default: create } = await import(/* @vite-ignore */ `${base}/examples/${id}.mjs`);
+      const { default: create } = await import(/* @vite-ignore */ `${base}/examples/${example}.mjs`);
       await create({
         locateFile: (f: string) => `${base}/examples/${f}`,
         preRun: [
           (m: { ENV: Record<string, string>; pty: Pty }) => {
             m.ENV.TERM = 'xterm-256color';
-            m.ENV.LINES = String(ROWS);
-            m.ENV.COLUMNS = String(COLS);
             m.ENV.ESCDELAY = '25';
             pty = m.pty;
+            // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
+            [pty.cols, pty.rows] = chosen();
             pty.write = (bytes) => term!.write(bytes);
           },
         ],
-        onExit: (code: number) => done(`${title} exited (${code}).`),
-        onAbort: () => done(`${title} stopped with an error.`),
+        onExit: (code: number) => done(`${label} exited (${code}).`),
+        onAbort: () => done(`${label} stopped with an error.`),
       });
     } catch (e) {
-      done(`Could not start ${title}: ${(e as Error).message}`);
+      done(`Could not start ${label}: ${(e as Error).message}`);
     }
-  });
+  };
+
+  main.addEventListener('click', () => run(id, title, main));
+  for (const { v, b } of extra) b.addEventListener('click', () => run(v.id, `${title} (${v.define} defined)`, b));
 }
 
 // exit() ends a program by throwing ExitStatus out of the resumed Asyncify stack; it is the
@@ -156,7 +198,7 @@ if (boxes.length) {
   void statuses().then((all) => {
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
-      if (s?.status === 'runs') setup(box);
+      if (s?.status === 'runs') setup(box, s.variants ?? []);
       else if (s) flag(box, `This program doesn't run in the browser yet: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }
