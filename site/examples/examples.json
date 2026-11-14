@@ -4,6 +4,17 @@
     "title": "Form Attributes example",
     "shard": "docs/client-library/forms/fields.md",
     "after": "**Example: Form Attributes example**",
-    "libs": ["form"]
+    "libs": [
+      "form"
+    ]
+  },
+  {
+    "id": "form-attributes-editing",
+    "title": "Form Attributes example with editing keys",
+    "shard": "docs/client-library/forms/fields.md",
+    "after": "**Example: Form Attributes example with editing keys**",
+    "libs": [
+      "form"
+    ]
   }
 ]
