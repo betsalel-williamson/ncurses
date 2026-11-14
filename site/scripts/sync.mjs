@@ -5,6 +5,7 @@
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
+ * - a Run placeholder after each listing named in examples/examples.json
  * Requires pandoc on PATH. Output is gitignored.
  */
 import { execFileSync } from 'node:child_process';
@@ -20,6 +21,7 @@ const blob = (p) => `https://github.com/${repoSlug}/blob/master/${p}`;
 
 // ---------- guides ----------
 const GUIDES = [{ src: 'docs/client-library/forms', route: 'guides/forms' }];
+const EXAMPLES = JSON.parse(readFileSync(join(site, 'examples/examples.json'), 'utf8'));
 rmSync(join(content, 'guides'), { recursive: true, force: true });
 for (const g of GUIDES) {
   const dir = join(repo, g.src);
@@ -41,6 +43,15 @@ for (const g of GUIDES) {
       const target = relative(repo, join(dir, p));
       return target.startsWith('docs/') ? m : `](${blob(target)}${frag})`;
     });
+    // Runnable examples: a Run button after the listing (built by build-examples.mjs).
+    for (const ex of EXAMPLES.filter((e) => e.shard === `${g.src}/${file}`)) {
+      const at = text.indexOf(ex.after);
+      const block = at < 0 ? null : /^```c\n[\s\S]*?^```$/m.exec(text.slice(at));
+      if (!block) throw new Error(`${ex.id}: no \`\`\`c block after "${ex.after}" in ${ex.shard}`);
+      const end = at + block.index + block[0].length;
+      const widget = `\n\n<div class="run-example" data-example="${ex.id}" data-title=${JSON.stringify(ex.title)}></div>`;
+      text = text.slice(0, end) + widget + text.slice(end);
+    }
     const out = join(content, g.route, file);
     mkdirSync(dirname(out), { recursive: true });
     const position = isIndex ? 0 : order.indexOf(file) + 1;

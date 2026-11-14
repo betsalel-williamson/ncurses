@@ -32,16 +32,16 @@ HOOK field_term(FORM *form);     /* form to query */
 
 These functions allow you to either set or query four different hooks. In each of the set functions, the second argument should be the address of a hook function. These functions differ only in the timing of the hook call.
 
-form_init  
+`form_init`  
 This hook is called when the form is posted; also, just after each page change operation.
 
-field_init  
+`field_init`  
 This hook is called when the form is posted; also, just after each field change
 
-field_term  
+`field_term`  
 This hook is called just after field validation; that is, just before the field is altered. It is also called when the form is unposted.
 
-form_term  
+`form_term`  
 This hook is called when the form is unposted; also, just before each page change operation.
 
 Calls to these hooks may be triggered
@@ -104,10 +104,10 @@ int form_opts(FORM *form);                /* form to query */
 
 By default, all options are on. Here are the available option bits:
 
-O_NL_OVERLOAD  
+`O_NL_OVERLOAD`  
 Enable overloading of `REQ_NEW_LINE` as described in [Editing Requests](form-driver.md#editing-requests). The value of this option is ignored on dynamic fields that have not reached their size limit; these have no last line, so the circumstances for triggering a `REQ_NEXT_FIELD` never arise.
 
-O_BS_OVERLOAD  
+`O_BS_OVERLOAD`  
 Enable overloading of `REQ_DEL_PREV` as described in [Editing Requests](form-driver.md#editing-requests).
 
 The option values are bit-masks and can be composed with logical-or in the obvious way.

@@ -1,0 +1,11 @@
+# Function names, identifiers and constants belong in backticks. Vale already skips code spans
+# and code blocks, so anything this matches is code written as plain prose.
+extends: existence
+message: "'%s' looks like code; wrap it in backticks."
+level: error
+scope: text
+nonword: true
+tokens:
+  - '\b[A-Za-z_][A-Za-z0-9_]*\(\)' # set_field_fore()
+  - '\b[a-z]+_[a-z0-9_]+\b' # field_init
+  - '\b[A-Z]+_[A-Z0-9_]+\b' # O_AUTOSKIP, TYPE_ENUM
