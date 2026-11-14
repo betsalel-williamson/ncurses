@@ -22,6 +22,7 @@ export default defineConfig({
         { label: 'Credits', link: '/credits/' },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
+        { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
         ...manSidebar,
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
