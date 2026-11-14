@@ -7,6 +7,8 @@
  *   continuation lines under its first line.
  * - Trailing comments line up: every one in a declaration listing, and those in each run of
  *   lines (no blank line between) in a program.
+ * - No line is longer than 77 columns, the width that fits the site's content column at 1280px
+ *   without scrolling (see codeFontSize in site/astro.config.mjs).
  * Usage: node site/scripts/check-listings.mjs [--fix]   (--fix reformats complete programs)
  */
 import { execFileSync } from 'node:child_process';
@@ -17,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 const repo = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const docs = join(repo, 'docs');
 const fix = process.argv.includes('--fix');
+const MAX_COLUMNS = 77;
 const style = `file:${join(docs, '.clang-format')}`;
 
 const walk = (dir) =>
@@ -50,6 +53,9 @@ for (const file of walk(docs)) {
     // Trailing comments line up: in a declaration listing, every one in the block; in a
     // program, those in each run of lines with no blank line between.
     const lines = code.split('\n');
+    lines.forEach((l, n) => {
+      if (l.length > MAX_COLUMNS) problems.push(`${rel}:${startLine + n}: ${l.length} columns, more than ${MAX_COLUMNS}`);
+    });
     const program = /^main\s*\(/m.test(code);
     let run = [];
     const flush = () => {

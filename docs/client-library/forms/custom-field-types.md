@@ -27,7 +27,8 @@ To create a field type from scratch, you need to specify one or both of the foll
 Here is how you do that:
 
 ```c
-typedef int     (*HOOK)();                 /* pointer to function returning int */
+/* pointer to function returning int */
+typedef int     (*HOOK)();
 
 FIELDTYPE *new_fieldtype(HOOK f_validate,  /* field validator */
                          HOOK c_validate); /* character validator */
@@ -52,8 +53,10 @@ In order to arrange for such arguments to be passed to your validation functions
 Here is how you make the association:
 
 ```c
-typedef char    *(*PTRHOOK)();            /* pointer to function returning (char *) */
-typedef void    (*VOIDHOOK)();            /* pointer to function returning void */
+/* pointer to function returning (char *) */
+typedef char    *(*PTRHOOK)();
+/* pointer to function returning void */
+typedef void    (*VOIDHOOK)();
 
 int set_fieldtype_arg(FIELDTYPE *type,    /* type to alter */
                       PTRHOOK make_str,   /* make structure from args */
@@ -79,7 +82,8 @@ The `make_str` and `copy_str` functions may return NULL to signal allocation fai
 Some custom field types are simply ordered in the same well-defined way that `TYPE_ENUM` is. For such types, it is possible to define successor and predecessor functions to support the `REQ_NEXT_CHOICE` and `REQ_PREV_CHOICE` requests. Here is how:
 
 ```c
-typedef int     (*INTHOOK)();             /* pointer to function returning int */
+/* pointer to function returning int */
+typedef int     (*INTHOOK)();
 
 int set_fieldtype_choice(FIELDTYPE *type, /* type to alter */
                          INTHOOK succ,    /* get successor value */

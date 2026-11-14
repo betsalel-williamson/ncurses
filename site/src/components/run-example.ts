@@ -10,6 +10,7 @@ import '@xterm/xterm/css/xterm.css';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const COLS = 80;
 const ROWS = 24;
+const FONT_SIZE = 16;
 
 type Pty = { write: (bytes: Uint8Array) => void; push: (bytes: Uint8Array) => void };
 
@@ -82,6 +83,7 @@ function setup(box: HTMLElement) {
         cols: COLS,
         rows: ROWS,
         cursorBlink: true,
+        fontSize: FONT_SIZE,
         theme: { background: '#1e1e1e', black: '#1e1e1e' },
       });
       term.open(screen);
@@ -95,6 +97,18 @@ function setup(box: HTMLElement) {
       } catch {
         // no WebGL: keep the DOM renderer
       }
+      // An 80-column terminal at the default 16px is wider than the content column on a
+      // 1280px screen. Shrink the font until all 80 columns fit, down to 9px, then scroll.
+      const fit = () => {
+        const style = getComputedStyle(screen);
+        const avail = box.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+        const width = () => screen.querySelector('.xterm-screen')?.getBoundingClientRect().width ?? 0;
+        let size = FONT_SIZE;
+        term!.options.fontSize = size;
+        while (width() > avail && size > 9) term!.options.fontSize = size -= 0.5;
+      };
+      fit();
+      window.addEventListener('resize', fit);
     }
     term.reset();
     term.focus();
