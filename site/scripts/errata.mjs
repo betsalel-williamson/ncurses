@@ -7,7 +7,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const COLUMNS = ['category', 'where', 'anchor', 'was', 'now', 'source', 'pr', 'commit'];
+export const COLUMNS = ['category', 'where', 'anchor', 'was', 'now', 'source', 'pr', 'commit', 'checked', 'quote', 'verdict', 'confidence', 'earlier'];
+/** Rows that claim an error carry the five-step check: checked, quote, verdict, confidence, earlier. */
+export const CLAIMS = ['original-error', 'edition-error', 'open', 'rejected'];
+export const VERDICTS = ['matches', 'disagrees', 'missing', 'impossible', 'superseded', "can't tell"];
+export const CONFIDENCE = ['high', 'medium', 'low'];
 export const CATEGORIES = {
   'original-error': 'Errors corrected in the original text',
   'edition-error': 'Errors this edition introduced, then fixed',
@@ -15,6 +19,7 @@ export const CATEGORIES = {
   structure: 'Structure',
   addition: 'New material',
   open: 'Found, not yet fixed',
+  rejected: 'Checked and rejected',
 };
 
 /** RFC 4180 CSV: quoted fields may hold commas, quotes ("") and newlines. */
@@ -54,8 +59,15 @@ export function checkErrata(repo) {
     if (!CATEGORIES[r.category]) problems.push(`${at}: unknown category "${r.category}"`);
     if (!r.where || !existsSync(join(repo, r.where))) problems.push(`${at}: "${r.where}" is not a file in the repository`);
     if (!r.now) problems.push(`${at}: "now" is empty`);
-    if (r.category === 'open') {
-      if (r.pr || r.commit) problems.push(`${at}: an open row has no pr or commit yet`);
+    if (CLAIMS.includes(r.category)) {
+      for (const k of ['checked', 'quote', 'earlier']) if (!r[k]) problems.push(`${at}: "${k}" is empty; an error claim needs the five-step check`);
+      if (!VERDICTS.includes(r.verdict)) problems.push(`${at}: verdict must be one of ${VERDICTS.join(', ')}`);
+      if (!CONFIDENCE.includes(r.confidence)) problems.push(`${at}: confidence must be one of ${CONFIDENCE.join(', ')}`);
+      const confirmed = r.category === 'rejected' ? r.verdict !== 'matches' : r.verdict === 'matches';
+      if (!confirmed) problems.push(`${at}: a ${r.category} row with verdict "${r.verdict}" belongs in ${r.category === 'rejected' ? 'an error category' : 'rejected'}`);
+    }
+    if (r.category === 'open' || r.category === 'rejected') {
+      if (r.pr || r.commit) problems.push(`${at}: an ${r.category} row has no pr or commit`);
       continue;
     }
     if (!/^[1-9]\d*$/.test(r.pr)) problems.push(`${at}: pr must be a pull request number`);
@@ -93,13 +105,28 @@ export function renderErrata(repo, { base, repoSlug, routeOf }) {
   for (const [category, title] of Object.entries(CATEGORIES)) {
     const list = rows.filter((r) => r.category === category);
     if (!list.length) continue;
-    const open = category === 'open';
+    const claim = CLAIMS.includes(category);
+    const fixed = category !== 'open' && category !== 'rejected';
     md += `\n## ${title}\n\n`;
-    md += open ? '| Where | Error | Fix to propose upstream |\n| --- | --- | --- |\n' : '| Where | Was | Now | Source | Change |\n| --- | --- | --- | --- | --- |\n';
+    md += '| Where | Was | Now | Source |' + (claim ? ' Verdict |' : '') + (fixed ? ' Change |' : '') + '\n';
+    md += '| --- | --- | --- | --- |' + (claim ? ' --- |' : '') + (fixed ? ' --- |' : '') + '\n';
     for (const r of list) {
-      if (open) md += `| ${where(r)} | ${cell(r.was)} | ${cell(r.now)} |\n`;
-      else
-        md += `| ${where(r)} | ${cell(r.was) || '—'} | ${cell(r.now)} | ${cell(r.source)} | [#${r.pr}](${gh}/pull/${r.pr}), [\`${r.commit.slice(0, 7)}\`](${gh}/commit/${r.commit}) |\n`;
+      md += `| ${where(r)} | ${cell(r.was) || '—'} | ${cell(r.now)} | ${cell(r.source)} |`;
+      if (claim) md += ` ${r.verdict}, ${r.confidence} |`;
+      if (fixed) md += ` [#${r.pr}](${gh}/pull/${r.pr}), [\`${r.commit.slice(0, 7)}\`](${gh}/commit/${r.commit}) |`;
+      md += '\n';
+    }
+    if (claim) {
+      md += '\n<details>\n<summary>How each was checked</summary>\n\n';
+      for (const r of list) {
+        md += `- **${cell(r.was)}** (${where(r)})\n`;
+        md += `  1. Claim, as printed: ${cell(r.was)}\n`;
+        md += `  2. Opened: ${cell(r.checked)}\n`;
+        md += `  3. It says: "${cell(r.quote)}"\n`;
+        md += `  4. Verdict: ${r.verdict}, ${r.confidence} confidence\n`;
+        md += `  5. One step earlier: ${cell(r.earlier)}\n`;
+      }
+      md += '\n</details>\n';
     }
   }
   return md;
