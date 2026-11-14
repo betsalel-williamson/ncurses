@@ -26,6 +26,7 @@ const blob = (p) => `https://github.com/${repoSlug}/blob/master/${p}`;
 const GUIDES = [
   { src: 'docs/client-library/getting-started', route: 'guides/getting-started', indexLabel: 'Introduction' },
   { src: 'docs/client-library/windows', route: 'guides/windows', indexLabel: 'Introduction' },
+  { src: 'docs/client-library/output', route: 'guides/output', indexLabel: 'Introduction' },
   { src: 'docs/client-library/forms', route: 'guides/forms', indexLabel: 'Introduction' },
   { src: 'docs/client-library/menus', route: 'guides/menus', indexLabel: 'Introduction' },
   { src: 'docs/client-library/panels', route: 'guides/panels', indexLabel: 'Introduction' },

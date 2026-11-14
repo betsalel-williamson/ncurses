@@ -22,6 +22,7 @@ export default defineConfig({
         { label: 'Credits', link: '/credits/' },
         { label: 'Getting started', items: [{ autogenerate: { directory: 'guides/getting-started' } }] },
         { label: 'Windows and screen updates', items: [{ autogenerate: { directory: 'guides/windows' } }] },
+        { label: 'Output', items: [{ autogenerate: { directory: 'guides/output' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
