@@ -3,7 +3,7 @@
  * Run one built example (public/examples/<id>.mjs) in Node on a fake 80x24 xterm, the way the
  * page runs it, and report whether it works: it must draw something, keep running until a key
  * comes, and exit with status 0 when it gets F1, pressed up to three times (every guide example
- * quits on F1).
+ * quits on F1). A program reading a line (getstr) ignores F1, so it gets Enter, then F1 again.
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
  * Usage: node smoke-example.mjs <path to .mjs>
  */
@@ -23,7 +23,7 @@ process.on('unhandledRejection', (e) => isExit(e) || report('crashed', String(e?
 let output = 0;
 let exited = null;
 const { default: create } = await import(pathToFileURL(process.argv[2]).href);
-setTimeout(() => report('no-quit', 'still running after F1 was pressed three times'), 7000);
+setTimeout(() => report('no-quit', 'still running after F1 three times, then Enter and F1'), 10000);
 let pty;
 create({
   preRun: [
@@ -55,5 +55,11 @@ for (let press = 0; press < 3 && exited === null; press++) {
   for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
 }
 for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
-if (exited === null) report('no-quit', 'still running after F1 was pressed three times');
+// getstr() and friends discard function keys until a line ends.
+for (const keys of [new TextEncoder().encode('\r'), F1]) {
+  if (exited !== null) break;
+  pty.push(keys);
+  for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+}
+if (exited === null) report('no-quit', 'still running after F1 three times, then Enter and F1');
 report(exited === 0 ? 'runs' : 'crashed', exited === 0 ? '' : `exited (${exited}) after F1`);
