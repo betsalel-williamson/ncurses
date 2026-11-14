@@ -87,6 +87,32 @@ const FILL = {
 };
 const fill = (t) => t.replace(/@([A-Z_]+)@/g, (m, k) => FILL[k] ?? k.toLowerCase());
 
+/**
+ * Replace each \\fP ("previous font") with the font it returns to. pandoc's man reader tracks
+ * the previous font wrongly, so \\fB…\\fP and \\fI…\\fP left bold running on, and the pages
+ * showed stray ** around page references and after italic words. Fonts reset at each
+ * paragraph or section macro, as in the man macros.
+ */
+const PARAGRAPH = /^\.(SH|SS|PP|LP|P|TP|IP|HP|bP|TH)\b/;
+function resolvePreviousFont(text) {
+  let cur = 'R';
+  let prev = 'R';
+  return text
+    .split('\n')
+    .map((line) => {
+      if (PARAGRAPH.test(line)) cur = prev = 'R';
+      if (line.startsWith('.\\"')) return line;
+      return line.replace(/\\f(\(..|\[[^\]]*\]|.)/g, (m, f) => {
+        let font = f.replace(/^\(|^\[|\]$/g, '') || 'P';
+        if (font === 'P') font = prev;
+        prev = cur;
+        cur = font;
+        return font.length === 1 ? `\\f${font}` : `\\f[${font}]`;
+      });
+    })
+    .join('\n');
+}
+
 const manDir = join(repo, 'man');
 const tmp = join(site, '.generated');
 mkdirSync(tmp, { recursive: true });
@@ -107,8 +133,8 @@ const pages = sources.map(({ file, text }) => {
   let md;
   let failed = false;
   try {
-    md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none'], {
-      input: fill(text),
+    md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none', '--lua-filter', join(site, 'scripts/man-inlines.lua')], {
+      input: resolvePreviousFont(fill(text)),
       encoding: 'utf8',
       maxBuffer: 64 << 20,
       stdio: ['pipe', 'pipe', 'pipe'],
