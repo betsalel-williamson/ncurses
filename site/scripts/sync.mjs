@@ -6,12 +6,14 @@
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
  * - a Run placeholder after each listing named in examples/examples.json
+ * - the errata tables in the appendix, from docs/appendix/errata.csv
  * Requires pandoc on PATH. Output is gitignored.
  */
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderErrata } from './errata.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
@@ -52,6 +54,8 @@ for (const g of GUIDES) {
       const route = target.endsWith('.md') ? routeOf(target) : null;
       return route ? `](${route}${frag})` : `](${blob(target)}${frag})`;
     });
+    // The appendix's tables come from errata.csv.
+    if (g.route === 'appendix' && isIndex) text += renderErrata(repo, { base, repoSlug, routeOf });
     // Runnable examples: a Run button after the listing (built by build-examples.mjs).
     for (const ex of EXAMPLES.filter((e) => e.shard === `${g.src}/${file}`)) {
       const at = text.indexOf(ex.after);
