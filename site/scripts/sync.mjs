@@ -113,6 +113,18 @@ function resolvePreviousFont(text) {
     .join('\n');
 }
 
+/**
+ * Rewrite troff that means the same but that pandoc's man reader can't parse: a line ending in
+ * a backslash continues on the next line (it stopped pandoc inside a table in curs_terminfo),
+ * and a table's format lines can name a two-letter font as f(BI), which pandoc reads only as
+ * fBI (infocmp).
+ */
+function forPandoc(text) {
+  return text
+    .replace(/(^|[^\\])\\\n/g, '$1')
+    .replace(/(^\.TS\n(?:.*;\n)?)([\s\S]*?\.\n)/gm, (m, head, format) => head + format.replace(/f\((..)\)/g, 'f$1'));
+}
+
 const manDir = join(repo, 'man');
 const tmp = join(site, '.generated');
 mkdirSync(tmp, { recursive: true });
@@ -134,14 +146,16 @@ const pages = sources.map(({ file, text }) => {
   let failed = false;
   try {
     md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none', '--lua-filter', join(site, 'scripts/man-inlines.lua')], {
-      input: resolvePreviousFont(fill(text)),
+      input: resolvePreviousFont(forPandoc(fill(text))),
       encoding: 'utf8',
       maxBuffer: 64 << 20,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
   } catch {
     failed = true;
-    md = '```\n' + fill(text) + '\n```\n';
+    // A fence longer than any run of backticks in the page (troff quotes with ``).
+    const fence = '`'.repeat(Math.max(3, ...[...text.matchAll(/`+/g)].map((m) => m[0].length + 1)));
+    md = `${fence}\n${fill(text)}\n${fence}\n`;
   }
   // NAME lists the names this page documents: "**addch**, **waddch** - add a character".
   const nameBlock = /^# NAME\n+([\s\S]*?)\n\n/m.exec(md);

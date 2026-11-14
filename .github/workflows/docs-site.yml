@@ -65,6 +65,8 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
+      - name: Check the built pages for Markdown shown as text
+        run: node site/scripts/check-rendered.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
