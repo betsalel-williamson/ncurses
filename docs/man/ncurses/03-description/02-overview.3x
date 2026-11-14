@@ -1,0 +1,134 @@
+.SS Overview
+A
+.I curses
+library abstracts the terminal with a
+.I \%SCREEN
+data structure,
+and represents all or part of its display
+with
+.I \%WINDOW
+structures.
+Distinct properties apply to each;
+for example,
+the
+.I "line discipline"
+of a typical Unix terminal driver
+is in one of three modes:
+raw,
+\%cbreak,
+or canonical (\*(``cooked\*('').
+In
+.IR curses ","
+the line discipline is a property of the screen,
+applying identically to all windows associated with it.
+.PP
+A
+.I window
+is a rectangular grid of character cells,
+addressed by line and column coordinates
+.RI ( y ","
+.IR x ),
+with the upper left corner as (0, 0).
+A window called
+.BR \%stdscr ","
+by default the same size as the terminal screen,
+is always available.
+Create others with \fB\%newwin\fP(3X).
+.PP
+A
+.I curses
+library does not manage overlapping windows
+(but see below).
+You can either use
+.B \%stdscr
+to manage one screen-filling window,
+or tile the screen into non-overlapping windows and not use
+.B \%stdscr
+at all.
+Mixing the two approaches will result in unpredictable and undesired
+effects.
+.PP
+Functions permit manipulation of a window and the
+.I cursor
+identifying the cell within it at which the next operation will occur.
+Among those,
+the most basic are \fB\%move\fP(3X) and \fB\%addch\fP(3X):
+these place the cursor within and write a character to
+.BR \%stdscr ","
+respectively.
+.PP
+Frequent changes to the terminal screen can cause unpleasant flicker or
+inefficient use of the communication channel to the device,
+so as a rule the library does not update it automatically.
+Therefore,
+after using
+.I curses
+functions to accumulate a set of desired updates that make sense to
+present together,
+call \fB\%refresh\fP(3X) to tell the library to make the user's screen
+look like \fBstdscr\fP.
+The library
+.\" X/Open Curses Issue 7 assumes some optimization will be done, but
+.\" does not mandate it in any way.
+.I optimizes
+its output by computing a minimal volume of operations to mutate the
+screen from its state at the previous refresh to the new one.
+Effective optimization demands accurate information about the terminal
+device:
+the management of such information is the province of the
+\fB\%terminfo\fP(3X) API,
+a feature of every standard
+.I curses
+implementation.
+.PP
+Special windows called
+.I pads
+may also be manipulated.
+These are not constrained to the size of the terminal screen and their
+contents need not be completely displayed.
+See \fB\%curs_pad\fP(3X).
+.PP
+Many terminals support configuration of character cell foreground and
+background colors as well as
+.IR attributes ","
+which cause characters to render in such modes as
+boldfaced,
+underlined,
+or in reverse video.
+See \fB\%curs_color\fP(3X) and \fB\%curs_attr\fP(3X).
+.PP
+.I curses
+defines constants to simplify access
+to a small set of forms-drawing graphics
+corresponding to the DEC Alternate Character Set (ACS),
+a feature of VT100 and other terminals.
+See \fB\%addch\fP(3X).
+.PP
+.I curses
+is implemented using the operating system's terminal driver;
+key events are received not as scan codes but as byte sequences.
+The driver reports graphical keycaps
+(alphanumeric and punctuation keys,
+and the space)
+as-is.
+Everything else,
+including the tab,
+enter/return,
+keypad,
+arrow,
+and function keys,
+appears to
+.I curses
+as a control character or a multibyte
+.I "escape sequence."
+.I curses
+can translate the latter into unique
+.I "key codes."
+See \fB\%keypad\fP(3X) and \fB\%getch\fP(3X).
+.PP
+.I \%ncurses
+provides reimplementations of the SVr4 \fBpanel\fP(3X), \fBform\fP(3X),
+and \fBmenu\fP(3X) libraries;
+they permit overlapping windows and ease construction of user interfaces
+with
+.IR curses "."

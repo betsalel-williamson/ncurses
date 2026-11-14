@@ -1,0 +1,109 @@
+.SH EXAMPLES
+.TP
+.B "@TPUT@ init"
+Initialize the terminal according to the type of
+terminal in the
+.I TERM
+environment variable.
+If the system does not reliably initialize the terminal upon login,
+this command can be included in
+.I \%$HOME/.profile
+after exporting the
+.I TERM
+environment variable.
+.TP
+.B "@TPUT@ \-T5620 reset"
+Reset an AT&T 5620 terminal,
+overriding the terminal type in the
+.I TERM
+environment variable.
+.TP
+.B "@TPUT@ cnorm"
+Set cursor to normal visibility.
+.TP
+.B "@TPUT@ home"
+Move the cursor to line 0,
+column 0:
+the upper left corner of the screen,
+usually known as the \*(``home\*('' cursor position.
+.TP
+.B "@TPUT@ clear"
+Clear the screen:
+write the
+.B \%clear_screen
+capability's value to the standard output stream.
+.TP
+.B "@TPUT@ cols"
+Report the number of columns used by the current terminal type.
+.TP
+.B "@TPUT@ \-Tadm3a cols"
+Report the number of columns used by an ADM-3A terminal.
+.TP
+.B "strong=\(ga@TPUT@ smso\(ga normal=\(ga@TPUT@ rmso\(ga"
+Set shell variables to capability values:
+.B strong
+and
+.BR normal ","
+to begin and end,
+respectively,
+stand-out mode for the terminal.
+One might use these to present a prompt.
+.IP
+.EX
+.RS 14
+printf "${strong}Username:${normal} "
+.RE
+.EE
+.TP
+.B "@TPUT@ hc"
+Indicate via exit status whether the terminal is a hard copy device.
+.TP
+.B "@TPUT@ cup 23 4"
+Move the cursor to line 23,
+column 4.
+.TP
+.B "@TPUT@ cup"
+Report the value of the
+.B \%cursor_address
+.RB ( cup )
+capability
+(used for cursor movement),
+with no parameters substituted.
+.TP
+.B "@TPUT@ longname"
+Report the
+.I \%term\%info
+database's description of the terminal type specified in the
+.I TERM
+environment variable.
+.TP
+.B "@TPUT@ \-S"
+Process multiple capabilities.
+The
+.B \-S
+option can be profitably used with a shell \*(``here document\*(''.
+.IP
+.EX
+.nf
+.RB $\  "@TPUT@ \-S <<!"
+.RB >\  clear
+.RB >\  "cup 10 10"
+.RB >\  bold
+.RB >\  !
+.fi
+.EE
+.IP
+The foregoing
+clears the screen,
+moves the cursor to position
+(10, 10)
+and turns on bold
+(extra bright)
+mode.
+.TP
+.B "@TPUT@ clear cup 10 10 bold"
+Perform the same actions as the foregoing
+\%\*(``\c
+.B "@TPUT@ \-S\c"
+\*(''
+example.

@@ -1,0 +1,37 @@
+{
+  "configVersion": "1.1.0",
+  "sources": [
+    {
+      "glob": "**/*.md",
+      "format": "gfm"
+    },
+    {
+      "glob": "man/**/*.3x",
+      "format": "man"
+    },
+    {
+      "glob": "man/**/*.1",
+      "format": "man"
+    },
+    {
+      "glob": "man/**/*.1m",
+      "format": "man"
+    },
+    {
+      "glob": "man/**/*.5",
+      "format": "man"
+    },
+    {
+      "glob": "man/**/*.7",
+      "format": "man"
+    }
+  ],
+  "roots": [
+    "client-library/forms/index.md"
+  ],
+  "man": {
+    "quiet": [
+      "defaults"
+    ]
+  }
+}

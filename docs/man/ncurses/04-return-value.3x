@@ -1,0 +1,19 @@
+.SH RETURN VALUE
+Unless otherwise noted,
+functions that return integers return the constants
+.B OK
+on success and
+.B ERR
+on failure;
+see \fB\%curs_variables\fP(3X).
+Functions that return pointers return a null pointer on failure.
+Typically,
+an
+.I \%ncurses
+function expecting a pointer argument
+fails if passed a null pointer.
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ","
+.IR x )
+is outside the window boundaries.

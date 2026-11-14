@@ -1,0 +1,106 @@
+.SH EXTENSIONS
+.I \%ncurses
+enables an application to capture mouse events from certain terminals,
+including \fI\%xterm\fP(1);
+see \fB\%curs_mouse\fP(3X).
+.PP
+.I \%ncurses
+provides a means of responding to window resizing events,
+as when running in a GUI terminal emulator application such as
+.IR \%xterm ;
+see \fB\%resizeterm\fP(3X) and \fB\%wresize\fP(3X).
+.PP
+.I \%ncurses
+allows an application to query the terminal for the presence of a wide
+variety of special keys;
+see \fB\%has_key\fP(3X).
+.PP
+.I \%ncurses
+extends the fixed set of function key capabilities specified by X/Open
+Curses by allowing the application programmer to define additional key
+events at runtime;
+see
+\fB\%define_key\fP(3X),
+\fB\%key_defined\fP(3X),
+\fB\%keybound\fP(3X),
+and
+\fB\%keyok\fP(3X).
+.PP
+.I \%ncurses
+can exploit the capabilities of terminals implementing ISO\ 6429/ECMA-48
+SGR\ 39 and SGR\ 49 sequences,
+which allow an application to reset the terminal to its original
+foreground and background colors.
+From a user's perspective,
+the application is able to draw colored text on a background whose color
+is set independently,
+providing better control over color contrasts.
+See \fB\%default_colors\fP(3X).
+.PP
+An
+.I \%ncurses
+application can eschew knowledge of
+.I \%SCREEN
+and
+.I \%WINDOW
+structure internals,
+instead using accessor functions such as
+\fB\%is_cbreak\fP(3X) and
+\fB\%is_scrollok\fP(3X).
+.PP
+.I \%ncurses
+enables an application to direct its output to a printer attached to the
+terminal device;
+see \fB\%curs_print\fP(3X).
+.PP
+.I \%ncurses
+offers \fB\%slk_attr\fP(3X) as a counterpart of \fB\%attr_get\fP(3X) for
+soft-label key lines,
+and \fB\%extended_slk_color\fP(3X) as a form of \fB\%slk_color\fP(3X)
+that can gather color information from them when many colors are
+supported.
+.PP
+.I \%ncurses
+permits modification of \fB\%unctrl\fP(3X)'s behavior;
+see \fB\%use_legacy_coding\fP(3X).
+.PP
+Rudimentary support for multi-threaded applications may be available;
+see \fBcurs_threads\fP(3X).
+.PP
+Functions that ease the management of multiple screens can be exposed;
+see \fBcurs_sp_funcs\fP(3X).
+.PP
+To aid applications to debug their memory usage,
+.I \%ncurses
+optionally offers functions to more aggressively free memory it
+dynamically allocates itself;
+see \fBcurs_memleaks\fP(3X).
+.PP
+The library facilitates auditing and troubleshooting of its behavior;
+see \fBcurs_trace\fP(3X).
+.PP
+Compiling
+.I \%ncurses
+with the option
+.B \%\-DUSE_GETCAP
+causes it to fall back to reading
+.I \%/etc/termcap
+if the terminal setup code cannot find a
+.I \%term\%info
+entry corresponding to
+.IR TERM "."
+Use of this feature is not recommended,
+as it essentially includes an entire
+.I termcap
+compiler in the
+.I \%ncurses
+startup code,
+at a cost in memory usage and application launch latency.
+.PP
+.I \%PDCurses
+and NetBSD
+.I curses
+incorporate some
+.I \%ncurses
+extensions.
+Individual man pages indicate where this is the case.

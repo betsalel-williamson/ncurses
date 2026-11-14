@@ -1,0 +1,125 @@
+.SH PORTABILITY
+.SS setupterm
+Note that it is possible for
+.B setupterm
+to expect a different set of capabilities
+than are actually present in the file.
+Either the database may have been updated since
+.B setupterm
+was recompiled
+(resulting in extra unrecognized entries in the file)
+or the program may have been recompiled more recently
+than the database was updated
+(resulting in missing entries).
+The routine
+.B setupterm
+must be prepared for both possibilities \-
+this is why the numbers and sizes are included.
+Also,
+new capabilities must always be added at the end of the lists
+of Boolean,
+number,
+and string capabilities.
+.SS "Binary Format"
+X/Open Curses does not specify a format for the
+.I \%term\%info
+database.
+System\ V
+.I curses
+used a directory-tree of binary files,
+one per terminal description.
+.PP
+Despite the consistent use of little-endian numbers and the otherwise
+self-describing format,
+it is not wise to count on portability of binary
+.I \%term\%info
+entries between commercial Unix versions.
+The problem is that there are at least three versions of
+.I \%term\%info
+(under HP\-UX,
+AIX,
+and OSF/1)
+each of which diverged from System\ V
+.I \%term\%info
+after SVr1,
+and added extension capabilities to the string table that
+(in the binary format)
+collide with System\ V and X/Open Curses extensions.
+See \fB\%terminfo\fP(5) for detailed
+discussion of
+.I \%term\%info
+source compatibility issues.
+.PP
+This implementation is by default compatible with the binary
+.I \%term\%info
+format used by Solaris
+.IR curses ,
+except in a few less-used details
+where it was found that the latter did not match X/Open Curses.
+The format used by the other Unix versions
+can be matched by building
+.I \%ncurses
+with different configuration options.
+.SS "Magic Codes"
+The magic number in a binary
+.I \%term\%info
+file is the first 16 bits
+(two bytes).
+Besides making it more reliable for the library to check that a file is
+.IR \%term\%info ,
+utilities such as \fIfile\fP(1) also use that to tell what the
+file-format is.
+System\ V defined more than one magic number,
+with 0433,
+0435 as screen-dumps
+(see \fB\%scr_dump\fP(5)).
+This implementation uses 01036 as a continuation of that sequence,
+but with a different high-order byte to avoid confusion.
+.SS "The \fITERMTYPE\fP Structure"
+Direct access to the
+.I \%TERMTYPE
+structure is provided for legacy applications.
+Portable applications should use \fB\%tigetflag\fP(3X) and related
+functions to read terminal capabilities.
+.SS "Mixed-case Terminal Names"
+A small number of terminal descriptions use uppercase characters in
+their names.
+If the underlying file system ignores the difference between
+uppercase and lowercase,
+.I \%ncurses
+represents the \*(``first character\*('' of the terminal name used as
+the intermediate level of a directory tree in (two-character)
+hexadecimal form.
+.SS Limits
+.I \%ncurses
+stores compiled terminal descriptions in three related formats,
+described in the subsections
+.bP
+.BR "Legacy Storage Format" ,
+and
+.bP
+.BR "Extended Storage Format" ,
+and
+.bP
+.BR "Extended Number Format" .
+.PP
+The legacy storage format and the extended number format differ by
+the types of numeric capability that they can store
+(for example,
+16- versus 32-bit integers).
+The extended storage format introduced by
+.I \%ncurses
+5.0 adds data to either of these formats.
+.PP
+Some limitations apply:
+.bP
+total compiled entries cannot exceed 4096 bytes in the legacy format.
+.bP
+total compiled entries cannot exceed 32768 bytes in the extended format.
+.bP
+the name field cannot exceed 128 bytes.
+.PP
+Compiled entries are limited to 32768 bytes because offsets into the
+\fIstrings table\fP use two-byte integers.
+The legacy format could have supported 32768-byte entries,
+but was limited to a virtual memory page's 4096 bytes.

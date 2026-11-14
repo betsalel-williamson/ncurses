@@ -1,0 +1,122 @@
+.SH DESCRIPTION
+The \*(``new curses\*('' library offers the programmer a
+terminal-independent means of reading keyboard and mouse input and
+writing to character-cell displays with output optimized to minimize
+screen updates.
+.I \%ncurses
+replaces the
+.I curses
+libraries from
+System V Release 4 Unix (\*(``SVr4\*('')
+and
+4.4BSD Unix,
+the development of which ceased in the 1990s.
+This document describes
+.I \%ncurses
+version @NCURSES_MAJOR@.@NCURSES_MINOR@
+(patch @NCURSES_PATCH@).
+.PP
+.I \%ncurses
+permits control of the terminal screen's contents;
+abstraction and subdivision thereof with
+.I windows
+and
+.IR pads ;
+acquisition of keyboard and mouse events;
+selection of color and rendering attributes
+(such as bold or underline);
+the definition and use of
+.I "soft label"
+keys;
+access to the
+.I \%term\%info
+terminal capability database;
+a
+.I termcap
+compatibility interface;
+and an abstraction of the system's API for manipulating the terminal
+(such as \fI\%termios\fP(3)).
+.PP
+.I \%ncurses
+implements the interface described by X/Open Curses Issue\ 7.
+In many behavioral details not standardized by X/Open,
+.I \%ncurses
+emulates the
+.I curses
+library of SVr4 and provides numerous useful extensions.
+.PP
+.I \%ncurses
+man pages employ several sections to clarify matters of usage and
+interoperability with other
+.I curses
+implementations.
+.bP
+\*(``NOTES\*('' describes issues and caveats of which any user of the
+.I \%ncurses
+API should be aware,
+such as limitations on the size of an underlying integral type or the
+availability of a preprocessor macro exclusive of a function definition
+(which prevents its address from being taken).
+This section also describes implementation details
+of significance to the programmer but which are not standardized.
+.bP
+\*(``EXTENSIONS\*('' presents
+.I \%ncurses
+innovations beyond the X/Open Curses standard and/or the SVr4
+.I curses
+implementation.
+They are termed
+.I extensions
+to indicate that they cannot be implemented solely by using the library
+API,
+but require access to the library's internal state.
+.bP
+\*(``PORTABILITY\*('' discusses matters
+(beyond the exercise of extensions)
+that should be considered when writing to a
+.I curses
+standard,
+or for multiple implementations.
+.bP
+\*(``HISTORY\*('' examines points of detail in
+.I \%ncurses
+and other
+.I curses
+implementations over the decades of their development,
+particularly where precedent or inertia have frustrated better design
+(and,
+in a few cases,
+where such inertia has been overcome).
+.PP
+A
+.I curses
+application must be linked with the library;
+use the
+.B \-lncurses
+option to your compiler or linker.
+A debugging version of the library may be available;
+if so,
+link with it using
+.BR \-lncurses_g "."
+(Your system integrator may have installed these libraries such that you
+can use the options
+.B \-lcurses
+and
+.BR \-lcurses_g ","
+respectively.)
+The
+.I \%ncurses_g
+library logs events describing
+.I \%ncurses
+actions
+to a file called
+.I \%trace
+in the application's working directory at startup.
+See section \*(``ALTERNATE CONFIGURATIONS\*('' below.
+.so ncurses/03-description/01-application-structure.3x
+.so ncurses/03-description/02-overview.3x
+.so ncurses/03-description/03-initialization.3x
+.so ncurses/03-description/04-naming-conventions.3x
+.so ncurses/03-description/05-wide-and-non-wide-character-configurations.3x
+.so ncurses/03-description/06-rendering.3x
+.so ncurses/03-description/07-function-name-index.3x

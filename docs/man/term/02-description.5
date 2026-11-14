@@ -1,0 +1,312 @@
+.SH DESCRIPTION
+\fB\%@TIC@\fP(1) compiles a
+.I \%term\%info
+terminal type description,
+and \fB\%setupterm\fP(3X) reads it.
+A compiled description may be stored in a file or in a database of,
+potentially,
+many such descriptions.
+Further,
+a compiled description may be in one of two formats:
+one similar to that used by System\ V,
+and a newer,
+extensible format employed exclusively by
+.IR \%ncurses .
+.SS "Storage Location"
+Compiled
+.I \%term\%info descriptions are placed
+under the directory
+.IR \%@TERMINFO@ .
+One of two configurations is selected
+when building the
+.I \%ncurses
+libraries.
+.TP 5
+.B directory tree
+A two-level scheme is used to avoid a linear search
+of a huge Unix system directory:
+.IR \%@TERMINFO@/ c / name
+where
+.I name
+is the name of the terminal,
+and
+.I c
+is the first character of
+.IR name .
+Thus,
+the compiled description of terminal type \*(``act4\*(''
+is found in the file
+.IR \%@TERMINFO@/a/act4 .
+Synonyms for the same terminal are implemented by multiple
+links to the same compiled file.
+.TP 5
+.B hashed database
+Using the Berkeley database API,
+two types of records are stored:
+the
+.I \%term\%info
+data in the same format as that stored in a directory tree with
+the terminal's primary type name as a key,
+and records containing only aliases pointing to the primary name.
+.IP
+If built to write hashed databases,
+.I \%ncurses
+can still read
+.I \%term\%info
+databases organized as a
+directory tree,
+but cannot write entries into the directory tree.
+It can write
+(or rewrite)
+entries in the hashed database.
+.IP
+.I \%ncurses
+distinguishes the two cases in the
+.I \%TERMINFO
+and
+.I \%TERMINFO_DIRS
+environment variable by assuming a directory tree for entries that
+correspond to an existing directory,
+and a hashed database otherwise.
+.SS "Legacy Storage Format"
+The format has been chosen so that it will be the same on all hardware.
+A byte of at least eight bits' width is assumed,
+but no assumptions about bit ordering
+or sign extension are made.
+.PP
+The file is divided into six parts:
+.RS 5
+.IP (a) 4
+.IR header ,
+.IP (b)
+.IR "terminal names" ,
+.IP (c)
+.IR "Boolean flags" ,
+.IP (d)
+.IR numbers ,
+.IP (e)
+.IR strings ,
+and
+.IP (f)
+a
+.IR "string table" .
+.RE
+.PP
+The \fIheader\fP section begins the file.
+This section contains six short integers in the format
+described below.
+These integers are
+.RS 5
+.TP 5
+(1) the \fImagic number\fP
+(octal 0432);
+.TP 5
+(2) the size,
+in bytes,
+of the \fIterminal names\fP section;
+.TP 5
+(3) the number of bytes in the \fIBoolean flags\fP section;
+.TP 5
+(4) the number of short integers in the \fInumbers\fP section;
+.TP 5
+(5) the number of offsets
+(short integers)
+in the \fIstrings\fP section;
+.TP 5
+(6) the size,
+in bytes,
+of the \fIstring table\fP.
+.RE
+.PP
+The capabilities in the
+\fIBoolean flags\fP,
+\fInumbers\fP,
+and
+\fIstrings\fP
+sections are in the same order as in the header file
+.IR term.h .
+.PP
+Short integers are signed,
+in the range \-32768 to 32767,
+and stored in little-endian format.
+.PP
+Numbers in a terminal description,
+whether they are entries in the \fInumbers\fP or \fIstrings\fP table,
+are positive integers.
+Boolean flags are treated as positive one-byte integers.
+In each case,
+those positive integers represent a terminal capability.
+The terminal compiler
+.I \%@TIC@
+uses negative integers to handle the cases where a capability is not
+available:
+.bP
+If a capability is absent from this terminal,
+.I \%@TIC@
+stores a \-1 in the corresponding table.
+.IP
+The integer value \-1 is represented by two bytes 0377,
+0377.
+.br
+Absent Boolean values are represented by the byte 0 (false).
+.bP
+If a capability has been canceled from this terminal,
+.I \%@TIC@
+stores a \-2 in the corresponding table.
+.IP
+The integer value \-2 is represented by two bytes 0377,
+0376.
+.br
+The Boolean value \-2 is represented by the byte 0376.
+.br
+.bP
+Other negative values are illegal.
+.PP
+The \fIterminal names\fP section comes after the \fIheader\fP.
+It contains the first line of the
+.I \%term\%info
+description,
+listing the various names for the terminal,
+separated by the \*(``|\*('' character.
+The \fIterminal names\fP section is terminated
+with an \s-1ASCII NUL\s+1 character.
+.PP
+The \fIBoolean flags\fP section has one byte for each flag.
+Boolean capabilities are either 1 or 0
+(true or false)
+according to whether the terminal supports the given capability or not.
+.PP
+Between the \fIBoolean flags\fP section and the \fInumber\fP section,
+a null byte will be inserted,
+if necessary,
+to ensure that the \fInumber\fP section begins on an even byte
+This is a relic of the PDP\-11's word-addressed architecture,
+originally designed to avoid traps induced
+by addressing a word on an odd byte boundary.
+All short integers are aligned on a short word boundary.
+.PP
+The \fInumbers\fP section is similar to the \fIBoolean flags\fP section.
+Each capability takes up two bytes,
+and is stored as a little-endian short integer.
+.PP
+The \fIstrings\fP section is also similar.
+Each capability is stored as a short integer.
+The capability value is an index into the \fIstring table\fP.
+.PP
+The \fIstring table\fP is the last section.
+It contains all of the values of string capabilities referenced in
+the \fIstrings\fP section.
+Each string is null-terminated.
+Special characters in \*^X or \ec notation are stored in their
+interpreted form,
+not the printing representation.
+Padding information
+.BI $< nn >
+and parameter information
+.B %x
+are stored intact in uninterpreted form.
+.SS "Extended Storage Format"
+The previous section describes the conventional
+.I \%term\%info
+binary format.
+With some minor variations of the offsets
+(see PORTABILITY),
+the same binary format is used in all modern Unix systems.
+Each system uses a standard set of Boolean,
+numeric,
+or string capabilities.
+.PP
+The
+.I \%ncurses
+libraries and applications support extended
+.I \%term\%info
+binary format,
+allowing users to define capabilities that are loaded at runtime.
+This extension is made possible by using the fact that the other
+implementations stop reading the
+.I \%term\%info
+data when they reach the end of the size given in the header.
+.I \%ncurses
+checks the size,
+and if it exceeds that specified in the header,
+continues to parse according to its own scheme.
+.PP
+First,
+it reads the extended header
+(5 short integers):
+.RS 5
+.TP 5
+(1)
+count of extended Boolean capabilities
+.TP 5
+(2)
+count of extended numeric capabilities
+.TP 5
+(3)
+count of extended string capabilities
+.TP 5
+(4)
+count of the items in extended string table
+.TP 5
+(5)
+size of the extended string table in bytes
+.RE
+.PP
+The count- and size-values for the extended string table
+include the extended capability \fInames\fP as well as
+extended capability \fIvalues\fP.
+.PP
+Using the counts and sizes,
+.I \%ncurses
+allocates arrays and reads data for the extended capabilities in the
+same order as the header information.
+.PP
+The extended string table contains values for string capabilities.
+After the end of these values,
+it contains the names for each of
+the extended capabilities in order:
+Boolean,
+numeric,
+and string.
+.PP
+By storing terminal descriptions in this way,
+.I \%ncurses
+is able to provide a database useful with legacy applications,
+as well as providing data for applications that require more information
+about a terminal type than was anticipated
+by X/Open Curses.
+See \fB\%user_caps\fP(5) for an overview of the way
+.I \%ncurses
+uses this extended information.
+.PP
+Applications that manipulate terminal data can use the definitions
+described in \fB\%term_variables\fP(3X) associating the long capability
+names with members of a
+.I \%TERMTYPE
+structure.
+.
+.SS "Extended Number Format"
+On occasion,
+16-bit signed integers are not large enough.
+.I \%ncurses
+6.1 introduced a new format
+by making a few changes to the legacy format:
+.bP
+a different magic number
+(octal 01036)
+.bP
+changing the type for the \fInumber\fP array from signed 16-bit integers
+to signed 32-bit integers.
+.PP
+To maintain compatibility,
+the library presents the same data structures
+to direct users of the
+.I \%TERMTYPE
+structure as in previous formats.
+However,
+that cannot provide callers with the extended numbers.
+The library uses a similar but hidden data structure
+.I \%TERMTYPE2
+to provide data for the
+.I \%term\%info
+functions.

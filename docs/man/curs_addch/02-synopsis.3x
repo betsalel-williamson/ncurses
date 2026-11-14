@@ -1,0 +1,47 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint addch(const chtype \fIch\fP);
+\fBint waddch(WINDOW * \fIwin\fP, const chtype \fIch\fP);
+\fBint mvaddch(int \fIy\fP, int \fIx\fP, const chtype \fIch\fP);
+\fBint mvwaddch(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, const chtype \fIch\fP);
+.PP
+\fBint echochar(const chtype \fIch\fP);
+\fBint wechochar(WINDOW * \fIwin\fP, const chtype \fIch\fP);
+.PP
+\fI/* (integer) constants */\fP
+/*\fI .\|.\|. */ \fBACS_BLOCK;\fR
+/*\fI .\|.\|. */ \fBACS_BOARD;\fR
+/*\fI .\|.\|. */ \fBACS_BTEE;\fR
+/*\fI .\|.\|. */ \fBACS_BULLET;\fR
+/*\fI .\|.\|. */ \fBACS_CKBOARD;\fR
+/*\fI .\|.\|. */ \fBACS_DARROW;\fR
+/*\fI .\|.\|. */ \fBACS_DEGREE;\fR
+/*\fI .\|.\|. */ \fBACS_DIAMOND;\fR
+/*\fI .\|.\|. */ \fBACS_HLINE;\fR
+/*\fI .\|.\|. */ \fBACS_LANTERN;\fR
+/*\fI .\|.\|. */ \fBACS_LARROW;\fR
+/*\fI .\|.\|. */ \fBACS_LLCORNER;\fR
+/*\fI .\|.\|. */ \fBACS_LRCORNER;\fR
+/*\fI .\|.\|. */ \fBACS_LTEE;\fR
+/*\fI .\|.\|. */ \fBACS_PLMINUS;\fR
+/*\fI .\|.\|. */ \fBACS_PLUS;\fR
+/*\fI .\|.\|. */ \fBACS_RARROW;\fR
+/*\fI .\|.\|. */ \fBACS_RTEE;\fR
+/*\fI .\|.\|. */ \fBACS_S1;\fR
+/*\fI .\|.\|. */ \fBACS_S9;\fR
+/*\fI .\|.\|. */ \fBACS_TTEE;\fR
+/*\fI .\|.\|. */ \fBACS_UARROW;\fR
+/*\fI .\|.\|. */ \fBACS_ULCORNER;\fR
+/*\fI .\|.\|. */ \fBACS_URCORNER;\fR
+/*\fI .\|.\|. */ \fBACS_VLINE;\fR
+\fI/* extensions */\fP
+/*\fI .\|.\|. */ \fBACS_GEQUAL;\fR
+/*\fI .\|.\|. */ \fBACS_LEQUAL;\fR
+/*\fI .\|.\|. */ \fBACS_NEQUAL;\fR
+/*\fI .\|.\|. */ \fBACS_PI;\fR
+/*\fI .\|.\|. */ \fBACS_S3;\fR
+/*\fI .\|.\|. */ \fBACS_S7;\fR
+/*\fI .\|.\|. */ \fBACS_STERLING;\fR
+.fi

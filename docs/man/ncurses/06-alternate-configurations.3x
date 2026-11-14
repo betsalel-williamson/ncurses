@@ -1,0 +1,300 @@
+.SH "ALTERNATE CONFIGURATIONS"
+Many different
+.I \%ncurses
+configurations are possible,
+determined by the options given to the
+.I \%configure
+script when building the library.
+Run the script with the
+.B \%\-\-help
+option to peruse them all.
+A few are of particular significance to the application developer
+employing
+.IR \%ncurses "."
+.TP 5
+.B \-\-disable\-overwrite
+Avoid file name conflicts between
+.I \%ncurses
+and an existing
+.I curses
+installation on the system.
+The standard C preprocessor inclusion for the
+.I curses
+library is as follows.
+.RS 5
+.PP
+.RS 4
+.EX
+.nf
+.\" The dummy character prevents undesired rewriting of the next line on
+.\" installation of the man page.
+\fB#\&include <curses.h>\fP
+.fi
+.EE
+.RE
+.PP
+If
+.I \%ncurses
+is installed disabling overwrite,
+it puts its header files in a subdirectory.
+Here is an example.
+.PP
+.RS 4
+.EX
+.\" The dummy character prevents undesired rewriting of the next line on
+.\" installation of the man page.
+\fB#\&include <ncurses/curses.h>\fP
+.EE
+.RE
+.PP
+With
+.BR \%\-\-disable\-overwrite ","
+installation also omits a symbolic link that would cause the compiler's
+.B \%\-lcurses
+option to link object files with
+.I \%ncurses
+instead of the system
+.I curses
+library.
+.PP
+The directory used by this configuration of
+.I \%ncurses
+is shown in section \*(``SYNOPSIS\*('' above.
+.RE
+.TP 5
+.B \-\-enable\-widec
+(default for ABI\ 6+ since 2023-10-21)
+Enable support for wide characters.
+The
+.I \%configure
+script renames the
+.I \%ncurses
+library
+(and the
+.I tinfo
+library,
+if
+.B \%\-\-with\-termlib
+is also specified),
+appending \*(``w\*(''.
+An application desirous of wide-character support then uses
+.B \%\-lncursesw
+(or
+.BR \%\-ltinfow )
+instead of
+.B \%\-lncurses
+(or
+.BR \%\-ltinfo )
+as its linker option.
+The
+.IR ncurses++ ","
+.IR panel ","
+.IR form ","
+and
+.I menu
+libraries are renamed similarly.
+.IP
+An application must also
+define certain C preprocessor symbols
+to enable wide-character features
+in
+.I curses
+header files
+to use the extended (wide-character) functions.
+The symbol that enables these features has changed
+since X/Open Curses Issue\ 4.
+.RS 5
+.bP
+Originally,
+the wide-character feature required the symbol
+.IR \%_XOPEN_SOURCE_EXTENDED ","
+but that was valid only for XPG4 (1996).
+.bP
+Later,
+that was deemed conflicting with an
+.I \%_XOPEN_SOURCE
+value of 500.
+.bP
+As of mid-2018,
+no
+.I \%ncurses
+feature requires a
+.I \%_XOPEN_SOURCE
+value greater than 600.
+However,
+X/Open Curses Issue\ 7 (2009) recommends defining it to 700.
+.bP
+Alternatively,
+you can enable the feature by defining
+.B \%NCURSES_WIDECHAR
+with the caveat that some header file other than
+.I \%curses.h
+may require a specific value for
+.I \%_XOPEN_SOURCE
+(or a system-specific symbol).
+.RE
+.IP
+The
+.I \%curses.h
+header file installed
+for the wide-character library
+is designed to be compatible with the non-wide library's header.
+Only the size of the
+.I \%WINDOW
+structure differs;
+few applications require more than pointers to
+.IR \%WINDOW "."
+.\" XXX: What's different in term.h?
+.IP
+If
+.IR \%ncurses 's
+header files are installed allowing overwrite
+(the default,
+but see
+.B \%\-\-disable\-overwrite
+above),
+the wide-character library's headers should be installed last
+by packaging systems and similar,
+to allow applications to be built using either library
+from the same set of headers.
+.TP 5
+.B \-\-with\-pthread
+Enable support for multi-threaded applications.
+The
+.I \%configure
+script renames the
+.I \%ncurses
+library
+(and the
+.I tinfo
+library,
+if
+.B \%\-\-with\-termlib
+is also specified),
+appending \*(``t\*(''
+(before any \*(``w\*('' added by
+.BR \%\-\-enable\-widec ).
+An application desirous of support for multiple threads of execution
+then uses,
+for example,
+.B \%\-lncursest
+(or
+.BR \%\-ltinfot )
+instead of
+.B \%\-lncurses
+(or
+.BR \%\-ltinfo )
+as its linker option.
+The
+.IR ncurses++ ","
+.IR panel ","
+.IR form ","
+and
+.I menu
+libraries are renamed similarly.
+.IP
+.I \%ncursest
+and
+.I \%ncursestw
+replace global variables such as
+.B \%LINES
+with macros allowing read-only access.
+At the same time,
+they provide functions to set these values.
+Very few applications require changes
+to work with this convention.
+.\" see definition of NCURSES_WRAPPED_VAR
+.TP 5
+.B \-\-with\-shared
+.tQ
+.B \-\-with\-normal
+.tQ
+.B \-\-with\-debug
+.tQ
+.B \-\-with\-profile
+Mandate compilation of the
+.I \%ncurses
+library
+(and the
+.I tinfo
+library,
+if
+.B \%\-\-with\-termlib
+is also specified)
+in the specified forms.
+The shared and normal (static) library names differ by their suffixes,
+as with
+.I \%libncurses.so
+and
+.IR \%libncurses.a "."
+The debugging and profiling libraries add a \*(``_g\*(''
+and a \*(``_p\*('' to the roots of these respective names,
+forming
+.I \%libncurses_g.so
+and
+.IR \%libncurses_p.a ","
+for example.
+The
+.IR ncurses++ ","
+.IR panel ","
+.IR form ","
+and
+.I menu
+libraries are made available similarly.
+.TP 5
+.B \-\-with\-termlib
+Provide
+.IR \%ncurses 's
+lower-level terminal interface functions
+(those that do not depend
+on the
+.I \%SCREEN
+and
+.I \%WINDOW
+abstractions)
+in a library named
+.IR \%tinfo "."
+This arrangement reduces an application's linking and/or loading times
+when it does not require
+.IR curses 's
+higher-level features.
+.IP
+The following pages document
+.I curses
+functions provided by
+.IR \%tinfo "."
+.RS
+.bP
+\fB\%curs_extend\fP(3X) \- miscellaneous \fIncurses\fP extensions
+.bP
+\fB\%curs_inopts\fP(3X) \- \fIcurses\fP input options
+.bP
+\fB\%curs_kernel\fP(3X) \- low-level \fIcurses\fP routines
+.bP
+\fB\%curs_termattrs\fP(3X) \- \fIcurses\fP environment query routines
+.bP
+\fB\%curs_termcap\fP(3X) \- \fIcurses\fP emulation of \fItermcap\fP
+.bP
+\fB\%curs_terminfo\fP(3X) \- \fIcurses\fP interface to \fIterminfo\fP
+database
+.bP
+\fB\%curs_util\fP(3X) \- miscellaneous \fIcurses\fP utility routines
+.RE
+.TP 5
+.B \-\-with\-trace
+Expose the \fBcurses_trace\fP(3X) function
+in the
+.I ncurses(w)
+shared and static libraries.
+Normally,
+it is available only in the debugging library.
+(If
+.B \-\-with\-termlib
+is also specified,
+.I tinfo(w)
+rather than
+.I ncurses(w)
+supplies the deprecated \fBtrace\fP(3X) function.)
+An application's configuration script should check
+for the function's existence
+rather than assuming its confinement to the debugging library.

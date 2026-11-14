@@ -1,0 +1,37 @@
+.SH EXIT STATUS
+Normally,
+one should interpret
+.BR \%@TPUT@ "'s"
+exit statuses as follows.
+.PP
+.if n .ne 3
+.if t .ne 2
+.TS
+Lb Lb
+Lb Lx.
+Status	Meaning When \-S Not Specified
+_
+0	Boolean or string capability present
+1	Boolean or numeric capability absent
+2	usage error or no terminal type specified
+3	unrecognized terminal type
+4	unrecognized capability code
+>4	system error (4 + \fBerrno\fP)
+.TE
+.PP
+When the
+.B \-S
+option is used,
+some statuses change meanings.
+.PP
+.if n .ne 4
+.if t .ne 3
+.TS
+Lb Lb
+Lb Lx.
+Status	Meaning When \-S Specified
+_
+0	all operands interpreted
+1	unused
+4	some operands not interpreted
+.TE

@@ -1,0 +1,27 @@
+.SH NOTES
+X/Open Curses permits most functions it specifies to be made available
+as macros as well.
+.\" See X/Open Curses Issue 4, Version 2, pp. 227-234.
+.\" See X/Open Curses Issue 7, pp. 311-318.
+\fI\%ncurses\fP does so
+.bP
+for functions that return values via their parameters,
+.bP
+to support obsolete features,
+.bP
+to reuse functions
+(for example,
+those that move the cursor before another operation),
+and
+.bP
+in a few special cases.
+.PP
+If the standard output file descriptor of an
+.I \%ncurses
+program is redirected to something that is not a terminal device,
+the library writes screen updates to the standard error file descriptor.
+This was an undocumented feature of SVr3
+.IR curses "."
+.PP
+See subsection \*(``Header Files\*('' below regarding symbols exposed by
+inclusion of \fI\%curses.h\fP.
