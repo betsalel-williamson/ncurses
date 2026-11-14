@@ -214,3 +214,142 @@ main(void)
 ```
 
 Play with the color pairs and try to understand the foreground and background attributes. In my programs using color attributes, I usually set only the background with `set_field_back()`. Curses simply doesn't allow defining individual color attributes.
+
+### Try it: make Backspace and Delete work
+
+Run the example above and type a few characters into the first field. Now press Backspace. Nothing happens, and the left and right arrow keys don't move the cursor either.
+
+The program is doing exactly what it was told. The forms library never reads the keyboard itself: `getch()` returns a key code, and only the program decides what that key means. The `default:` branch hands every other key to `form_driver()`, which accepts two kinds of input. A printable character is typed into the field. A request code such as `REQ_NEXT_FIELD` is an editing or navigation command. `KEY_BACKSPACE` and `KEY_DC` are neither, so `form_driver()` returns `E_UNKNOWN_COMMAND` and the key is dropped.
+
+To enable a key, translate it into the request you want, the same way the example already turns `KEY_DOWN` into `REQ_NEXT_FIELD`:
+
+1. Backspace becomes `REQ_DEL_PREV`, which deletes the character before the cursor. Terminals disagree on what Backspace sends, so match all three codes: `KEY_BACKSPACE` from `keypad()`, 127 (DEL) and `'\b'` (Ctrl-H).
+2. Delete becomes `REQ_DEL_CHAR`, which deletes the character under the cursor. With `keypad(stdscr, TRUE)`, `getch()` reports it as `KEY_DC`.
+3. The left and right arrows become `REQ_PREV_CHAR` and `REQ_NEXT_CHAR`, so you can move to the character you want to delete.
+
+Add these cases to the `switch`, above `default:`:
+
+```c
+        case KEY_LEFT:
+            /* Move the cursor within the field */
+            form_driver(my_form, REQ_PREV_CHAR);
+            break;
+        case KEY_RIGHT:
+            form_driver(my_form, REQ_NEXT_CHAR);
+            break;
+        case KEY_BACKSPACE:
+        case 127:
+        case '\b':
+            /* Backspace: delete the character before the cursor */
+            form_driver(my_form, REQ_DEL_PREV);
+            break;
+        case KEY_DC:
+            /* Delete: delete the character under the cursor */
+            form_driver(my_form, REQ_DEL_CHAR);
+            break;
+```
+
+Here is the complete program with the new cases. Run it, type into a field, and use the arrows, Backspace and Delete to edit what you typed.
+
+**Example: Form Attributes example with editing keys**
+
+```c
+#include <stdlib.h>
+#include <form.h>
+
+int
+main(void)
+{
+    FIELD *field[3];
+    FORM *my_form;
+    int ch;
+
+    /* Initialize curses */
+    initscr();
+    start_color();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+
+    /* Initialize few color pairs */
+    init_pair(1, COLOR_WHITE, COLOR_BLUE);
+    init_pair(2, COLOR_WHITE, COLOR_BLUE);
+
+    /* Initialize the fields */
+    field[0] = new_field(1, 10, 4, 18, 0, 0);
+    field[1] = new_field(1, 10, 6, 18, 0, 0);
+    field[2] = NULL;
+
+    /* Set field options */
+    set_field_fore(field[0], COLOR_PAIR(1));    /* Put the field with blue background */
+    set_field_back(field[0], COLOR_PAIR(2));    /* and white foreground (characters
+                                                   are printed in white         */
+    field_opts_off(field[0], O_AUTOSKIP);       /* Don't go to next field when this
+                                                   Field is filled up           */
+    set_field_back(field[1], A_UNDERLINE);
+    field_opts_off(field[1], O_AUTOSKIP);
+
+    /* Create the form and post it */
+    my_form = new_form(field);
+    post_form(my_form);
+    refresh();
+
+    set_current_field(my_form, field[0]);       /* Set focus to the colored field */
+    mvprintw(4, 10, "Value 1:");
+    mvprintw(6, 10, "Value 2:");
+    mvprintw(LINES - 2, 0,
+             "Use UP, DOWN arrow keys to switch between fields, F1 to quit");
+    refresh();
+
+    /* Loop through to get user requests */
+    while ((ch = getch()) != KEY_F(1)) {
+        switch (ch) {
+        case KEY_DOWN:
+            /* Go to next field */
+            form_driver(my_form, REQ_NEXT_FIELD);
+            /* Go to the end of the present buffer */
+            /* Leaves nicely at the last character */
+            form_driver(my_form, REQ_END_LINE);
+            break;
+        case KEY_UP:
+            /* Go to previous field */
+            form_driver(my_form, REQ_PREV_FIELD);
+            form_driver(my_form, REQ_END_LINE);
+            break;
+        case KEY_LEFT:
+            /* Move the cursor within the field */
+            form_driver(my_form, REQ_PREV_CHAR);
+            break;
+        case KEY_RIGHT:
+            form_driver(my_form, REQ_NEXT_CHAR);
+            break;
+        case KEY_BACKSPACE:
+        case 127:
+        case '\b':
+            /* Backspace: delete the character before the cursor */
+            form_driver(my_form, REQ_DEL_PREV);
+            break;
+        case KEY_DC:
+            /* Delete: delete the character under the cursor */
+            form_driver(my_form, REQ_DEL_CHAR);
+            break;
+        default:
+            /* If this is a normal character, it gets */
+            /* Printed                                */
+            form_driver(my_form, ch);
+            break;
+        }
+    }
+
+    /* Un post form and free the memory */
+    unpost_form(my_form);
+    free_form(my_form);
+    free_field(field[0]);
+    free_field(field[1]);
+
+    endwin();
+    return EXIT_SUCCESS;
+}
+```
+
+`REQ_DEL_PREV` has one special case: at the start of a field it moves to the previous field instead of deleting. [Editing Requests](form-driver.md#editing-requests) lists that and every other editing request you can map a key to.
