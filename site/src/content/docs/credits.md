@@ -7,17 +7,17 @@ All the documentation on this site was written by the ncurses authors and contri
 
 ## Maintainer
 
-- **Thomas E. Dickey**, maintainer since ncurses 1.9.9e. NEWS records changes since then; changes with no cited author are his.
+- **Thomas E. Dickey** ([ThomasDickey](https://github.com/ThomasDickey) on GitHub), maintainer since ncurses 1.9.9e. NEWS records changes since then; changes with no cited author are his.
 
 ## Principal authors and contributors
 
-From the project's `AUTHORS` file, in decreasing order of their contribution since 1.9.9e:
+From the project's `AUTHORS` file, in decreasing order of their contribution since 1.9.9e. A GitHub account is linked only where its own public repositories tie it to the person:
 
-- Thomas E. Dickey
+- Thomas E. Dickey ([ThomasDickey](https://github.com/ThomasDickey))
 - Juergen Pfeifer
 - Eric S. Raymond
-- Alexander V. Lukyanov
-- G. Branden Robinson
+- Alexander V. Lukyanov ([lavv17](https://github.com/lavv17))
+- G. Branden Robinson ([g-branden-robinson](https://github.com/g-branden-robinson))
 - Philippe Blain
 - Sven Verdoolaege
 - Nicolas Boulenguez
