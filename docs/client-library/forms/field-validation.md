@@ -22,7 +22,7 @@ The validation type of a field is considered an attribute of the field. As with 
 
 Here are the pre-defined validation types:
 
-### TYPE_ALPHA
+### `TYPE_ALPHA`
 
 This field type accepts alphabetic data; no blanks, no digits, no special characters (this is checked at character-entry time). It is set up with:
 
@@ -34,7 +34,7 @@ int set_field_type(FIELD *field,          /* field to alter */
 
 The `width` argument sets a minimum width of data. Typically you will want to set this to the field width; if it is greater than the field width, the validation check will always fail. A minimum width of zero makes field completion optional.
 
-### TYPE_ALNUM
+### `TYPE_ALNUM`
 
 This field type accepts alphabetic data and digits; no blanks, no special characters (this is checked at character-entry time). It is set up with:
 
@@ -44,9 +44,9 @@ int set_field_type(FIELD *field,          /* field to alter */
                    int width);            /* maximum width of field */
 ```
 
-The `width` argument sets a minimum width of data. As with TYPE_ALPHA, typically you will want to set this to the field width; if it is greater than the field width, the validation check will always fail. A minimum width of zero makes field completion optional.
+The `width` argument sets a minimum width of data. As with `TYPE_ALPHA`, typically you will want to set this to the field width; if it is greater than the field width, the validation check will always fail. A minimum width of zero makes field completion optional.
 
-### TYPE_ENUM
+### `TYPE_ENUM`
 
 This type allows you to restrict a field's values to be among a specified set of string values (for example, the two-letter postal codes for U.S. states). It is set up with:
 
@@ -60,13 +60,13 @@ int set_field_type(FIELD *field,          /* field to alter */
 
 The `valuelist` parameter must point at a NULL-terminated list of valid strings. The `checkcase` argument, if true, makes comparison with the string case-sensitive.
 
-When the user exits a TYPE_ENUM field, the validation procedure tries to complete the data in the buffer to a valid entry. If a complete choice string has been entered, it is of course valid. But it is also possible to enter a prefix of a valid string and have it completed for you.
+When the user exits a `TYPE_ENUM` field, the validation procedure tries to complete the data in the buffer to a valid entry. If a complete choice string has been entered, it is of course valid. But it is also possible to enter a prefix of a valid string and have it completed for you.
 
 By default, if you enter such a prefix and it matches more than one value in the string list, the prefix will be completed to the first matching value. But the `checkunique` argument, if true, requires prefix matches to be unique in order to be valid.
 
 The `REQ_NEXT_CHOICE` and `REQ_PREV_CHOICE` input requests can be particularly useful with these fields.
 
-### TYPE_INTEGER
+### `TYPE_INTEGER`
 
 This field type accepts an integer. It is set up as follows:
 
@@ -83,7 +83,7 @@ If the value passes its range check, it is padded with as many leading zero digi
 
 A `TYPE_INTEGER` value buffer can conveniently be interpreted with the C library function `atoi(3)`.
 
-### TYPE_NUMERIC
+### `TYPE_NUMERIC`
 
 This field type accepts a decimal number. It is set up as follows:
 
@@ -100,7 +100,7 @@ If the value passes its range check, it is padded with as many trailing zero dig
 
 A `TYPE_NUMERIC` value buffer can conveniently be interpreted with the C library function `atof(3)`.
 
-### TYPE_REGEXP
+### `TYPE_REGEXP`
 
 This field type accepts data matching a regular expression. It is set up as follows:
 
