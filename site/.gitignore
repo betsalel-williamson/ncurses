@@ -4,3 +4,4 @@ dist/
 .generated/
 src/content/docs/guides/
 src/content/docs/man/
+public/examples/

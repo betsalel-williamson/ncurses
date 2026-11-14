@@ -30,6 +30,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y pandoc
       - name: Check the stitched man pages match man/
         run: docs/man/stitch.sh && git diff --exit-code man/
+      - name: Install Emscripten, for the runnable examples
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 4.0.10
+          actions-cache-folder: emsdk-cache
       - name: Build the site
         working-directory: site
         run: |

@@ -1,0 +1,9 @@
+[
+  {
+    "id": "form-attributes",
+    "title": "Form Attributes example",
+    "shard": "docs/client-library/forms/fields.md",
+    "after": "**Example: Form Attributes example**",
+    "libs": ["form"]
+  }
+]

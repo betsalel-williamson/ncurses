@@ -14,6 +14,7 @@ export default defineConfig({
     starlight({
       title: 'ncurses',
       description: 'Documentation for ncurses, the new curses library: guides and every manual page.',
+      components: { Footer: './src/components/Footer.astro' },
       social: [{ icon: 'github', label: 'GitHub', href: `https://github.com/${repo}` }],
       sidebar: [
         { label: 'Credits', link: '/credits/' },
