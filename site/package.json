@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.42.8",
+    "@xterm/addon-webgl": "^0.18.0",
     "@xterm/xterm": "^5.5.0",
     "astro": "^7.4.5"
   }

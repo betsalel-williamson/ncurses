@@ -4,6 +4,7 @@
  * runs it in an xterm.js terminal: keys go to the program's stdin, its output to the screen.
  */
 import { Terminal } from '@xterm/xterm';
+import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -53,6 +54,16 @@ function setup(box: HTMLElement) {
         theme: { background: '#1e1e1e', black: '#1e1e1e' },
       });
       term.open(screen);
+      // The default DOM renderer blinks a block cursor against the page background, not the
+      // cell's own (white on blue in a form field showed as white on black). The WebGL renderer
+      // draws the cell as ncurses left it; without WebGL the DOM renderer stays.
+      try {
+        const webgl = new WebglAddon();
+        webgl.onContextLoss(() => webgl.dispose());
+        term.loadAddon(webgl);
+      } catch {
+        // no WebGL: keep the DOM renderer
+      }
     }
     term.reset();
     term.focus();
