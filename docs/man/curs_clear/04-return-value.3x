@@ -1,0 +1,11 @@
+.SH RETURN VALUE
+All routines return the integer \fBOK\fP on success and \fBERR\fP on failure.
+.PP
+In this implementation,
+.bP
+functions using a window pointer parameter return
+.B ERR
+if it is null
+.bP
+\fBwclrtoeol\fP returns an error
+if the cursor position is about to wrap.

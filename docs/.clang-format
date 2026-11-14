@@ -1,0 +1,24 @@
+# The C style of the ncurses sources (test/*.c), for the listings in docs/: K&R braces,
+# a 4-column indent, the return type of a definition on its own line, a space after a cast.
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 8
+UseTab: Never
+ColumnLimit: 0
+BreakBeforeBraces: Linux
+AlwaysBreakAfterReturnType: AllDefinitions
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+IndentCaseLabels: false
+PointerAlignment: Right
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+AlignTrailingComments:
+  Kind: Leave
+AlignConsecutiveMacros: None
+SortIncludes: Never
+ReflowComments: false
+BreakBeforeBinaryOperators: None

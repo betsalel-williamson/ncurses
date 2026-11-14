@@ -1,0 +1,24 @@
+.SH PORTABILITY
+These functions are described in X/Open Curses Issue\ 4.
+It specifies no error conditions for them.
+.PP
+SVr4 documentation
+.\" SVID 4, vol. 3, p. 483
+.so common/svr4-immedok-return.3x
+.PP
+BSD
+.I curses
+drew boxes with
+.I horch
+in
+.I every
+character cell of the top and bottom lines of the window,
+whereas SVr3.1 and later
+.IR curses ","
+because its
+.I box
+wrapped
+.IR wborder ","
+used the default corner characters.
+.\" https://github.com/ryanwoodsmall/oldsysv/blob/master/sysvr3/31/\
+.\"   usr/src/lib/libcurses/screen/curses.ed#L454

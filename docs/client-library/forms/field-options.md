@@ -145,7 +145,7 @@ main(void)
     set_field_back(field[1], A_UNDERLINE);      /* Print a line for the option  */
 
     field_opts_off(field[0], O_ACTIVE);         /* This field is a static label */
-    field_opts_off(field[1], O_PUBLIC);         /* This filed is like a password field */
+    field_opts_off(field[1], O_PUBLIC);         /* This field is like a password field */
     field_opts_off(field[1], O_AUTOSKIP);       /* To avoid entering the same field
                                                    after last character is entered */
 

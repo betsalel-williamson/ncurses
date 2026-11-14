@@ -1,0 +1,24 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+.bP
+these functions fail if the screen is not initialized;
+and
+.bP
+functions taking a
+.I \%WINDOW
+pointer argument fail if
+.I win
+is a null pointer.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

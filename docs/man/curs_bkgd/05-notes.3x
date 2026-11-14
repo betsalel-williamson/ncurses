@@ -1,0 +1,25 @@
+.SH NOTES
+Unusually,
+there is no
+.B \%wgetbkgd
+function;
+.B \%getbkgd
+behaves as one would expect
+.B \%wgetbkgd
+to,
+accepting a
+.I \%WINDOW
+pointer argument.
+.PP
+.B \%bkgd
+and
+.B \%bkgdset
+may be implemented as macros.
+.PP
+X/Open Curses mentions that the character part of the background must
+be a single-byte value.
+.IR \%ncurses ","
+like SVr4
+.IR curses ","
+checks to ensure that it is,
+and retains the existing background character if the check fails.

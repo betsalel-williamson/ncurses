@@ -1,0 +1,50 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It indicates that
+.IR bkgd ","
+.IR wbkgd ","
+and
+.I getbkgd
+return
+.I ERR
+on failure
+(in the case of the last,
+this value is cast to
+.IR \%chtype ),
+but specifies no error conditions for them.
+.PP
+SVr4 documentation
+.\" SVID 4, vol. 3, p. 482
+says that
+.I \%bkgd
+and
+.I \%wbkgd
+return
+.I OK
+\*(``or a non-negative integer if
+.I \%immedok() \" Courier roman in source
+is set\*('',
+referring to the return value from
+.IR \%wrefresh ","
+which in SVr4 returns a count of characters
+written to the window if its
+.I \%immedok
+property is set;
+.\" ...though its wrefresh() man page says nothing about immedok()...
+in
+.IR \%ncurses ","
+it does not.
+.PP
+Neither X/Open Curses nor the SVr4 manual pages detail how the rendition
+of characters in the window updates when
+.I \%bkgd
+or
+.I \%wbkgd
+changes the background character.
+.IR \%ncurses ","
+like SVr4
+.IR curses ","
+does not
+(in its non-wide-character configuration)
+store the background and window attribute contributions to each
+character cell separately.

@@ -27,12 +27,12 @@ To create a field type from scratch, you need to specify one or both of the foll
 Here is how you do that:
 
 ```c
-typedef int     (*HOOK)();       /* pointer to function returning int */
+typedef int     (*HOOK)();                 /* pointer to function returning int */
 
-FIELDTYPE *new_fieldtype(HOOK f_validate, /* field validator */
-                         HOOK c_validate) /* character validator */
+FIELDTYPE *new_fieldtype(HOOK f_validate,  /* field validator */
+                         HOOK c_validate); /* character validator */
 
-int free_fieldtype(FIELDTYPE *ftype);     /* type to free */
+int free_fieldtype(FIELDTYPE *ftype);      /* type to free */
 ```
 
 At least one of the arguments of `new_fieldtype()` must be non-NULL. The forms driver will automatically call the new type's validation functions at appropriate points in processing a field of the new type.
@@ -52,8 +52,8 @@ In order to arrange for such arguments to be passed to your validation functions
 Here is how you make the association:
 
 ```c
-typedef char    *(*PTRHOOK)();    /* pointer to function returning (char *) */
-typedef void    (*VOIDHOOK)();    /* pointer to function returning void */
+typedef char    *(*PTRHOOK)();            /* pointer to function returning (char *) */
+typedef void    (*VOIDHOOK)();            /* pointer to function returning void */
 
 int set_fieldtype_arg(FIELDTYPE *type,    /* type to alter */
                       PTRHOOK make_str,   /* make structure from args */
@@ -72,18 +72,18 @@ This function is called by form library functions that allocate new field instan
 `free_str`  
 This function is called by field- and type-deallocation routines in the library. It takes a pile pointer argument, and is expected to free the storage of that pile.
 
-The `make_str` and `copy_str` functions may return NULL to signal allocation failure. The library routines will that call them will return error indication when this happens. Thus, your validation functions should never see a NULL file pointer and need not check specially for it.
+The `make_str` and `copy_str` functions may return NULL to signal allocation failure. The library routines that call them will return an error indication when this happens. Thus, your validation functions should never see a NULL pile pointer and need not check specially for it.
 
 ### Order Functions For Custom Types
 
 Some custom field types are simply ordered in the same well-defined way that `TYPE_ENUM` is. For such types, it is possible to define successor and predecessor functions to support the `REQ_NEXT_CHOICE` and `REQ_PREV_CHOICE` requests. Here is how:
 
 ```c
-typedef int     (*INTHOOK)();     /* pointer to function returning int */
+typedef int     (*INTHOOK)();             /* pointer to function returning int */
 
-int set_fieldtype_arg(FIELDTYPE *type,    /* type to alter */
-                      INTHOOK succ,       /* get successor value */
-                      INTHOOK pred);      /* get predecessor value */
+int set_fieldtype_choice(FIELDTYPE *type, /* type to alter */
+                         INTHOOK succ,    /* get successor value */
+                         INTHOOK pred);   /* get predecessor value */
 ```
 
 The successor and predecessor arguments will each be passed two arguments; a field pointer, and a pile pointer (as for the validation functions). They are expected to use the function `field_buffer()` to read the current value, and `set_field_buffer()` on buffer 0 to set the next or previous value. Either hook may return TRUE to indicate success (a legal next or previous value was set) or FALSE to indicate failure.

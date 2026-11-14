@@ -1,0 +1,15 @@
+says that these functions return
+.I OK
+\*(``or a non-negative integer if
+.I \%immedok() \" Courier roman in source
+is set\*('',
+referring to the return value from
+.IR \%wrefresh ","
+which in SVr4 returns a count of characters
+written to the window if its
+.I \%immedok
+property is set;
+.\" ...though its wrefresh() man page says nothing about immedok()...
+in
+.IR \%ncurses ","
+it does not.

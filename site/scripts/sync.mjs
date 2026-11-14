@@ -6,12 +6,14 @@
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
  * - a Run placeholder after each listing named in examples/examples.json
+ * - the errata tables in the appendix, from docs/appendix/errata.csv
  * Requires pandoc on PATH. Output is gitignored.
  */
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderErrata } from './errata.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
@@ -20,9 +22,20 @@ const repoSlug = process.env.GITHUB_REPOSITORY || 'betsalel-williamson/ncurses';
 const blob = (p) => `https://github.com/${repoSlug}/blob/master/${p}`;
 
 // ---------- guides ----------
-const GUIDES = [{ src: 'docs/client-library/forms', route: 'guides/forms' }];
+const GUIDES = [
+  { src: 'docs/client-library/forms', route: 'guides/forms', indexLabel: 'Introduction' },
+  { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
+];
 const EXAMPLES = JSON.parse(readFileSync(join(site, 'examples/examples.json'), 'utf8'));
-rmSync(join(content, 'guides'), { recursive: true, force: true });
+const base = `/${repoSlug.split('/')[1]}`;
+for (const g of GUIDES) rmSync(join(content, g.route.split('/')[0]), { recursive: true, force: true });
+// The site route of a shard, or null when it isn't in a guide.
+const routeOf = (target) => {
+  const g = GUIDES.find((x) => x.src === dirname(target));
+  if (!g) return null;
+  const name = basename(target, '.md');
+  return `${base}/${g.route}/${name === 'index' ? '' : `${name}/`}`;
+};
 for (const g of GUIDES) {
   const dir = join(repo, g.src);
   // Sidebar order follows the guide's index: the order its links list the shards.
@@ -33,16 +46,16 @@ for (const g of GUIDES) {
     const title = h1 ? h1[1] : file;
     if (h1) text = text.slice(h1[0].length);
     const isIndex = file === 'index.md';
-    // Relative .md links become site routes; links out of docs/ go to GitHub.
-    text = text.replace(/\]\(([^)#\s]+\.md)(#[^)]*)?\)/g, (_, p, frag = '') => {
-      const name = basename(p, '.md');
-      const route = name === 'index' ? '' : `${name}/`;
-      return `](${isIndex ? '' : '../'}${route}${frag})`;
-    });
-    text = text.replace(/\]\(((?:\.\.\/)+[^)#\s]+)(#[^)]*)?\)/g, (m, p, frag = '') => {
+    // Relative links: a shard in a guide becomes its site route; anything else in the repo
+    // goes to GitHub.
+    text = text.replace(/\]\(((?:\.\.?\/)*[^)/:#\s][^):#\s]*)(#[^)]*)?\)/g, (m, p, frag = '') => {
       const target = relative(repo, join(dir, p));
-      return target.startsWith('docs/') ? m : `](${blob(target)}${frag})`;
+      if (target.startsWith('..')) return m;
+      const route = target.endsWith('.md') ? routeOf(target) : null;
+      return route ? `](${route}${frag})` : `](${blob(target)}${frag})`;
     });
+    // The appendix's tables come from errata.csv.
+    if (g.route === 'appendix' && isIndex) text += renderErrata(repo, { base, repoSlug, routeOf });
     // Runnable examples: a Run button after the listing (built by build-examples.mjs).
     for (const ex of EXAMPLES.filter((e) => e.shard === `${g.src}/${file}`)) {
       const at = text.indexOf(ex.after);
@@ -55,7 +68,7 @@ for (const g of GUIDES) {
     const out = join(content, g.route, file);
     mkdirSync(dirname(out), { recursive: true });
     const position = isIndex ? 0 : order.indexOf(file) + 1;
-    const fm = `---\ntitle: ${JSON.stringify(title)}\nsidebar:\n  order: ${position}\n${isIndex ? '  label: Introduction\n' : ''}---\n\n`;
+    const fm = `---\ntitle: ${JSON.stringify(title)}\nsidebar:\n  order: ${position}\n${isIndex ? `  label: ${g.indexLabel}\n` : ''}---\n\n`;
     writeFileSync(out, fm + text);
   }
 }
@@ -126,7 +139,6 @@ for (const p of pages) {
 }
 
 rmSync(join(content, 'man'), { recursive: true, force: true });
-const base = `/${repoSlug.split('/')[1]}`;
 for (const p of pages) {
   let md = p.md.replace(/^(#+) /gm, '#$1 '); // NAME, SYNOPSIS... become level-2 sections
   // Page references: **addch**(3X) or addch(3X) -> a link to that page.
