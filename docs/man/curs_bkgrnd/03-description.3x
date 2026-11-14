@@ -1,0 +1,120 @@
+.SH DESCRIPTION
+Every
+.I curses
+window has a
+.I "background character"
+property:
+in the library's wide configuration,
+it is a
+.I curses
+complex character
+.RI \%( cchar_t )
+that combines a set of attributes
+(and,
+if colors are enabled,
+a color pair identifier)
+with a character code.
+When erasing
+(parts of)
+a window,
+.I curses
+replaces the erased cells with the background character.
+.PP
+.I curses
+also uses the background character when writing characters to a
+populated window.
+.bP
+The attribute part of the background character combines with all
+non-blank character cells in the window,
+as populated by the \fB\%wadd_wch\fP(3X) and \fB\%wins_wch\fP(3X)
+families of functions
+(and those that call them).
+.bP
+Both the character code and attributes of the background character
+combine with blank character cells in the window.
+.PP
+.so common/background-attributes.3x
+.SS "bkgrnd, wbkgrnd"
+.B \%bkgrnd
+and
+.B \%wbkgrnd
+set the background property of
+.B \%stdscr
+or the specified window and then apply this setting to
+every character cell in that window.
+.bP
+The rendition of every character in the window changes to the new
+background rendition.
+.bP
+Wherever the former background character appears,
+it changes to the new background character.
+.PP
+.I \%ncurses
+updates the rendition of each character cell by comparing the character,
+non-color attributes,
+and color pair selection.
+The library applies to following procedure to each cell in the window,
+whether or not it is blank.
+.bP
+.I \%ncurses
+first compares the cell's character to the previously specified
+background character;
+if they match,
+.I \%ncurses
+writes the new background character to the cell.
+.bP
+.I \%ncurses
+then checks whether the cell uses color;
+that is,
+its color pair value is nonzero.
+If not,
+it simply replaces the attributes and color pair in the cell with those
+from the new background character.
+.bP
+If the cell uses color,
+and its background color matches that of the current window background,
+.I \%ncurses
+removes attributes that may have come from the current background and
+adds those from the new background.
+It finishes by setting the cell's background to use the new window
+background color.
+.bP
+If the cell uses color,
+and its background color does not match that of the current window
+background,
+.I \%ncurses
+updates only the non-color attributes,
+first removing those that may have come from the current background,
+and then adding attributes from the new background.
+.PP
+If the new background's character is non-spacing,
+.I \%ncurses
+reuses the old background character,
+except for one special case:
+.I \%ncurses
+treats a background character code of zero (0) as a space.
+.PP
+.so common/background-color-ignored.3x
+.SS "bkgrndset, wbkgrndset"
+.B \%bkgrndset
+and
+.B \%wbkgrndset
+manipulate the background of the applicable window,
+without updating the character cells as
+.B \%bkgrnd
+and
+.B \%wbkgrnd
+do;
+only future writes reflect the updated background.
+.SS "getbkgrnd, wgetbkgrnd"
+.B \%getbkgrnd
+and
+.B \%wgetbkgrnd
+respectively obtain
+.BR \%stdscr 's
+or the given window's background character,
+attributes,
+and color pair,
+and store it in their
+.I wch
+argument.

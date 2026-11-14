@@ -1,0 +1,90 @@
+.SH DESCRIPTION
+.B \%wborder
+and
+.B \%border
+draw a box at the edges of the specified window or
+.BR \%stdscr ","
+respectively.
+Each
+.I \%chtype
+argument corresponds to a geometric component of the border as follows:
+.RS
+.I ls
+\- left side,
+.br
+.I rs
+\- right side,
+.br
+.I ts
+\- top side,
+.br
+.I bs
+\- bottom side,
+.br
+.I tl
+\- top left-hand corner,
+.br
+.I tr
+\- top right-hand corner,
+.br
+.I bl
+\- bottom left-hand corner, and
+.br
+.I br
+\- bottom right-hand corner.
+.RE
+.PP
+If any
+.I \%chtype
+argument is
+.BR 0 ","
+then
+.I curses
+uses forms-drawing characters
+(see \fBaddch\fP(3X))
+in the following correspondence:
+.RS
+.BR \%ACS_VLINE ","
+.br
+.BR \%ACS_VLINE ","
+.br
+.BR \%ACS_HLINE ","
+.br
+.BR \%ACS_HLINE ","
+.br
+.BR \%ACS_ULCORNER ","
+.br
+.BR \%ACS_URCORNER ","
+.br
+.BR \%ACS_LLCORNER ","
+and
+.br
+.BR \%ACS_LRCORNER "."
+.RE
+.PP
+.BI \%box( win ","
+.IB verch ,
+.IB horch )
+is shorthand for
+.RB \%\*(`` wborder(\c
+.IB win ,
+.IB verch ,
+.IB verch ,
+.IB horch ,
+.IB horch ,
+.BR "0, 0, 0, 0)" "\*(''."
+.PP
+.B \%whline
+draws a horizontal line of
+.I ch
+from left to right,
+and
+.B \%wvline
+a vertical one from top to bottom,
+stopping once
+.I n
+characters have been drawn or upon reaching the boundary of
+.IR win "."
+These functions do not update the cursor position
+(beyond any motion directed by their \*(``mv\*('' variants).
+\fB\%ncurses\fP(3X) describes the variants of these functions.

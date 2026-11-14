@@ -1,0 +1,16 @@
+.SH NOTES
+.BR \%bkgrnd ","
+.BR \%bkgrndset ","
+and
+.B \%getbkgrnd
+may be implemented as macros.
+.PP
+Unlike their counterparts in the non-wide-character configuration of
+.IR \%ncurses ","
+.B \%getbkgrnd
+and
+.B \%wgetbkgrnd
+store the background character in a modifiable
+.I \%cchar_t
+parameter,
+rather than supplying it as the return value.

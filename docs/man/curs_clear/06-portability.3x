@@ -1,0 +1,26 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 documentation
+.\" SVID 4, vol. 3, p. 485
+.so common/svr4-immedok-return.3x
+.PP
+Some historic curses implementations had, as an undocumented feature, the
+ability to do the equivalent of \fBclearok(..., 1)\fP by saying
+\fBtouchwin(stdscr)\fP or \fBclear(stdscr)\fP.
+This will not work under
+\fI\%ncurses\fP.
+.PP
+This implementation, and others such as Solaris,
+sets the current position to 0,0 after erasing
+via \fBwerase\fP and \fBwclear\fP.
+That fact is not documented in other implementations,
+and may not be true of implementations
+which were not derived from SVr4 source.
+.PP
+Not obvious from the description,
+most implementations clear the screen after \fBwclear\fP
+even for a subwindow or derived window.
+If you do not want to clear the screen during the next \fBwrefresh\fP,
+use \fBwerase\fP instead.

@@ -1,0 +1,28 @@
+.SH RETURN VALUE
+.B \%bkgdset
+and
+.B \%wbkgdset
+do not return a value.
+.PP
+Functions returning an
+.I int
+return
+.B ERR
+upon failure and
+.B OK
+upon success.
+In
+.IR \%ncurses ","
+failure occurs if
+.bP
+the
+.I curses
+screen has not been initialized,
+or
+.bP
+.I win
+is
+.IR NULL "."
+.PP
+.BR \%getbkgd 's
+return value is as described above.

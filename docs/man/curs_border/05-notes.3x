@@ -1,0 +1,28 @@
+.SH NOTES
+Unusually,
+there is no
+.B \%wbox
+function;
+.B \%box
+behaves as one would expect
+.B \%wbox
+to,
+accepting a
+.I \%WINDOW
+pointer argument.
+.PP
+.BR \%border ","
+.BR \%box ","
+.BR \%hline ","
+.BR \%mvhline ","
+.BR \%mvwhline ","
+.BR \%vline ","
+.BR \%mvvline ","
+and
+.B \%mvwvline
+may be implemented as macros.
+.PP
+Borders drawn by these functions are
+.I interior
+borders.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/src/lib/libcurses/box.c
