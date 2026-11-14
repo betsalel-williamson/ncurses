@@ -5,7 +5,7 @@
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
- * - a Run placeholder after each listing named in examples/examples.json
+ * - a Run placeholder after each complete program in a guide (examples.mjs)
  * - the errata tables in the appendix, from docs/appendix/errata.csv
  * Requires pandoc on PATH. Output is gitignored.
  */
@@ -14,6 +14,7 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'nod
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderErrata } from './errata.mjs';
+import { findPrograms } from './examples.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
@@ -26,7 +27,6 @@ const GUIDES = [
   { src: 'docs/client-library/forms', route: 'guides/forms', indexLabel: 'Introduction' },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
 ];
-const EXAMPLES = JSON.parse(readFileSync(join(site, 'examples/examples.json'), 'utf8'));
 const base = `/${repoSlug.split('/')[1]}`;
 for (const g of GUIDES) rmSync(join(content, g.route.split('/')[0]), { recursive: true, force: true });
 // The site route of a shard, or null when it isn't in a guide.
@@ -56,14 +56,12 @@ for (const g of GUIDES) {
     });
     // The appendix's tables come from errata.csv.
     if (g.route === 'appendix' && isIndex) text += renderErrata(repo, { base, repoSlug, routeOf });
-    // Runnable examples: a Run button after the listing (built by build-examples.mjs).
-    for (const ex of EXAMPLES.filter((e) => e.shard === `${g.src}/${file}`)) {
-      const at = text.indexOf(ex.after);
-      const block = at < 0 ? null : /^```c\n[\s\S]*?^```$/m.exec(text.slice(at));
-      if (!block) throw new Error(`${ex.id}: no \`\`\`c block after "${ex.after}" in ${ex.shard}`);
-      const end = at + block.index + block[0].length;
+    // Runnable examples: a placeholder after each complete program, which becomes a Run button
+    // or a "doesn't run yet" flag (build-examples.mjs, run-example.ts). From the end, so the
+    // offsets stay good.
+    for (const ex of findPrograms(text, `${g.src}/${file}`).reverse()) {
       const widget = `\n\n<div class="run-example" data-example="${ex.id}" data-title=${JSON.stringify(ex.title)}></div>`;
-      text = text.slice(0, end) + widget + text.slice(end);
+      text = text.slice(0, ex.end) + widget + text.slice(ex.end);
     }
     const out = join(content, g.route, file);
     mkdirSync(dirname(out), { recursive: true });
@@ -87,6 +85,44 @@ const FILL = {
 };
 const fill = (t) => t.replace(/@([A-Z_]+)@/g, (m, k) => FILL[k] ?? k.toLowerCase());
 
+/**
+ * Replace each \\fP ("previous font") with the font it returns to. pandoc's man reader tracks
+ * the previous font wrongly, so \\fB…\\fP and \\fI…\\fP left bold running on, and the pages
+ * showed stray ** around page references and after italic words. Fonts reset at each
+ * paragraph or section macro, as in the man macros.
+ */
+const PARAGRAPH = /^\.(SH|SS|PP|LP|P|TP|IP|HP|bP|TH)\b/;
+function resolvePreviousFont(text) {
+  let cur = 'R';
+  let prev = 'R';
+  return text
+    .split('\n')
+    .map((line) => {
+      if (PARAGRAPH.test(line)) cur = prev = 'R';
+      if (line.startsWith('.\\"')) return line;
+      return line.replace(/\\f(\(..|\[[^\]]*\]|.)/g, (m, f) => {
+        let font = f.replace(/^\(|^\[|\]$/g, '') || 'P';
+        if (font === 'P') font = prev;
+        prev = cur;
+        cur = font;
+        return font.length === 1 ? `\\f${font}` : `\\f[${font}]`;
+      });
+    })
+    .join('\n');
+}
+
+/**
+ * Rewrite troff that means the same but that pandoc's man reader can't parse: a line ending in
+ * a backslash continues on the next line (it stopped pandoc inside a table in curs_terminfo),
+ * and a table's format lines can name a two-letter font as f(BI), which pandoc reads only as
+ * fBI (infocmp).
+ */
+function forPandoc(text) {
+  return text
+    .replace(/(^|[^\\])\\\n/g, '$1')
+    .replace(/(^\.TS\n(?:.*;\n)?)([\s\S]*?\.\n)/gm, (m, head, format) => head + format.replace(/f\((..)\)/g, 'f$1'));
+}
+
 const manDir = join(repo, 'man');
 const tmp = join(site, '.generated');
 mkdirSync(tmp, { recursive: true });
@@ -107,15 +143,17 @@ const pages = sources.map(({ file, text }) => {
   let md;
   let failed = false;
   try {
-    md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none'], {
-      input: fill(text),
+    md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none', '--lua-filter', join(site, 'scripts/man-inlines.lua')], {
+      input: resolvePreviousFont(forPandoc(fill(text))),
       encoding: 'utf8',
       maxBuffer: 64 << 20,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
   } catch {
     failed = true;
-    md = '```\n' + fill(text) + '\n```\n';
+    // A fence longer than any run of backticks in the page (troff quotes with ``).
+    const fence = '`'.repeat(Math.max(3, ...[...text.matchAll(/`+/g)].map((m) => m[0].length + 1)));
+    md = `${fence}\n${fill(text)}\n${fence}\n`;
   }
   // NAME lists the names this page documents: "**addch**, **waddch** - add a character".
   const nameBlock = /^# NAME\n+([\s\S]*?)\n\n/m.exec(md);
