@@ -117,7 +117,7 @@ chtype field_back(FIELD *field);          /* field to query */
 int set_field_pad(FIELD *field,           /* field to alter */
                  int pad);                /* pad character to set */
 
-chtype field_pad(FIELD *field);
+chtype field_pad(FIELD *field);         /* returns present pad character */
 
 int set_new_page(FIELD *field,            /* field to alter */
                  int flag);               /* TRUE to force new page */
@@ -126,9 +126,6 @@ chtype new_page(FIELD *field);            /* field to query */
 ```
 
 The attributes set and returned by the first four functions are normal `curses(3x)` display attribute values (`A_STANDOUT`, `A_BOLD`, `A_REVERSE` etc). The page bit of a field controls whether it is displayed at the start of a new form screen.
-
-                                        /* returns present pad character */
-```
 
 Though above functions seem quite simple, using colors with set_field_fore() may be frustrating in the beginning. Let me first explain about foreground and background attributes of a field. The foreground attribute is associated with the character. That means a character in the field is printed with the attribute you have set with set_field_fore(). Background attribute is the attribute used to fill background of field, whether any character is there or not. So what about colors? Since colors are always defined in pairs, what is the right way to display colored fields? Here's an example clarifying color attributes.
 
