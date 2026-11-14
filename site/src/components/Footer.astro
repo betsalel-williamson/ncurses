@@ -10,8 +10,10 @@ import Default from '@astrojs/starlight/components/Footer.astro';
 </script>
 
 <style is:global>
+  /* Clear of the listing above even where the browser draws the code block's horizontal
+     scrollbar below its box (classic scrollbars in Safari and on macOS with "always show"). */
   .run-example {
-    margin-top: 0.75rem;
+    margin-top: 1.5rem;
   }
   .run-example-bar {
     display: flex;
