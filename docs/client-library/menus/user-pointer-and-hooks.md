@@ -51,7 +51,8 @@ main(void)
     int n_choices, i;
 
     n_choices = ARRAY_SIZE(choices);
-    if ((my_items = calloc((size_t) (n_choices + 1), sizeof(ITEM *))) == NULL) {
+    if ((my_items = calloc((size_t) (n_choices + 1),
+                           sizeof(ITEM *))) == NULL) {
         perror("my_items");
         return EXIT_FAILURE;
     }
@@ -80,7 +81,8 @@ main(void)
 
     /* Post the menu */
     mvprintw(LINES - 3, 0, "Press <ENTER> to see the option selected");
-    mvprintw(LINES - 2, 0, "Up and Down arrow keys to navigate (F1 to Exit)");
+    mvprintw(LINES - 2, 0,
+             "Up and Down arrow keys to navigate (F1 to Exit)");
     post_menu(my_menu);
     refresh();
 

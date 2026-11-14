@@ -104,7 +104,11 @@ export function renderErrata(repo, { base, repoSlug, routeOf }) {
   let md = '';
   for (const [category, title] of Object.entries(CATEGORIES)) {
     const list = rows.filter((r) => r.category === category);
-    if (!list.length) continue;
+    if (!list.length) {
+      // Keep the open list's heading, so links to it work and an empty list reads as checked.
+      if (category === 'open') md += `\n## ${title}\n\nNothing is open. Every error found so far has been fixed or rejected.\n`;
+      continue;
+    }
     const claim = CLAIMS.includes(category);
     const fixed = category !== 'open' && category !== 'rejected';
     md += `\n## ${title}\n\n`;

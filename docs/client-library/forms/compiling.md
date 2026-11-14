@@ -5,7 +5,7 @@
 Your form-using modules must import the form library declarations with
 
 ```c
-          #include <form.h>
+#include <form.h>
 ```
 
 and must be linked explicitly with the forms library using an `-lform` argument. Note that they must also link the `ncurses` library with `-lncurses`. Many linkers are two-pass and will accept either order, but it is still good practice to put `-lform` first and `-lncurses` second.
@@ -35,9 +35,10 @@ main(void)
     field[2] = NULL;
 
     /* Set field options */
-    set_field_back(field[0], A_UNDERLINE);      /* Print a line for the option  */
-    field_opts_off(field[0], O_AUTOSKIP);       /* Don't go to next field when this
-                                                   Field is filled up           */
+    /* Print a line for the option */
+    set_field_back(field[0], A_UNDERLINE);
+    /* Don't go to next field when this Field is filled up */
+    field_opts_off(field[0], O_AUTOSKIP);
     set_field_back(field[1], A_UNDERLINE);
     field_opts_off(field[1], O_AUTOSKIP);
 

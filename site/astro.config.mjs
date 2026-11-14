@@ -15,6 +15,8 @@ export default defineConfig({
       title: 'ncurses',
       description: 'Documentation for ncurses, the new curses library: guides and every manual page.',
       components: { Footer: './src/components/Footer.astro' },
+      // 13px code fits a 77-column listing in the content column at 1280px; check-listings.mjs holds listings to that.
+      expressiveCode: { styleOverrides: { codeFontSize: '0.8125rem' } },
       social: [{ icon: 'github', label: 'GitHub', href: `https://github.com/${repo}` }],
       sidebar: [
         { label: 'Credits', link: '/credits/' },

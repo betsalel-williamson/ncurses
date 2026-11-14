@@ -39,7 +39,8 @@ main(void)
     int n_choices, i;
 
     n_choices = ARRAY_SIZE(choices);
-    if ((my_items = calloc((size_t) (n_choices + 1), sizeof(ITEM *))) == NULL) {
+    if ((my_items = calloc((size_t) (n_choices + 1),
+                           sizeof(ITEM *))) == NULL) {
         perror("my_items");
         return EXIT_FAILURE;
     }
