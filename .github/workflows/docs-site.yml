@@ -7,6 +7,7 @@ on:
   push:
     branches: [master]
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   workflow_dispatch:
 
 permissions:
@@ -34,14 +35,14 @@ jobs:
         run: docs/man/stitch.sh && git diff --exit-code man/
       - name: Require an errata entry when a pull request changes the docs
         # docs/appendix/errata.csv is the running list of every change this edition makes. A pull
-        # request that changes a shard adds its rows there, or says "no errata" in its body.
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.body, 'no errata')
+        # request that changes a shard adds its rows there, or carries the no-errata label.
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'no-errata')
         env:
           BASE: ${{ github.event.pull_request.base.sha }}
         run: |
           changed=$(git diff --name-only "$BASE" HEAD)
           if echo "$changed" | grep -qE '^docs/(client-library|man)/' && ! echo "$changed" | grep -qx 'docs/appendix/errata.csv'; then
-            echo "::error file=docs/appendix/errata.csv::This pull request changes the docs; add its changes to docs/appendix/errata.csv, or write 'no errata' in the pull request body."
+            echo "::error file=docs/appendix/errata.csv::This pull request changes the docs; add its changes to docs/appendix/errata.csv, or label the pull request no-errata if no reader sees the change."
             exit 1
           fi
       - name: Check the errata list
