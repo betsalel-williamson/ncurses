@@ -32,6 +32,7 @@
     "client-library/menus/index.md",
     "client-library/windows/index.md",
     "client-library/output/index.md",
+    "client-library/input/index.md",
     "client-library/panels/index.md",
     "appendix/index.md"
   ],
