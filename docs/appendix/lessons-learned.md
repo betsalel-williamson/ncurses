@@ -68,3 +68,11 @@ A pull request was merged while more commits for it were still being written. Th
 clang-format was added to keep the C listings in the ncurses source style. Its trailing-comment alignment broke comments that continue over several lines. That alignment is now off in `docs/.clang-format`, and `site/scripts/check-listings.mjs` checks trailing comments itself.
 
 **Lesson:** run a new formatter over every listing and read the diff before adopting its defaults.
+
+## A harness can change the meaning of the code it runs
+
+Four menu listings reported exit status 1 when they quit. The listings were correct: C gives `main()`, and only `main()`, an implicit `return 0` at its closing brace. The example build renamed `main()` with `-Dmain=example_main`, which took that guarantee away. The build now renames the function after the compiler has added the return.
+
+**Lesson:** when a check fails, ask whether the check changed what it measures before blaming the thing measured.
+
+**Guard:** the smoke run still requires exit status 0 on F1, so a listing that really exits with an error is still flagged.
