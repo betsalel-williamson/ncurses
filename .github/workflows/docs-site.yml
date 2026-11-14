@@ -34,6 +34,10 @@ jobs:
         run: |
           curl -sSL https://github.com/errata-ai/vale/releases/download/v3.15.1/vale_3.15.1_Linux_64-bit.tar.gz | tar -xz -C /tmp vale
           /tmp/vale --config docs/.vale.ini docs/client-library
+      - name: Check the C listings' style
+        run: |
+          pipx install clang-format==18.1.3
+          node site/scripts/check-listings.mjs
       - name: Install Emscripten, for the runnable examples
         uses: mymindstorm/setup-emsdk@v14
         with:

@@ -117,7 +117,7 @@ chtype field_back(FIELD *field);          /* field to query */
 int set_field_pad(FIELD *field,           /* field to alter */
                  int pad);                /* pad character to set */
 
-chtype field_pad(FIELD *field);         /* returns present pad character */
+chtype field_pad(FIELD *field);           /* returns present pad character */
 
 int set_new_page(FIELD *field,            /* field to alter */
                  int flag);               /* TRUE to force new page */
@@ -223,7 +223,7 @@ The program is doing exactly what it was told. The forms library never reads the
 
 To enable a key, translate it into the request you want, the same way the example already turns `KEY_DOWN` into `REQ_NEXT_FIELD`:
 
-1. Backspace becomes `REQ_DEL_PREV`, which deletes the character before the cursor. Terminals disagree on what Backspace sends, so match all three codes: `KEY_BACKSPACE` from `keypad()`, 127 (DEL) and `'\b'` (Ctrl-H).
+1. Backspace becomes `REQ_DEL_PREV`, which deletes the character before the cursor. At the start of a field there is nothing before the cursor, so `REQ_DEL_PREV` moves to the previous field instead, and leaves the cursor at the start of that field. Follow it with `REQ_END_LINE`, as the `KEY_UP` case does, so the cursor lands after the text and the next Backspace keeps deleting. Terminals disagree on what Backspace sends, so match all three codes: `KEY_BACKSPACE` from `keypad()`, 127 (DEL) and `'\b'` (Ctrl-H).
 2. Delete becomes `REQ_DEL_CHAR`, which deletes the character under the cursor. With `keypad(stdscr, TRUE)`, `getch()` reports it as `KEY_DC`.
 3. The left and right arrows become `REQ_PREV_CHAR` and `REQ_NEXT_CHAR`, so you can move to the character you want to delete.
 
@@ -241,7 +241,15 @@ Add these cases to the `switch`, above `default:`:
         case 127:
         case '\b':
             /* Backspace: delete the character before the cursor */
-            form_driver(my_form, REQ_DEL_PREV);
+            {
+                FIELD *before = current_field(my_form);
+
+                form_driver(my_form, REQ_DEL_PREV);
+                /* At the start of a field it moves to the previous
+                   field instead; put the cursor after its text */
+                if (current_field(my_form) != before)
+                    form_driver(my_form, REQ_END_LINE);
+            }
             break;
         case KEY_DC:
             /* Delete: delete the character under the cursor */
@@ -327,7 +335,15 @@ main(void)
         case 127:
         case '\b':
             /* Backspace: delete the character before the cursor */
-            form_driver(my_form, REQ_DEL_PREV);
+            {
+                FIELD *before = current_field(my_form);
+
+                form_driver(my_form, REQ_DEL_PREV);
+                /* At the start of a field it moves to the previous
+                   field instead; put the cursor after its text */
+                if (current_field(my_form) != before)
+                    form_driver(my_form, REQ_END_LINE);
+            }
             break;
         case KEY_DC:
             /* Delete: delete the character under the cursor */
@@ -352,4 +368,4 @@ main(void)
 }
 ```
 
-`REQ_DEL_PREV` has one special case: at the start of a field it moves to the previous field instead of deleting. [Editing Requests](form-driver.md#editing-requests) lists that and every other editing request you can map a key to.
+[Editing Requests](form-driver.md#editing-requests) lists every editing request you can map a key to, and the `O_BS_OVERLOAD` option that controls what `REQ_DEL_PREV` does at the start of a field.
