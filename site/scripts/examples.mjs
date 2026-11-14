@@ -11,6 +11,16 @@ const BLOCK = /^```c\n([\s\S]*?)^```$/gm;
 const MAIN = /^(?:int\s+|void\s+)?main\s*\(/m;
 const LIBS = { form: /#include\s*<form\.h>/, menu: /#include\s*<menu\.h>/, panel: /#include\s*<panel\.h>/ };
 
+/**
+ * The macros a listing tests but never defines (#ifdef _DEBUG), so a build with -D<name> runs
+ * code the default build leaves out. The library's own feature macros are not the listing's.
+ */
+export function listingMacros(code) {
+  const tested = [...code.matchAll(/^\s*#\s*(?:ifn?def\s+(\w+)|(?:el)?if\b.*?\bdefined\s*\(?\s*(\w+))/gm)].map((m) => m[1] ?? m[2]);
+  const defined = new Set([...code.matchAll(/^\s*#\s*define\s+(\w+)/gm)].map((m) => m[1]));
+  return [...new Set(tested)].filter((n) => !defined.has(n) && !/^(NCURSES_|_XOPEN|__)/.test(n));
+}
+
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /**
@@ -32,7 +42,7 @@ export function findPrograms(text, shard) {
     for (let n = 2; used.has(id); n++) id = `${slug(title)}-${n}`;
     used.add(id);
     const libs = Object.keys(LIBS).filter((l) => LIBS[l].test(m[1]));
-    programs.push({ id, title, code: m[1], end: m.index + m[0].length, libs });
+    programs.push({ id, title, code: m[1], end: m.index + m[0].length, libs, macros: listingMacros(m[1]) });
   }
   return programs;
 }

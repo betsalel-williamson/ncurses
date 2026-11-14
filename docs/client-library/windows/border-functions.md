@@ -45,8 +45,9 @@ static void
 print_win_params(WIN *p_win)
 {
 #ifdef _DEBUG
-    mvprintw(25, 0, "%d %d %d %d", p_win->startx, p_win->starty,
+    mvprintw(LINES - 1, 0, "%d %d %d %d", p_win->startx, p_win->starty,
              p_win->width, p_win->height);
+    move(0, 0);
     refresh();
 #else
     (void) p_win;
@@ -134,3 +135,5 @@ main(void)
     return EXIT_SUCCESS;
 }
 ```
+
+`print_win_params()` prints the box's starting position and size on the bottom line, but only when the macro `_DEBUG` is defined, so the default build shows nothing there. The **Run with `_DEBUG` defined** button runs a build with it defined.
