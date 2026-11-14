@@ -142,12 +142,15 @@ main(void)
     field[N_FIELDS - 1] = NULL;
 
     /* Set field options */
-    set_field_back(field[1], A_UNDERLINE);      /* Print a line for the option  */
+    /* Print a line for the option */
+    set_field_back(field[1], A_UNDERLINE);
 
-    field_opts_off(field[0], O_ACTIVE);         /* This field is a static label */
-    field_opts_off(field[1], O_PUBLIC);         /* This field is like a password field */
-    field_opts_off(field[1], O_AUTOSKIP);       /* To avoid entering the same field
-                                                   after last character is entered */
+    /* This field is a static label */
+    field_opts_off(field[0], O_ACTIVE);
+    /* This field is like a password field */
+    field_opts_off(field[1], O_PUBLIC);
+    /* To avoid entering the same field after last character is entered */
+    field_opts_off(field[1], O_AUTOSKIP);
 
     /* Create the form and post it */
     my_form = new_form(field);

@@ -5,7 +5,7 @@
 Your menu-using modules must import the menu library declarations with
 
 ```c
-          #include <menu.h>
+#include <menu.h>
 ```
 
 and must be linked explicitly with the menus library using an `-lmenu` argument. Note that they must also link the `ncurses` library with `-lncurses`. Many linkers are two-pass and will accept either order, but it is still good practice to put `-lmenu` first and `-lncurses` second:
@@ -43,7 +43,8 @@ main(void)
     int n_choices, i;
 
     n_choices = ARRAY_SIZE(choices);
-    if ((my_items = calloc((size_t) (n_choices + 1), sizeof(ITEM *))) == NULL) {
+    if ((my_items = calloc((size_t) (n_choices + 1),
+                           sizeof(ITEM *))) == NULL) {
         perror("my_items");
         return EXIT_FAILURE;
     }

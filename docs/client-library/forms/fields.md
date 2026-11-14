@@ -159,11 +159,12 @@ main(void)
     field[2] = NULL;
 
     /* Set field options */
-    set_field_fore(field[0], COLOR_PAIR(1));    /* Put the field with blue background */
-    set_field_back(field[0], COLOR_PAIR(2));    /* and white foreground (characters
-                                                   are printed in white         */
-    field_opts_off(field[0], O_AUTOSKIP);       /* Don't go to next field when this
-                                                   Field is filled up           */
+    /* Put the field with blue background and white foreground
+       (characters are printed in white) */
+    set_field_fore(field[0], COLOR_PAIR(1));
+    set_field_back(field[0], COLOR_PAIR(2));
+    /* Don't go to next field when this Field is filled up */
+    field_opts_off(field[0], O_AUTOSKIP);
     set_field_back(field[1], A_UNDERLINE);
     field_opts_off(field[1], O_AUTOSKIP);
 
@@ -172,7 +173,8 @@ main(void)
     post_form(my_form);
     refresh();
 
-    set_current_field(my_form, field[0]);       /* Set focus to the colored field */
+    /* Set focus to the colored field */
+    set_current_field(my_form, field[0]);
     mvprintw(4, 10, "Value 1:");
     mvprintw(6, 10, "Value 2:");
     mvprintw(LINES - 2, 0,
@@ -289,11 +291,12 @@ main(void)
     field[2] = NULL;
 
     /* Set field options */
-    set_field_fore(field[0], COLOR_PAIR(1));    /* Put the field with blue background */
-    set_field_back(field[0], COLOR_PAIR(2));    /* and white foreground (characters
-                                                   are printed in white         */
-    field_opts_off(field[0], O_AUTOSKIP);       /* Don't go to next field when this
-                                                   Field is filled up           */
+    /* Put the field with blue background and white foreground
+       (characters are printed in white) */
+    set_field_fore(field[0], COLOR_PAIR(1));
+    set_field_back(field[0], COLOR_PAIR(2));
+    /* Don't go to next field when this Field is filled up */
+    field_opts_off(field[0], O_AUTOSKIP);
     set_field_back(field[1], A_UNDERLINE);
     field_opts_off(field[1], O_AUTOSKIP);
 
@@ -302,7 +305,8 @@ main(void)
     post_form(my_form);
     refresh();
 
-    set_current_field(my_form, field[0]);       /* Set focus to the colored field */
+    /* Set focus to the colored field */
+    set_current_field(my_form, field[0]);
     mvprintw(4, 10, "Value 1:");
     mvprintw(6, 10, "Value 2:");
     mvprintw(LINES - 2, 0,
