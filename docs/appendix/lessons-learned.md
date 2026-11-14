@@ -81,6 +81,8 @@ Four menu listings reported exit status 1 when they quit. The listings were corr
 
 Some listings scrolled sideways. The first check flagged every code block whose scroll width was larger than its visible width, and a 72-column line still showed up as too long. Expressive Code reserves padding on the right of each line for the copy button, so the code block can scroll a few pixels even when all of its text is visible. The check now measures where each line's text ends and compares that with the right edge of the code block. Listings render at 13px and hold to 77 columns, and at 1024, 1280 and 1440 pixels wide no listing text is cut off.
 
+The example terminal had the same fault: 80 columns at 16px are 720 pixels, wider than the content column at 1280 pixels, so it scrolled too. It now shrinks its font until all 80 columns fit.
+
 A configuration change also seemed to do nothing until Astro's content cache in `site/node_modules/.astro` was cleared. CI builds from a clean checkout, so it doesn't hit this, but a local build can.
 
 **Lesson:** when a measurement disagrees with what you see, check what it measures. When a configuration change seems to do nothing, clear the build cache before concluding it doesn't work.
