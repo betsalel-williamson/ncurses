@@ -2,7 +2,8 @@
 /**
  * Run one built example (public/examples/<id>.mjs) in Node on a fake 80x24 xterm, the way the
  * page runs it, and report whether it works: it must draw something, keep running until a key
- * comes, and exit with status 0 when it gets F1 (every guide example quits on F1).
+ * comes, and exit with status 0 when it gets F1, pressed up to three times (every guide example
+ * quits on F1).
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
  * Usage: node smoke-example.mjs <path to .mjs>
  */
@@ -22,7 +23,7 @@ process.on('unhandledRejection', (e) => isExit(e) || report('crashed', String(e?
 let output = 0;
 let exited = null;
 const { default: create } = await import(pathToFileURL(process.argv[2]).href);
-setTimeout(() => report('no-quit', 'still running 4 s after F1'), 6000);
+setTimeout(() => report('no-quit', 'still running after F1 was pressed three times'), 7000);
 let pty;
 create({
   preRun: [
@@ -47,7 +48,12 @@ create({
 await new Promise((r) => setTimeout(r, 2000));
 if (exited !== null) report('crashed', `exited (${exited}) before any key was pressed`);
 if (!output) report('no-output', 'drew nothing in 2 s');
-pty.push(F1);
-for (let i = 0; i < 40 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
-if (exited === null) report('no-quit', 'still running 4 s after F1');
+// Some programs wait for one key before their main loop (initialization.md shows the key it
+// read, then waits again), so press F1 up to three times, a second apart.
+for (let press = 0; press < 3 && exited === null; press++) {
+  pty.push(F1);
+  for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+}
+for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+if (exited === null) report('no-quit', 'still running after F1 was pressed three times');
 report(exited === 0 ? 'runs' : 'crashed', exited === 0 ? '' : `exited (${exited}) after F1`);
