@@ -20,6 +20,7 @@ export default defineConfig({
       social: [{ icon: 'github', label: 'GitHub', href: `https://github.com/${repo}` }],
       sidebar: [
         { label: 'Credits', link: '/credits/' },
+        { label: 'Getting started', items: [{ autogenerate: { directory: 'guides/getting-started' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
