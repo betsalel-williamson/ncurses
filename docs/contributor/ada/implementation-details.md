@@ -6,7 +6,7 @@ The binding's types such as `Window`, `Panel`, `Menu` and `Form` are opaque repr
 
 ## Extended `ripoffline()` usage
 
-The [X/Open](../../glossary/x-open-curses.md) documentation of `ripoffline()` says that the line parameter only determines whether exactly one line is taken from the top or the bottom of the screen, so only the sign of the parameter matters. ncurses also uses the parameter's absolute value as the number of lines to take, and the binding's `Rip_Off_Lines` routine relies on this.
+The [X/Open](../../glossary/x-open-curses.md) documentation of `ripoffline()` says that the line parameter only determines whether exactly one line is taken from the top or the bottom of the screen, so only the sign of the parameter matters. ncurses follows that in its public `ripoffline()`, which passes on only the sign. Internally, though, its `_nc_ripoffline()` function uses the parameter's absolute value as the number of lines to take, and the binding's `Rip_Off_Lines` routine calls that function directly.
 
 ## How user-defined field types work
 
