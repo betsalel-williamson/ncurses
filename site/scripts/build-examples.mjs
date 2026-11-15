@@ -14,7 +14,7 @@
  */
 import { execFile, execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { appendFileSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { availableParallelism } from 'node:os';
 import { promisify } from 'node:util';
 import { dirname, join } from 'node:path';
@@ -271,6 +271,14 @@ async function buildExample(ex, id, defines, libs, entryFile) {
   if (ex.args.length) result.args = ex.args;
   if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
   return result;
+}
+// Each build's .wasm size, so the page can show its download's progress: the server may compress
+// it, and then the response's own length isn't the size the page counts.
+const wasmBytes = (id) => statSync(join(out, `${id}.wasm`)).size;
+for (const entry of status) {
+  if (entry.status !== 'runs') continue;
+  entry.bytes = wasmBytes(entry.id);
+  for (const v of entry.variants ?? []) v.bytes = wasmBytes(v.id);
 }
 writeFileSync(join(out, 'status.json'), JSON.stringify(status, null, 2));
 
