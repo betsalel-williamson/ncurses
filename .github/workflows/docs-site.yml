@@ -77,6 +77,17 @@ jobs:
     if: ${{ !cancelled() && needs.reuse.outputs.reused != 'true' }}
     uses: ./.github/workflows/docs-site-build.yml
 
+  cache:
+    # When the deploy reuses a pull request's build, nothing builds on master, and pull requests
+    # can restore caches only from master or their own branch. This build fills master's caches
+    # (Emscripten, the WebAssembly ncurses build, the examples, npm) for the next pull request.
+    # It publishes nothing, and the deploy doesn't wait for it.
+    needs: reuse
+    if: ${{ !cancelled() && needs.reuse.outputs.reused == 'true' }}
+    uses: ./.github/workflows/docs-site-build.yml
+    with:
+      publish: false
+
   deploy:
     needs: [reuse, build]
     if: >-

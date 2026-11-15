@@ -7,6 +7,11 @@ name: Docs site build
 
 on:
   workflow_call:
+    inputs:
+      publish:
+        description: On master, hand the site to GitHub Pages. docs-site.yml's cache job sets it to false.
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -26,7 +31,16 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
+        # The release archive, checked against its hash: a few seconds, where apt-get update
+        # took fifteen. 3.1.3 is the version Ubuntu 24.04 packages, which the site was built with.
+        env:
+          PANDOC_VERSION: 3.1.3
+          PANDOC_SHA256: 74bc434908e4d858b3edbfd6271d2e9e499477837e5df1d630df4e62f113803d
+        run: |
+          curl -sSLo /tmp/pandoc.tar.gz "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-amd64.tar.gz"
+          echo "${PANDOC_SHA256}  /tmp/pandoc.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/pandoc.tar.gz -C /tmp
+          echo "/tmp/pandoc-${PANDOC_VERSION}/bin" >> "$GITHUB_PATH"
       - name: Check the stitched man pages match man/
         run: docs/man/stitch.sh && git diff --exit-code man/
       - name: Require an errata entry when a pull request changes the docs
@@ -66,6 +80,31 @@ jobs:
         with:
           version: 7.0.0
           actions-cache-folder: emsdk-cache
+      # Caches. A pull request can restore only what its own branch or master saved, so
+      # docs-site.yml's cache job saves these on master after every merge.
+      - name: Key the WebAssembly ncurses build by its sources
+        id: ncurses-key
+        # Every tracked file outside the docs, the site and CI, so a docs change keeps the key,
+        # plus the script that configures the build.
+        run: |
+          sources=$(git ls-files -s -- . ':!docs' ':!site' ':!man' ':!.github' | sha256sum | cut -c1-16)
+          script=$(sha256sum site/scripts/build-examples.mjs | cut -c1-16)
+          echo "key=ncurses-wasm-emsdk-7.0.0-$sources-$script" >> "$GITHUB_OUTPUT"
+      - name: Restore the WebAssembly ncurses build
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: site/.generated/ncurses-wasm
+          key: ${{ steps.ncurses-key.outputs.key }}
+      - name: Restore the built examples
+        # A partial restore: the newest saved set comes back, and build-examples.mjs rebuilds
+        # only the listings whose inputs changed (it keys each build by a hash of them).
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: site/.generated/example-cache
+          key: examples-v1-${{ steps.ncurses-key.outputs.key }}-${{ hashFiles('docs/client-library/**/*.md', 'site/examples/**', 'site/scripts/build-examples.mjs', 'site/scripts/examples.mjs', 'site/scripts/smoke-example.mjs') }}
+          restore-keys: |
+            examples-v1-${{ steps.ncurses-key.outputs.key }}-
+            examples-v1-
       - name: Build the site
         working-directory: site
         run: |
@@ -85,7 +124,7 @@ jobs:
           path: site/dist
           retention-days: 30
           if-no-files-found: error
-      - if: github.event_name != 'pull_request'
+      - if: github.event_name != 'pull_request' && inputs.publish
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site/dist

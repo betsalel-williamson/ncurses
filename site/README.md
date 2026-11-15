@@ -111,3 +111,13 @@ A pull request's run (`.github/workflows/docs-site-pr.yml`) builds the site from
 - That run succeeded.
 
 If no artifact matches, because `master` moved on after the pull request's last run, the `build` job builds and deploys as before. Requiring branches to be up to date before merging makes the trees match every time.
+
+### Build caches
+
+Most of a cold CI run went to the runnable examples. The WebAssembly ncurses build took 46 seconds, and compiling and smoke-testing the examples one at a time took two minutes. Three caches skip that work:
+
+- **The WebAssembly ncurses build** (`.generated/ncurses-wasm`). It is keyed by every tracked file outside `docs/`, `site/`, `man/` and `.github/`, plus `build-examples.mjs` and the Emscripten version. A change to the docs or the site keeps the key, so the library restores and is not rebuilt.
+- **Each example build** (`.generated/example-cache/<hash>`). `build-examples.mjs` keys each build of a listing by a hash of its inputs: the listing, its macros and arguments, the libraries it links, `examples/`, the smoke test, the script itself and the `emcc` version. A build whose hash is cached is copied with its smoke-test result. Only listings whose inputs changed are compiled and run, in parallel, one per CPU. CI restores the newest saved set (a partial restore), and the script deletes the entries the run didn't use, so the saved set matches the current examples.
+- **Emscripten itself and npm**, through `setup-emsdk` and `setup-node`.
+
+A pull request can restore caches saved only on its own branch or on `master`. When a merge deploys the pull request's build, nothing builds on `master`, so the `cache` job in `docs-site.yml` runs the build there, publishes nothing, and saves the caches for the next pull request. The deploy doesn't wait for it. The same caches work locally: a second `npm run build` reuses `.generated/`.
