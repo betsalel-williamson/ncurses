@@ -18,7 +18,7 @@ These functions put a single character into the current cursor location and adva
 
 In order to combine a character with some attributes, you have two options:
 
-- OR a single character with the desired attribute macros. These attribute macros can be found in the header file `ncurses.h`. For example, to print a character `ch` bold and underlined, you would call `addch()` as below.
+- OR a single character with the desired attribute macros. These attribute macros are defined in `curses.h`. For example, to print a character `ch` bold and underlined, you would call `addch()` as below.
 
   ```c
   addch(ch | A_BOLD | A_UNDERLINE);

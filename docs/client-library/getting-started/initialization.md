@@ -6,7 +6,7 @@ To initialize the curses system, call `initscr()`. There are functions which can
 
 ## `raw()` and `cbreak()`
 
-Normally the terminal driver buffers the characters a user types until a new line or carriage return is encountered. But most programs require that the characters be available as soon as the user types them. These two functions disable line buffering. The difference between them is in the way control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C) are passed to the program. In `raw()` mode these characters are passed directly to the program without generating a signal. In [`cbreak()`](../../glossary/cbreak-mode.md) mode the terminal driver still interprets them, and generates the signal as usual. I personally prefer to use `raw()` as I can exercise greater control over what the user does.
+Normally the terminal driver buffers the characters a user types until a new line or carriage return is encountered. But most programs require that the characters be available as soon as the user types them. These two functions disable line buffering. The difference between them is in the way control characters like suspend (CTRL-Z), interrupt (CTRL-C) and quit (CTRL-\\) are passed to the program. In `raw()` mode these characters are passed directly to the program without generating a signal. In [`cbreak()`](../../glossary/cbreak-mode.md) mode the terminal driver still interprets them, and generates the signal as usual. I personally prefer to use `raw()` as I can exercise greater control over what the user does.
 
 ## `echo()` and `noecho()`
 

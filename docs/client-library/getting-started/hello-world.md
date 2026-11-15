@@ -53,7 +53,7 @@ After this is done, we can do a variety of initializations to customize our curs
 
 ## The mysterious `refresh()`
 
-The next line, `printw()`, prints the string "Hello World !!!" on to the screen. This function is analogous to the normal `printf()` in all respects except that it prints the data on a window called `stdscr` at the current (y,x) co-ordinates. Since our present co-ordinates are at 0,0 the string is printed at the left hand corner of the window.
+The next line, `printw()`, prints the string "Hello World !!!" on to the screen. This function is analogous to the normal `printf()` in all respects except that it prints the data on a window called `stdscr` at the current (y,x) co-ordinates. Since our present co-ordinates are at 0,0 the string is printed at the upper left-hand corner of the window.
 
 This brings us to that mysterious `refresh()`. When we called `printw()`, the data was actually written to an imaginary window, which is not updated on the screen yet. The job of `printw()` is to update a few flags and data structures and write the data to a buffer corresponding to `stdscr`. In order to show it on the screen, we need to call `refresh()` and tell the curses system to dump the contents on the screen.
 
