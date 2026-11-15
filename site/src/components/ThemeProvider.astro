@@ -17,7 +17,7 @@ import Default from '@astrojs/starlight/components/ThemeProvider.astro';
 <script is:inline>
   (() => {
     // Styles drawn for one color scheme only. Modern follows the Auto/Light/Dark picker.
-    const modes = { textmode: 'dark', workstation: 'light', terminal: 'dark' };
+    const modes = { textmode: 'dark', workstation: 'light', terminal: 'dark', manpage: 'light' };
     let style = null;
     try {
       style = localStorage.getItem('ncurses-style');

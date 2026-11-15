@@ -9,12 +9,13 @@ const options = [
   { label: 'Text mode', value: 'textmode', selected: false },
   { label: 'Workstation', value: 'workstation', selected: false },
   { label: 'Terminal', value: 'terminal', selected: false },
+  { label: 'Manual page', value: 'manpage', selected: false },
 ];
 ---
 
 <div class="pickers">
   <ncurses-style-select>
-    <Select icon="window" label="Style" width="9.5em" options={options} />
+    <Select icon="window" label="Style" width="10em" options={options} />
   </ncurses-style-select>
   <Default />
 </div>

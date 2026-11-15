@@ -16,6 +16,12 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     align-items: center;
     gap: 0.75rem;
   }
+  /* Starlight puts a top margin between siblings in page content; in this row it lifted the
+     second button and the size menu off the first button's line. */
+  .run-example-bar > *,
+  .run-example-size > select {
+    margin: 0;
+  }
   .run-example-bar button {
     font: inherit;
     font-size: var(--sl-text-sm);
@@ -36,7 +42,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
   }
   .run-example-size select {
     font: inherit;
-    padding: 0.2rem 0.4rem;
+    padding: 0.35rem 0.5rem;
     border-radius: 0.4rem;
     border: 1px solid var(--sl-color-gray-4);
     background: var(--sl-color-bg);

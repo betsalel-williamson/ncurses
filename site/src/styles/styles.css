@@ -23,6 +23,54 @@
   --sl-text-h4: var(--sl-text-lg);
 }
 
+/* Code hints. code-links.mjs links each curses call in a C listing to its man page, and
+   code-hints.js shows the page's NAME summary in this box on hover or focus. Modern draws it
+   from Starlight's colors; each other style sets the --nc-hint-* tokens. */
+.expressive-code a.nc-sym {
+  color: inherit;
+  text-decoration: var(--nc-sym-decoration, underline dotted);
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  text-underline-offset: 0.2em;
+}
+.expressive-code a.nc-sym:is(:hover, :focus-visible) {
+  text-decoration-style: solid;
+  text-decoration-color: currentColor;
+}
+.nc-hint {
+  position: fixed;
+  z-index: 100;
+  max-width: min(28rem, calc(100vw - 1rem));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--nc-hint-bg, var(--sl-color-gray-6));
+  color: var(--nc-hint-fg, var(--sl-color-gray-2));
+  border: var(--nc-hint-border, 1px solid var(--sl-color-gray-5));
+  border-radius: var(--nc-hint-radius, 0.375rem);
+  box-shadow: var(--nc-hint-shadow, var(--sl-shadow-md));
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-sm);
+  line-height: 1.4;
+  pointer-events: none;
+}
+:root[data-style='workstation'] .nc-hint {
+  border-color: var(--nc-raised);
+}
+.nc-hint[hidden] {
+  display: none;
+}
+.nc-hint code {
+  font-family: var(--sl-font-mono);
+  font-weight: 700;
+  color: var(--nc-hint-name-fg, var(--sl-color-white));
+}
+.nc-hint-page {
+  font-size: var(--sl-text-xs);
+  color: var(--nc-hint-page-fg, var(--sl-color-text-accent));
+}
+
 /* The status bar (ThemeProvider.astro) is hidden unless a style turns it on. */
 .nc-statusbar {
   display: none;
@@ -139,6 +187,15 @@
   --nc-toc-border-color: var(--nc-cga-black);
   --nc-toc-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
   --nc-toc-title: '[ On this page ]';
+  /* Code hints (code-hints.js): a gray dialog box like the On this page panel. */
+  --nc-hint-bg: var(--nc-cga-gray);
+  --nc-hint-fg: var(--nc-cga-black);
+  --nc-hint-name-fg: var(--nc-cga-blue);
+  --nc-hint-page-fg: var(--nc-cga-red);
+  --nc-hint-border: 4px double var(--nc-cga-black);
+  --nc-hint-shadow: 0.5rem 0.5rem 0 var(--nc-cga-black);
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
   --nc-toc-title-fg: var(--nc-cga-black);
   --nc-toc-heading-clip: inset(50%);
   --nc-toc-heading-position: absolute;
@@ -157,6 +214,27 @@
   --nc-code-border-color: transparent;
   --nc-code-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 #000044;
   --nc-code-radius: 0;
+  /* A shell listing's title bar is a curses window's top edge: a double rule with the close
+     box at the left, where a Mac shows its three dots. */
+  --nc-frame-close: '[■]';
+  --nc-frame-close-fg: var(--nc-cga-light-green);
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: var(--nc-cga-black);
+  --nc-frame-titlebar-fg: var(--nc-cga-white);
+  --nc-frame-titlebar-rule: 4px double var(--nc-cga-white);
+  /* The search dialog: a gray dialog box with a double frame and a title on its top edge. */
+  --nc-dialog-bg: var(--nc-cga-gray);
+  --nc-dialog-fg: var(--nc-cga-black);
+  --nc-dialog-border: 4px double var(--nc-cga-white);
+  --nc-dialog-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
+  --nc-dialog-title: '[ Search ]';
+  --nc-dialog-title-fg: var(--nc-cga-white);
+  --nc-dialog-input-border: 0;
+  --nc-dialog-result-bg: var(--nc-cga-cyan);
+  --nc-dialog-result-fg: var(--nc-cga-black);
+  --nc-dialog-result-title-fg: var(--nc-cga-black);
+  --nc-dialog-accent: var(--nc-cga-blue);
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.35);
   --nc-inline-code-bg: transparent;
   --nc-inline-code-fg: var(--nc-cga-light-cyan);
 
@@ -279,6 +357,15 @@
   --nc-toc-border-color: var(--nc-raised);
   --nc-toc-shadow: none;
   --nc-toc-title: none;
+  /* Code hints (code-hints.js): a raised panel. */
+  --nc-hint-bg: #d6d6d1;
+  --nc-hint-fg: #33332f;
+  --nc-hint-name-fg: #161616;
+  --nc-hint-page-fg: #22577a;
+  --nc-hint-border: 2px solid;
+  --nc-hint-shadow: none;
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
 
   --nc-content-bg: #ffffff;
   --nc-content-border: 2px solid;
@@ -293,6 +380,27 @@
   --nc-code-border-color: var(--nc-sunken);
   --nc-code-shadow: none;
   --nc-code-radius: 0;
+  /* A shell listing's title bar is a Motif window's: a raised bar with the window-menu
+     button at the left, where a Mac shows its three dots. */
+  --nc-frame-close: '';
+  --nc-frame-close-fg: #161616;
+  --nc-frame-close-box: 2px solid;
+  --nc-frame-titlebar-bg: #c8c8c3;
+  --nc-frame-titlebar-fg: #161616;
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: a raised panel. */
+  --nc-dialog-bg: #d6d6d1;
+  --nc-dialog-fg: #33332f;
+  --nc-dialog-border: 2px solid;
+  --nc-dialog-shadow: 0.25rem 0.25rem 0 rgb(0 0 0 / 0.35);
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: #161616;
+  --nc-dialog-input-border: 2px solid;
+  --nc-dialog-result-bg: #f4f4ef;
+  --nc-dialog-result-fg: #33332f;
+  --nc-dialog-result-title-fg: #161616;
+  --nc-dialog-accent: #22577a;
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.25);
   --nc-inline-code-bg: #ecece7;
   --nc-inline-code-fg: #161616;
 
@@ -303,6 +411,7 @@
   --nc-button-border: 2px solid;
   --nc-button-border-color: var(--nc-raised);
   --nc-button-shadow: none;
+  --nc-button-primary-shadow: 0 0 0 2px #f4f4f0, 0 0 0 3px #161616;
   --nc-button-radius: 0;
   --nc-card-bg: #d6d6d1;
   --nc-card-fg: #33332f;
@@ -311,6 +420,174 @@
   --nc-term-frame-bg: #d6d6d1;
   --nc-term-frame-border: 2px solid;
   --nc-term-frame-border-color: var(--nc-raised);
+  --nc-term-frame-shadow: none;
+  --nc-term-frame-radius: 0;
+  /* xterm's defaults. */
+  --nc-term-bg: #ffffff;
+  --nc-term-fg: #000000;
+  --nc-term-cursor: #000000;
+  --nc-ansi-0: #000000;
+  --nc-ansi-1: #cd0000;
+  --nc-ansi-2: #00cd00;
+  --nc-ansi-3: #cdcd00;
+  --nc-ansi-4: #0000ee;
+  --nc-ansi-5: #cd00cd;
+  --nc-ansi-6: #00cdcd;
+  --nc-ansi-7: #e5e5e5;
+  --nc-ansi-8: #7f7f7f;
+  --nc-ansi-9: #ff0000;
+  --nc-ansi-10: #00ff00;
+  --nc-ansi-11: #ffff00;
+  --nc-ansi-12: #5c5cff;
+  --nc-ansi-13: #ff00ff;
+  --nc-ansi-14: #00ffff;
+  --nc-ansi-15: #ffffff;
+}
+
+/* Manual page: set like a printed man page, in Times and Courier on paper, with bold capital
+   section headings and no window chrome. */
+:root[data-style='manpage'] {
+  --sl-font: 'Tinos', 'Times New Roman', Times, serif;
+  --sl-font-mono: 'Cousine', 'Courier New', monospace;
+  --sl-text-body: 1.125rem;
+  --sl-line-height: 1.55;
+
+  --sl-color-white: #1b1b1b;
+  --sl-color-gray-1: #222222;
+  --sl-color-gray-2: #2c2c28;
+  --sl-color-gray-3: #3d3d38;
+  --sl-color-gray-4: #8a8a80;
+  --sl-color-gray-5: #d8d8cc;
+  --sl-color-gray-6: #ececdf;
+  --sl-color-gray-7: #f1f1e8;
+  --sl-color-black: #fdfdf8;
+  --sl-color-accent-low: #dde4f3;
+  --sl-color-accent: #1d3f8f;
+  --sl-color-accent-high: #0d2259;
+  --sl-color-text-invert: #fdfdf8;
+  --sl-color-bg-nav: #fdfdf8;
+  --sl-color-bg-sidebar: #fdfdf8;
+  --sl-color-hairline: #d8d8cc;
+  --sl-color-hairline-light: #d8d8cc;
+  --sl-color-hairline-shade: #1b1b1b;
+
+  --nc-heading-font: var(--sl-font);
+  --nc-heading-weight: 700;
+  --nc-nav-font: var(--sl-font);
+  --nc-h1-fg: #1b1b1b;
+  --nc-h2-fg: #1b1b1b;
+  /* Section headings as man sets NAME and DESCRIPTION: bold capitals at body size. */
+  --nc-h2-size: 1.0625rem;
+  --nc-h2-transform: uppercase;
+  --nc-h2-tracking: 0.08em;
+  --nc-h3-style: italic;
+  --nc-h3-fg: #1b1b1b;
+  --nc-h2-before: none;
+  --nc-h2-after: none;
+  --nc-h2-rule: 0;
+  --nc-link-fg: #1d3f8f;
+  --nc-hotkey-fg: inherit;
+
+  --nc-page-bg: #fdfdf8;
+  --nc-header-bg: #fdfdf8;
+  --nc-header-fg: #1b1b1b;
+  --nc-header-border: 1px solid #1b1b1b;
+  --nc-header-shadow: none;
+  --nc-input-bg: #fdfdf8;
+  --nc-input-fg: #55554e;
+  --nc-input-border: 1px solid;
+  --nc-input-border-color: #8a8a80;
+  --nc-input-radius: 0;
+
+  --nc-statusbar-display: none;
+  --nc-statusbar-height: 0rem;
+
+  --nc-panel-gap: 0rem;
+  --nc-panel-radius: 0;
+
+  --nc-nav-bg: transparent;
+  --nc-nav-fg: #3d3d38;
+  --nc-nav-group-fg: #1b1b1b;
+  --nc-nav-muted: #8a8a80;
+  --nc-nav-current-bg: transparent;
+  --nc-nav-current-fg: #1b1b1b;
+  --nc-nav-current-weight: 700;
+  --nc-nav-current-decoration: underline;
+  --nc-nav-border: 0;
+  --nc-nav-border-color: transparent;
+  --nc-nav-shadow: none;
+  --nc-nav-title: none;
+
+  --nc-toc-bg: transparent;
+  --nc-toc-fg: #3d3d38;
+  --nc-toc-heading-fg: #1b1b1b;
+  --nc-toc-current-fg: #1d3f8f;
+  --nc-toc-border: 0;
+  --nc-toc-border-color: transparent;
+  --nc-toc-shadow: none;
+  --nc-toc-title: none;
+  /* Code hints (code-hints.js): a ruled note on paper. */
+  --nc-hint-bg: #fdfdf8;
+  --nc-hint-fg: #2c2c28;
+  --nc-hint-name-fg: #1b1b1b;
+  --nc-hint-page-fg: #1d3f8f;
+  --nc-hint-border: 1px solid #1b1b1b;
+  --nc-hint-shadow: 0.1875rem 0.1875rem 0 #d8d8cc;
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
+
+  --nc-content-bg: #fdfdf8;
+  --nc-content-border: 0;
+  --nc-content-border-color: transparent;
+  --nc-content-shadow: none;
+  --nc-content-title: none;
+
+  --nc-code-bg: #f1f1e8;
+  --nc-code-titlebar-bg: #f1f1e8;
+  --nc-code-titlebar-fg: #3d3d38;
+  --nc-code-border: 1px solid;
+  --nc-code-border-color: #d8d8cc;
+  --nc-code-shadow: none;
+  --nc-code-radius: 0;
+  /* A shell listing is set like a man page's EXAMPLES: no window chrome, a rule under the title. */
+  --nc-frame-close: none;
+  --nc-frame-close-fg: #1b1b1b;
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: #f1f1e8;
+  --nc-frame-titlebar-fg: #3d3d38;
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: a sheet of paper with a ruled edge. */
+  --nc-dialog-bg: #fdfdf8;
+  --nc-dialog-fg: #2c2c28;
+  --nc-dialog-border: 1px solid #1b1b1b;
+  --nc-dialog-shadow: 0.25rem 0.25rem 0 #d8d8cc;
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: #161616;
+  --nc-dialog-input-border: 1px solid;
+  --nc-dialog-result-bg: #f1f1e8;
+  --nc-dialog-result-fg: #2c2c28;
+  --nc-dialog-result-title-fg: #1b1b1b;
+  --nc-dialog-accent: #1d3f8f;
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.25);
+  --nc-inline-code-bg: transparent;
+  --nc-inline-code-fg: #1b1b1b;
+  --nc-inline-code-weight: 700;
+
+  --nc-button-bg: #1b1b1b;
+  --nc-button-fg: #fdfdf8;
+  --nc-button-hover-bg: #1d3f8f;
+  --nc-button-hover-fg: #fdfdf8;
+  --nc-button-border: 1px solid;
+  --nc-button-border-color: #1b1b1b;
+  --nc-button-shadow: none;
+  --nc-button-radius: 0;
+  --nc-card-bg: #fdfdf8;
+  --nc-card-fg: #2c2c28;
+  --nc-card-title-fg: #1b1b1b;
+
+  --nc-term-frame-bg: #f1f1e8;
+  --nc-term-frame-border: 1px solid;
+  --nc-term-frame-border-color: #d8d8cc;
   --nc-term-frame-shadow: none;
   --nc-term-frame-radius: 0;
   /* xterm's defaults. */
@@ -414,6 +691,15 @@
   --nc-toc-border-color: transparent;
   --nc-toc-shadow: none;
   --nc-toc-title: none;
+  /* Code hints (code-hints.js): amber in a thin amber rule, like a terminal's own window. */
+  --nc-hint-bg: #050504;
+  --nc-hint-fg: #b3ae9f;
+  --nc-hint-name-fg: var(--nc-amber-light);
+  --nc-hint-page-fg: var(--nc-amber);
+  --nc-hint-border: 1px solid var(--nc-amber);
+  --nc-hint-shadow: 0 0 0.5rem rgb(255 176 0 / 0.35);
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
 
   --nc-content-bg: transparent;
   --nc-content-border: 0;
@@ -428,6 +714,26 @@
   --nc-code-border-color: var(--nc-rule);
   --nc-code-shadow: none;
   --nc-code-radius: 0;
+  /* A shell listing on a terminal has no window chrome: a thin amber rule under the title. */
+  --nc-frame-close: none;
+  --nc-frame-close-fg: var(--nc-amber);
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: transparent;
+  --nc-frame-titlebar-fg: var(--nc-amber);
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: amber text in a thin amber frame on black. */
+  --nc-dialog-bg: #050504;
+  --nc-dialog-fg: #b3ae9f;
+  --nc-dialog-border: 1px solid var(--nc-amber);
+  --nc-dialog-shadow: 0 0 1rem rgb(255 176 0 / 0.25);
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: var(--nc-amber);
+  --nc-dialog-input-border: 1px solid;
+  --nc-dialog-result-bg: transparent;
+  --nc-dialog-result-fg: #b3ae9f;
+  --nc-dialog-result-title-fg: var(--nc-amber);
+  --nc-dialog-accent: var(--nc-amber);
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.6);
   --nc-inline-code-bg: #2a2720;
   --nc-inline-code-fg: var(--nc-amber-pale);
 
@@ -565,6 +871,8 @@
   }
   & .sidebar-content [aria-current='page'] {
     border-radius: var(--nc-panel-radius);
+    font-weight: var(--nc-nav-current-weight, inherit);
+    text-decoration: var(--nc-nav-current-decoration, none);
   }
 
   /* Right panel: on this page. */
@@ -649,6 +957,9 @@
   }
   & .sl-markdown-content h2 {
     color: var(--nc-h2-fg);
+    font-size: var(--nc-h2-size, var(--sl-text-h2));
+    text-transform: var(--nc-h2-transform, none);
+    letter-spacing: var(--nc-h2-tracking, normal);
   }
   & .sl-markdown-content h2::before {
     content: var(--nc-h2-before);
@@ -662,8 +973,9 @@
   }
   & .sl-markdown-content h3 {
     color: var(--nc-h3-fg);
+    font-style: var(--nc-h3-style, normal);
   }
-  & .sl-markdown-content a:not(.sl-anchor-link) {
+  & .sl-markdown-content a:not(.sl-anchor-link, .nc-sym) {
     color: var(--nc-link-fg);
   }
 
@@ -671,6 +983,7 @@
   & .sl-markdown-content code:not(pre code) {
     background: var(--nc-inline-code-bg);
     color: var(--nc-inline-code-fg);
+    font-weight: var(--nc-inline-code-weight, inherit);
   }
   & .expressive-code {
     --ec-frm-edBg: var(--nc-code-bg);
@@ -693,8 +1006,117 @@
   & .expressive-code .frame pre {
     border: 0;
   }
+  & .expressive-code .frame.is-terminal .header {
+    background: var(--nc-frame-titlebar-bg);
+    color: var(--nc-frame-titlebar-fg);
+    border-top: var(--nc-frame-titlebar-rule);
+  }
+  & .expressive-code .frame.is-terminal .header::before {
+    content: var(--nc-frame-close);
+    -webkit-mask-image: none;
+    mask-image: none;
+    background: var(--nc-frame-titlebar-bg);
+    opacity: 1;
+    width: auto;
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 0.125rem;
+    line-height: 1;
+    color: var(--nc-frame-close-fg);
+    font-family: var(--sl-font-mono);
+  }
+  /* Workstation draws the window-menu button: a raised square holding a short bar. */
+  &[data-style='workstation'] .expressive-code .frame.is-terminal .header::before {
+    width: 1rem;
+    height: 0.75rem;
+    padding: 0;
+    box-sizing: border-box;
+    border: var(--nc-frame-close-box);
+    border-color: var(--nc-raised);
+    background: linear-gradient(currentColor, currentColor) center / 0.5rem 2px no-repeat var(--nc-frame-titlebar-bg);
+  }
+  &[data-style='workstation'] .expressive-code .frame.is-terminal .header {
+    border: 2px solid;
+    border-color: var(--nc-raised);
+  }
 
-  /* Buttons: Run this example, and the previous and next page links. */
+  /* The search dialog (Ctrl+K). */
+  & site-search dialog {
+    overflow: visible;
+    background: var(--nc-dialog-bg);
+    color: var(--nc-dialog-fg);
+    border: var(--nc-dialog-border);
+    border-radius: 0;
+    box-shadow: var(--nc-dialog-shadow);
+    --sl-color-black: var(--nc-dialog-result-bg);
+    --sl-color-white: var(--nc-dialog-result-title-fg);
+    --sl-color-gray-1: var(--nc-dialog-result-fg);
+    --sl-color-gray-2: var(--nc-dialog-result-fg);
+    --sl-color-gray-3: var(--nc-dialog-fg);
+    --sl-color-text: var(--nc-dialog-fg);
+    --sl-color-text-accent: var(--nc-dialog-accent);
+    --sl-color-accent: var(--nc-dialog-accent);
+  }
+  &[data-style='workstation'] site-search dialog {
+    border-color: var(--nc-raised);
+  }
+  & site-search dialog::backdrop {
+    background: var(--nc-dialog-backdrop);
+    backdrop-filter: none;
+  }
+  & site-search dialog::before {
+    content: var(--nc-dialog-title);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    padding: 0 0.5rem;
+    background: var(--nc-dialog-bg);
+    color: var(--nc-dialog-title-fg);
+    font-family: var(--sl-font);
+    white-space: nowrap;
+  }
+  & #starlight__search {
+    --pagefind-ui-font: var(--sl-font);
+    --pagefind-ui-background: var(--nc-input-bg);
+    --pagefind-ui-text: var(--nc-dialog-fg);
+    --pagefind-ui-primary: var(--nc-dialog-fg);
+    --pagefind-ui-border: var(--nc-dialog-fg);
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-tag: var(--nc-dialog-result-bg);
+    --sl-search-corners: 0;
+  }
+  & #starlight__search input:focus {
+    --pagefind-ui-border: var(--nc-dialog-accent);
+  }
+  & #starlight__search .pagefind-ui__search-input {
+    color: var(--nc-input-fg);
+    border: var(--nc-dialog-input-border);
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+  }
+  &[data-style='workstation'] #starlight__search .pagefind-ui__search-input {
+    border-color: var(--nc-sunken);
+  }
+  & #starlight__search .pagefind-ui__search-input::placeholder {
+    color: var(--nc-input-fg);
+    opacity: 0.75;
+  }
+  & #starlight__search .pagefind-ui__form::before {
+    background-color: var(--nc-input-fg);
+  }
+  & #starlight__search mark {
+    background: var(--nc-dialog-accent);
+    color: var(--nc-dialog-bg);
+  }
+
+  /* Buttons: the home page's primary action, Run this example, the mobile menu button and the
+     copy button on listings. Secondary actions and cards draw as the style's card. */
+  & .sl-link-button.primary,
+  & button.sl-menu-button,
+  & .expressive-code .copy button,
   & .run-example-bar button,
   & .run-example-size select {
     background: var(--nc-button-bg);
@@ -705,13 +1127,46 @@
     box-shadow: var(--nc-button-shadow);
     font-family: var(--sl-font);
   }
+  & .sl-link-button.primary:hover,
+  & button.sl-menu-button:hover,
   & .run-example-bar button:not(:disabled):hover {
     background: var(--nc-button-hover-bg);
     color: var(--nc-button-hover-fg);
   }
+  & .sl-link-button:active,
+  & button.sl-menu-button:active,
   & .run-example-bar button:not(:disabled):active {
     box-shadow: none;
     transform: translate(0.125rem, 0.125rem);
+  }
+  & .sl-link-button {
+    font-family: var(--sl-font);
+  }
+  /* A style can mark the default action, as CDE ringed its default button. */
+  & .sl-link-button.primary {
+    box-shadow: var(--nc-button-primary-shadow, var(--nc-button-shadow));
+  }
+  & .sl-link-button:is(.secondary, .minimal),
+  & .card {
+    background: var(--nc-card-bg);
+    color: var(--nc-card-fg);
+    border: var(--nc-button-border);
+    border-color: var(--nc-button-border-color);
+    border-radius: var(--nc-button-radius);
+    box-shadow: var(--nc-button-shadow);
+    --sl-color-white: var(--nc-card-title-fg);
+    --sl-card-border: var(--nc-button-border-color);
+    --sl-card-bg: var(--nc-card-bg);
+  }
+  & .sl-link-button.minimal {
+    padding-inline: 1.25rem;
+  }
+  & .sl-link-button:is(.secondary, .minimal):hover {
+    background: var(--nc-button-hover-bg);
+    color: var(--nc-button-hover-fg);
+  }
+  & .card .icon {
+    border-radius: var(--nc-button-radius);
   }
   & .pagination-links a {
     background: var(--nc-card-bg);
@@ -766,5 +1221,92 @@
   :root[data-style]:not([data-style='modern']) {
     --nc-statusbar-display: none;
     --nc-statusbar-height: 0rem;
+  }
+}
+
+/* Icons. The retro styles draw pixel icons (src/icons/pixel/, pixelarticons) in place of
+   Starlight's. Each Starlight icon keeps its box and its color; its paths are hidden and the
+   pixel icon is drawn as a mask over currentColor. Starlight still rotates the sidebar caret. */
+:root[data-style]:not([data-style='modern']) {
+  --nc-icon-search: url('../icons/pixel/search.svg');
+  --nc-icon-github: url('../icons/pixel/github.svg');
+  --nc-icon-style: url('../icons/pixel/app-windows.svg');
+  --nc-icon-dropdown: url('../icons/pixel/chevron-down.svg');
+  --nc-icon-expand: url('../icons/pixel/chevron-right.svg');
+  --nc-icon-next: url('../icons/pixel/arrow-right.svg');
+  --nc-icon-previous: url('../icons/pixel/arrow-left.svg');
+  --nc-icon-menu: url('../icons/pixel/menu.svg');
+  --nc-icon-close: url('../icons/pixel/close.svg');
+  --nc-icon-anchor: url('../icons/pixel/link.svg');
+  --nc-icon-copy: url('../icons/pixel/copy.svg');
+
+  & site-search button[data-open-modal] svg {
+    --nc-icon: var(--nc-icon-search);
+  }
+  & .social-icons a svg,
+  & header a[href^='https://github.com/'] svg {
+    --nc-icon: var(--nc-icon-github);
+  }
+  & label svg.label-icon {
+    --nc-icon: var(--nc-icon-style);
+  }
+  & label svg.caret {
+    --nc-icon: var(--nc-icon-dropdown);
+  }
+  & summary svg.caret {
+    --nc-icon: var(--nc-icon-expand);
+  }
+  & .sl-link-button svg,
+  & .pagination-links a[rel='next'] svg {
+    --nc-icon: var(--nc-icon-next);
+  }
+  & .pagination-links a[rel='prev'] svg {
+    --nc-icon: var(--nc-icon-previous);
+  }
+  & svg.open-menu {
+    --nc-icon: var(--nc-icon-menu);
+  }
+  & svg.close-menu {
+    --nc-icon: var(--nc-icon-close);
+  }
+  & .sl-anchor-icon svg {
+    --nc-icon: var(--nc-icon-anchor);
+  }
+  & :is(
+      site-search button[data-open-modal] svg,
+      .social-icons a svg,
+      header a[href^='https://github.com/'] svg,
+      label svg.label-icon,
+      label svg.caret,
+      summary svg.caret,
+      .sl-link-button svg,
+      .pagination-links a svg,
+      svg.open-menu,
+      svg.close-menu,
+      .sl-anchor-icon svg
+    ) {
+    -webkit-mask: var(--nc-icon) center / contain no-repeat;
+    mask: var(--nc-icon) center / contain no-repeat;
+    background-color: currentColor;
+    & > * {
+      visibility: hidden;
+    }
+  }
+  & .expressive-code {
+    --ec-frm-copyIcon: var(--nc-icon-copy);
+  }
+  & .expressive-code .copy button::after {
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  & #starlight__search .pagefind-ui__form::before {
+    -webkit-mask-image: var(--nc-icon-search);
+    mask-image: var(--nc-icon-search);
+  }
+  & #starlight__search .pagefind-ui__search-clear::before {
+    -webkit-mask-image: var(--nc-icon-close);
+    mask-image: var(--nc-icon-close);
   }
 }

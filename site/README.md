@@ -24,12 +24,21 @@ A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose h
 | `src/styles/styles.css` | Each style's tokens, then the components written once against them. |
 | `src/code-themes/*.json` | Each style's syntax colors for code blocks, used by `ec.config.mjs`. |
 | `src/components/run-example.ts` | Reads the terminal demo's colors from the style's tokens. |
+| `src/icons/pixel/` | The pixel icons (pixelarticons, MIT) that the styles other than Modern draw in place of Starlight's. `styles.css` names each one in an `--nc-icon-*` token and draws it as a mask, so it takes the color of the text around it. |
 
-The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323, with a menu bar, a function-key bar and boxed panels), Workstation (Motif-era beveled gray panels, Charter text, Helvetica-style headings and an xterm terminal) and Terminal (amber on near black with VT323 headings).
+The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323, with a menu bar, a function-key bar and boxed panels), Workstation (Motif-era beveled gray panels, Charter text, Helvetica-style headings and an xterm terminal) Terminal (amber on near black with VT323 headings) and Manual page (set like a printed man page: Times-metric Tinos and Courier-metric Cousine on paper, bold capital section headings, monochrome code).
 
-Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's (`--nc-*`). The `--nc-*` tokens name every part a style draws: the menu bar and status bar, the contents, page and "On this page" panels (background, border, shadow, title), headings, links, inline code, code blocks, buttons, the terminal frame, and the terminal's 16 colors (`--nc-ansi-0` to `--nc-ansi-15`). To add a style, copy one style's token block in `styles.css`, add its option to `ThemeSelect.astro`, its color scheme to `modes` in `ThemeProvider.astro`, and a syntax theme to `src/code-themes/` and `ec.config.mjs`. The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site.
+Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's (`--nc-*`). The `--nc-*` tokens name every part a style draws: the menu bar and status bar, the contents, page and "On this page" panels (background, border, shadow, title), headings, links, inline code, code blocks, buttons, the shell listing's title bar, the search dialog, the code hint, the terminal frame, and the terminal's 16 colors (`--nc-ansi-0` to `--nc-ansi-15`). To add a style, copy one style's token block in `styles.css`, add its option to `ThemeSelect.astro`, its color scheme to `modes` in `ThemeProvider.astro`, and a syntax theme to `src/code-themes/` and `ec.config.mjs`. The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site.
 
 Astro caches the code-block stylesheet's name between local builds. After changing `ec.config.mjs`, delete `node_modules/.astro` before building, or the pages link a stylesheet that no longer exists.
+
+## Code hints
+
+In C listings, each call of a curses library function links to its man page, and hovering or focusing the name shows the page's NAME summary.
+
+- `scripts/sync.mjs` writes `.generated/symbols.json` from the NAME line of every 3X page: each name, its page and the summary.
+- `code-links.mjs` is an Expressive Code plugin, loaded from `ec.config.mjs`. It links a name only when a `(` follows it, so a variable called `box` or `move` stays plain.
+- `src/components/code-hints.js` draws the hint, and `src/styles/styles.css` styles it from the `--nc-hint-*` tokens of each reader style.
 
 ## Runnable examples
 
