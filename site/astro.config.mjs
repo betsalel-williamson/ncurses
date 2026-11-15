@@ -10,6 +10,8 @@ const manSidebar = existsSync(generated) ? JSON.parse(readFileSync(generated, 'u
 export default defineConfig({
   site: `https://${owner}.github.io`,
   base: `/${name}`,
+  // A page that moved keeps its old address working.
+  redirects: { '/guides/screen/line-drawing-characters': `/${name}/guides/output/line-drawing-characters/` },
   integrations: [
     starlight({
       title: 'ncurses',
