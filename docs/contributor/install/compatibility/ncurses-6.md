@@ -75,7 +75,7 @@
 
 ### Interface changes
 
-- the definition of TERMTYPE2 is now internal, not visible in the ABI, like the enclosing TERMINAL which was previously made opaque. This was done to provide SCREEN-specific "static" variables in terminfo.
+- the definition of TERMTYPE2 is now internal, not visible in the ABI, like the enclosing TERMINAL which was previously made opaque. This was done to provide SCREEN-specific "static" variables in [terminfo](../../../glossary/terminfo.md).
 
 ### Added extensions
 
@@ -131,7 +131,7 @@
 
 ### Interface changes
 
-- X/Open Curses specifies a "reserved" void* parameter in several functions, saying that it must be NULL. In this release, if the parameter is non-NULL, it is interpreted as a point to an integer containing a color pair. In previous releases, a non-NULL parameter caused an error return. Portable applications are unaffected. Here are the functions which have been extended: `attr_get` `attr_off` `attr_on` `attr_set` chgat `color_set` mvchgat mvwchgat `slk_attr_off` `slk_attr_on` `slk_attr_set` `wattr_get` `wattr_on` `wattr_off` `wattr_set` wchgat `wcolor_set`
+- X/Open Curses specifies a "reserved" void* parameter in several functions, saying that it must be NULL. In this release, if the parameter is non-NULL, it is interpreted as a point to an integer containing a [color pair](../../../glossary/color-pair.md). In previous releases, a non-NULL parameter caused an error return. Portable applications are unaffected. Here are the functions which have been extended: `attr_get` `attr_off` `attr_on` `attr_set` chgat `color_set` mvchgat mvwchgat `slk_attr_off` `slk_attr_on` `slk_attr_set` `wattr_get` `wattr_on` `wattr_off` `wattr_set` wchgat `wcolor_set`
 
 - the TERMINAL structure declared in `<term.h>` has been made opaque, and its size increased to handle the increased size of color pair and color value, as well as other numeric capabilities.
 
@@ -143,7 +143,7 @@
 
   as well as corresponding sp-functions.
 
-- A new terminfo capability "RGB" tells the ncurses library that the color values are red/green/blue, to eliminate the need for palettes in that special case for the `color_content` function.
+- A new [terminfo capability](../../../glossary/terminal-capability.md) "RGB" tells the ncurses library that the color values are red/green/blue, to eliminate the need for palettes in that special case for the `color_content` function.
 
 ### Added internal functions (other than "_sp" variants)
 

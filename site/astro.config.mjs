@@ -67,6 +67,7 @@ export default defineConfig({
         },
         { label: 'Ada95 binding', items: [{ autogenerate: { directory: 'contributing/ada' } }] },
         { label: 'Release announcement', items: [{ autogenerate: { directory: 'contributing/announce' } }] },
+        { label: 'Glossary', collapsed: true, items: [{ autogenerate: { directory: 'glossary' } }] },
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
     }),

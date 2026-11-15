@@ -4,7 +4,7 @@
 
 The ncurses library provides a mouse interface.
 
-> **Note:** this facility is specific to ncurses. It is not part of either the XSI Curses standard, nor of System V Release 4, nor BSD curses. System V Release 4 curses contains code with similar interface definitions, but it is not documented. Wrap mouse-related code in an `#ifdef` using the feature macro `NCURSES_MOUSE_VERSION`, so it is not compiled and linked on systems without ncurses.
+> **Note:** this facility is specific to ncurses. It is not part of either the [XSI Curses](../../glossary/x-open-curses.md) standard, nor of System V Release 4, nor [BSD curses](../../glossary/bsd-curses.md). System V Release 4 curses contains code with similar interface definitions, but it is not documented. Wrap mouse-related code in an `#ifdef` using the feature macro `NCURSES_MOUSE_VERSION`, so it is not compiled and linked on systems without ncurses.
 
 Mouse event reporting works with xterm's mouse-tracking protocol, which xterm and similar programs such as rxvt support, and with platform drivers: Alessandro Rubini's gpm server for the Linux console, FreeBSD sysmouse, and OS/2 EMX.
 
@@ -83,6 +83,6 @@ The `mouseinterval()` function sets the maximum time, in thousandths of a second
 
 ## Other functions
 
-The function `wenclose()` tells whether a mouse event fell within a given window, so you can see whether a window should consider the event relevant to it. The functions `mouse_trafo()` and `wmouse_trafo()` convert between window-relative and screen-relative coordinates. See the `curs_mouse(3X)` manual page for details.
+The function `wenclose()` tells whether a mouse event fell within a given [window](../../glossary/window.md), so you can see whether a window should consider the event relevant to it. The functions `mouse_trafo()` and `wmouse_trafo()` convert between window-relative and screen-relative coordinates. See the `curs_mouse(3X)` manual page for details.
 
 Because mouse event reporting isn't available in all environments, it would be unwise to build ncurses applications that require a mouse. Use the mouse as a shortcut for point-and-shoot commands your application would normally accept from the keyboard. Two of the test games in the ncurses distribution, `bs` and `knight`, show how this can be done.

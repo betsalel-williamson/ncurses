@@ -1,6 +1,6 @@
 # Panels library
 
-The `panel` library manages overlapping windows: it keeps them in a stack and refreshes them in the right order. These shards merge the panel chapters of two guides, so each fact appears once:
+The `panel` library manages overlapping [windows](../../glossary/window.md): it keeps them in a stack and refreshes them in the right order. These shards merge the panel chapters of two guides, so each fact appears once:
 
 - *Writing Programs with NCURSES*, by Eric S. Raymond and Zeyd M. Ben-Halim
 - *NCURSES Programming HOWTO*, by Pradeep Padala

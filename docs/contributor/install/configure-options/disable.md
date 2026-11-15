@@ -8,7 +8,7 @@ With ncurses 5.1, we introduced a new function, `assume_default_colors()` which 
 
 ## `--disable-big-core`
 
-Assume machine has little memory. The configure script attempts to determine if your machine has enough memory (about 6Mb) to compile the terminfo database without writing portions to disk. Some allocators return deceptive results, so you may have to override the configure script. Or you may be building tic for a smaller machine.
+Assume machine has little memory. The configure script attempts to determine if your machine has enough memory (about 6Mb) to compile the [terminfo](../../../glossary/terminfo.md) database without writing portions to disk. Some allocators return deceptive results, so you may have to override the configure script. Or you may be building tic for a smaller machine.
 
 ## `--disable-big-strings`
 
@@ -16,7 +16,7 @@ Disable compile-time optimization of predefined tables which puts all of their s
 
 ## `--disable-database`
 
-Use only built-in data. The ncurses libraries normally read terminfo and termcap data from disk. You can configure ncurses to have a built-in database, aka "fallback" entries. Embedded applications may have no need for an external database. Some, but not all of the programs are useful in this configuration, e.g., tset and tput versus infocmp and tic.
+Use only built-in data. The ncurses libraries normally read terminfo and [termcap](../../../glossary/termcap.md) data from disk. You can configure ncurses to have a built-in database, aka "fallback" entries. Embedded applications may have no need for an external database. Some, but not all of the programs are useful in this configuration, e.g., tset and tput versus infocmp and tic.
 
 ## `--disable-db-install`
 
@@ -172,4 +172,4 @@ configure --with-ticlib --with-shared --disable-tic-depends
 
 ## `--disable-tparm-varargs`
 
-Portable programs should call `tparm()` using the fixed-length parameter list documented in X/Open. ncurses provides varargs support for this function. Use `--disable-tparm-varargs` to disable this support.
+Portable programs should call `tparm()` using the fixed-length parameter list documented in [X/Open](../../../glossary/x-open-curses.md). ncurses provides varargs support for this function. Use `--disable-tparm-varargs` to disable this support.

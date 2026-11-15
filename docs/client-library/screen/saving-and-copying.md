@@ -4,7 +4,7 @@
 
 ## Screen dumping
 
-While writing games, it sometimes becomes necessary to store the state of the screen and restore it to the same state later. The function `scr_dump()` dumps the screen contents to the file named in its argument. `scr_restore()` reads them back into the virtual screen, and the next `doupdate()` (or `refresh()`) puts them on the terminal. These two simple functions can be used effectively to maintain a fast-moving game with changing scenes.
+While writing games, it sometimes becomes necessary to store the state of the screen and restore it to the same state later. The function `scr_dump()` dumps the screen contents to the file named in its argument. `scr_restore()` reads them back into the [virtual screen](../../glossary/virtual-screen.md), and the next `doupdate()` (or `refresh()`) puts them on the terminal. These two simple functions can be used effectively to maintain a fast-moving game with changing scenes.
 
 ## Window dumping
 

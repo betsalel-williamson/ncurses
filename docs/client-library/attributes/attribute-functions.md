@@ -33,11 +33,11 @@ attron(A_REVERSE | A_BLINK);
 
 ## `attron()` vs `attrset()`
 
-Then what is the difference between `attron()` and `attrset()`? `attrset()` sets the attributes of the window, whereas `attron()` just switches on the attribute given to it. So `attrset()` fully overrides whatever attributes the window previously had and sets it to the new attributes. Similarly, `attroff()` just switches off the attributes given to it as an argument. This gives us the flexibility of managing attributes easily. But if you use them carelessly, you may lose track of what attributes the window has and garble the display. This is especially true while managing menus with colors and highlighting. So decide on a consistent policy and stick to it. You can always use `standend()`, which is equivalent to `attrset(A_NORMAL)`, which turns off all attributes and brings you to normal mode.
+Then what is the difference between `attron()` and `attrset()`? `attrset()` sets the attributes of the [window](../../glossary/window.md), whereas `attron()` just switches on the attribute given to it. So `attrset()` fully overrides whatever attributes the window previously had and sets it to the new attributes. Similarly, `attroff()` just switches off the attributes given to it as an argument. This gives us the flexibility of managing attributes easily. But if you use them carelessly, you may lose track of what attributes the window has and garble the display. This is especially true while managing menus with colors and highlighting. So decide on a consistent policy and stick to it. You can always use `standend()`, which is equivalent to `attrset(A_NORMAL)`, which turns off all attributes and brings you to normal mode.
 
 ## `attr_get()`
 
-The function `attr_get()` gets the window's current attributes and color pair: the ones it will give the next characters written to it. Though we might not use this as often as the above functions, it is useful when you need to change the attributes for a while and then put back what was there. It reports nothing about characters already on the screen; to read those, use `inch()`.
+The function `attr_get()` gets the window's current attributes and [color pair](../../glossary/color-pair.md): the ones it will give the next characters written to it. Though we might not use this as often as the above functions, it is useful when you need to change the attributes for a while and then put back what was there. It reports nothing about characters already on the screen; to read those, use `inch()`.
 
 ## The `attr_` functions
 
@@ -45,4 +45,4 @@ There is a series of functions like `attr_set()`, `attr_on()`, etc. These are si
 
 ## The `wattr` functions
 
-For each of the above functions, we have a corresponding function with 'w' which operates on a particular window. The above functions operate on `stdscr`.
+For each of the above functions, we have a corresponding function with 'w' which operates on a particular window. The above functions operate on [`stdscr`](../../glossary/stdscr.md).

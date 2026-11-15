@@ -10,7 +10,7 @@ The `panel` library first appeared in AT&T System V. The version documented here
 
 ## The deck
 
-A panel object is a window that is implicitly treated as part of a *deck* including all other panel objects. The deck has an implicit bottom-to-top visibility order: the top panel is completely visible, and the other panels may or may not be obscured according to their positions. The standard window, `stdscr`, is considered below all panels.
+A panel object is a window that is implicitly treated as part of a *deck* including all other panel objects. The deck has an implicit bottom-to-top visibility order: the top panel is completely visible, and the other panels may or may not be obscured according to their positions. The standard window, [`stdscr`](../../glossary/stdscr.md), is considered below all panels.
 
 The panels library includes an update function, `update_panels()`, that does what `refresh()` does for a single window: it prepares all panels in the deck for display in the proper order to resolve overlaps. Functions are provided to hide or show panels, move panels, change their size, and so on. The panels library manages the overlaps during all the calls to these functions.
 
@@ -20,7 +20,7 @@ Details on the panels functions are available in `panel(3X)`. This guide hits th
 
 1.  Create the windows, with `newwin()`, to be attached to the panels.
 2.  Create panels from the windows with `new_panel()`, in the chosen visibility order. Each new panel goes on top of the deck.
-3.  Call `update_panels()` to write the panels to the virtual screen in the correct visibility order, then call `doupdate()` to show them on the screen.
+3.  Call `update_panels()` to write the panels to the [virtual screen](../../glossary/virtual-screen.md) in the correct visibility order, then call `doupdate()` to show them on the screen.
 4.  Manipulate the panels with `show_panel()`, `hide_panel()`, `move_panel()`, and so on. Use helper functions like `panel_hidden()` and `panel_window()`. Use a user pointer to store custom data for a panel: `set_panel_userptr()` sets it and `panel_userptr()` gets it.
 5.  When you are done with a panel, use `del_panel()` to delete it.
 

@@ -2,7 +2,7 @@
 
 > Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-Once you've seen what ncurses and its companion libraries can do, you may be ready for a project that works the screen hard. Complex widgets can be hard to write and maintain in plain ncurses, even with the panels, menus and forms libraries. Ready-made tools and widget libraries can stand in for widgets of your own. Use them, take ideas from their code, or extend them.
+Once you've seen what ncurses and its companion libraries can do, you may be ready for a project that works the screen hard. Complex widgets can be hard to write and maintain in plain ncurses, even with the [panels](../../glossary/panel.md), menus and forms libraries. Ready-made tools and widget libraries can stand in for widgets of your own. Use them, take ideas from their code, or extend them.
 
 ## CDK, the Curses Development Kit
 

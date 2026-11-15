@@ -49,7 +49,7 @@ The configure script generates makefile rules for one or more object models and 
 | `libncurses_p.a`    | profile                                                                       |
 | `libncurses.la`     | libtool                                                                       |
 
-With the wide-character code, a "w" is appended to the library names (for example, `libncursesw.a`), and the libraries support wide characters, for example through a UTF-8 locale. Since ncurses 6.5 this is the default, and `--disable-widec` builds the 8-bit libraries without the "w". The header files are compatible with both configurations, because the wide-character features are provided by `#ifdef`s in the headers. The wide-character library interfaces aren't binary-compatible with the 8-bit version. Building and running the wide-character code relies on a fairly recent implementation of libiconv. We have built this configuration on various systems using libiconv, sometimes requiring libutf8.
+With the wide-character code, a "w" is appended to the library names (for example, `libncursesw.a`), and the libraries support wide characters, for example through a UTF-8 locale. Since ncurses 6.5 this is the default, and `--disable-widec` builds the 8-bit libraries without the "w". The header files are compatible with both configurations, because the wide-character features are provided by `#ifdef`s in the headers. The [wide-character library](../../glossary/wide-character-library.md) interfaces aren't binary-compatible with the 8-bit version. Building and running the wide-character code relies on a fairly recent implementation of libiconv. We have built this configuration on various systems using libiconv, sometimes requiring libutf8.
 
 If you configure using the `--with-pthread` option, a "t" is appended to the library names (for example, `libncursest.a` or `libncursestw.a`).
 
@@ -97,7 +97,7 @@ Type `make`. Ignore any warnings; no error messages should be produced. This com
 
 Run `ncurses` and several other test programs in the `test` directory to verify that ncurses works correctly before doing an install that may overwrite system files. Read the file `test/README` for details on the test programs.
 
-> **Note:** You must have installed the terminfo database, or set the environment variable `$TERMINFO` to point to a SVr4-compatible terminfo database, before running the test programs. Not all vendors' terminfo databases are SVr4-compatible, but most seem to be.
+> **Note:** You must have installed the terminfo database, or set the environment variable `$TERMINFO` to point to a [SVr4](../../glossary/svr4.md)-compatible terminfo database, before running the test programs. Not all vendors' terminfo databases are SVr4-compatible, but most seem to be.
 
 It's possible to configure ncurses to use other terminfo database formats. A few are provided as examples in the include directory (see [`--with-caps`](configure-options/with-a-l.md#--with-capsxxx)).
 

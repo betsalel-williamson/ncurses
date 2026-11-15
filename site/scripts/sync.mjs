@@ -8,6 +8,7 @@
  * - .generated/sidebar.json: the man page groups for the sidebar
  * - .generated/symbols.json: library names and their man pages, for links in code listings
  * - a Run placeholder after each complete program in a guide (examples.mjs)
+ * - docs/glossary -> src/content/docs/glossary (one page per term)
  * - the errata tables in the appendix, from docs/appendix/errata.csv
  * Requires pandoc on PATH. Output is gitignored.
  */
@@ -46,6 +47,7 @@ const GUIDES = [
   { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Overview' },
   { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Overview' },
   { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Overview' },
+  { src: 'docs/glossary', route: 'glossary', indexLabel: 'Overview' },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
 ];
 const base = `/${repoSlug.split('/')[1]}`;
@@ -72,6 +74,10 @@ for (const g of GUIDES) {
     text = text.replace(/\]\(((?:\.\.?\/)*[^)/:#\s][^):#\s]*)(#[^)]*)?\)/g, (m, p, frag = '') => {
       const target = relative(repo, join(dir, p));
       if (target.startsWith('..')) return m;
+      // A manual page source in man/ becomes its page on this site.
+      // terminfo(5) is built from terminfo.head and the capability tables.
+      const man = /^man\/([^/]+)\.(3x|1|1m|5|7)$/.exec(target === 'man/terminfo.head' ? 'man/terminfo.5' : target);
+      if (man) return `](${base}/man/${man[2]}/${man[1]}/${frag})`;
       const route = target.endsWith('.md') ? routeOf(target) : null;
       return route ? `](${route}${frag})` : `](${blob(target)}${frag})`;
     });

@@ -2,7 +2,7 @@
 
 > Adapted from *A Hacker's Guide to NCURSES*, by Eric S. Raymond.
 
-The ncurses implementation of `tic` is rather complex internally; it has to do a trying combination of missions. This starts with the fact that, in addition to its normal duty of compiling terminfo sources into loadable terminfo binaries, it has to be able to handle termcap syntax and compile that too into terminfo entries.
+The ncurses implementation of `tic` is rather complex internally; it has to do a trying combination of missions. This starts with the fact that, in addition to its normal duty of compiling terminfo sources into loadable terminfo binaries, it has to be able to handle [termcap](../../glossary/termcap.md) syntax and compile that too into terminfo entries.
 
 The implementation therefore starts with a table-driven, dual-mode lexical analyzer (in `comp_scan.c`). The lexer chooses its mode (termcap or terminfo) based on the first `,` or `:` it finds in each entry. The lexer does all the work of recognizing capability names and values; the grammar above it is trivial, just "parse entries till you run out of file".
 

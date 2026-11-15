@@ -6,7 +6,7 @@
 
 `initscr()` calls `newterm()` to do most of its work. If you're writing a program that opens several terminals, use `newterm()` directly.
 
-Each call takes a terminal type and a pair of file pointers, and returns a `SCREEN` reference. The terminal it opens becomes the current one, so `stdscr` is the last one allocated. Switch between terminals with `set_term()`. Like `initscr()`, `newterm()` saves each terminal's shell and program modes, as `def_shell_mode()` and `def_prog_mode()` do, and each terminal has its own saved modes. [Initialization and wrapup](../init-and-debugging/initialization-and-wrapup.md) describes these functions.
+Each call takes a [terminal type](../../glossary/terminal-type.md) and a pair of file pointers, and returns a `SCREEN` reference. The terminal it opens becomes the current one, so `stdscr` is the last one allocated. Switch between terminals with `set_term()`. Like `initscr()`, `newterm()` saves each terminal's shell and program modes, as `def_shell_mode()` and `def_prog_mode()` do, and each terminal has its own saved modes. [Initialization and wrapup](../init-and-debugging/initialization-and-wrapup.md) describes these functions.
 
 ## Testing for terminal capabilities
 

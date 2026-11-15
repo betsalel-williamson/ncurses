@@ -109,6 +109,6 @@ main(void)
 
 Use the up and down arrows to move the highlight, and press Enter to choose. Any other key, F1 included, shows its code on the bottom line, so this program ends only when you choose. The program compares the key with 10, a newline, because ncurses turns the carriage return that Enter sends into a newline while `nl()` is in effect, which is the default.
 
-The window is centered with `LINES` and `COLS`, so the menu stays in the middle at any terminal size.
+The [window](../../glossary/window.md) is centered with `LINES` and `COLS`, so the menu stays in the middle at any terminal size.
 
 The program prints your choice just before `endwin()`. A terminal that draws curses programs on an alternate screen, as xterm and the terminal on this page do, switches back to the normal screen at `endwin()`, so on xterm the message disappears with the menu. The terminal on this page keeps the program's last screen in view after it ends, so you can read the choice there.

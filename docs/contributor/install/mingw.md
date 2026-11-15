@@ -18,7 +18,7 @@ Using MinGW is a pragmatic decision: it's the easiest way to port this heavily U
 
 The `TERM` environment variable must be set to activate the Windows console driver. The driver checks whether `TERM` is set to `#win32con` (explicit use), or is unset or empty (implicit use).
 
-Beginning with build 17763 (the fall 2018 update), Windows 10 supports ANSI escape sequences (Virtual Terminal support). If ncurses detects this or a later Windows 10 version, the meaning of the implicit setting (`TERM` unset or empty) changes. `TERM` is then assumed to be `ms-terminal`, and ncurses uses the regular terminfo-based driver, acting like a terminal on UNIX-like systems.
+Beginning with build 17763 (the fall 2018 update), Windows 10 supports ANSI [escape sequences](../../glossary/escape-sequence.md) (Virtual Terminal support). If ncurses detects this or a later Windows 10 version, the meaning of the implicit setting (`TERM` unset or empty) changes. `TERM` is then assumed to be `ms-terminal`, and ncurses uses the regular terminfo-based driver, acting like a terminal on UNIX-like systems.
 
 This code requires Windows NT 6.0 or later: Windows Vista or later on the client, and Windows Server 2008 or later on the server.
 

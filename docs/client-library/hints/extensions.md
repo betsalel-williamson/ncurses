@@ -2,7 +2,7 @@
 
 > Adapted from *Writing Programs with NCURSES*, by Eric S. Raymond and Zeyd M. Ben-Halim.
 
-These functions aren't part of SVr4 curses or the X/Open Curses standard.
+These functions aren't part of [SVr4](../../glossary/svr4.md) curses or the X/Open Curses standard.
 
 ## Resizing
 
@@ -18,4 +18,4 @@ These functions aren't part of SVr4 curses or the X/Open Curses standard.
 
 ## Number of colors
 
-SVr4 curses defines only 8 colors. ncurses supports as many as the terminal description gives in its `colors` capability, such as 256 for `xterm-256color`. `start_color()` sets `COLORS` to that number. The color functions in SVr4 and X/Open Curses take `short` arguments, which limits a portable program to the colors and color pairs a `short` can number. The ncurses extensions `init_extended_color()` and `init_extended_pair()` take `int` arguments instead. [Colors](../attributes/colors.md) has an example program.
+SVr4 curses defines only 8 colors. ncurses supports as many as the terminal description gives in its `colors` [capability](../../glossary/terminal-capability.md), such as 256 for `xterm-256color`. `start_color()` sets `COLORS` to that number. The color functions in SVr4 and X/Open Curses take `short` arguments, which limits a portable program to the colors and [color pairs](../../glossary/color-pair.md) a `short` can number. The ncurses extensions `init_extended_color()` and `init_extended_pair()` take `int` arguments instead. [Colors](../attributes/colors.md) has an example program.

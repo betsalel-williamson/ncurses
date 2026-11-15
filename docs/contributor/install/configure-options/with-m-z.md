@@ -134,7 +134,7 @@ This is a colon-separated list, like the `$TERMINFO_DIRS` environment variable.
 
 When building the ncurses library, organize this as two parts: the curses library (libncurses) and the low-level terminfo library (libtinfo). This is done to accommodate applications that use only the latter. The terminfo library is about half the size of the total.
 
-If an option value is given, that overrides the name of the terminfo library. For instance, if the wide-character version is built, the terminfo library would be named libtinfow. But the libtinfow interface is upward compatible from libtinfo, so it would be possible to overlay libtinfo.so with a "wide" version of libtinfow.so by renaming it with this option.
+If an option value is given, that overrides the name of the terminfo library. For instance, if the [wide-character version](../../../glossary/wide-character-library.md) is built, the terminfo library would be named libtinfow. But the libtinfow interface is upward compatible from libtinfo, so it would be possible to overlay libtinfo.so with a "wide" version of libtinfow.so by renaming it with this option.
 
 ## `--with-termpath=XXX`
 

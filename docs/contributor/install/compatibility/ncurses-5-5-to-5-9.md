@@ -187,7 +187,7 @@ Also (if using the hashed database configuration):
 
 - change SP->_current_attr to a pointer, adjust ifdef's to ensure that libtinfo.so and libtinfow.so have the same ABI. The reason for this is that the corresponding data which belongs to the upper-level ncurses library has a different size in each model.
 
-- `winnstr()` now returns multibyte character strings for the wide-character configuration.
+- `winnstr()` now returns multibyte character strings for the [wide-character configuration](../../../glossary/wide-character-library.md).
 
 - `assume_default_colors()` no longer requires that `use_default_colors()` be called first.
 
@@ -205,7 +205,7 @@ Also (if using the hashed database configuration):
 
 Experimental mouse version 2 supports wheel mice with buttons 4 and 5. This requires ABI 6 because it modifies the encoding of mouse events.
 
-Experimental extended colors allows encoding of 256 foreground and background colors, e.g., with the xterm-256color or xterm-88color terminfo entries. This requires ABI 6 because it changes the size of `cchar_t`.
+Experimental extended colors allows encoding of 256 foreground and background colors, e.g., with the xterm-256color or xterm-88color terminfo entries. This requires ABI 6 because it changes the size of [`cchar_t`](../../../glossary/complex-character.md).
 
 ### Added internal functions
 

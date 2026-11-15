@@ -8,7 +8,7 @@ For other platforms, including NetBSD, the default is `/usr/local`. See the disc
 
 The location of the terminfo database is set indirectly by the `--datadir` configure option. For example, a datadir of `/usr/share` puts it in `/usr/share/terminfo`. You may want to override this if you are installing ncurses libraries in nonstandard locations, but wish to share the terminfo database.
 
-Normally the ncurses library is configured in a pure-terminfo mode, that is, with the `--disable-termcap` option. This makes the ncurses library smaller and faster. The ncurses library includes a termcap emulation that queries the terminfo database, so even applications that use raw termcap to query terminal characteristics will win (provided you recompile and relink them).
+Normally the ncurses library is configured in a pure-terminfo mode, that is, with the `--disable-termcap` option. This makes the ncurses library smaller and faster. The ncurses library includes a [termcap](../../glossary/termcap.md) emulation that queries the terminfo database, so even applications that use raw termcap to query terminal characteristics will win (provided you recompile and relink them).
 
 If you must configure with termcap fallback enabled, you may also wish to use the [`--enable-getcap`](configure-options/enable.md#--enable-getcap) option. This speeds up termcap-based startups, at the expense of not allowing personal termcap entries to reference the terminfo tree. See the comments in `ncurses/tinfo/read_termcap.c` for further details.
 

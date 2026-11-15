@@ -6,7 +6,7 @@ Each menu has a pair of associated windows. Both these windows are painted when 
 
 The outer or frame window is not otherwise touched by the menu routines. It exists so the programmer can associate a title, a border, or perhaps help text with the menu and have it properly refreshed or erased at post/unpost time. The inner window or *subwindow* is where the current menu page is displayed.
 
-By default, both windows are `stdscr`. You can set them with the functions in `menu_win(3X)`. When the windows are not specified, as in [the first example](compiling.md), the menu system uses `stdscr` as the main window and calculates the subwindow size required to display the items.
+By default, both windows are [`stdscr`](../../glossary/stdscr.md). You can set them with the functions in `menu_win(3X)`. When the windows are not specified, as in [the first example](compiling.md), the menu system uses `stdscr` as the main window and calculates the subwindow size required to display the items.
 
 When you call `post_menu()`, you write the menu to its subwindow. When you call `unpost_menu()`, you erase the subwindow. However, neither of these actually modifies the screen. To do that, call `wrefresh()` or some equivalent.
 

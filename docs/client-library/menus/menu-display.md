@@ -16,7 +16,7 @@ The actual menu page may be smaller than the format size. This depends on the it
 
 Each menu has a *mark string* used to visually tag selected items; see the `menu_mark(3X)` manual page for details. The mark string length also influences the menu page size.
 
-The function `scale_menu()` returns the minimum display size that the menu code computes from all these factors. There are other menu display attributes including a select attribute, an attribute for selectable items, an attribute for unselectable items, and a pad character used to separate item name text from description text. These have reasonable defaults which the library allows you to change (see the `menu_attributes(3X)` manual page).
+The function `scale_menu()` returns the minimum display size that the menu code computes from all these factors. There are other menu display [attributes](../../glossary/attribute.md) including a select attribute, an attribute for selectable items, an attribute for unselectable items, and a pad character used to separate item name text from description text. These have reasonable defaults which the library allows you to change (see the `menu_attributes(3X)` manual page).
 
 ## Scrolling menus
 
