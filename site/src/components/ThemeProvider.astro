@@ -1,0 +1,27 @@
+---
+// Starlight's theme provider, plus the reader's chosen style (styles.css). It runs inline at the
+// top of <body>, like Starlight's, so the page never paints in the wrong style first.
+import Default from '@astrojs/starlight/components/ThemeProvider.astro';
+---
+
+<Default />
+
+<script is:inline>
+  (() => {
+    // Styles drawn for one color scheme only. Modern follows the Auto/Light/Dark picker.
+    const modes = { textmode: 'dark', workstation: 'light', terminal: 'dark' };
+    let style = null;
+    try {
+      style = localStorage.getItem('ncurses-style');
+    } catch {}
+    const root = document.documentElement;
+    root.dataset.style = style && Object.hasOwn(modes, style) ? style : 'modern';
+    // Keep the color scheme a fixed style needs, whatever Starlight's picker or the system says.
+    const force = () => {
+      const mode = modes[root.dataset.style];
+      if (mode && root.dataset.theme !== mode) root.dataset.theme = mode;
+    };
+    force();
+    new MutationObserver(force).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-style'] });
+  })();
+</script>

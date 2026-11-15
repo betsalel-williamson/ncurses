@@ -1,0 +1,71 @@
+---
+// A Style menu beside Starlight's Auto/Light/Dark picker. The styles are in styles.css. The
+// color-scheme picker hides while a style that has only one scheme is chosen.
+import Default from '@astrojs/starlight/components/ThemeSelect.astro';
+import Select from '@astrojs/starlight/components/Select.astro';
+
+const options = [
+  { label: 'Modern', value: 'modern', selected: true },
+  { label: 'Text mode', value: 'textmode', selected: false },
+  { label: 'Workstation', value: 'workstation', selected: false },
+  { label: 'Terminal', value: 'terminal', selected: false },
+];
+---
+
+<div class="pickers">
+  <ncurses-style-select>
+    <Select icon="window" label="Style" width="8.5em" options={options} />
+  </ncurses-style-select>
+  <Default />
+</div>
+
+<script is:inline>
+  document.querySelectorAll('ncurses-style-select select').forEach((s) => {
+    s.value = document.documentElement.dataset.style || 'modern';
+  });
+</script>
+
+<script>
+  const storageKey = 'ncurses-style';
+
+  function setStyle(style: string): void {
+    const root = document.documentElement;
+    root.dataset.style = style;
+    try {
+      localStorage.setItem(storageKey, style === 'modern' ? '' : style);
+    } catch {}
+    if (style === 'modern') {
+      // Back to the scheme Starlight's picker would give.
+      let theme: string | null = null;
+      try {
+        theme = localStorage.getItem('starlight-theme');
+      } catch {}
+      root.dataset.theme =
+        theme === 'light' || theme === 'dark' ? theme : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    document.querySelectorAll<HTMLSelectElement>('ncurses-style-select select').forEach((s) => {
+      s.value = style;
+    });
+  }
+
+  class NcursesStyleSelect extends HTMLElement {
+    constructor() {
+      super();
+      this.querySelector('select')?.addEventListener('change', (e) => {
+        if (e.currentTarget instanceof HTMLSelectElement) setStyle(e.currentTarget.value);
+      });
+    }
+  }
+  customElements.define('ncurses-style-select', NcursesStyleSelect);
+</script>
+
+<style>
+  .pickers {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  :global(:root:not([data-style='modern'])) .pickers :global(starlight-theme-select) {
+    display: none;
+  }
+</style>
