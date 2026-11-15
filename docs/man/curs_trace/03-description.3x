@@ -1,0 +1,129 @@
+.SH DESCRIPTION
+The \fIcurses trace\fP routines are used for debugging the
+\fI\%ncurses\fP libraries,
+as well as applications which use the \fI\%ncurses\fP libraries.
+Some limitations apply:
+.bP
+Aside from \fBcurses_trace\fP,
+the other functions are normally available only with the debugging library
+e.g., \fBlibncurses_g.a\fP.
+.IP
+All of the trace functions may be compiled into any model (shared, static,
+profile) by defining the symbol \fBTRACE\fP.
+.bP
+Additionally, the functions which use \fBcchar_t\fP
+are only available with the wide-character configuration of the libraries.
+.SS Functions
+The principal parts of this interface are
+.bP
+\fBcurses_trace\fP, which selectively enables different tracing features, and
+.bP
+\fB_tracef\fP, which writes formatted data to the \fItrace\fP file.
+.IP
+The other functions either return a pointer to a string-area
+(allocated by the corresponding function), or return no value
+(such as \fB_tracedump\fP,
+which implements the screen dump for \fBTRACE_UPDATE\fP).
+The caller should not free these strings,
+since the allocation is reused on successive calls.
+To work around the problem of a single string-area per function,
+some use a buffer-number parameter, telling the library to allocate
+additional string-areas.
+.PP
+The \fBcurses_trace\fP function is always available,
+whether or not the other trace functions are available:
+.bP
+If tracing is available,
+calling \fBcurses_trace\fP with a nonzero parameter
+updates the trace mask,
+and returns the previous trace mask.
+.IP
+When the trace mask is nonzero,
+\fI\%ncurses\fP creates the file \*(``trace\*('' in the current directory for output.
+If the file already exists, no tracing is done.
+.bP
+If tracing is not available, \fBcurses_trace\fP returns zero (0).
+.SS "Trace Parameter"
+The trace parameter is formed by logically \*(``or\*(''-ing
+values from the list of \fBTRACE_\fIxxx\fR definitions in \fB<curses.h>\fR.
+These include:
+.TP 5
+.B TRACE_DISABLE
+turn off tracing by passing a zero parameter.
+.IP
+The library flushes the output file,
+but retains an open file-descriptor to the trace file
+so that it can resume tracing later if a nonzero parameter is passed
+to the \fBcurses_trace\fP function.
+.TP 5
+.B TRACE_TIMES
+trace user and system times of updates.
+.TP 5
+.B TRACE_TPUTS
+trace \fBtputs\fP(3X) calls.
+.TP 5
+.B TRACE_UPDATE
+trace update actions, old & new screens.
+.TP 5
+.B TRACE_MOVE
+trace cursor movement and scrolling.
+.TP 5
+.B TRACE_CHARPUT
+trace all character outputs.
+.TP 5
+.B TRACE_ORDINARY
+trace all update actions.
+The old and new screen contents are written to the trace file
+for each refresh.
+.TP 5
+.B TRACE_CALLS
+trace all curses calls.
+The parameters for each call are traced, as well as return values.
+.TP 5
+.B TRACE_VIRTPUT
+trace virtual character puts, i.e., calls to \fBaddch\fP.
+.TP 5
+.B TRACE_IEVENT
+trace low-level input processing, including timeouts.
+.TP 5
+.B TRACE_BITS
+trace state of TTY control bits.
+.TP 5
+.B TRACE_ICALLS
+trace internal/nested calls.
+.TP 5
+.B TRACE_CCALLS
+trace per-character calls.
+.TP 5
+.B TRACE_DATABASE
+trace read/write of terminfo/termcap data.
+.TP 5
+.B TRACE_ATTRS
+trace changes to video attributes and colors.
+.TP 5
+.B TRACE_MAXIMUM
+maximum trace level, enables all of the separate trace features.
+.PP
+Some tracing features are enabled whenever the \fBcurses_trace\fP parameter
+is nonzero.
+Some features overlap.
+The specific names are used as a guideline.
+.SS "Command-line Utilities"
+The command-line utilities such as \fBtic\fP(1M) provide a verbose option
+which extends the set of messages written using the \fBcurses_trace\fP function.
+Both of these (\fB\-v\fP and \fBcurses_trace\fP)
+use the same variable (\fB_nc_tracing\fP),
+which determines the messages which are written.
+.PP
+Because the command-line utilities may call initialization functions
+such as \fBsetupterm\fP, \fBtgetent\fP or \fBuse_extended_names\fP,
+some of their debugging output may be directed to the \fItrace\fP file
+if the \fI\%NCURSES_TRACE\fP environment variable is set:
+.bP
+messages produced in the utility are written to the standard error.
+.bP
+messages produced by the underlying library are written to \fItrace\fP.
+.PP
+If \fI\%ncurses\fP is built without tracing,
+none of the latter are produced,
+and fewer diagnostics are provided by the command-line utilities.

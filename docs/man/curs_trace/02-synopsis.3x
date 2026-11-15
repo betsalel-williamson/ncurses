@@ -1,0 +1,23 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBunsigned curses_trace(const unsigned \fItrace-mask\fP);
+.PP
+\fBvoid _tracef(const char *\fIformat\fP, ...);
+.PP
+\fBchar *_traceattr(attr_t \fIattr\fP);
+\fBchar *_traceattr2(int \fIbuffer\fP, chtype \fIch\fP);
+\fBchar *_tracecchar_t(const cchar_t *\fIstring\fP);
+\fBchar *_tracecchar_t2(int \fIbuffer\fP, const cchar_t *\fIstring\fP);
+\fBchar *_tracechar(int \fIc\fP);
+\fBchar *_tracechtype(chtype \fIch\fP);
+\fBchar *_tracechtype2(int \fIbuffer\fP, chtype \fIch\fP);
+.PP
+\fBvoid _tracedump(const char *\fIlabel\fP, WINDOW *\fIwin\fP);
+\fBchar *_nc_tracebits(void);
+\fBchar *_tracemouse(const MEVENT *\fIevent\fP);
+.PP
+\fI/* deprecated */\fP
+\fBvoid trace(const unsigned int \fItrace-mask\fP);
+.fi

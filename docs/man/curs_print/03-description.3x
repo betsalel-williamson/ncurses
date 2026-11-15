@@ -1,0 +1,35 @@
+.SH DESCRIPTION
+.BR \%mcprint ","
+an
+.I \%ncurses
+extension to the
+.I curses
+library,
+uses the terminal's
+.B \%prtr_non
+.RB ( mc5p )
+or
+.B \%prtr_on
+.RB ( mc5 )
+and
+.B \%prtr_off
+.RB ( mc4 )
+media copy capabilities,
+if defined,
+to send
+.I len
+bytes of the given string
+.I data
+to a printer attached to the terminal.
+.PP
+.B \%mcprint
+has no means of flow control to the printer
+nor of knowing how much buffering it has.
+Your application is responsible
+for keeping the rate of writes to the printer
+below its continuous throughput rate,
+typically about half of its nominal characters-per-second (cps) rating.
+Dot-matrix printers and
+6-page-per-minute laser printers can typically handle 80 cps,
+so a conservative rule of thumb
+is to sleep for one second after sending an 80-character line.

@@ -1,0 +1,15 @@
+.SH RETURN VALUE
+Upon successful completion, these functions return
+\fBOK\fP.
+Otherwise, they return
+\fBERR\fP.
+.PP
+Functions using a window parameter return
+.B ERR
+if it is null.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

@@ -1,0 +1,31 @@
+.SH HISTORY
+4BSD (1980)
+introduced
+.IR \%clearok ","
+.IR \%leaveok ","
+and
+.IR \%scrollok "."
+.PP
+SVr2 (1984)
+supplied
+.IR \%idlok ","
+.IR \%setscrreg ","
+and
+.IR \%wsetscrreg "."
+.PP
+SVr3.1 (1987)
+implemented
+.I \%idcok
+and
+.IR \%immedok "."
+.PP
+.I \%ncurses
+formerly treated
+.I nl
+and
+.I nonl
+as both input
+.I and
+output options,
+but no longer;
+see \fB\%curs_inopts\fP(3X).

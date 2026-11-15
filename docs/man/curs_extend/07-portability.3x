@@ -1,0 +1,13 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+NetBSD 9 (2020) added a
+.I \%curses_version
+function
+that intentionally returns a string devoid of version information.
+.\" See https://mail-index.netbsd.org/tech-userlevel/2019/08/27/\
+.\" msg012068.html and follow-up messages.

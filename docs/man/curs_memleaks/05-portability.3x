@@ -1,0 +1,19 @@
+.SH PORTABILITY
+These functions are not part of X/Open Curses;
+nor do other implementations of curses provide a similar feature.
+.PP
+In any implementation of X/Open Curses, an application can free part
+of the memory allocated by curses:
+.bP
+The portable part of \fB\%exit_curses\fP can be freed using \fB\%delscreen\fP,
+passing the \fISCREEN\fP pointer returned by \fB\%newterm\fP.
+.IP
+In some implementations, there is a global variable \fBsp\fP
+which could be used, e.g., if the screen were only initialized
+using \fB\%initscr\fP.
+.bP
+The portable part of \fB\%exit_terminfo\fP can be freed
+using \fB\%del_curterm\fP.
+.IP
+In this case, there is a global variable \fB\%cur_term\fP which can be
+used as parameter.

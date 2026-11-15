@@ -1,0 +1,35 @@
+.SH DESCRIPTION
+.BR \%use_legacy_coding ","
+an
+.I \%ncurses
+extension to the
+.I curses
+library,
+permits customiztion of \fB\%unctrl\fP(3X) behavior,
+suppressing \fI\%isprint\fP(3)-based checks within the library that
+would normally cause nonprinting characters to be rendered in visible
+form.
+The alteration affects only byte-wide characters with the most
+significant bit set.
+.PP
+The
+.I level
+parameter controls the result.
+.RS
+.TP 5
+.B 0
+The library functions normally,
+rendering nonprinting characters as described in \fB\%unctrl\fP(3X),
+.TP
+.B 1
+the library ignores
+.I \%isprint
+for codes in the range 160-255.
+.TP
+.B 2
+the library ignores
+.I \%isprint
+for codes in the range 128-255.
+It also modifies the output of \fB\%unctrl\fP(3X),
+showing codes in the range 128-159 as is.
+.RE

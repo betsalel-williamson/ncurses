@@ -1,0 +1,212 @@
+.SH DESCRIPTION
+.I \%ncurses
+provides the foregoing variables and functions as a compatibility layer
+for programs that use the \fItermcap\fP library.
+The API is the same,
+but behavior is emulated using the \fI\%term\%info\fP database.
+Thus,
+it can be used only to query the capabilities of terminal database
+entries for which a \fI\%term\%info\fP entry has been compiled.
+.SS Initialization
+\fB\%tgetent\fP loads the terminal database entry for \fIname\fP;
+see \fBterm\fP(7).
+This must be done before calling any of the other functions.
+It returns
+.RS 3
+.TP 5 \" "-1" + 2n + adjust for PDF
+.B 1
+on success,
+.TP
+.B 0
+if there is no such entry
+(or if the matching entry describes a generic terminal,
+having too little information for
+.I curses
+applications to run),
+and
+.TP
+.B \-1
+if the
+.I \%term\%info
+database could not be found.
+.RE
+.PP
+This implementation differs from those of historical \fItermcap\fP
+libraries.
+.bP
+.I \%ncurses
+ignores the buffer pointer \fIbp\fP,
+as do other \fItermcap\fP implementations conforming to portions of
+X/Open Curses now withdrawn.
+The BSD \fItermcap\fP library would store a copy of the terminal type
+description in the buffer referenced by this pointer.
+\fI\%term\%info\fP stores terminal type descriptions in compiled form,
+which is not the same thing.
+.bP
+The meanings of the return values differ.
+The BSD \fItermcap\fP library does not check whether the terminal type
+description includes the
+.B \%generic
+.RB ( gn )
+capability,
+nor whether the terminal type description supports an addressable
+cursor,
+a property essential for any \fIcurses\fP implementation to operate.
+.SS "Retrieving Capability Values"
+\fB\%tgetflag\fP reports the Boolean entry for \fIid\fP,
+or zero if it is not available.
+.PP
+\fB\%tgetnum\fP obtains the numeric entry for \fIid\fP,
+or \-1 if it is not available.
+.PP
+\fB\%tgetstr\fP returns the string entry for \fIid\fP,
+or
+.I NULL
+if it is not available.
+Use \fB\%tputs\fP to output the string returned.
+The
+.I sbuf
+parameter is used as follows.
+.bP
+It is assumed to be the address of a pointer to a buffer managed by the
+calling application.
+.bP
+However,
+.I \%ncurses
+checks to ensure that
+.I sbuf
+is not
+.IR NULL ","
+and that the pointer obtained by dereferencing
+.I sbuf
+is also not
+.IR NULL "."
+If either check fails,
+.I \%ncurses
+ignores
+.IR sbuf .
+.bP
+If the checks succeed,
+\fI\%ncurses\fP also copies the return value to the buffer pointed to by
+\fIsbuf\fP,
+and the library updates
+.I sbuf
+to point past the null character terminating this value.
+.bP
+The return value itself is an address in the terminal type description
+loaded into memory.
+.SS "Applying String Capabilities"
+String capabilities can be parameterized;
+see subsection \*(``Parameterized Strings\*('' in  \fB\%terminfo\fP(5).
+\fB\%tgoto\fP applies its second and third arguments to the parametric
+placeholders in the capability stored in the first argument.
+.bP
+The capability may contain padding specifications;
+see subsection \*(``Delays and Padding\*('' of \fB\%terminfo\fP(5).
+The output of \fB\%tgoto\fP should thus be passed to \fB\%tputs\fP
+rather than some other output function such as \fI\%printf\fP(3).
+.bP
+While \fB\%tgoto\fP is assumed to be used for the two-parameter
+cursor positioning capability,
+\fItermcap\fP applications also use it for single-parameter
+capabilities.
+.IP
+Doing so reveals a quirk in \fB\%tgoto\fP:
+most hardware terminals use cursor addressing with \fIrow\fP first,
+but the original developers of the \fItermcap\fP interface chose to
+put the \fIcol\fP (column) parameter first.
+The \fB\%tgoto\fP function swaps the order of its parameters.
+It does this even for calls requiring only a single parameter.
+In that case,
+the first parameter is merely a placeholder.
+.bP
+Normally the \fI\%ncurses\fP library is compiled without
+full \fI\%termcap\fP support.
+In that case,
+\fB\%tgoto\fP uses an internal version of \fB\%tparm\fP(3X)
+(a more capable function).
+.IP
+Because it uses \fB\%tparm\fP internally,
+\fB\%tgoto\fP is able to use some \fI\%term\%info\fP features,
+but not all.
+In particular,
+it allows only numeric parameters;
+\fB\%tparm\fP supports string parameters.
+.IP
+However,
+\fB\%tparm\fP is not a \fItermcap\fP feature,
+and portable \fItermcap\fP applications should not rely upon its
+availability.
+.PP
+\fB\%tputs\fP is described in \fB\%curs_terminfo\fP(3X).
+It can retrieve capabilities by either \fItermcap\fP or
+\fI\%term\%info\fP code.
+.SS "Global Variables"
+.B \%tgetent
+sets the variables
+.BR PC ","
+.BR UP ","
+and
+.B BC
+to the
+.I \%term\%info
+entry's data for
+.B \%pad_char
+.RB ( pad ),
+.B \%cursor_up
+.RB ( cuu1 ),
+and
+.B \%backspace_if_not_bs
+.RB ( OTbs ),
+respectively.
+.I \%ncurses
+does not employ
+.B cuu1
+internally.
+\fB\%delay_output\fP(3X)
+uses
+.BR pad ","
+while
+.B \%tgoto
+emulation uses the obsolete
+.I termcap
+capability
+.BR bs ","
+represented in
+.I \%ncurses
+.I \%term\%info
+as \*(``OTbs\*(''.
+.I \%ncurses
+assigns the variable
+.B \%ospeed
+a system-specific value to encode the terminal's data rate.
+.SS "Releasing Memory"
+The \fItermcap\fP functions provide no means of freeing memory,
+because legacy \fItermcap\fP implementations used only the storage
+provided by the caller via \fB\%tgetent\fP and \fB\%tgetstr\fP.
+Those buffers are unused in \fI\%term\%info\fP.
+.PP
+By contrast,
+\fI\%term\%info\fP allocates memory.
+It uses \fB\%setupterm\fP(3X) to obtain the data used by \fB\%tgetent\fP
+and the functions that retrieve capability values.
+One could use
+.RS
+.EX
+del_curterm(cur_term);
+.EE
+.RE
+to free this memory,
+but there is an additional complication with \fI\%ncurses\fP.
+It uses a fixed-size pool of storage locations,
+one per value of the terminal name parameter given to \fB\%tgetent\fP.
+The \fIscreen\fP(1) program relies upon this arrangement to improve its
+performance.
+.PP
+An application that uses only the \fItermcap\fP functions,
+not the higher-level
+.I \%curses
+API,
+could release the memory using \fB\%del_curterm\fP(3X),
+because the pool is freed using other functions;
+see \fB\%curs_memleaks\fP(3X).

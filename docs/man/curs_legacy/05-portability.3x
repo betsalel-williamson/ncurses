@@ -1,0 +1,10 @@
+.SH PORTABILITY
+BSD and System\ V
+.I curses
+did not check the pointer-to-\c
+.I \%WINDOW
+parameter for validity.
+.PP
+The \fB\%getattrs\fP function and macro are defined to return a (signed) integer
+for compatibility with those implementations
+although an unsigned type would have been more appropriate.

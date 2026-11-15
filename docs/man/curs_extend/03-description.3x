@@ -1,0 +1,31 @@
+.SH DESCRIPTION
+These
+.I \%ncurses
+extensions to the
+.I curses
+library do not fit easily into other functional categories.
+.SS curses_version
+.B \%curses_version
+returns a pointer to a string containing the library's name
+and version number,
+including its patch level,
+for example
+\*(``ncurses 6.5.20240720\*(''.
+.SS use_extended_names
+.B \%use_extended_names
+configures whether the library recognizes
+user-defined or nonstandard
+.I \%term\%info
+capability names that may be compiled into terminal type descriptions
+via the \fB\%curs_terminfo\fP(3X) or \fB\%curs_termcap\fP(3X) interfaces.
+Normally these names are available for use,
+since the essential decision
+is made through use of \fB\%@TIC@\fP(1M)'s
+.B \-x
+option to include such extensions in terminal type descriptions.
+.B \%use_extended_names(FALSE)
+prevents
+.I \%ncurses
+from recognizing these capabilities
+to ensure compatibility with other implementations of
+.IR curses .

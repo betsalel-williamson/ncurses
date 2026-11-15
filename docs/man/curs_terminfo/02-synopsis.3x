@@ -1,0 +1,47 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+\fB#include <term.h>
+.PP
+\fBTERMINAL * cur_term;
+.PP
+\fBconst char * const boolnames[];
+\fBconst char * const boolcodes[];
+\fBconst char * const boolfnames[];
+\fBconst char * const numnames[];
+\fBconst char * const numcodes[];
+\fBconst char * const numfnames[];
+\fBconst char * const strnames[];
+\fBconst char * const strcodes[];
+\fBconst char * const strfnames[];
+.PP
+\fBint setupterm(const char * \fIterm\fP, int \fIfiledes\fP, int * \fIerrret\fP);
+\fBTERMINAL * set_curterm(TERMINAL * \fInterm\fP);
+\fBint del_curterm(TERMINAL * \fIoterm\fP);
+\fBint restartterm(const char * \fIterm\fP, int \fIfiledes\fP, int * \fIerrret\fP);
+.PP
+\fBchar * tparm(const char * \fIstr\fP, \fR.\|.\|.\fP);
+	\fI/* or */
+\fBchar * tparm(const char * \fIstr\fP, long \fIp1\fP \fR.\|.\|.\fP \fBlong\fP \fIp9\fP);
+.PP
+\fBint tputs(const char * \fIstr\fP, int \fIaffcnt\fP, int (* \fIputc\fP)(int));
+\fBint putp(const char * \fIstr\fP);
+.PP
+\fBint vidputs(chtype \fIattrs\fP, int (* \fIputc\fP)(int));
+\fBint vidattr(chtype \fIattrs\fP);
+\fBint vid_puts(attr_t \fIattrs\fP, short \fIpair\fP, void * \fIopts\fP, int (* \fIputc\fP)(int));
+\fBint vid_attr(attr_t \fIattrs\fP, short \fIpair\fP, void * \fIopts\fP);
+.PP
+\fBint tigetflag(const char * \fIcap-code\fP);
+\fBint tigetnum(const char * \fIcap-code\fP);
+\fBchar * tigetstr(const char * \fIcap-code\fP);
+.PP
+\fBchar * tiparm(const char * \fIstr\fP, \fR.\|.\|.\fP);
+.PP
+\fI/* extensions */
+\fBchar * tiparm_s(int \fIexpected\fP, int \fImask\fP, const char * \fIstr\fP, .\|.\|.);
+\fBint tiscan_s(int * \fIexpected\fP, int * \fImask\fP, const char * \fIstr\fP);
+.PP
+\fI/* deprecated */
+\fBint setterm(const char * \fIterm\fP);
+.fi

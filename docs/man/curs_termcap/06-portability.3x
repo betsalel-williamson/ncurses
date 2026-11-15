@@ -1,0 +1,91 @@
+.SH PORTABILITY
+These functions are no longer standardized
+(and the variables never were);
+see section \*(``HISTORY\*('' below.
+.I \%ncurses
+provides them to support legacy applications;
+they should not be used in new programs.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 536
+.PP
+Neither X/Open Curses nor the SVr4 man pages documented the return
+values of
+.I \%tgetent
+correctly,
+though all three shown here were in fact returned ever since SVr1.
+In particular,
+an omission in the X/Open Curses specification has been misinterpreted
+to mean that
+.I \%tgetent
+returns
+.I OK
+or
+.IR ERR "."
+Because the purpose of these functions is to provide compatibility with
+the
+.I termcap
+library,
+that is a defect in X/Open Curses Issue\ 4 Version\ 2
+rather than in
+.IR \%ncurses "."
+.SS "Compatibility with BSD \fItermcap\fP"
+.I \%ncurses
+provides externally visible variables to support certain
+.I termcap
+applications.
+However,
+their correct usage is poorly documented;
+for example,
+it is unclear when reading and writing them is meaningful.
+In particular,
+some applications are reported to declare and/or modify
+.IR \%ospeed "."
+.PP
+The constraint that only the first two characters of the
+.I id
+parameter are looked up in the terminal database
+escapes many application developers.
+The BSD
+.I termcap
+library did not require a trailing null character
+after the capability identifier passed to
+.IR \%tgetstr ","
+.IR \%tgetnum ","
+and
+.IR \%tgetflag "."
+.\" See <https://minnie.tuhs.org/cgi-bin/utree.pl?file=2BSD/src/\
+.\"   termlib/termcap.c>.
+Some applications thus assume that the
+.I termcap
+interface does not require the trailing null character
+for the capability identifier.
+.I \%ncurses
+disallows matches by the
+.I termcap
+interface against extended capability names
+that are longer than two characters;
+see \fB\%user_caps\fP(5).
+.PP
+The BSD
+.I termcap
+function
+.I \%tgetent
+returns the text of a
+.I termcap
+entry in the buffer passed as an argument.
+.IR \%ncurses ","
+like other
+.I \%term\%info
+implementations,
+does not store terminal type descriptions as text.
+It sets the buffer contents to a null-terminated string.
+.SS "Header File"
+.I \%ncurses
+includes a
+.I \%termcap.h
+header file for compatibility with other implementations,
+but it is rarely used because the other implementations
+are not mutually compatible;
+see below.

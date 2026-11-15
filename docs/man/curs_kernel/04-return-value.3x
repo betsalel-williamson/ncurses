@@ -1,0 +1,44 @@
+.SH RETURN VALUE
+Except for
+.BR \%curs_set ","
+these functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+.B \%curs_set
+returns the previous cursor visibility,
+and returns
+.B ERR
+if the terminal type does not support the requested
+.IR visibility "."
+.PP
+.B \%napms
+always succeeds.
+.PP
+.B \%mvcur
+fails if the position
+.RI ( newrow ,
+.IR newcol )
+is outside the screen boundaries.
+.PP
+In
+.IR \%ncurses ","
+.bP
+.BR \%def_prog_mode ","
+.BR \%def_shell_mode ","
+.BR \%reset_prog_mode ","
+and
+.B \%reset_shell_mode
+return
+.B ERR
+if the terminal was not initialized,
+or if the operating system's function for obtaining terminal settings
+fails.
+.bP
+.B \%ripoffline
+returns
+.B ERR
+if the accumulated quantity of ripped-off lines
+would exceed the maximum (5).

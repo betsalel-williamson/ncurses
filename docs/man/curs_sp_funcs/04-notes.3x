@@ -1,0 +1,25 @@
+.SH NOTES
+This extension introduces some new names:
+.TP 5
+NCURSES_SP_FUNCS
+This is set to the library patch-level number.
+In the unextended library, this is zero (0),
+to make it useful for checking if the extension is provided.
+.TP 5
+NCURSES_SP_NAME
+The new functions are named using the macro \fINCURSES_SP_NAME\fP,
+which hides the actual implementation.
+Currently this adds a \*(``_sp\*('' suffix
+to the name of the unextended function.
+This manual page indexes the extensions showing the full name.
+However the proper usage of these functions uses the macro,
+to provide for the possibility of changing the naming convention
+for specific library configurations.
+.TP 5
+NCURSES_SP_OUTC
+This is a new function-pointer type to use in the screen-pointer functions
+where an \fINCURSES_OUTC\fP is used in the unextended library.
+.TP 5
+NCURSES_OUTC
+This is a function-pointer type used for the cases where a function passes
+characters to the output stream, e.g., \fBvidputs\fP(3X).

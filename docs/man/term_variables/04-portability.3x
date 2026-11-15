@@ -1,0 +1,23 @@
+.SH PORTABILITY
+X/Open Curses does not describe any of these symbols except for
+.IR \%cur_term "."
+(The inclusion of
+.I \%cur_term
+appears to be an oversight,
+since other comparable low-level information is omitted by X/Open.)
+.PP
+Other implementations may have comparable variables.
+Some implementations provide the variables in their libraries,
+but omit them from the header files.
+.PP
+All implementations that provide
+.I \%term\%info
+interfaces add definitions
+as described in the
+.RI \*(`` terminfo
+Names\*('' section above.
+Most,
+but not all,
+base the definition upon the
+.I \%cur_term
+variable.

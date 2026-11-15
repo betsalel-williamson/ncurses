@@ -1,0 +1,25 @@
+.SH RETURN VALUE
+Except for
+.BR \%flushinp ","
+functions that return integers return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+Functions that return pointers return a null pointer on failure.
+.PP
+In
+.IR \%ncurses ","
+.bP
+.B \%flushinp
+returns
+.B ERR
+if the terminal was not initialized,
+and
+.bP
+.B \%putwin
+returns
+.B ERR
+if its associated \fIwrite\fP(2) calls return
+.BR ERR "."

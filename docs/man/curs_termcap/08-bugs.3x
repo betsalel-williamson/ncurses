@@ -1,0 +1,52 @@
+.SH BUGS
+If you call \fB\%tgetstr\fP to fetch
+.B \%column_address
+.RB ( ch )
+or any other parameterized string capability,
+be aware that it is returned in \fI\%term\%info\fP notation,
+not the older and not-quite-compatible \fItermcap\fP notation.
+This does not cause problems if all you do with it is call \fB\%tgoto\fP
+or \fB\%tparm\fP,
+which both parametrically expand \fI\%term\%info\fP-style string
+capabilities as \fI\%term\%info\fP does.
+(If
+.I \%ncurses
+is configured to support \fItermcap,\fP
+\fB\%tgoto\fP checks whether the string is \fI\%term\%info\fP-style by
+looking for \*(``\fB%p\fP\*('' parameters or
+\*(``\fB<\fP.\|.\|.\fB>\fP\*('' delays,
+and invokes a \fItermcap\fP-style parser if the string appears not to
+use \fI\%term\%info\fP syntax.)
+.PP
+Because \fI\%term\%info\fP's syntax for padding in string capabilities
+differs from \fItermcap\fP's,
+users can be surprised.
+.IP \(bu 4
+\fB\%tputs("50")\fP in a \fI\%term\%info\fP system transmits
+\*(``50\*('' rather than busy-waiting for 50 milliseconds.
+.IP
+However,
+if \fI\%ncurses\fP is configured to support \fItermcap\fP,
+it may also have been configured to support BSD-style padding.
+In that case,
+\fB\%tputs\fP inspects strings passed to it,
+looking for digits at the beginning of the string.
+.IP \(bu 4
+\fB\%tputs("50")\fP in a \fItermcap\fP system may busy-wait for 50
+milliseconds rather than transmitting \*(``50\*(''.
+.PP
+\fItermcap\fP has nothing analogous to \fI\%term\%info\fP's
+.B \%set_attributes
+.RB ( sgr )
+capability.
+One consequence is that \fItermcap\fP applications assume that
+.RB \*(`` me \*(''
+(equivalent to \fI\%term\%info\fP's
+.B \%exit_attribute_mode
+.RB ( sgr0 )
+capability)
+does not reset the alternate character set.
+\fI\%ncurses\fP inspects the data shared with the
+.I termcap
+interface and modifies it as necessary
+to accommodate the latter's limitation in this respect.

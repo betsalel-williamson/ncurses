@@ -1,0 +1,83 @@
+.SH "VARIABLES"
+.SS "curscr, newscr, stdscr"
+When a
+.I curses
+application calls
+\fB\%initscr\fP(3X) or \fB\%newterm\fP(3X),
+the library creates a window named
+.B \%stdscr
+that is the same size as the terminal screen,
+(minus any lines reserved by
+\fB\%ripoffline\fP(3X) or \fB\%slk_init\fP(3X))
+and is the implicit window used by functions
+that interact with a window
+but do not take a parameter identifying one;
+many
+.I curses
+functions use it.
+An application need not use
+.BR \%stdscr ";"
+it might prefer to tile the display into multiple windows instead.
+.PP
+The library records updates to the terminal screen in a window named
+\fB\%curscr\fP.
+This object is referred to as the \*(``physical screen\*('' in
+\fB\%curs_refresh\fP(3X) and
+\fB\%curs_outopts\fP(3X).
+.PP
+\fI\%ncurses\fP collects pending updates to the terminal screen in a
+window named \fB\%newscr\fP.
+This object is referred to as the \*(``virtual screen\*('' in the
+\fB\%curs_kernel\fP(3X),
+\fB\%curs_refresh\fP(3X),
+and
+\fB\%curs_outopts\fP(3X).
+When the screen is refreshed,
+\fIcurses\fP determines a minimal set of updates using the terminal's
+capabilities to make \fB\%curscr\fP look like \fB\%newscr\fP.
+.SS COLORS
+Once a
+.I curses
+screen is initialized,
+.B \%COLORS
+contains the number of colors supported by the terminal;
+see \fB\%curs_color\fP(3X).
+.SS COLOR_PAIRS
+Once a
+.I curses
+screen is initialized,
+.B \%COLOR_PAIRS
+contains the number of color pairs supported by the terminal;
+see \fB\%curs_color\fP(3X).
+.SS "COLS, LINES"
+Once a
+.I curses
+screen is initialized,
+.B \%COLS
+and
+.B LINES
+contain its width and height in character cells,
+respectively;
+that is,
+the number of columns and lines.
+.SS ESCDELAY
+When reading key strokes from a window in keypad mode,
+.I curses
+distinguishes the ESC character resulting from a user's press of the
+\*(``Escape\*('' key on the input device
+from one beginning an escape sequence
+(commonly produced by function keys),
+by waiting after receiving the escape character
+to see if further characters are available
+on the input stream within a short interval.
+.B \%ESCDELAY
+stores this interval in milliseconds.
+.PP
+If \fB\%keypad\fP(3X) is disabled for the
+.I curses
+window receiving input,
+a program must disambiguate escape sequences itself.
+.SS TABSIZE
+The \fIcurses\fP library converts a tab character to this number of
+spaces as it adds a tab to a window;
+see \fB\%curs_addch\fP(3X).

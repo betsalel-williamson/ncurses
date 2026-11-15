@@ -1,0 +1,17 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+\fB#include <term.h>
+.PP
+\fBchar PC;
+\fBchar * UP;
+\fBchar * BC;
+\fB@NCURSES_OSPEED@ ospeed;
+.PP
+\fBint tgetent(char * \fIbp\fP, const char * \fIname\fP);
+\fBint tgetflag(const char * \fIid\fP);
+\fBint tgetnum(const char * \fIid\fP);
+\fBchar * tgetstr(const char * \fIid\fP, char ** \fIsbuf\fP);
+\fBchar * tgoto(const char * \fIcap\fP, int \fIcol\fP, int \fIrow\fP);
+\fBint tputs(const char * \fIstr\fP, int \fIaffcnt\fP, int (* \fIputc\fP)(int));
+.fi

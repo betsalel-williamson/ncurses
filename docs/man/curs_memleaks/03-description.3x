@@ -1,0 +1,43 @@
+.SH DESCRIPTION
+These functions are used to simplify analysis of memory leaks in the
+\fI\%ncurses\fP library.
+.PP
+Any implementation of curses must not free the memory associated with
+a screen, since (even after calling \fB\%endwin\fP(3X)), it must be available
+for use in the next call to \fB\%refresh\fP(3X).
+There are also chunks of memory held for performance reasons.
+That makes it hard to analyze curses applications for memory leaks.
+When using the specially configured debugging version of the
+\fI\%ncurses\fP library,
+applications can call functions which free those chunks of memory,
+simplifying the process of memory-leak checking.
+.PP
+Some of the functions are named with a \*(``_nc_\*('' prefix
+because they are not intended for use in the non-debugging library:
+.TP 5
+\fB\%_nc_freeall\fP
+This frees (almost) all of the memory allocated by \fI\%ncurses\fP.
+.TP 5
+\fB\%_nc_free_and_exit\fP
+This frees the memory allocated by \fI\%ncurses\fP
+(like \fB\%_nc_freeall\fP),
+and exits the program.
+It is preferred over \fB\%_nc_freeall\fP since some of that memory
+may be required to keep the application running.
+Simply exiting (with the given exit-code) is safer.
+.TP 5
+\fB\%_nc_free_tinfo\fP
+Use this function if only the low-level terminfo functions (and
+corresponding library) are used.
+Like \fB\%_nc_free_and_exit\fP, it exits the program after freeing memory.
+.PP
+The functions prefixed \*(``_nc\*('' are normally not available;
+they must be configured into the library
+at build time using the \fB\%\-\-disable-leaks\fP option.
+That compiles-in code that frees memory that normally would not be freed.
+.PP
+The \fB\%exit_curses\fP and \fB\%exit_terminfo\fP functions
+call \fB\%_nc_free_and_exit\fP and \fB\%_nc_free_tinfo\fP if
+the library is configured to support memory-leak checking.
+If the library is not configured to support memory-leak checking,
+they simply call \fBexit\fP.

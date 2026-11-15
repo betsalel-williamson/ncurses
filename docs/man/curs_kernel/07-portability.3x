@@ -1,0 +1,83 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+The
+.I "virtual screen"
+functions
+.I \%setsyx
+and
+.I \%getsyx
+are not described in X/Open Curses Issue\ 4.
+SVr4 documents each of them
+as returning an
+.IR int "."
+This is misleading,
+as they are macros with no documented semantics for returning values.
+.PP
+All other functions are as described in X/Open Curses.
+It specifies no error conditions for them,
+except as described for
+.I \%curs_set
+in section \*(``RETURN VALUE\*('' above.
+.PP
+The System\ V Interface Definition,
+Version 4 (1995),
+specified all of these functions except
+.I \%curs_set
+as returning
+.IR OK "."
+.\" SVID 4, vol 3., p. 518
+.PP
+Older SVr4 man pages warn that the return value of
+.I \%curs_set
+\*(``is currently incorrect\*(''.
+This implementation gets it right,
+but counting on its correctness anywhere else may be unwise.
+.PP
+X/Open Curses specifies
+.I \%ripoffline
+as returning
+.I OK
+with no possibility of failure
+(\*(``[c]alls to
+.I \%ripoffline
+above this limit
+[five lines]
+have no effect but report success\*('').
+.PP
+X/Open Curses notes:
+.RS
+.PP
+After use of
+.IR \%mvcur "(),"
+the model Curses maintains of the state of the terminal might not
+match the actual state of the terminal.
+An application should touch and refresh the window before
+resuming conventional use of Curses.
+.RE
+.PP
+Both
+.I \%ncurses
+and SVr4
+.I curses
+implement
+.I \%mvcur
+using the
+.I SCREEN
+object allocated in either \fB\%initscr\fP(3X) or \fB\%newterm\fP(3X).
+X/Open Curses states that the old location must be given for
+.I \%mvcur
+to accommodate terminals that lack absolute cursor positioning.
+.\" X/Open Curses Issue 7, p. 161
+.PP
+If interrupted by a signal,
+.I \%ncurses
+restarts
+.IR \%napms "."
+That,
+and the limitation to 30 seconds,
+differ from other implementations.

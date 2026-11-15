@@ -1,0 +1,288 @@
+.SH PORTABILITY
+Except for
+.IR \%setterm ","
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value
+except where \*(``otherwise noted\*(''
+as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 539
+.SS "Header Files"
+On legacy
+.I curses
+systems,
+include
+.I \%curses.h
+and
+.I \%term.h
+in that order
+to make visible the definitions of the string arrays
+storing the capability names and codes.
+.SS "Compatibility Macros"
+.I \%ncurses
+implements a few macros for early System\ V
+.I curses
+compatibility
+(see section \*(``HISTORY\*('' below).
+They include
+.IR \%crmode ","
+.IR \%fixterm ","
+.IR \%gettmode ","
+.IR \%nocrmode ","
+.IR \%resetterm ","
+.IR \%saveterm ","
+and
+.IR \%setterm "."
+.PP
+In SVr4,
+these are found in
+.IR \%curses.h ","
+but except for
+.IR \%setterm ","
+are likewise macros.
+The one function,
+.IR \%setterm ","
+is mentioned in the manual page.
+It further notes that
+.I \%setterm
+was replaced by
+.IR \%setupterm ","
+stating that the call
+.RS
+.EX
+.RI setupterm( term ", 1, (int *)0)"
+.EE
+.RE
+provides the same functionality as
+.RS
+.EX
+.RI setterm( term )
+.EE
+.RE
+and discouraging the latter for new programs.
+.SS "Legacy Data"
+.I \%setupterm
+copies the terminal name to the array
+.IR \%ttytype "."
+This behavior is not specified by X/Open Curses,
+but is assumed by some applications.
+.PP
+Other implementations may not declare the capability name arrays.
+Some provide them without declaring them.
+X/Open Curses does not specify them.
+.PP
+Extended terminal capability names,
+as defined by
+.RB \%\*(`` "@TIC@ \-x" \*('',
+are not stored in the arrays described here.
+.SS "Output Buffering"
+Older versions of
+.I \%ncurses
+assumed that the file descriptor passed to
+.I \%setupterm
+from
+.I \%initscr
+or
+.I \%newterm
+used buffered I/O,
+and wrote to the corresponding
+.I stdio
+stream.
+In addition to the limitation that the terminal was left in
+block-buffered mode on exit
+(like System\ V
+.IR curses "),"
+it was problematic because
+.I \%ncurses
+did not allow a reliable way to clean up on receiving
+.IR SIGTSTP "."
+.PP
+.I \%ncurses
+.RI 6. x
+uses output buffers managed directly by
+.IR \%ncurses "."
+The lower-level functions described here
+that write to the terminal device
+do so via the standard output stream;
+they thus are not signal-safe.
+The higher-level functions in
+.I \%ncurses
+employ alternate versions of these functions
+using a more reliable buffering scheme.
+.SS "Function Prototypes"
+The X/Open Curses prototypes are based on the SVr4
+.I curses
+header declarations,
+which were defined at the same time the C language was first
+standardized in the late 1980s.
+.bP
+X/Open Curses uses
+.I \%const
+less effectively than a later design might,
+sometimes applying it needlessly to function parameters
+that are passed by value
+(and therefore copied),
+and in most cases overlooking parameters
+that normally would benefit from
+.IR \%const "."
+Passing
+.IR \%const -qualified
+parameters to functions that do not declare them
+.I \%const
+may prevent the program from compiling.
+On the other hand,
+\*(``writable strings\*('' are an obsolescent C language feature.
+.IP
+As an extension,
+.I \%ncurses
+can be configured to change the function prototypes
+to use the
+.I \%const
+keyword.
+The
+.I \%ncurses
+ABI 6 enables this feature by default.
+.bP
+X/Open Curses prototypes
+.I \%tparm
+with a fixed number of parameters,
+rather than a variable argument list.
+.IP
+.I \%ncurses
+uses a variable argument list,
+but can be configured to use the fixed-parameter list.
+Portable applications should provide nine parameters after the format;
+zeroes are fine for this purpose.
+.IP
+In response to review comments by Thomas E. Dickey,
+X/Open Curses Issue\ 7 proposed the
+.I \%tiparm
+function in mid-2009.
+.IP
+While
+.I \%tiparm
+is always provided in
+.IR \%ncurses ","
+the older form is available only as a build-time configuration option.
+If not specially configured,
+.I \%tparm
+is the same as
+.IR \%tiparm "."
+.PP
+Both forms of
+.I \%tparm
+have drawbacks.
+.bP
+Most calls to
+.I \%tparm
+require only one or two parameters.
+Passing nine on each call is awkward.
+.IP
+Using
+.I long
+for the numeric parameter type is a workaround to make the parameter use
+the same amount of stack memory as a pointer.
+That approach dates to the mid-1980s,
+before C was standardized.
+Since ANSI\ C (1989),
+C language standards do not require a pointer to fit in a
+.IR long ")."
+.bP
+Providing the right number of parameters for a variadic function
+such as
+.I \%tiparm
+can be a problem,
+in particular for string parameters.
+However,
+only a few
+.I \%term\%info
+capabilities use string parameters
+(for instance,
+the ones used for programmable function keys).
+.IP
+The
+.I \%ncurses
+library checks usage of these capabilities,
+and returns
+.I ERR
+if the capability mishandles string parameters.
+But it cannot check if a calling program provides strings in the right
+places for the
+.I \%tparm
+calls.
+.IP
+.IR \%ncurses 's
+\fB\%@TPUT@\fR(1) checks its use of these capabilities with a table,
+so that it calls
+.I \%tparm
+correctly.
+.SS "Special \fITERM\fP treatment"
+If
+.I \%ncurses
+is configured to use a terminal driver
+that does not employ the POSIX
+.I \%termios
+API,
+as with the MinGW port,
+.bP
+.I \%setupterm
+interprets a missing or empty
+.I TERM
+variable as the special value \*(``unknown\*(''.
+.IP
+SVr4
+.I curses
+uses the special value \*(``dumb\*(''.
+.IP
+The difference between the two is that the former uses the
+.B \%generic_type
+.RB ( gn )
+.I \%term\%info
+capability,
+while the latter does not.
+A generic terminal is unsuitable for full-screen applications.
+.bP
+.I \%setupterm
+allows explicit use of the Microsoft Windows console driver by checking
+whether the
+.I TERM
+environment variable has the value \*(``#win32con\*(''
+or an abbreviation of that string.
+.SS "Other Portability Issues"
+In SVr4,
+.I \%set_curterm
+returns an
+.IR int ","
+.I OK
+or
+.IR ERR "."
+We have chosen to implement the X/Open Curses semantics.
+.PP
+In SVr4,
+the third argument of
+.I \%tputs
+has the type
+.RB \*(`` "int (*)(char)" \*(''.
+.PP
+At least one implementation of X/Open Curses
+(Solaris
+.IR \%xcurses ")"
+returns a value other than
+.I OK
+or
+.I ERR
+from
+.IR \%tputs "."
+It instead returns the length of the string,
+and does no error checking.
+.PP
+Very old versions of AIX
+.\" Can we be more specific?  Like, AIX 4.3.3 and earlier? --GBR
+.I curses
+required inclusion of
+.I \%curses.h
+before
+.IR \%term.h .
+.\" ********************************************************************

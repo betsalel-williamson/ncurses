@@ -1,0 +1,15 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fI/* data types */
+\fBtypedef int (*NCURSES_WINDOW_CB)(WINDOW *, void *);
+\fBtypedef int (*NCURSES_SCREEN_CB)(SCREEN *, void *);
+.PP
+\fBint get_escdelay(void);
+\fBint set_escdelay(int \fIms\fP);
+\fBint set_tabsize(int \fIcols\fP);
+.PP
+\fBint use_screen(SCREEN *\fIscr\fP, NCURSES_SCREEN_CB \fIfunc\fP, void *\fIdata\fP);
+\fBint use_window(WINDOW *\fIwin\fP, NCURSES_WINDOW_CB \fIfunc\fP, void *\fIdata\fP);
+.fi

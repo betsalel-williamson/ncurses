@@ -1,0 +1,148 @@
+.SH HISTORY
+SVr2 (1984) introduced the
+.I \%term\%info
+feature.
+Its programming manual mentioned the following low-level functions.
+.PP
+.TS
+Lb Lb
+Li Lw(47n)x.
+Function	Description
+_
+fixterm	restore terminal to \*(``in \fIcurses\fP\*('' state
+gettmode	establish current terminal modes
+mvcur	low level cursor motion
+putp	use \fItputs\fP to send characters via \fIputchar\fP
+resetterm	set terminal modes to \*(``out of \fIcurses\fP\*(''\
+ state
+resetty	reset terminal flags to stored value
+saveterm	save current modes as \*(``in \fIcurses\fP\*('' state
+savetty	store current terminal flags
+setterm	establish terminal with given type
+setupterm	establish terminal with given type
+tparm	interpolate parameters into string capability
+tputs	apply padding information to a string
+vidattr	like \fIvidputs\fP, but output through \fIputchar\fP
+vidputs	T{
+write string to terminal, applying specified attributes
+T}
+.TE
+.PP
+The programming manual also mentioned
+functions provided for
+.I termcap
+compatibility
+(commenting that they \*(``may go away at a later date\*('').
+.PP
+.TS
+Lb Lb
+Li Lw(48n)x.
+Function	Description
+_
+tgetent	look up \fItermcap\fP entry for given \fIname\fP
+tgetflag	get Boolean entry for given \fIid\fP
+tgetnum	get numeric entry for given \fIid\fP
+tgetstr	get string entry for given \fIid\fP
+tgoto	apply parameters to given capability
+tputs	T{
+write characters via a function parameter, applying padding
+T}
+.TE
+.PP
+Early
+.I \%term\%info
+programs obtained capability values from the
+.I \%TERMINAL
+structure initialized by
+.IR \%setupterm "."
+.PP
+SVr3 (1987) extended
+.I \%term\%info
+by adding functions to retrieve capability values
+(like the
+.I termcap
+interface),
+and reusing
+.I \%tgoto
+and
+.IR \%tputs "."
+.PP
+.ne 4v
+.TS
+Lb Lb
+LI Lx.
+Function	Description
+_
+tigetflag	get Boolean entry for given \fIid\fP
+tigetnum	get numeric entry for given \fIid\fP
+tigetstr	get string entry for given \fIid\fP
+.TE
+.PP
+SVr3 also replaced several of the SVr2
+.I \%term\%info
+functions that had no counterpart in the
+.I termcap
+interface,
+documenting them as obsolete.
+.PP
+.TS
+Lb Lb
+Li Lix.
+Function	Replaced by
+_
+crmode	cbreak
+fixterm	reset_prog_mode
+gettmode	\fRn/a\fP
+nocrmode	nocbreak
+resetterm	reset_shell_mode
+saveterm	def_prog_mode
+setterm	setupterm
+.TE
+.PP
+SVr3 kept the
+.IR \%mvcur ","
+.IR \%vidattr ","
+and
+.I \%vidputs
+functions,
+along with
+.IR \%putp ","
+.IR \%tparm ","
+and
+.IR \%tputs "."
+The latter were needed to support padding,
+and to handle capabilities accessed by functions such as
+.I \%vidattr
+(which used more than the two parameters supported by
+.IR \%tgoto ")."
+.PP
+SVr3 introduced the functions for switching between terminal
+descriptions;
+for example,
+.IR \%set_curterm "."
+Some changes reflected incremental improvements to the SVr2 library.
+.bP
+The
+.I \%TERMINAL
+type definition was introduced in SVr3.01,
+for the
+.I term
+structure provided in SVr2.
+.bP
+Various global variables such as
+.I \%boolnames
+were mentioned in the programming manual at this point,
+though the variables had been provided in SVr2.
+.PP
+SVr4 (1989) added the
+.I \%vid_attr
+and
+.I \%vid_puts
+functions.
+.PP
+Other low-level functions are declared in the
+.I curses
+header files of Unix systems,
+but none are documented.
+Those noted as \*(``obsolete\*('' by SVr3 remained in use by System\ V's
+\fIvi\fP(1) editor.

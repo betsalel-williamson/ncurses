@@ -1,0 +1,36 @@
+.SH RETURN VALUE
+The functions
+.B \%setscrreg
+and
+.B \%wsetscrreg
+return
+.B OK
+upon success
+and
+.B ERR
+upon failure.
+All other routines that return an integer always
+return
+.BR OK "."
+.PP
+In
+.IR \%ncurses ","
+these functions fail if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+or
+.bP
+(for
+.B \%setscrreg
+and
+.BR \%wsetscrreg ")"
+the function is passed arguments describing a scrolling region
+with limits that extend outside the window boundaries.

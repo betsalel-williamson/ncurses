@@ -1,0 +1,52 @@
+.SH NOTES
+.B \%getsyx
+is a macro;
+use of the
+.B &
+operator before its arguments is unnecessary.
+.PP
+The
+.B \%endwin
+function of both
+.I \%ncurses
+and SVr4
+.I curses
+calls
+.B \%curs_set
+if the latter has previously been called to set the cursor visibility
+to a value other than normal;
+that is,
+either
+invisible or very visible.
+There is no way for
+.I \%ncurses
+to determine the initial cursor visibility to restore it.
+.PP
+.I \%ncurses
+imposes a limit of 30 seconds on a delay requested of
+.BR \%napms .
+.PP
+While the
+.I init
+function called by
+.B \%ripoffline
+is specified to return an
+.IR int ","
+.I \%ncurses
+pays no attention to its return value.
+.PP
+If
+.B \%ripoffline
+cannot allocate memory for the required
+.I \%WINDOW
+structure backing the ripped-off line,
+it stores a null pointer to the
+.I \%WINDOW
+pointer argument supplied by the
+.I init
+function the application specifies.
+The application must check this argument for validity after calling
+.B \%initscr
+and prior to performing
+.I curses
+operations on that window.

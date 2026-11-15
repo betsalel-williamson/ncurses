@@ -1,0 +1,20 @@
+.SH RETURN VALUE
+On success,
+.B \%mcprint
+returns the number of characters sent to the printer.
+.PP
+.B \%mcprint
+returns
+.B ERR
+if the write operation fails for any reason.
+In that event,
+.B errno
+contains either a value set by \fIwrite\fP(2),
+or one of the following.
+.TP 5
+\fBENODEV\fP
+The terminal lacks relevant media copy capabilities.
+.TP 5
+\fBENOMEM\fP
+.I \%ncurses
+could not allocate sufficient memory to buffer the write operation.

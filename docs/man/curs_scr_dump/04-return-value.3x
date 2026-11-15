@@ -1,0 +1,22 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+each function returns
+.B ERR
+if it cannot open
+.IR filename "."
+.BR \%scr_init ","
+.BR \%scr_restore ","
+and
+.B \%scr_set
+return
+.B ERR
+if the contents of
+.I filename
+are invalid.

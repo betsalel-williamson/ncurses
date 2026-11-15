@@ -1,0 +1,21 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBbool is_cleared(const WINDOW *\fIwin\fP);
+\fBbool is_idcok(const WINDOW *\fIwin\fP);
+\fBbool is_idlok(const WINDOW *\fIwin\fP);
+\fBbool is_immedok(const WINDOW *\fIwin\fP);
+\fBbool is_keypad(const WINDOW *\fIwin\fP);
+\fBbool is_leaveok(const WINDOW *\fIwin\fP);
+\fBbool is_nodelay(const WINDOW *\fIwin\fP);
+\fBbool is_notimeout(const WINDOW *\fIwin\fP);
+\fBbool is_pad(const WINDOW *\fIwin\fP);
+\fBbool is_scrollok(const WINDOW *\fIwin\fP);
+\fBbool is_subwin(const WINDOW *\fIwin\fP);
+\fBbool is_syncok(const WINDOW *\fIwin\fP);
+.PP
+\fBWINDOW * wgetparent(const WINDOW *\fIwin\fP);
+\fBint wgetdelay(const WINDOW *\fIwin\fP);
+\fBint wgetscrreg(const WINDOW *\fIwin\fP, int *\fItop\fP, int *\fIbottom\fP);
+.fi

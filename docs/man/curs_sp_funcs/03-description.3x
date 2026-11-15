@@ -1,0 +1,38 @@
+.SH DESCRIPTION
+This implementation can be configured to provide a set of functions which
+improve the ability to manage multiple screens.
+This feature can be added to any of the configurations supported by
+\fI\%ncurses\fP;
+it adds new symbols
+without changing the meaning of any of the existing ones.
+.\" ***************************************************************************
+.SS "Improved Functions"
+Most of the functions are new versions of existing functions.
+A parameter is added at the front of the parameter list.
+It is a \fISCREEN\fP pointer.
+.PP
+The existing functions all use the current screen,
+which is a static variable.
+The extended functions use the specified screen,
+thereby reducing the number of variables which must be modified
+to update multiple screens.
+.\" ***************************************************************************
+.SS "New Functions"
+Here are the new functions:
+.TP 5
+ceiling_panel
+this returns a pointer to the topmost panel in the given screen.
+.TP 5
+ground_panel
+this returns a pointer to the lowest panel in the given screen.
+.TP 5
+new_prescr
+when creating a new screen, the library uses static variables which
+have been preset, e.g., by \fBuse_env\fP(3X), \fBfilter\fP(3X), etc.
+With the screen-pointer extension,
+there are situations where it must create a current screen before
+the unextended library does.
+The \fBnew_prescr\fP function is used internally to handle these cases.
+It is also provided to allow applications to customize library
+initialization.
+.\" ***************************************************************************

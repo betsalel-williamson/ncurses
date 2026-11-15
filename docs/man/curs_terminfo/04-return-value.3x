@@ -1,0 +1,46 @@
+.SH RETURN VALUE
+Functions that return integers return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+In
+.IR \%ncurses ","
+.TP 5
+.B del_curterm
+fails if its terminal parameter is null.
+.TP 5
+.B putp
+calls \fB\%tputs\fP,
+returning the same error codes.
+.TP 5
+.B restartterm
+fails if the associated call to \fB\%setupterm\fP returns
+.BR ERR "."
+.TP 5
+.B setupterm
+fails if it cannot allocate enough memory,
+or create the initial windows
+.RB \%( stdscr ,
+.BR \%curscr ","
+and
+.BR \%newscr ")."
+Other error conditions are documented above.
+.TP 5
+.B tparm
+returns a null pointer if the capability would require unexpected
+parameters;
+that is,
+too many,
+too few,
+or incorrect types
+(strings where integers are expected,
+or vice versa).
+.TP 5
+.B tputs
+fails if the string parameter is null.
+It does not detect I/O errors:
+X/Open Curses states that \fB\%tputs\fP ignores the return value
+of the output function \fI\%putc\fP.
+.\" ********************************************************************

@@ -1,0 +1,209 @@
+.SH DESCRIPTION
+The following routines give low-level access
+to various \fBcurses\fP capabilities.
+These routines typically are used inside library routines.
+.SS "def_prog_mode, def_shell_mode"
+The \fBdef_prog_mode\fP and \fBdef_shell_mode\fP routines save the
+current terminal modes as the \*(``program\*(''
+(in \fBcurses\fP) or \*(``shell\*(''
+(not in \fBcurses\fP) state for use by the \fBreset_prog_mode\fP and
+\fBreset_shell_mode\fP routines.
+This is done automatically by \fBinitscr\fP.
+There is one such save area for each screen context
+allocated by \fBnewterm\fP.
+.SS "reset_prog_mode, reset_shell_mode"
+The \fBreset_prog_mode\fP and \fBreset_shell_mode\fP routines restore
+the terminal to \*(``program\*('' (in \fBcurses\fP) or \*(``shell\*('' (out of
+\fBcurses\fP) state.
+These are done automatically by \fBendwin\fP(3X) and,
+after an \fBendwin\fP, by \fBdoupdate\fP,
+so they normally are not called.
+.SS "resetty, savetty"
+The \fBresetty\fP and \fBsavetty\fP routines save and restore the
+state of the terminal modes.
+\fBsavetty\fP saves the current state in
+a buffer and \fBresetty\fP restores the state to what it was at the
+last call to \fBsavetty\fP.
+.SS getsyx
+.B \%getsyx
+stores the coordinates of virtual screen
+.RB \%( newscr )
+cursor in
+.I y
+and
+.IR x "."
+If
+.BR \%newscr 's
+\fB\%leaveok\fP(3X) output option is
+.BR TRUE ","
+.B \%getsyx
+stores
+.B \-1
+in both
+.I y
+and
+.IR x "."
+If lines have been removed from the top of the screen using
+.BR \%ripoffline ","
+.I y
+includes these lines;
+therefore,
+.I y
+and
+.I x
+populated by
+.B \%getsyx
+should be used only as arguments for
+.BR \%setsyx "."
+.PP
+Few applications use this feature;
+most call \fB\%getyx\fP(3X) instead.
+.SS setsyx
+.B \%setsyx
+sets the virtual screen
+.RB \%( newscr )
+cursor location to
+.RI ( y ,
+.IR x ")."
+.B "\%setsyx(\-1, \-1)"
+is equivalent to
+.BR "\%leaveok(newscr, TRUE)" "."
+.PP
+.B \%getsyx
+and
+.B \%setsyx
+are designed to be used by a function that manipulates
+.I curses
+windows but seeks to avoid changing the cursor position.
+Such a function would first call
+.BR \%getsyx ","
+modify its windows' content,
+call \fB\%wnoutrefresh\fP(3X) on them,
+call
+.BR \%setsyx ","
+then call \fB\%doupdate\fP(3X).
+.PP
+Few applications use this feature;
+most call \fB\%wmove\fP(3X) instead.
+.SS curs_set
+.B \%curs_set
+adjusts the cursor visibility to
+\*(``invisible\*('',
+\*(``visible\*('',
+\*(``very visible\*('',
+as its argument is
+.BR 0 ,
+.BR 1 ,
+or
+.BR 2 ,
+respectively.
+It returns the previous
+.I visibility
+if the requested one is supported,
+and
+.B ERR
+otherwise.
+.SS mvcur
+.B \%mvcur
+provides low-level cursor motion.
+It takes effect immediately,
+rather than at the next refresh.
+Unlike the other low-level output functions,
+which either write to the standard output stream
+or are passed a function pointer to perform output,
+.B \%mvcur
+uses a file descriptor derived from the output stream parameter of
+\fB\%newterm\fP(3X).
+.PP
+One application of
+.B \%mvcur
+accompanies the temporary use of another program to write to the
+terminal screen.
+For example,
+first call \fB\%refresh\fP(3X) to ensure that the screen and the
+library's model of it are up to date;
+then call
+.BR \%reset_shell_mode ";"
+write to the screen with the external application;
+call
+.BR \%reset_prog_mode ";"
+and finally call
+.BR \%mvcur( ".\|.\|." ,
+.RB .\|.\|. ,
+.B \-1, \-1)
+to move the terminal cursor to where
+.I \%curses
+thinks it is,
+since the library has no knowledge of how the external application
+moved it.
+.\" https://lists.gnu.org/archive/html/bug-ncurses/2016-10/msg00002.html
+.SS napms
+.B \%napms
+sleeps for
+.I ms
+milliseconds.
+If
+.I ms
+exceeds 30,000
+(thirty seconds),
+.I \%ncurses
+caps it at that value.
+.SS ripoffline
+.B \%ripoffline
+provides access to the same facility that \fB\%slk_init\fP(3X) uses to
+reduce the size of the screen.
+The application must call
+.B \%ripoffline
+before \fB\%initscr\fP(3X) or \fB\%newterm\fP(3X)
+so that the latter functions prepare a
+.B \%stdscr
+of the correct size.
+.bP
+If
+.I line
+is positive,
+.B \%ripoffline
+removes a line from the top of what will become
+.BR \%stdscr "."
+.bP
+If
+.I line
+is negative,
+.B \%ripoffline
+removes a line from the bottom of what will become
+.BR \%stdscr "."
+.PP
+When
+.B \%initscr
+initializes
+.IR curses ","
+it calls the
+.I init
+function supplied to
+.B \%ripoffline
+by the application with two arguments:
+.bP
+a pointer to the one-line
+.I \%WINDOW
+that it allocates,
+and
+.bP
+an integer with the number of columns in the window.
+.PP
+Inside this
+.I init
+function,
+the values of the integer variables
+.B LINES
+and
+.B COLS
+(see \fB\%curs_variables\fP(3X))
+are not guaranteed to be reliable;
+it must not call \fB\%wrefresh\fP(3X) or \fB\%doupdate\fP(3X).
+A \fB\%wnoutrefresh\fP(3X) call is permissible.
+.PP
+.B \%ripoffline
+can be called up to five times before
+.B \%initscr
+or
+.BR \%newterm "."

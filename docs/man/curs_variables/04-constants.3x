@@ -1,0 +1,27 @@
+.SH CONSTANTS
+.SS "TRUE, FALSE"
+The
+.I curses
+library defines
+.B TRUE
+and
+.B FALSE
+to represent the values of the Boolean data type.
+.SS "ERR, OK"
+.I curses
+and
+.I \%term\%info
+functions frequently return these constant integral values
+indicating failure and success,
+respectively.
+.SS CCHARW_MAX
+This integral value,
+an
+.I \%ncurses
+extension,
+indicates the maximum number of
+.I \%wchar_t
+wide characters that can be stored in a
+.I curses
+complex character
+.IR \%cchar_t "."

@@ -1,0 +1,46 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.\" Unusually, SVID 4 explicitly indicated "OK" as a possible return
+.\" value, rather than the "integer other than ERR" refrain (p. 529).
+.PP
+.\" SVID 4, p. 529
+SVr4 omitted the
+.I \%const
+qualifiers.
+.PP
+SVr4 documentation describes
+.I \%scr_init
+such that the dump data is also considered invalid
+\*(``if the time-stamp of the tty is old\*(''
+but does not define \*(``old\*(''.
+.PP
+As of 2024,
+.I \%PDCurses
+provides these functions.
+NetBSD
+.I curses
+does not.
+.PP
+Other implementations of
+.I curses
+store the window in binary form,
+which makes the dump dependent
+upon the
+.I curses
+library's internal data structures.
+.I \%ncurses
+avoids this drawback by storing the dump in textual form,
+allowing more flexible use of the data.
+For instance,
+the
+.I \%scr_restore
+of SVr4
+.I curses
+requires that the dumped window have the same dimensions
+as the restored window.
+.I \%ncurses
+uses its
+\fB\%wresize\fP(3X)
+extension
+to adjust the restored window size.
