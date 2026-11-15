@@ -9,6 +9,7 @@ cd site
 npm ci
 npm run build      # sync.mjs, then build-examples.mjs, then astro build
 npx astro preview  # serves dist/ at http://localhost:4321/ncurses/
+npm test           # unit tests (tests/*.test.mjs), with node --test
 ```
 
 The runnable examples need Emscripten (`emcc` on `PATH`). Without it, `build-examples.mjs` skips them and the rest of the site still builds.
@@ -53,7 +54,8 @@ Every complete C program in the guides (a listing with a `main()`) gets a "Run t
 | `scripts/smoke-example.mjs` | Runs one build in Node on a fake 80×24 xterm and decides whether it runs. |
 | `examples/main.c`, `examples/main-args.c` | Entry points. They call the listing's `main()`, renamed `example_main()`, and pass its result to `exit()`. |
 | `examples/pty.js` | The terminal bridge between the program and the page. |
-| `src/components/run-example.ts` | The button, the terminal, the size picker and the "Run with X defined" variants. |
+| `src/components/run-example.ts` | The button, the terminal, the size picker, the "Run with X defined" variants, the keys for a running program (F1 Quit on every device; the arrows and Page Up/Down on touch screens, for programs that read them) and Fit to width. |
+| `src/components/terminal-fit.js` | The font size that fits the terminal's columns in a phone's column, and the bytes each key sends. |
 
 ### The terminal bridge waits on events
 

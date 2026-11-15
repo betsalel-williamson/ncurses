@@ -6,9 +6,28 @@
 import { Terminal, type ITheme } from '@xterm/xterm';
 import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
+import { FULL_SIZE, STEP, fitFontSize, keySequence, offersFullSize, overflows } from './terminal-fit.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const FONT_SIZE = 16;
+const FONT_SIZE = FULL_SIZE;
+/** The reader's Fit to width choice, kept in their browser. */
+const FIT_KEY = 'nc-terminal-fit';
+const fitPreferred = () => {
+  try {
+    return localStorage.getItem(FIT_KEY) !== 'off';
+  } catch {
+    return true;
+  }
+};
+const preferFit = (on: boolean) => {
+  try {
+    localStorage.setItem(FIT_KEY, on ? 'on' : 'off');
+  } catch {
+    // no storage: the choice lasts until the page is left
+  }
+};
+/** A touch screen, where there is no keyboard to press an arrow key on. */
+const touch = () => matchMedia('(hover: none) and (pointer: coarse)').matches;
 
 // The terminal's colors follow the reader's style: styles.css defines --nc-term-* and the 16
 // --nc-ansi-* colors for each style but Modern, which keeps xterm.js's own palette.
@@ -90,9 +109,63 @@ function flag(box: HTMLElement, text: string, detail?: string) {
   }
 }
 
+/**
+ * The keys for a running program, after the Run button: F1 Quit for every program, on every
+ * device (on most laptops F1 is a brightness key unless Fn is held), and the arrows and Page
+ * Up/Down on touch screens for a program that reads them (sync.mjs's data-keys). A tap sends the
+ * key down the path a real key press takes, and leaves focus in the terminal.
+ */
+function keyGroup(wanted: string[], send: (key: string) => void) {
+  const group = document.createElement('div');
+  group.className = 'run-example-keys';
+  group.setAttribute('role', 'group');
+  group.setAttribute('aria-label', 'Keys for the running program');
+  group.hidden = true;
+  const key = (k: string, label: string, html: string, cls = '') => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = `nc-key ${cls}`.trim();
+    b.dataset.key = k;
+    b.setAttribute('aria-label', label);
+    b.innerHTML = html;
+    return b;
+  };
+  group.append(key('F1', 'F1 Quit', '<kbd>F1</kbd>Quit'));
+  if (touch()) {
+    if (wanted.includes('arrows'))
+      for (const [k, label, glyph] of [['Left', 'Left arrow', '←'], ['Up', 'Up arrow', '↑'], ['Down', 'Down arrow', '↓'], ['Right', 'Right arrow', '→']])
+        group.append(key(k, label, glyph, 'is-arrow'));
+    if (wanted.includes('pages'))
+      group.append(key('PageUp', 'Page Up', '<kbd>PgUp</kbd>'), key('PageDown', 'Page Down', '<kbd>PgDn</kbd>'));
+  }
+  // A pointer press sends at once and keeps focus where it was (the terminal, with the phone's
+  // keyboard as it was). An arrow repeats while held, after 400ms, as a real key does.
+  let repeat: number | undefined;
+  const stop = () => {
+    clearTimeout(repeat);
+    clearInterval(repeat);
+    repeat = undefined;
+  };
+  group.addEventListener('pointerdown', (e) => {
+    const b = (e.target as Element).closest<HTMLButtonElement>('button');
+    e.preventDefault();
+    if (!b) return;
+    send(b.dataset.key!);
+    if (b.classList.contains('is-arrow')) repeat = window.setTimeout(() => (repeat = window.setInterval(() => send(b.dataset.key!), 60)), 400);
+  });
+  for (const type of ['pointerup', 'pointercancel', 'pointerleave']) group.addEventListener(type, stop);
+  // Enter or Space on a focused key (a keyboard user can Tab to them); a pointer has already sent.
+  group.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLButtonElement>('button');
+    if (b && e.detail === 0) send(b.dataset.key!);
+  });
+  return { group, stop };
+}
+
 function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
+  const wantedKeys = (box.dataset.keys ?? '').split(/\s+/).filter(Boolean);
   box.innerHTML = '';
   const bar = document.createElement('div');
   bar.className = 'run-example-bar';
@@ -110,10 +183,22 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   const size = document.createElement('select');
   for (const [c, r] of SIZES) size.add(new Option(`${c}×${r}`, `${c}x${r}`));
   sizeLabel.append(size);
+  // Fit to width: shown only when fitting the terminal takes its text below 9px (on a phone),
+  // pressed unless the reader turned it off. Off, the terminal keeps full size and scrolls.
+  const fitToggle = document.createElement('button');
+  fitToggle.type = 'button';
+  fitToggle.className = 'nc-key run-example-fit';
+  fitToggle.textContent = 'Fit to width';
+  fitToggle.hidden = true;
+  fitToggle.setAttribute('aria-pressed', String(fitPreferred()));
   const note = document.createElement('span');
   note.className = 'run-example-note';
-  note.textContent = 'Runs the listing above, compiled to WebAssembly. Press F1 to quit.';
-  bar.append(main, ...extra.map((x) => x.b), sizeLabel, note);
+  note.textContent = 'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit.';
+  const keys = keyGroup(wantedKeys, (k) => {
+    if (!term || !running) return;
+    term.input(keySequence(k, term.modes.applicationCursorKeysMode), true);
+  });
+  bar.append(main, keys.group, ...extra.map((x) => x.b), sizeLabel, fitToggle, note);
   const screen = document.createElement('div');
   screen.className = 'run-example-screen not-content';
   // The frame wraps the whole terminal. When the terminal is wider than the column, the frame
@@ -129,8 +214,11 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   let pty: Pty | null = null;
   let running = false;
 
-  // A wide terminal is wider than the content column. Shrink the font until every column
-  // fits, down to 9px, then scroll.
+  // A terminal wider than the column (80x24 on a phone, 100x30 on a laptop) shrinks until every
+  // column fits, so the reader sees the whole screen without scrolling it, unless they turned Fit
+  // to width off. It sets xterm.js's font size rather than scaling the canvas, so the text is
+  // drawn sharp at the new size and taps still land on the right cell. Columns and rows don't
+  // change, so the program gets no resize.
   const fit = () => {
     if (!term) return;
     const px = (el: Element, ...keys: ('paddingLeft' | 'paddingRight' | 'borderLeftWidth' | 'borderRightWidth')[]) => {
@@ -142,10 +230,32 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       px(scroller, 'paddingLeft', 'paddingRight') -
       px(screen, 'paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth');
     const width = () => screen.querySelector('.xterm-screen')?.getBoundingClientRect().width ?? 0;
-    let fontPx = FONT_SIZE;
+    if (term.options.fontSize !== FONT_SIZE) term.options.fontSize = FONT_SIZE;
+    const cell = width() / term.cols;
+    if (!overflows(avail, term.cols, cell)) {
+      fitToggle.hidden = true;
+      return;
+    }
+    fitToggle.hidden = !offersFullSize(avail, term.cols, cell);
+    if (!fitToggle.hidden && fitToggle.getAttribute('aria-pressed') !== 'true') return;
+    // The size the cell width predicts, then quarter-pixel steps down until the screen fits
+    // (xterm.js rounds each cell to a whole device pixel).
+    let fontPx = fitFontSize(avail, term.cols, cell);
     term.options.fontSize = fontPx;
-    while (width() > avail && fontPx > 9) term.options.fontSize = fontPx -= 0.5;
+    while (width() > avail && fontPx > STEP) term.options.fontSize = fontPx -= STEP;
   };
+  // Once per frame at most: each font change rebuilds the WebGL renderer's glyphs.
+  let fitFrame = 0;
+  const fitSoon = () => {
+    cancelAnimationFrame(fitFrame);
+    fitFrame = requestAnimationFrame(fit);
+  };
+  fitToggle.addEventListener('click', () => {
+    const on = fitToggle.getAttribute('aria-pressed') !== 'true';
+    fitToggle.setAttribute('aria-pressed', String(on));
+    preferFit(on);
+    fit();
+  });
 
   // A new size applies at once: the terminal changes, and a running program gets SIGWINCH and
   // sees KEY_RESIZE, as it would when a real terminal window is resized.
@@ -177,6 +287,8 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       new MutationObserver(() => {
         restyle.options.theme = terminalTheme();
         restyle.options.cursorStyle = cursorStyle();
+        // A style draws a different frame, so the room for the terminal changes.
+        fitSoon();
       }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-style'] });
       // On the alternate screen xterm.js turns the wheel into arrow keys, which a curses program
       // reads as input (getstr() echoed them as ^[[A) while the page scrolls too. Leave the wheel
@@ -198,13 +310,22 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       } catch {
         // no WebGL: keep the DOM renderer
       }
-      window.addEventListener('resize', fit);
+      // Rotation, a resized window, the sidebar opening and late fonts all change the scroller's
+      // width. Its height changes with every fit, so only a new width fits again.
+      let observedWidth = -1;
+      new ResizeObserver(([entry]) => {
+        const w = entry.contentRect.width;
+        if (w === observedWidth) return;
+        observedWidth = w;
+        fitSoon();
+      }).observe(scroller);
     } else {
       term.resize(cols, rows);
     }
     fit();
     term.reset();
     term.focus();
+    keys.group.hidden = false;
     const encoder = new TextEncoder();
     pty = null;
     const input = term.onData((d) => pty?.push(encoder.encode(d)));
@@ -213,8 +334,12 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       pty = null;
       term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
       running = false;
+      keys.stop();
+      const hadFocus = keys.group.contains(document.activeElement);
+      keys.group.hidden = true;
       for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = false;
       if (clicked === main) main.textContent = '↻ Run again';
+      if (hadFocus) clicked.focus();
     };
     try {
       const { default: create } = await import(/* @vite-ignore */ `${base}/examples/${example}.mjs`);
