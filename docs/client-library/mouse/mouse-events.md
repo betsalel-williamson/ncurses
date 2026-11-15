@@ -39,7 +39,7 @@ Button 5 is there when `NCURSES_MOUSE_VERSION` is greater than 1, as it is in cu
 
 ## Getting the events
 
-Once a class of mouse events has been enabled, the `getch()` class of functions returns `KEY_MOUSE` every time a mouse event happens. Then the mouse event can be retrieved with `getmouse()`. Do this before the next `wgetch()`; otherwise another mouse event might come in and make the first one inaccessible.
+Once a class of mouse events has been enabled, the `getch()` class of functions returns `KEY_MOUSE` every time a mouse event happens. Then the mouse event can be retrieved with `getmouse()`. ncurses keeps mouse events in their own queue, apart from the keys, but the queue is small: it holds eight events in current ncurses. Read each event with `getmouse()` when `KEY_MOUSE` arrives, so that later events don't crowd it out.
 
 The code looks roughly like this:
 

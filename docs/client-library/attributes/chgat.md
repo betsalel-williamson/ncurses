@@ -37,7 +37,7 @@ main(void)
      * end of line
      * Fourth parameter is the normal attribute you wanted to give
      * to the character
-     * Fifth is the color index. It is the index given during init_pair()
+     * Fifth is the color pair number, the one given to init_pair()
      * use 0 if you didn't want color
      * Sixth one is always NULL
      */
