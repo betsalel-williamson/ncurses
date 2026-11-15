@@ -1,0 +1,131 @@
+# The Game of Life
+
+> Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala. The program comes from the HOWTO's example archive, `JustForFun/life.c`, maintained by Thomas E. Dickey.
+
+Life is a wonder of mathematics. It isn't a game in the usual sense: there are no players, and no winning or losing. Once the pieces are placed in the starting position, the rules decide everything that happens later. Even so, Life is full of surprises. For most starting patterns, the only way to find out what will happen is to follow the rules.
+
+This program starts with a simple inverted U and steps through the generations, one every 300 milliseconds, until you press F1. The board wraps around at its edges. There's plenty of room for improvement: let the user enter a pattern or read one from a file, or change the rules and try variations.
+
+**Example: The Game of Life**
+
+```c
+#include <stdlib.h>
+#include <curses.h>
+
+int STARTX = 0;
+int STARTY = 0;
+int ENDX = 79;
+int ENDY = 24;
+
+#define CELL_CHAR '#'
+#define TIME_OUT 300
+
+typedef struct _state {
+    int oldstate;
+    int newstate;
+} state;
+
+static void
+display(WINDOW *win, state **area, int startx, int starty, int endx,
+        int endy)
+{
+    int i, j;
+    wclear(win);
+    for (i = startx; i <= endx; ++i)
+        for (j = starty; j <= endy; ++j)
+            if (area[i][j].newstate == TRUE)
+                mvwaddch(win, j, i, CELL_CHAR);
+    wrefresh(win);
+}
+
+static void
+calc(state **area, int i, int j)
+{
+    int neighbours;
+    int newstate;
+
+    neighbours =
+        area[(i - 1 + COLS) % COLS][j].oldstate +
+        area[(i - 1 + COLS) % COLS][(j - 1 + LINES) % LINES].oldstate +
+        area[(i - 1 + COLS) % COLS][(j + 1) % LINES].oldstate +
+        area[(i + 1) % COLS][j].oldstate +
+        area[(i + 1) % COLS][(j - 1 + LINES) % LINES].oldstate +
+        area[(i + 1) % COLS][(j + 1) % LINES].oldstate +
+        area[i][(j - 1 + LINES) % LINES].oldstate +
+        area[i][(j + 1) % LINES].oldstate;
+
+    newstate = FALSE;
+    if (area[i][j].oldstate == TRUE && (neighbours == 2 || neighbours == 3))
+        newstate = TRUE;
+    else if (area[i][j].oldstate == FALSE && neighbours == 3)
+        newstate = TRUE;
+    area[i][j].newstate = newstate;
+}
+
+static void
+update_state(state **area, int startx, int starty, int endx, int endy)
+{
+    int i, j;
+
+    for (i = startx; i <= endx; ++i)
+        for (j = starty; j <= endy; ++j)
+            area[i][j].oldstate = area[i][j].newstate;
+}
+
+int
+main(void)
+{
+    state **workarea;
+    int i, j;
+
+    initscr();
+    cbreak();
+    timeout(TIME_OUT);
+    keypad(stdscr, TRUE);
+
+    ENDX = COLS - 1;
+    ENDY = LINES - 1;
+
+    if ((workarea = calloc((size_t) COLS, sizeof(state *))) == NULL) {
+        endwin();
+        return EXIT_FAILURE;
+    }
+    for (i = 0; i < COLS; ++i) {
+        if ((workarea[i] = calloc((size_t) LINES, sizeof(state))) == NULL) {
+            endwin();
+            return EXIT_FAILURE;
+        }
+    }
+
+    /* For inverted U */
+    workarea[39][15].newstate = TRUE;
+    workarea[40][15].newstate = TRUE;
+    workarea[41][15].newstate = TRUE;
+    workarea[39][16].newstate = TRUE;
+    workarea[39][17].newstate = TRUE;
+    workarea[41][16].newstate = TRUE;
+    workarea[41][17].newstate = TRUE;
+    update_state(workarea, STARTX, STARTY, ENDX, ENDY);
+
+    /* For block  */
+    /*
+       workarea[37][13].newstate = TRUE;
+       workarea[37][14].newstate = TRUE;
+       workarea[38][13].newstate = TRUE;
+       workarea[38][14].newstate = TRUE;
+
+       update_state(workarea, STARTX, STARTY, ENDX, ENDY);
+     */
+    display(stdscr, workarea, STARTX, STARTY, ENDX, ENDY);
+    while (getch() != KEY_F(1)) {
+        for (i = STARTX; i <= ENDX; ++i)
+            for (j = STARTY; j <= ENDY; ++j)
+                calc(workarea, i, j);
+        update_state(workarea, STARTX, STARTY, ENDX, ENDY);
+        display(stdscr, workarea, STARTX, STARTY, ENDX, ENDY);
+    }
+
+    endwin();
+    return EXIT_SUCCESS;
+}
+```

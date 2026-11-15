@@ -1,0 +1,152 @@
+# Magic square
+
+> Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala. The program comes from the HOWTO's example archive, `JustForFun/magic.c`, maintained by Thomas E. Dickey.
+
+A magic square is another wonder of mathematics: simple to understand, hard to make. The numbers in each row and each column add up to the same sum, and the diagonals can too. There are many variations with special properties.
+
+This program makes a magic square of odd order, given as its argument. The Run button runs it with 5. Press any key to end it.
+
+**Example: Magic square**
+
+```c args="5"
+#include <curses.h>
+#include <stdlib.h>
+
+#define STARTX 9
+#define STARTY 3
+#define WIDTH 6
+#define HEIGHT 4
+
+#define TRACE_VALUE TRACE_MAXIMUM
+
+static void
+magic(int **a, int n)
+{
+    int i, j, k;
+    int row, col;
+    for (i = 0; i < n; ++i)
+        for (j = 0; j < n; ++j)
+            a[i][j] = -1;
+    row = 0;
+    col = n / 2;
+
+    k = 1;
+    a[row][col] = k;
+
+    while (k != n * n) {
+        if (row == 0 && col != n - 1) {
+            row = n - 1;
+            col++;
+            a[row][col] = ++k;
+        } else if (row != 0 && col != n - 1) {
+            if (a[row - 1][col + 1] == -1) {
+                row--;
+                col++;
+                a[row][col] = ++k;
+            } else {
+                row++;
+                a[row][col] = ++k;
+            }
+        } else if (row != 0 && col == n - 1) {
+            row--;
+            col = 0;
+            a[row][col] = ++k;
+        } else if (row == 0 && col == n - 1) {
+            row++;
+            a[row][col] = ++k;
+        }
+    }
+    return;
+}
+
+static void
+board(WINDOW *win, int starty, int startx, int lines, int cols,
+      int tile_width, int tile_height)
+{
+    int endy, endx, i, j;
+
+    endy = starty + lines * tile_height;
+    endx = startx + cols * tile_width;
+
+    for (j = starty; j <= endy; j += tile_height)
+        for (i = startx; i <= endx; ++i)
+            mvwaddch(win, j, i, ACS_HLINE);
+    for (i = startx; i <= endx; i += tile_width)
+        for (j = starty; j <= endy; ++j)
+            mvwaddch(win, j, i, ACS_VLINE);
+    mvwaddch(win, starty, startx, ACS_ULCORNER);
+    mvwaddch(win, endy, startx, ACS_LLCORNER);
+    mvwaddch(win, starty, endx, ACS_URCORNER);
+    mvwaddch(win, endy, endx, ACS_LRCORNER);
+    for (j = starty + tile_height; j <= endy - tile_height;
+         j += tile_height) {
+        mvwaddch(win, j, startx, ACS_LTEE);
+        mvwaddch(win, j, endx, ACS_RTEE);
+        for (i = startx + tile_width; i <= endx - tile_width;
+             i += tile_width)
+            mvwaddch(win, j, i, ACS_PLUS);
+    }
+    for (i = startx + tile_width; i <= endx - tile_width; i += tile_width) {
+        mvwaddch(win, starty, i, ACS_TTEE);
+        mvwaddch(win, endy, i, ACS_BTEE);
+    }
+    wrefresh(win);
+}
+
+static void
+magic_board(int **a, int n)
+{
+    int i, j, deltax, deltay;
+    int startx, starty;
+
+    starty = (LINES - n * HEIGHT) / 2;
+    startx = (COLS - n * WIDTH) / 2;
+    board(stdscr, starty, startx, n, n, WIDTH, HEIGHT);
+    deltay = HEIGHT / 2;
+    deltax = WIDTH / 2;
+    for (i = 0; i < n; ++i)
+        for (j = 0; j < n; ++j)
+            mvprintw(starty + j * HEIGHT + deltay,
+                     startx + i * WIDTH + deltax,
+                     "%d", a[i][j]);
+}
+
+int
+main(int argc, char *argv[])
+{
+    int **a, n, i;
+
+    if (argc != 2) {
+        printf("Usage: %s <magic square order>\n", argv[0]);
+        return EXIT_SUCCESS;
+    }
+    n = atoi(argv[1]);
+    if (n % 2 == 0) {
+        printf("Sorry !!! I don't know how to create magic square of "
+               "even order\n");
+        printf("The order should be an odd number\n");
+        return EXIT_SUCCESS;
+    }
+    if ((a = (int **) calloc((size_t) n, sizeof(int *))) == NULL) {
+        perror("malloc");
+        return EXIT_FAILURE;
+    }
+    for (i = 0; i < n; ++i) {
+        if ((a[i] = (int *) calloc((size_t) n, sizeof(int))) == NULL) {
+            perror("malloc");
+            return EXIT_FAILURE;
+        }
+    }
+
+    magic(a, n);
+
+    initscr();
+    curs_set(0);
+    noecho();
+    magic_board(a, n);
+    getch();
+    endwin();
+
+    return EXIT_SUCCESS;
+}
+```

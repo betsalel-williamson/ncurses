@@ -5,13 +5,17 @@
  */
 
 /** Guide shard directories, relative to the repository root. */
-export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus', 'docs/client-library/panels', 'docs/client-library/getting-started', 'docs/client-library/windows', 'docs/client-library/output', 'docs/client-library/input', 'docs/client-library/attributes', 'docs/client-library/keyboard', 'docs/client-library/mouse', 'docs/client-library/screen', 'docs/client-library/init-and-debugging', 'docs/client-library/hints'];
+export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus', 'docs/client-library/panels', 'docs/client-library/getting-started', 'docs/client-library/windows', 'docs/client-library/output', 'docs/client-library/input', 'docs/client-library/attributes', 'docs/client-library/keyboard', 'docs/client-library/mouse', 'docs/client-library/screen', 'docs/client-library/init-and-debugging', 'docs/client-library/hints', 'docs/client-library/more'];
 
-const BLOCK = /^```c\n([\s\S]*?)^```$/gm;
+// A listing's fence can give the program's arguments: ```c args="5".
+const BLOCK = /^```c([^\n]*)\n([\s\S]*?)^```$/gm;
 const MAIN = /^(?:int\s+|void\s+)?main\s*\(/m;
 /** A program that starts a shell with system() can't run in a web page, which has none. */
 const SHELL = /\bsystem\s*\(/;
-/** main(int argc, char *argv[]): the program reads the file named by its first argument. */
+/**
+ * main(int argc, char *argv[]): unless the fence gives arguments, the program reads the file
+ * named by its first argument, which is its own source.
+ */
 const MAIN_ARGS = /^(?:int\s+)?main\s*\(\s*int\s+\w+\s*,/m;
 const LIBS = { form: /#include\s*<form\.h>/, menu: /#include\s*<menu\.h>/, panel: /#include\s*<panel\.h>/ };
 
@@ -38,15 +42,18 @@ export function findPrograms(text, shard) {
   const programs = [];
   const used = new Set();
   for (const m of text.matchAll(BLOCK)) {
-    if (!MAIN.test(m[1])) continue;
+    const [, meta, code] = m;
+    if (!MAIN.test(code)) continue;
     const before = text.slice(Math.max(0, m.index - 400), m.index);
     const label = [...before.matchAll(/^\*\*Example: (.+?)\*\*\s*$/gm)].pop();
     const title = label ? label[1] : `${name} program ${programs.length + 1}`;
     let id = slug(label ? label[1] : `${name}-${programs.length + 1}`);
     for (let n = 2; used.has(id); n++) id = `${slug(title)}-${n}`;
     used.add(id);
-    const libs = Object.keys(LIBS).filter((l) => LIBS[l].test(m[1]));
-    programs.push({ id, title, code: m[1], end: m.index + m[0].length, libs, macros: listingMacros(m[1]), args: MAIN_ARGS.test(m[1]) ? ['example.c'] : [], shell: SHELL.test(m[1]) });
+    const libs = Object.keys(LIBS).filter((l) => LIBS[l].test(code));
+    const given = /\bargs="([^"]*)"/.exec(meta);
+    const args = given ? given[1].split(/\s+/).filter(Boolean) : MAIN_ARGS.test(code) ? ['example.c'] : [];
+    programs.push({ id, title, code, end: m.index + m[0].length, libs, macros: listingMacros(code), args, shell: SHELL.test(code) });
   }
   return programs;
 }

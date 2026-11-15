@@ -44,7 +44,7 @@ In C listings, each call of a curses library function links to its man page, and
 
 ## Runnable examples
 
-Every complete C program in the guides (a listing with a `main()`) gets a "Run this example" button. The program runs in the reader's browser, compiled to WebAssembly and drawn in an xterm.js terminal.
+Every complete C program in the guides (a listing with a `main()`) gets a "Run this example" button. The program runs in the reader's browser, compiled to WebAssembly and drawn in an xterm.js terminal. A program whose `main()` takes arguments is run with its own source as its one argument, unless its fence gives others, as ` ```c args="5" ` does.
 
 | File | What it does |
 | --- | --- |
@@ -89,6 +89,7 @@ A program's button appears only if its build passes the smoke test. The test run
 1. F1, up to three times.
 2. Enter, then F1. A program reading a line with `getstr()` ignores F1 until the line ends.
 3. A click on the word Exit, for a program that turned on mouse tracking. The test finds the word on a rough model of the 80×24 screen.
+4. The number of an Exit item and Enter, for a numbered menu read with `scanw()`, such as "14: Exit".
 
 A program that fails shows a note instead of a button, with its build log, and CI lists it in the run summary.
 

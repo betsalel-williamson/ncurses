@@ -49,6 +49,7 @@ export default defineConfig({
         { label: 'Screen and other features', items: [{ autogenerate: { directory: 'guides/screen' } }] },
         { label: 'Initialization, wrapup and debugging', items: [{ autogenerate: { directory: 'guides/init-and-debugging' } }] },
         { label: 'Hints, tips and compatibility', items: [{ autogenerate: { directory: 'guides/hints' } }] },
+        { label: 'Other libraries, tools and programs', items: [{ autogenerate: { directory: 'guides/more' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
