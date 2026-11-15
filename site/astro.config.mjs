@@ -56,6 +56,14 @@ export default defineConfig({
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
         ...manSidebar,
         { label: "Hacker's guide", items: [{ autogenerate: { directory: 'contributing/hackguide' } }] },
+        {
+          label: 'Installing ncurses',
+          items: [
+            { autogenerate: { directory: 'contributing/install' } },
+            { label: 'Configure options', collapsed: true, items: [{ autogenerate: { directory: 'contributing/configure-options' } }] },
+            { label: 'Compatibility with older releases', collapsed: true, items: [{ autogenerate: { directory: 'contributing/compatibility' } }] },
+          ],
+        },
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
     }),
