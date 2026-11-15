@@ -18,4 +18,6 @@ make                                # make it
 sudo make install                   # install it as root
 ```
 
+Before you unpack a release, you can check that it isn't damaged or altered. The SHA-256 of `ncurses-6.6.tar.gz` is `355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11`; compare it with your system's checksum tool. The release is also signed: the GNU site has `ncurses-<version>.tar.gz.sig` and the home page has `ncurses-<version>.tar.gz.asc`. Check either with `gpg --verify` against Thomas E. Dickey's key, whose fingerprint is `1988 2D92 DDA4 C400 C22C 0D56 CC2A F447 2167 BE03`.
+
 To build a program you also need the library's header files. Operating systems that split libraries into packages usually put them in a separate development package.

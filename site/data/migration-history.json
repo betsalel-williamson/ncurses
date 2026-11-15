@@ -1488,6 +1488,54 @@
     "rows": 302,
     "originalErrors": 159
    }
+  },
+  {
+   "pr": 64,
+   "merge": "275b9b37aa22",
+   "mergedAt": "2026-11-15T11:58:18-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 302,
+    "originalErrors": 159
+   }
+  },
+  {
+   "pr": 65,
+   "merge": "ae3712dd737f",
+   "mergedAt": "2026-11-15T12:21:38-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 303,
+    "originalErrors": 160
+   }
   }
  ]
 }
