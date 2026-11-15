@@ -1,0 +1,32 @@
+.SH "RETURN VALUE"
+The return values of
+\fB\%tgetent\fP,
+\fB\%tgetflag\fP,
+\fB\%tgetname\fP,
+and
+\fB\%tgetstr\fP
+are documented above.
+.PP
+\fB\%tgoto\fP returns
+.I NULL
+on error.
+Error conditions include:
+.bP
+uninitialized state
+\%(\fBtgetent\fP was not called successfully),
+.bP
+.I cap
+being a null pointer,
+.bP
+.I cap
+referring to a canceled capability,
+.bP
+.I cap
+being a capability with string-valued parameters
+(a \fI\%term\%info\fP-only feature),
+and
+.bP
+.I cap
+being a capability with more than two parameters.
+.PP
+See \fB\%curs_terminfo\fP(3X) regarding \fB\%tputs\fP.

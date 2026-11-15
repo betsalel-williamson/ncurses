@@ -1,0 +1,39 @@
+.SH NOTES
+.BR \%clearok ","
+.BR \%leaveok ","
+.BR \%scrollok ","
+.BR \%idcok ","
+and
+.B \%setscrreg
+may be implemented as macros.
+.PP
+Unlike the other functions described by this page,
+.B \%setscrreg
+does not accept a
+.RI pointer-to- WINDOW
+parameter,
+but operates on
+.BR stdscr "."
+Use
+.B \%wsetscrreg
+to configure the scrolling region of a selected window.
+.PP
+Historically,
+applications used
+.B \%idcok(FALSE)
+to accommodate the \*(``magic cookie\*('' feature
+of some terminal types;
+see subsection \*(``Highlighting, Underlining, and Visible Bells\*(''
+of \fB\%terminfo\fP(5).
+When updating a line,
+the presence of character cells with magic cookies in them
+made the
+.I curses
+library's computations of characters to be rewritten inaccurate.
+A better solution is to indicate the
+.B \%magic_cookie_glitch
+.RB ( xmc )
+capability in the terminal's type description.
+.PP
+.B \%immedok
+is useful for windows that are used as terminal emulators.

@@ -1,0 +1,15 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+NetBSD
+.I curses
+since 10.1 (2024) supports
+.IR \%wgetscr_reg "."
+It also implements
+.IR \%getscr_reg ","
+operating on
+.IR \%stdscr "."

@@ -1,0 +1,112 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+The X/Open Curses standard documents all of the foregoing types and
+symbols except for
+.BR \%CCHARW_MAX ","
+.BR \%newscr ","
+.BR \%TABSIZE ","
+and
+.BR \%ESCDELAY "."
+.PP
+X/Open Curses describes \fB\%curscr\fP only as \*(``an internal data
+structure\*('';
+SVr4 gave more details,
+noting its use \*(``for certain low-level operations like clearing and
+redrawing a screen containing garbage\*(''.
+.\" SVID 4, Volume 3, p. 408
+Neither specified its interaction with the rest of the interface beyond
+use as an argument to \fB\%clearok\fP(3X) and \fB\%wrefresh\fP(3X).
+.PP
+\fB\%newscr\fP is a feature of SVr4 \fIcurses\fP.
+When refreshing the screen,
+it is used as a working area for combining the standard window
+\fB\%stdscr\fP with any others the application may have created with
+\fB\%newwin\fP(3X).
+When the update of \fB\%newscr\fP is complete,
+\fIcurses\fP modifies \fB\%curscr\fP to match \fB\%newscr\fP.
+.PP
+.B \%TABSIZE
+is a feature of SVr4
+.IR curses "."
+.bP
+SVr4 initially sets
+.B \%TABSIZE
+from the terminal description's
+.B \%init_tabs
+.RB ( it )
+capability.
+After that,
+it can be altered by applications using SVr4
+.IR curses "."
+.bP
+SVr4
+.I curses
+uses
+.BR \%TABSIZE 's
+value to compute the position of tab stops when updating both
+the virtual screen with \fB\%addch\fP(3X) and
+the physical screen with \fB\%mvcur\fP(3X).
+.bP
+In
+.IR \%ncurses ","
+.BR \%TABSIZE 's
+value affects only the virtual screen.
+The library uses the terminal type description's
+.B \%init_tabs
+.RB ( it )
+capability to compute hardware tabs
+(that is,
+tab stops on the physical screen).
+.bP
+Other implementations differ.
+For instance,
+NetBSD
+.I curses
+allows
+.B \%TABSIZE
+to be set through an environment variable.
+.I \%ncurses
+does not.
+.IP
+NetBSD
+.I curses
+does not support hardware tabs;
+it uses the
+.B \%init_tabs
+.RB ( it )
+capability and the
+.B \%TABSIZE
+variable only to update the virtual screen.
+.PP
+.B \%ESCDELAY
+is a feature of AIX
+.IR curses "."
+.bP
+AIX treats
+.BR \%ESCDELAY 's
+value as counting
+.I fifths
+of milliseconds.
+.bP
+AIX's default
+.B \%ESCDELAY
+equals 0.1 seconds.
+.bP
+AIX also enforces a limit of 10,000 seconds for
+.BR \%ESCDELAY ";"
+.I \%ncurses
+does not enforce an upper limit.
+.PP
+.I \%ncurses
+has long interpreted
+.B \%ESCDELAY
+as a count of milliseconds,
+making it impossible to be completely compatible with AIX.
+Consequently,
+most users have decided either to override the value,
+or to rely upon its default.

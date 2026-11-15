@@ -1,0 +1,21 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint def_prog_mode(void);
+\fBint def_shell_mode(void);
+.PP
+\fBint reset_prog_mode(void);
+\fBint reset_shell_mode(void);
+.PP
+\fBint resetty(void);
+\fBint savetty(void);
+.PP
+\fBvoid getsyx(int \fIy\fP, int \fIx\fP);
+\fBvoid setsyx(int \fIy\fP, int \fIx\fP);
+.PP
+\fBint curs_set(int \fIvisibility\fP);
+\fBint mvcur(int \fIoldrow\fP, int \fIoldcol\fP, int \fInewrow\fP, int \fInewcol\fP);
+\fBint napms(int \fIms\fP);
+\fBint ripoffline(int \fIline\fP, int (*\fIinit\fP)(WINDOW *, int));
+.fi

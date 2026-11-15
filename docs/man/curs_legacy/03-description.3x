@@ -1,0 +1,30 @@
+.SH DESCRIPTION
+These legacy functions are simpler to use
+than the X/Open \fIcurses\fP functions:
+.bP
+The \fB\%getattrs\fP function returns the same attribute data
+as \fB\%wattr_get\fP.
+.IP
+However, \fB\%getattrs\fP returns an integer (actually a \fB\%chtype\fP),
+while \fB\%wattr_get\fP returns the current color pair in a separate parameter.
+In the wide-character library configuration,
+color pairs may not fit into a \fB\%chtype\fP,
+so \fB\%wattr_get\fP is the only way to obtain the color information.
+.IP
+Because \fB\%getattrs\fP returns the attributes in a single parameter,
+it would not be possible for an application to distinguish that from
+\fBERR\fP (a \fI-1\fP).
+If the window parameter is null, \fB\%getattrs\fP
+returns \fB\%A_NORMAL\fP (zero).
+.bP
+The \fB\%getbegy\fP and \fB\%getbegx\fP functions return the same
+data as \fB\%getbegyx\fP.
+.bP
+The \fB\%getcury\fP and \fB\%getcurx\fP functions return the same
+data as \fB\%getyx\fP.
+.bP
+The \fB\%getmaxy\fP and \fB\%getmaxx\fP functions return the same
+data as \fB\%getmaxyx\fP.
+.bP
+The \fB\%getpary\fP and \fB\%getparx\fP functions return the same
+data as \fB\%getparyx\fP.

@@ -1,0 +1,30 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint border_set(const cchar_t *\fIls\fB, const cchar_t *\fIrs\fP,
+      \fBconst cchar_t *\fIts\fB, const cchar_t *\fIbs\fP,
+      \fBconst cchar_t *\fItl\fB, const cchar_t *\fItr\fP,
+      \fBconst cchar_t *\fIbl\fB, const cchar_t *\fIbr\fB);\fR
+.br
+\fBint wborder_set(\fBWINDOW *\fIwin\fP,
+      \fBconst cchar_t *\fIls\fB, const cchar_t *\fIrs\fP,
+      \fBconst cchar_t *\fIts\fB, const cchar_t *\fIbs\fP,
+      \fBconst cchar_t *\fItl\fB, const cchar_t *\fItr\fP,
+      \fBconst cchar_t *\fIbl\fB, const cchar_t *\fIbr\fB);\fR
+.PP
+\fBint box_set(\fBWINDOW *\fIwin\fP, \fBconst cchar_t *\fIverch\fP,
+      \fBconst cchar_t *\fIhorch\fB);\fR
+.PP
+\fBint hline_set(const cchar_t *\fIwch\fB, int \fIn\fB);\fR
+\fBint whline_set(WINDOW *\fIwin\fP, \fBconst cchar_t *\fIwch\fB, int \fIn\fB);\fR
+\fBint mvhline_set(int \fIy\fB, int \fIx\fP, \fBconst cchar_t *\fIwch\fB,\fR \fBint \fIn\fB);\fR
+\fBint mvwhline_set(WINDOW *\fIwin\fP, \fBint \fIy\fB, int \fIx\fP,
+      \fBconst cchar_t *\fIwch\fB, int \fIn\fB);\fR
+.PP
+\fBint vline_set(const cchar_t *\fIwch\fB, int \fIn\fB);\fR
+\fBint wvline_set(WINDOW *\fIwin\fP, \fBconst cchar_t *\fIwch\fB, int \fIn\fB);\fR
+\fBint mvvline_set(int \fIy\fB, int \fIx\fP, \fBconst cchar_t *\fIwch\fB,\fR \fBint \fIn\fB);\fR
+\fBint mvwvline_set(WINDOW *\fIwin\fP, \fBint \fIy\fB, int \fIx\fP,
+      \fBconst cchar_t *\fIwch\fB, int \fIn\fB);\fR
+.fi

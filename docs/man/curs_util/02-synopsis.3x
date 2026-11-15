@@ -1,0 +1,25 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBconst char * unctrl(chtype \fIch\fP);
+\fBwchar_t * wunctrl(cchar_t * \fIwch\fP);
+.PP
+\fBconst char * keyname(int \fIc\fP);
+\fBconst char * key_name(wchar_t \fIwc\fP);
+.PP
+\fBvoid filter(void);
+\fI/* extension */
+\fBvoid nofilter(void);
+.PP
+\fBvoid use_env(bool \fIbf\fP);
+\fI/* extension */
+\fBvoid use_tioctl(bool \fIbf\fP);
+.PP
+\fBint putwin(WINDOW * \fIwin\fP, FILE * \fIfilep\fP);
+\fBWINDOW * getwin(FILE * \fIfilep\fP);
+.PP
+\fBint delay_output(int \fIms\fP);
+.PP
+\fBint flushinp(void);
+.fi

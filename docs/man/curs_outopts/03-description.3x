@@ -1,0 +1,160 @@
+.SH DESCRIPTION
+These functions configure properties of
+.I curses
+windows that affect their manner of output.
+Boolean-valued properties are initially
+.B FALSE
+except where noted.
+\fBendwin\fP(3X) resets any terminal modes corresponding to these
+properties;
+an application need not restore their initial values.
+.SS clearok
+Setting
+.IR win 's
+.B \%clearok
+property to
+.B TRUE
+causes the next
+.B \%wrefresh
+call on it to clear the terminal screen and redraw it entirely.
+This property is useful to restore the contents of the screen
+(perhaps because another process has written to the terminal),
+or in some cases to achieve a more pleasing visual effect.
+If
+.I \%win
+is
+.B \%curscr
+(see \fBcurs_variables\fP(3X)),
+the next
+.B \%wrefresh
+call on
+.I any
+window causes the terminal screen to clear and redraw as above.
+.B \%wrefresh
+resets this property to
+.BR FALSE "."
+.SS idcok
+(This property defaults
+.BR TRUE ".)"
+Setting
+.IR win 's
+.B \%idcok
+property to
+.B FALSE
+prevents
+.I curses
+from using the insert/delete character capabilities of terminal types
+possessing them according to the
+.I \%term\%info
+database.
+.SS idlok
+Setting
+.IR win 's
+.B \%idlok
+property to
+.B TRUE
+causes
+.I curses
+to consider
+using the insert/delete line capabilities of terminal types
+possessing them according to the
+.I \%term\%info
+database.
+Enable this option
+if the application explicitly requires these operations,
+as a full-screen text editor might;
+otherwise the results may be visually annoying to the user.
+.\" TODO: Substantiate that claim.
+.SS immedok
+If
+.B \%immedok
+is called with
+.B TRUE
+as second argument,
+changes to the window image,
+such as those caused by
+.BR \%waddch ","
+.BR \%wclrtobot ","
+or
+.BR \%wscrl ","
+automatically cause a call to
+.BR wrefresh "."
+Setting a window's
+.B \%immedok
+property may degrade performance considerably
+if writes are frequent.
+Calling
+.B \%immedok
+with
+.B FALSE
+as second argument
+restores the default behavior,
+deferring screen updates until a refresh is needed
+or explicitly directed by the application.
+.SS leaveok
+Normally,
+.I curses
+leaves the hardware cursor at the library's cursor location
+of the window being refreshed.
+The
+.B \%leaveok
+option allows the cursor to be left
+wherever the update happens to leave it.
+It is useful for applications that do not employ a visible cursor,
+since it reduces the need for cursor motions.
+.SS scrollok
+The
+.B \%scrollok
+option controls what happens when a window's cursor
+moves off the edge of the window or scrolling region,
+as a result of either
+(1) writing a newline anywhere on its bottom line,
+or
+(2) writing a character that advances the cursor to the last position
+on its bottom line.
+If disabled
+.RI ( bf
+is
+.BR FALSE "),"
+.I curses
+leaves the cursor on the bottom line of the window.
+If enabled
+.RI ( bf
+is
+.BR TRUE "),"
+.I curses
+scrolls the window up one line.
+(To get the physical scrolling effect on the terminal,
+the application must also enable
+.BR idlok ")."
+.SS "setscrreg, wsetscrreg"
+The
+.B \%wsetscrreg
+and
+.B \%setscrreg
+functions allow the application
+to set a software scrolling region in the specified window or
+.BR \%stdscr ","
+respectively.
+The
+.I top
+and
+.I bot
+parameters
+are the line numbers of the top and bottom margin of the scrolling
+region.
+If this option and
+.B scrollok
+are enabled,
+an attempt to move off the bottom margin line
+causes all lines in the scrolling region
+to scroll one line in the direction of the first line.
+Only the text of the window is scrolled.
+(This process has nothing to do
+with the scrolling region capability of the terminal,
+as found in the DEC VT100.)
+If
+.B \%idlok
+is enabled and the terminal
+has either a scrolling region or insert/delete line capability,
+they will probably be used by the output routines.

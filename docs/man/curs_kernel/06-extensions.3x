@@ -1,0 +1,17 @@
+.SH EXTENSIONS
+In
+.IR \%ncurses ","
+.B \%mvcur
+accepts
+.B \-1
+for either or both old coordinates.
+This value tells
+.I \%ncurses
+that the old location is unknown,
+and that it must use only absolute motion,
+as with the
+.B \%cursor_address
+.RB ( cup )
+capability,
+rather than the least costly combination of absolute and relative
+motion.

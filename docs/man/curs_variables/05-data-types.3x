@@ -1,0 +1,54 @@
+.SH "DATA TYPES"
+.SS "\fIbool\fP"
+.I curses
+defines an integral type
+.IR bool "."
+X/Open Issue\ 4 Curses (1996)
+preceded the ISO\ C99 and ISO\ C++98 standards,
+each of which also defined a Boolean data type of the same name.
+.PP
+.IR \%ncurses 's
+configure script attempts to discover the
+data type used by the system's C and C++ compilers,
+to reuse them as its own
+.IR bool "."
+.SS "\fIchtype\fP"
+The \fI\%chtype\fP integral type combines a
+(\*(``narrow\*('',
+8-bit)
+character with attributes encoding the character's \fIrendition\fP,
+such as the styling of its typeface and/or foreground and background
+colors.
+See,
+for example,
+\fB\%addch\fP(3X),
+\fB\%attron\fP(3X),
+and
+\fB\%inch\fP(3X).
+.SS "\fIcchar_t\fP, \fIattr_t\fP"
+\fI\%chtype\fP is too small for the standard C library's wide-character
+type,
+\fIwchar_t\fP.
+\fI\%cchar_t\fP is a type that can accommodate an \fI\%attr_t\fP and
+enough wide characters to store what Unicode terms a \fIgrapheme cluster\fP
+(a \*(``user-perceived character\*('' [UAX #29],
+which may nevertheless require several character encoding units to
+represent).
+\fI\%attr_t\fP is an integral type storing \*(``wide\*('' attributes that
+apply to \fI\%cchar_t\fPs.
+See,
+for example,
+\fB\%add_wch\fP(3X),
+\fB\%attr_on\fP(3X),
+and
+\fB\%in_wch\fP(3X).
+.SS "\fISCREEN\fP"
+.I curses
+manages a terminal device with this structure type;
+see \fB\%initscr\fP(3X).
+.SS "\fIWINDOW\fP"
+.I curses
+represents rectangular portions of the terminal screen with the
+.I \%WINDOW
+structure type;
+see subsection \*(``Overview\*('' of \fB\%ncurses\fP(3X).

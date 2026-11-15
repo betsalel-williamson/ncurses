@@ -1,0 +1,105 @@
+.\"***************************************************************************
+.\" Copyright 2018-2025,2026 Thomas E. Dickey                                *
+.\" Copyright 2010-2015,2017 Free Software Foundation, Inc.                  *
+.\"                                                                          *
+.\" Permission is hereby granted, free of charge, to any person obtaining a  *
+.\" copy of this software and associated documentation files (the            *
+.\" "Software"), to deal in the Software without restriction, including      *
+.\" without limitation the rights to use, copy, modify, merge, publish,      *
+.\" distribute, distribute with modifications, sublicense, and/or sell       *
+.\" copies of the Software, and to permit persons to whom the Software is    *
+.\" furnished to do so, subject to the following conditions:                 *
+.\"                                                                          *
+.\" The above copyright notice and this permission notice shall be included  *
+.\" in all copies or substantial portions of the Software.                   *
+.\"                                                                          *
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS  *
+.\" OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF               *
+.\" MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.   *
+.\" IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,   *
+.\" DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR    *
+.\" OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR    *
+.\" THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               *
+.\"                                                                          *
+.\" Except as contained in this notice, the name(s) of the above copyright   *
+.\" holders shall not be used in advertising or otherwise to promote the     *
+.\" sale, use or other dealings in this Software without prior written       *
+.\" authorization.                                                           *
+.\"***************************************************************************
+.\"
+.\" $Id: curs_variables.3x,v 1.76 2026/09/12 19:12:56 tom Exp $
+.TH curs_variables 3X 2026-09-12 "ncurses @NCURSES_MAJOR@.@NCURSES_MINOR@" "Library calls"
+.ie \n(.g \{\
+.ds `` \(lq
+.ds '' \(rq
+.\}
+.el \{\
+.ie t .ds `` ``
+.el   .ds `` ""
+.ie t .ds '' ''
+.el   .ds '' ""
+.\}
+.
+.ie \n(.g .ds : \:
+.el       .ds : \" empty
+.
+.de bP
+.ie n  .IP \(bu 4
+.el    .IP \(bu 2
+..
+.
+.\" URL hyperlink support macros from groff's "an-ext.tmac"
+.
+.\" Save the automatic hyphenation mode.
+.\"
+.\" In AT&T troff, there was no register exposing the hyphenation mode,
+.\" and no way to save and restore it.  Set `mH` to a reasonable value
+.\" for your implementation and preference.
+.de mY
+.  ie !\\n(.g \
+.    nr mH 14
+.  el \
+.    do nr mH \\n[.hy] \" groff extension register
+..
+.
+.\" Prepare link text for mail/web hyperlinks.  `MT` and `UR` call this.
+.de mV
+.  ds mU \\$1\"
+..
+.
+.\" Emit hyperlink.  The optional argument supplies trailing punctuation
+.\" after link text.  `ME` and `UE` call this.
+.de mQ
+.  mY
+.  nh
+<\\*(mU>\\$1
+.  hy \\n(mH
+.  rm mU
+..
+.
+.\" Start URL.
+.\" .UR url
+.if !\n(.g \{\
+.de UR
+.  mV \\$1
+..
+.\}
+.
+.\" End URL.
+.\" .UE [punctuation]
+.if !\n(.g \{\
+.de UE
+.  mQ \\$1
+..
+.\}
+.
+.so curs_variables/01-name.3x
+.so curs_variables/02-synopsis.3x
+.so curs_variables/03-description.3x
+.so curs_variables/04-constants.3x
+.so curs_variables/05-data-types.3x
+.so curs_variables/06-variables.3x
+.so curs_variables/07-notes.3x
+.so curs_variables/08-extensions.3x
+.so curs_variables/09-portability.3x
+.so curs_variables/10-see-also.3x

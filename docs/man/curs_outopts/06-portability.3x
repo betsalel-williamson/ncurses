@@ -1,0 +1,39 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+Some historic
+.I curses
+implementations,
+as an undocumented feature,
+did the equivalent of
+.RB \*(`` \%clearok( .\|.\|. ", 1)" \*(''
+when
+.B \%touchwin(stdstr)
+or
+.B \%clear(stdstr)
+were used.
+This trick does not work with
+.IR \%ncurses .
+.PP
+Early System\ V
+.I curses
+implementations specified that with
+.I \%scrollok
+enabled,
+any window modification triggering a scroll
+also forced a physical refresh.
+X/Open Curses does not require this,
+and
+.I \%ncurses
+avoids doing so to better optimize vertical motions upon a
+.IR \%wrefresh "."
+.PP
+X/Open Curses does not mention that the cursor should be
+made invisible as a side effect of
+.IR \%leaveok "."
+SVr4
+.I curses
+documentation notes this behavior,
+but the code neglects to implement it.
+Use \fB\%curs_set\fP(3X) to make the cursor invisible.
