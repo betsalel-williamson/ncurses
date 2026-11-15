@@ -2,6 +2,16 @@
 
 <!-- What this pull request changes, and why. -->
 
+## Demos to spot check
+
+<!-- Link each changed page on the site, at https://betsalel-williamson.github.io/ncurses/, and say what to try on each runnable example. The site deploys from master, so the links work once this pull request merges; until then, the screenshots under Evidence show the same pages. -->
+
+- 
+
+## Evidence
+
+<!-- Screenshots of the pages and examples above, from a local build of this branch. -->
+
 ## Errata
 
 - [ ] Every change to the docs' content, formatting or structure has a row in `docs/appendix/errata.csv`, with this pull request's number and the SHA of the commit that made the change.
