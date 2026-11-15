@@ -15,8 +15,12 @@ export default defineConfig({
       title: 'ncurses',
       description: 'Documentation for ncurses, the new curses library: guides and every manual page.',
       components: { Footer: './src/components/Footer.astro' },
+      customCss: ['./src/styles/layout.css'],
+      // Native scrollbars on listings. Safari adds a styled (::-webkit-scrollbar) horizontal
+      // scrollbar to the pre after its wrapper is sized, so the scrollbar spills into whatever
+      // follows until something forces a new layout (the Run button jumped on first run).
       // 13px code fits a 77-column listing in the content column at 1280px; check-listings.mjs holds listings to that.
-      expressiveCode: { styleOverrides: { codeFontSize: '0.8125rem' } },
+      expressiveCode: { useThemedScrollbars: false, styleOverrides: { codeFontSize: '0.8125rem' } },
       social: [{ icon: 'github', label: 'GitHub', href: `https://github.com/${repo}` }],
       sidebar: [
         { label: 'Credits', link: '/credits/' },
