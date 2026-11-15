@@ -1,0 +1,392 @@
+[
+  {
+    "id": "L206",
+    "claim": "See `include/curses.h.in` for mask values",
+    "opened": [
+      "doc/html/hackguide.html:619-624",
+      "include/curses.h.in",
+      "include/curses.tail:228-234",
+      "include/Makefile.in:117-125"
+    ],
+    "quote": "hackguide: See the file include/curses.h.in for mask values, near the end. / include/curses.h.in has no OPTIMIZE_* or _nc_optimize_enable. / curses.tail: _nc_optimize_enable and OPTIMIZE_MVCUR/HASHMAP/SCROLL/ALL. / Makefile.in appends curses.tail after curses.h.in when building curses.h.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — hackguide alone points readers at curses.h.in for the masks"
+  },
+  {
+    "id": "L207",
+    "claim": "The `lib_mouse()` code",
+    "opened": [
+      "doc/html/hackguide.html:545-549",
+      "ncurses/base/lib_mouse.c:1-90",
+      "ncurses/base/lib_mouse.c:228-230"
+    ],
+    "quote": "hackguide: The lib_mouse() code is logically split into a lower level... / MODULE_ID lib_mouse.c exists with helpers such as _nc_mouse_init/_nc_mouse_event; no function named lib_mouse().",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — basename lib_mouse.c exists under ncurses/base/"
+  },
+  {
+    "id": "L208",
+    "claim": "will settle for BSD regexps",
+    "opened": [
+      "doc/html/hackguide.html:633-634",
+      "form/fty_regex.c:40",
+      "form/fty_regex.c:88-120"
+    ],
+    "quote": "hackguide: prefers the POSIX regex facility... but will settle for BSD regexps if the former is not available. / fty_regex.c: #if HAVE_REGEX_H_FUNCS || HAVE_LIB_PCRE2 /* We prefer POSIX regex */ then #elif HAVE_REGEXP_H_FUNCS | HAVE_REGEXPR_H_FUNCS with regexp.h/regexpr.h.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — hackguide states the BSD fallback before confirming form/fty_regex.c"
+  },
+  {
+    "id": "L209",
+    "claim": "`ncurses/dump_entry.c`",
+    "opened": [
+      "doc/html/hackguide.html:749-750",
+      "progs/dump_entry.c:1-20",
+      "MANIFEST:1081"
+    ],
+    "quote": "hackguide: dump_entry() in ncurses/dump_entry.c. / file is progs/dump_entry.c (MANIFEST ./progs/dump_entry.c); no ncurses/dump_entry.c.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — that path string is what hackguide prints"
+  },
+  {
+    "id": "L210",
+    "claim": "`ncurses/MKlib_gen.sh`",
+    "opened": [
+      "doc/html/hackguide.html:791-792",
+      "ncurses/base/MKlib_gen.sh:1-20",
+      "MANIFEST:796"
+    ],
+    "quote": "hackguide: read ncurses/MKlib_gen.sh first. / actual path ncurses/base/MKlib_gen.sh (MANIFEST ./ncurses/base/MKlib_gen.sh).",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — hackguide cites ncurses/MKlib_gen.sh"
+  },
+  {
+    "id": "L211",
+    "claim": "The fifth field (flags) of `include/Caps`",
+    "opened": [
+      "doc/html/hackguide.html:803-808",
+      "include/Caps:49-57"
+    ],
+    "quote": "hackguide: that is why the fifth field (flags) is there. / Caps FILE FORMAT Column 5: KEY_xxx name, if any, `-' otherwise; termcap emission flags are Column 7.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — hackguide labels Caps field five as flags"
+  },
+  {
+    "id": "L212",
+    "claim": "`lib_getstr.c` is pure curses, but calls `outstr()`",
+    "opened": [
+      "doc/html/hackguide.html:835-838",
+      "ncurses/base/lib_getstr.c:51-70",
+      "ncurses/base/lib_getstr.c:1-45"
+    ],
+    "quote": "hackguide: This module is pure curses, but calls outstr(): lib_getstr.c. / current WipeOut uses waddstr/waddch; no outstr symbol in ncurses/form/menu/panel/progs/include.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — hackguide asserts the outstr() call"
+  },
+  {
+    "id": "L213",
+    "claim": "`lib_insstr.c`",
+    "opened": [
+      "doc/html/hackguide.html:828-832",
+      "NEWS:10750",
+      "ncurses/base/lib_insch.c:1-30",
+      "ncurses/base/lib_insnstr.c:1-20"
+    ],
+    "quote": "hackguide lists lib_insstr.c among pure-curses modules. / NEWS: rewrote lib_insch.c, combining it with lib_insstr.c; no lib_insstr.c remains in the tree.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "missing — file absent before reading the NEWS merge note"
+  },
+  {
+    "id": "L214",
+    "claim": "`lib_unctrl.c`",
+    "opened": [
+      "doc/html/hackguide.html:832",
+      "NEWS:15168",
+      "ncurses/base/MKunctrl.awk:1-20"
+    ],
+    "quote": "hackguide lists lib_unctrl.c. / NEWS: drop ncurses/lib_unctrl.c, add MKunctrl.awk to generate a table; MKunctrl.awk is present.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "missing — no lib_unctrl.c before the NEWS explanation"
+  },
+  {
+    "id": "L215",
+    "claim": "`comp_main.c`",
+    "opened": [
+      "doc/html/hackguide.html:862-865",
+      "include/tic.h:360",
+      "progs/tic.c:687"
+    ],
+    "quote": "hackguide lists comp_main.c among sources not needed for single-terminal ports. / no comp_main.c in the tree; tic.h still comments 'comp_main.c: compiler main'; main() is in progs/tic.c.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "missing — file not present before noting tic.c absorbed the role"
+  },
+  {
+    "id": "L223",
+    "claim": "The configure script attempts to locate previous installation of ncurses, and will set the default prefix according to where it finds the ncurses headers",
+    "opened": [
+      "INSTALL:95-97",
+      "aclocal.m4:960-1020"
+    ],
+    "quote": "INSTALL repeats that claim. / CF_CFG_DEFAULTS sets prefix from OS name (/usr vs $ac_default_prefix); header search only adjusts includedir and only under a dead prefix=NONE branch after prefix was already set.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — INSTALL text alone supports the claim"
+  },
+  {
+    "id": "L224",
+    "claim": "Typing 'configure' with no arguments is equivalent to: ./configure --with-normal --with-debug --enable-overwrite",
+    "opened": [
+      "INSTALL:147-151",
+      "configure.in:310-323",
+      "configure.in:563-569"
+    ],
+    "quote": "INSTALL states that equivalence. / --with-normal/--with-debug default yes, but --enable-overwrite defaults yes only when prefix is /usr (else no).",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — INSTALL asserts full equivalence"
+  },
+  {
+    "id": "L225",
+    "claim": "read the PORTABILITY section in the file ncurses/README",
+    "opened": [
+      "INSTALL:115-116",
+      "ncurses/README:1-51"
+    ],
+    "quote": "INSTALL: If your operating system is not supported, read the PORTABILITY section in the file ncurses/README. / ncurses/README has no PORTABILITY section (points at hackguide.html instead).",
+    "verdict": "missing",
+    "confidence": "high",
+    "earlier": "matches — INSTALL cites that section"
+  },
+  {
+    "id": "L227",
+    "claim": "tic(1), captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1)",
+    "opened": [
+      "INSTALL:183-186",
+      "progs/tic.c:1-20",
+      "ncurses/tinfo/captoinfo.c:1-20",
+      "progs/infocmp.c:1-20",
+      "progs/toe.c:1-20",
+      "progs/clear.c:1-20",
+      "progs/tset.c:1-20",
+      "progs/tput.c:1-20",
+      "progs/Makefile.in:248-250"
+    ],
+    "quote": "INSTALL lists those programs as build products. / corresponding sources exist; Makefile.in links reset to tset.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — INSTALL list alone"
+  },
+  {
+    "id": "L228",
+    "claim": "If the option is not given, this defaults to \"long\".",
+    "opened": [
+      "INSTALL:1347-1355",
+      "aclocal.m4:92",
+      "configure.in:1085-1089"
+    ],
+    "quote": "INSTALL --with-tparm-arg: If the option is not given, this defaults to \"long\". / cf_dft_tparm_arg=long; CF_WITH_TYPE(tparm-arg,... $cf_dft_tparm_arg).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — INSTALL states the default"
+  },
+  {
+    "id": "L229",
+    "claim": "--with-weak-symbols",
+    "opened": [
+      "INSTALL:1385-1391",
+      "INSTALL:836-838",
+      "configure.in:1395-1401"
+    ],
+    "quote": "INSTALL --with-versioned-syms text: when using the --with-weak-symbols option. / real option is --enable-weak-symbols (AC_ARG_ENABLE(weak-symbols,...)); INSTALL also documents --enable-weak-symbols elsewhere.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — that INSTALL paragraph literally says --with-weak-symbols"
+  },
+  {
+    "id": "L232",
+    "claim": "FreeBSD, NetBSD, OpenBSD, Cygwin, MinGW",
+    "opened": [
+      "INSTALL:2300-2310",
+      "aclocal.m4:979-988"
+    ],
+    "quote": "INSTALL special cases: FreeBSD, NetBSD, OpenBSD, Cygwin, MinGW. / CF_CFG_DEFAULTS /usr prefix case: openbsd*|freebsd*|mirbsd*|linux*|cygwin*|msys*|k*bsd*-gnu|mingw* — NetBSD not included.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — INSTALL lists those five names"
+  },
+  {
+    "id": "L233",
+    "claim": "listed in the misc/terminfo file",
+    "opened": [
+      "INSTALL:2356-2359",
+      "misc/terminfo.src:1-10"
+    ],
+    "quote": "INSTALL: terminfo maintainer (listed in the misc/terminfo file). / master file is misc/terminfo.src; there is no misc/terminfo.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — INSTALL uses that pathname"
+  },
+  {
+    "id": "L235",
+    "claim": "$HOME/terminfo (twice)",
+    "opened": [
+      "INSTALL:2482-2510",
+      "include/tic.h:127",
+      "ncurses/tinfo/home_terminfo.c:35-60"
+    ],
+    "quote": "INSTALL BSD notes earlier correctly say $HOME/.terminfo, then twice write $HOME/terminfo without the dot. / PRIVATE_INFO is \"%s/.terminfo\".",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — those two INSTALL lines literally say $HOME/terminfo"
+  },
+  {
+    "id": "L241",
+    "claim": "To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>",
+    "opened": [
+      "INSTALL:2584-2588",
+      "announce.html.in:1722-1730"
+    ],
+    "quote": "INSTALL: subscribe ncurses <your-email-address-here>. / announce.html.in: subscribe <name>@<host.domain>. Actual list-server syntax is not verifiable inside the repo.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "matches — INSTALL prints that subscribe body"
+  },
+  {
+    "id": "L243",
+    "claim": "assuming environment variable MINGW_ROOT holds the root directory name of your MinGW build",
+    "opened": [
+      "README.MinGW:100-136"
+    ],
+    "quote": "README.MinGW: assuming environment variable MINGW_ROOT holds the root directory name of your MinGW build: then ./configure --prefix=/mingw64 ... / the example never expands $MINGW_ROOT.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — README.MinGW states the MINGW_ROOT assumption"
+  },
+  {
+    "id": "L247",
+    "claim": "I provide no functions to switch on/off curses tracing options.",
+    "opened": [
+      "doc/html/Ada95.html:105-106",
+      "Ada95/gen/terminal_interface-curses-trace.ads.m4:45-125",
+      "Ada95/src/modules:42"
+    ],
+    "quote": "Ada95.html limitations: I provide no functions to switch on/off curses tracing options. / package Terminal_Interface.Curses.Trace provides Trace_On and Trace_Put; modules lists the trace unit.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "matches — Ada95.html limitations list still says that"
+  },
+  {
+    "id": "L248",
+    "claim": "Just make the boolean member bold of the record true.",
+    "opened": [
+      "doc/html/Ada95.html:78-81",
+      "Ada95/gen/terminal_interface-curses.ads.m4:420-456"
+    ],
+    "quote": "Ada95.html: Just make the boolean member bold of the record true. / Character_Attribute_Set has Bold_Character : Boolean, not a member named bold.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — Ada95.html uses the name bold"
+  },
+  {
+    "id": "L249",
+    "claim": "Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.",
+    "opened": [
+      "doc/html/Ada95.html:92-94",
+      "NEWS:12422",
+      "ncurses/widechar",
+      "Ada95/gen/Makefile.in:87"
+    ],
+    "quote": "Ada95.html still prints that limitation. / NEWS: make the Ada95 interface build with configure --enable-widec; ncurses/widechar/ is present; Ada Makefile mentions wide-character configuration.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "matches — Ada95.html still prints that limitation"
+  },
+  {
+    "id": "L250",
+    "claim": "The (n)curses documentation says, that the String arrays to be passed to an TYPE_ENUM fieldtype must not be automatic variables.",
+    "opened": [
+      "doc/html/Ada95.html:309-312",
+      "man/form_field_validation.3x:106-120",
+      "form/fty_enum.c:100-111"
+    ],
+    "quote": "Ada95.html: must not be automatic variables. / man form_field_validation.3x: The library copies the string list, so you may use a list that lives in automatic variables on the stack. / fty_enum.c strdup-copies keywords.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — Ada binding doc asserts that ncurses restriction"
+  },
+  {
+    "id": "L256",
+    "claim": "The most important bug-fixes/improvements (a link to \"Interesting bug-fixes\", a section with no content)",
+    "opened": [
+      "announce.html.in:171-173",
+      "announce.html.in:926-928",
+      "announce.html.in:1842"
+    ],
+    "quote": "TOC/body link The most important bug-fixes/improvements → #h3-bug-fixes. / <h3>Interesting bug-fixes</h3> is followed immediately by the next <h3> with no body content.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — TOC link target found before noticing the empty body"
+  },
+  {
+    "id": "L257",
+    "claim": "https://invisible-island.net/ncurses/man/tput.1m.html",
+    "opened": [
+      "announce.html.in:540-545",
+      "man/tput.1:1-20",
+      "doc/html/man/tput.1.html:1-20",
+      "man/tic.1m"
+    ],
+    "quote": "announce uses @HOMEPAGE@/man/tput.1m.html for tput. / shipped manual is man/tput.1 and doc/html/man/tput.1.html (section 1); tic/infocmp use .1m, but tput does not.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — announce.html.in contains the tput.1m.html href"
+  },
+  {
+    "id": "L258",
+    "claim": "Patches to the current release are made available at https://invisible-island.net/archives/ncurses/6.5/",
+    "opened": [
+      "announce.html.in:1746-1751",
+      "VERSION:1",
+      "ANNOUNCE:677-683"
+    ],
+    "quote": "announce.html.in prints .../archives/ncurses/6.5/. / VERSION is 6.6; plain ANNOUNCE (6.5 notes) lists patches under 6.4/. Whether that archive hosts patches requires outside-repo access.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "matches — announce.html.in prints that patches URL"
+  },
+  {
+    "id": "L259",
+    "claim": "To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.org containing the line: subscribe <name>@<host.domain>",
+    "opened": [
+      "announce.html.in:1720-1730",
+      "INSTALL:2584-2588"
+    ],
+    "quote": "announce: subscribe <name>@<host.domain>. / INSTALL instead: subscribe ncurses <your-email-address-here>. Actual list-server syntax not verifiable in-repo.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "matches — announce.html.in prints that subscribe line"
+  },
+  {
+    "id": "L260",
+    "claim": "modify MKlib_gen.c to allow for Solaris's definition of NULL as 0L",
+    "opened": [
+      "announce.html.in:1186-1189",
+      "NEWS:804",
+      "ncurses/base/MKlib_gen.sh:1-20"
+    ],
+    "quote": "announce/NEWS: modify MKlib_gen.c to allow for Solaris's definition of NULL as 0L. / only ncurses/base/MKlib_gen.sh exists; no MKlib_gen.c.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "matches — announce/NEWS print MKlib_gen.c"
+  }
+]

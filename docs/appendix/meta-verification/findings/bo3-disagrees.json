@@ -1,0 +1,1779 @@
+[
+  {
+    "id": "L28",
+    "batch": 1,
+    "claim": "The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one copy is an error",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L29",
+    "batch": 1,
+    "claim": "The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so one copy is an error",
+    "appears_in": "man/curs_border.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L34",
+    "batch": 1,
+    "claim": "The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the terminal does not support color \u2026), so one copy",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L47",
+    "batch": 2,
+    "claim": "Example 21. Milt Columnar Menus Example",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "multi-column-menus",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L65",
+    "batch": 2,
+    "claim": "replace a panel's window with a different window by calling `replace_window`",
+    "appears_in": "docs/client-library/panels/overview.md",
+    "section": "panel-functions",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L66",
+    "batch": 2,
+    "claim": "The `stsdcr` window is a special case",
+    "appears_in": "docs/client-library/panels/input-and-stdscr.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L67",
+    "batch": 2,
+    "claim": "The `panel_update` code ignores hidden panels",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L68",
+    "batch": 2,
+    "claim": "You cannot do `top_panel()` or `bottom_panel` on a hidden panel()",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L70",
+    "batch": 2,
+    "claim": "For some reason the function `panel_hidden()` which tells whether a panel is hidden or not is not working, with a link t",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L71",
+    "batch": 2,
+    "claim": "/* Update the stacking order. 2nd panel will be on top */ (also in the moving and hiding listings)",
+    "appears_in": "docs/client-library/panels/browsing.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L74",
+    "batch": 2,
+    "claim": "Mainpulate; is used to created panels; removes it form the stack; Entered Resizing :Use",
+    "appears_in": "docs/client-library/panels/overview.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L75",
+    "batch": 2,
+    "claim": "`bottom_panel` on a hidden panel()",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L81",
+    "batch": 2,
+    "claim": "In the `cbreak()` mode these control characters are interpreted as any other character by the terminal driver",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "raw-and-cbreak",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L82",
+    "batch": 2,
+    "claim": "`endwin()` frees the memory taken by curses sub-system and its data structures and puts the terminal in normal mode",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "endwin",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L83",
+    "batch": 2,
+    "claim": "`<curses.h>` also includes `<termios.h>`, `<termio.h>`, or `<sgtty.h>` depending on your system",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L85",
+    "batch": 2,
+    "claim": "To use ncurses library functions, you have to include ncurses.h in your programs",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L86",
+    "batch": 2,
+    "claim": "`bool`: boolean type, actually a \"char\"",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "variables",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L88",
+    "batch": 3,
+    "claim": "Changes should be made to through the API; To write to a different window. use the routine waddch() ... is provided",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "standard-windows",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L89",
+    "batch": 3,
+    "claim": "rearing to get started; halfdelay()is called; if he doesn't respond with in certain time",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "halfdelay",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L90",
+    "batch": 3,
+    "claim": "Mail links to zmbenhal@netcom.com and esr@snark.thyrsus.com, and a link to adahome.com for the Ada95 binding",
+    "appears_in": "docs/client-library/getting-started/history.md",
+    "section": "who-wrote-it",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L96",
+    "batch": 3,
+    "claim": "create_box() puts the corners at x + w and y + h, so a box of width 10 and height 3 is drawn 11 columns wide and 4 rows ",
+    "appears_in": "docs/client-library/windows/border-functions.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L98",
+    "batch": 3,
+    "claim": "let me clear few things; It doesn't create any thing; as user press a key; Let's dissect it by line by line",
+    "appears_in": "docs/client-library/windows/creating-windows.md",
+    "section": "explanation",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L102",
+    "batch": 3,
+    "claim": "If the terminal does not have such characters, curses.h will map them to a recognizable (though ugly) set of ASCII defau",
+    "appears_in": "docs/client-library/output/forms-characters.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L105",
+    "batch": 3,
+    "claim": "let's interact with world; message to be appeared on the screen; Try resizing your window(if possible); ch(of type char)",
+    "appears_in": "docs/client-library/output/",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L111",
+    "batch": 3,
+    "claim": "With _DEBUG defined, print_win_params() prints at row 25, below the bottom of a 24-row screen, so nothing is shown",
+    "appears_in": "docs/client-library/windows/border-functions.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L115",
+    "batch": 3,
+    "claim": "Example 4. A Simple scanw example",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L116",
+    "batch": 3,
+    "claim": "These pseudo-line-oriented functions turn on echoing while they execute",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "the-getstr-class-of-functions",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L117",
+    "batch": 3,
+    "claim": "begin read them; must used; one or the other has to changed; The resulting string of characters are pointed to",
+    "appears_in": "docs/client-library/input/",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L121",
+    "batch": 3,
+    "claim": "Initially RED color is defined with content 1000(r), 0(g), 0(b); init_color(COLOR_RED, 700, 0, 0) is described as lighte",
+    "appears_in": "docs/client-library/attributes/colors.md",
+    "section": "changing-color-definitions",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L122",
+    "batch": 3,
+    "claim": "attr_get() is useful in scanning areas of screen when we are not sure what attribute each character is associated with",
+    "appears_in": "docs/client-library/attributes/attribute-functions.md",
+    "section": "attr_get",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L123",
+    "batch": 3,
+    "claim": "Other functions wchgat(), mvchgat(), wchgat() behave similarly",
+    "appears_in": "docs/client-library/attributes/chgat.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L124",
+    "batch": 3,
+    "claim": "/* pager functionality by Joseph Spainhour\" <spainhou@bellsouth.net> */",
+    "appears_in": "docs/client-library/attributes/attributes.md",
+    "section": "a-simple-attributes-example",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L125",
+    "batch": 3,
+    "claim": "screeen; are we are at; cut bold on; Forth parameter; Viola !!!; loose track; the the source; Don't worry about all thos",
+    "appears_in": "docs/client-library/attributes/",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L129",
+    "batch": 3,
+    "claim": "mvprintw(24, 0, \"Character pressed is ...\"); mvprintw(23, 0, \"You chose choice ...\")",
+    "appears_in": "docs/client-library/keyboard/key-usage-example.md",
+    "section": "a-simple-key-usage-example",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L130",
+    "batch": 3,
+    "claim": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;",
+    "appears_in": "docs/client-library/keyboard/key-usage-example.md",
+    "section": "a-simple-key-usage-example",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L131",
+    "batch": 3,
+    "claim": "the Functions keys; See the initialization section; if(ch == KEY_LEFT); User did a choice come out of the infinite loop",
+    "appears_in": "docs/client-library/keyboard/",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L135",
+    "batch": 3,
+    "claim": "The default is one fifth of a second",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "clicks-and-mouseinterval",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L137",
+    "batch": 3,
+    "claim": "report_choice(event.x + 1, event.y + 1, ...); j = starty + 3; mouse_x <= i + strlen(...)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L138",
+    "batch": 3,
+    "claim": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; mvprintw(23, 1, ...); mvprintw(22, 1, ...)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L139",
+    "batch": 3,
+    "claim": "The event mask table stops at BUTTON4_TRIPLE_CLICKED",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L140",
+    "batch": 3,
+    "claim": "lets do the same thing from mouse; any thing; a class of mouse events have been enabled; Do some thing; thousands of a s",
+    "appears_in": "docs/client-library/mouse/",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L146",
+    "batch": 3,
+    "claim": "getbegyx() and getmaxyx() store the window's beginning and maximum co-ordinates",
+    "appears_in": "docs/client-library/screen/coordinates.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L155",
+    "batch": 4,
+    "claim": "The values returned can be 1 (all is well), 0 (no such terminal), or -1 (some problem locating the terminfo database)",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L160",
+    "batch": 4,
+    "claim": "endwin() should called once",
+    "appears_in": "docs/client-library/init-and-debugging/initialization-and-wrapup.md",
+    "section": "newtermtype-ofp-ifp",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L161",
+    "batch": 4,
+    "claim": "It is only available only if",
+    "appears_in": "docs/client-library/init-and-debugging/debugging.md",
+    "section": "_tracef",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L164",
+    "batch": 4,
+    "claim": "When ncurses returns that code, it calls resizeterm",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "key_resize",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L167",
+    "batch": 4,
+    "claim": "The refresh will pick up the new screen size from the xterm's environment",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "your-own-handler",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L168",
+    "batch": 4,
+    "claim": "Note that you will also have to call def_shell_mode and def_prog_mode on each tty yourself",
+    "appears_in": "docs/client-library/hints/terminals.md",
+    "section": "handling-multiple-terminal-screens",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L194",
+    "batch": 4,
+    "claim": "Thomas E. Dickey has maintained ncurses since 1.9.9e",
+    "appears_in": "site/src/content/docs/index.mdx",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "medium",
+      "high"
+    ]
+  },
+  {
+    "id": "L196",
+    "batch": 4,
+    "claim": "Thomas E. Dickey, maintainer since ncurses 1.9.9e",
+    "appears_in": "site/src/content/docs/credits.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "medium",
+      "high"
+    ]
+  },
+  {
+    "id": "L198",
+    "batch": 4,
+    "claim": "The third objective (standards conformance)",
+    "appears_in": "docs/contributor/hackguide/objective.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L201",
+    "batch": 4,
+    "claim": "Test frames for the library algorithms are in the progs directory",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "test-frames-for-the-library-algorithms",
+    "votes": [
+      "superseded",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L206",
+    "batch": 5,
+    "claim": "See `include/curses.h.in` for mask values",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L207",
+    "batch": 5,
+    "claim": "The `lib_mouse()` code",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "mouse-events",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L209",
+    "batch": 5,
+    "claim": "`ncurses/dump_entry.c`",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "",
+    "votes": [
+      "missing",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L210",
+    "batch": 5,
+    "claim": "`ncurses/MKlib_gen.sh`",
+    "appears_in": "docs/contributor/hackguide/style-tips.md",
+    "section": "",
+    "votes": [
+      "missing",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L211",
+    "batch": 5,
+    "claim": "The fifth field (flags) of `include/Caps`",
+    "appears_in": "docs/contributor/hackguide/style-tips.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L212",
+    "batch": 5,
+    "claim": "`lib_getstr.c` is pure curses, but calls `outstr()`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "votes": [
+      "superseded",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L223",
+    "batch": 5,
+    "claim": "The configure script attempts to locate previous installation of ncurses, and will set the default prefix according to w",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-1-choose-where-to-install",
+    "votes": [
+      "can't tell",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L224",
+    "batch": 5,
+    "claim": "Typing 'configure' with no arguments is equivalent to: ./configure --with-normal --with-debug --enable-overwrite",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L229",
+    "batch": 5,
+    "claim": "--with-weak-symbols",
+    "appears_in": "docs/contributor/install/configure-options/with-m-z.md",
+    "section": "--with-versioned-symsxxx",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L232",
+    "batch": 5,
+    "claim": "FreeBSD, NetBSD, OpenBSD, Cygwin, MinGW",
+    "appears_in": "docs/contributor/install/system-integrators.md",
+    "section": "configuration-and-installation",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L233",
+    "batch": 5,
+    "claim": "listed in the misc/terminfo file",
+    "appears_in": "docs/contributor/install/system-integrators.md",
+    "section": "naming-the-console-terminal",
+    "votes": [
+      "missing",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L235",
+    "batch": 5,
+    "claim": "$HOME/terminfo (twice)",
+    "appears_in": "docs/contributor/install/bsd-conversion.md",
+    "section": "private-installations-with-termcap",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L243",
+    "batch": 5,
+    "claim": "assuming environment variable MINGW_ROOT holds the root directory name of your MinGW build",
+    "appears_in": "docs/contributor/install/mingw.md",
+    "section": "configuring",
+    "votes": [
+      "can't tell",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L248",
+    "batch": 5,
+    "claim": "Just make the boolean member bold of the record true.",
+    "appears_in": "docs/contributor/ada/index.md",
+    "section": "general-remarks",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L250",
+    "batch": 5,
+    "claim": "The (n)curses documentation says, that the String arrays to be passed to an TYPE_ENUM fieldtype must not be automatic va",
+    "appears_in": "docs/contributor/ada/implementation-details.md",
+    "section": "enumeration-fields",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L257",
+    "batch": 5,
+    "claim": "https://invisible-island.net/ncurses/man/tput.1m.html",
+    "appears_in": "docs/contributor/announce/program-improvements.md",
+    "section": "utilities",
+    "votes": [
+      "can't tell",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L260",
+    "batch": 5,
+    "claim": "modify MKlib_gen.c to allow for Solaris's definition of NULL as 0L",
+    "appears_in": "docs/contributor/announce/portability.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L264",
+    "batch": 6,
+    "claim": "to revert to the original mode, type this: printf '\\033[0;37;40m\\n'",
+    "appears_in": "docs/client-library/getting-started/introduction.md",
+    "section": "terminals-and-escape-sequences",
+    "votes": [
+      "matches",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 2
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L274",
+    "batch": 6,
+    "claim": "Fifth is the color index. It is the index given during init_pair()",
+    "appears_in": "docs/client-library/attributes/chgat.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L277",
+    "batch": 6,
+    "claim": "Note that new_field() does not copy the pointer array into private storage",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "creating-and-freeing-fields-and-forms",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L280",
+    "batch": 6,
+    "claim": "The growth limit can be changed whether or not the O_STATIC bit is on, but has no effect until it is.",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "variable-sized-fields",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L281",
+    "batch": 6,
+    "claim": "A REQ_MOVE_RIGHT from A will go to B",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "inter-field-navigation-requests",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L282",
+    "batch": 6,
+    "claim": "the position of a form for purposes of these requests is its upper-left corner",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "inter-field-navigation-requests",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L283",
+    "batch": 6,
+    "claim": "REQ_DEL_PREV: Delete previous word at cursor.",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "editing-requests",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L284",
+    "batch": 6,
+    "claim": "When the current page is changed by set_current_field() call; When the current field is changed by a set_form_page() cal",
+    "appears_in": "docs/client-library/forms/hooks-and-form-options.md",
+    "section": "field-change-hooks",
+    "votes": [
+      "disagrees",
+      "disagrees",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 3
+    },
+    "majority": "disagrees",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L294",
+    "batch": 6,
+    "claim": "parse an entire terminfo file into a doubly-linked circular list of entry structures",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "use-capability-resolution",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  }
+]

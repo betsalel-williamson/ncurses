@@ -88,3 +88,34 @@ A configuration change also seemed to do nothing until Astro's content cache in 
 **Lesson:** when a measurement disagrees with what you see, check what it measures. When a configuration change seems to do nothing, clear the build cache before concluding it doesn't work.
 
 **Guard:** `site/scripts/check-listings.mjs` fails on a listing line longer than 77 columns.
+
+## Meta-verification belongs in another system
+
+The first attempt to re-check every errata error claim ran inside the Claude docs session that had written many of those rows. It launched 33 runs (18 on Sonnet, 10 Sonnet retries, 5 on Haiku). Sonnet's safety filter (`reasoning_extraction`) stopped 27; one more Sonnet run was cut off while writing cards; the Haiku retries were stopped after the permission system blocked a reworded prompt. One run finished (batch 5) and was discarded. That attempt counts as a **failed pass** for budget and lessons, not as evidence.
+
+A second attempt ran as an outside Cursor Cloud Agent pass with the Merlon Docs evidence-check skill installed first, six batches × three isolated runs, and no access to `docs/appendix/` for the checkers. Its report and run outputs live under [meta-verification](meta-verification.md). Hand that package to a separate agent only after the pull request that adds it has merged.
+
+**Lesson:** audit the errata list from a different product than the one that recorded the claims, load the evidence-check skill before launching runs, and keep the meta-verification artifacts in the appendix so the next agent can act from `master`.
+
+**Guard:** the appendix's [meta-verification](meta-verification.md) page names the process, the verdict framing, and where the current pass's files are.
+
+## Our own fixes can be wrong
+
+The [adjudication](meta-verification/adjudication.md) of the first outside pass rechecked 112 errata rows from primary evidence. Ten were type I errors: the row reported an error in text the original had right. In five of them the "fix" had made the docs wrong, and the original wording is now restored. The first check went wrong in four ways:
+
+- **It stopped reading too early.** `L103`: the check read part of `waddnstr()`, but `lib_addstr.c` sets `n = INT_MAX` for any negative `n`, so the HOWTO was right. `L295`: a search for the literal `box1` found nothing, but `parse_entry.c` translates `box_chars_1`, the same capability, to `acsc`.
+- **It skipped the manual page that settles the point.** `L272`: `curs_getch(3X)` says that `getch()` with echo and neither cbreak nor raw "is not well-defined", so the original warning was right. `L301`: `ncurses(3X)` states the `_w` naming rule and its exceptions. `L156`: `term_variables(3X)` describes saving and restoring `cur_term` through `set_curterm()`.
+- **It took a value at face value.** `L177`: `#define KEY_F1 265` looked wrong, but `include/Caps` gives `KEY_F0` as 0410 (264), so 265 is `KEY_F(1)`. `L179`: the CPAN index lists `Curses::Forms` as a distribution, so the HOWTO's `Curses::Form` looked like a typo, but it is a package in `Curses.pm`.
+- **It treated a looser wording as an error, or wrote a claim of its own.** `L104` and `L148` are true as written. `L195` claimed that Eric S. Raymond first wrote every manual page, but the AUTHORS sections name Thomas E. Dickey on ten of them.
+
+**Lesson:** assume the original is right unless the evidence against it is strong. Before calling it wrong, read the whole function, search for the concept as well as the literal name, and open the manual page that defines the behavior. A new claim the edition adds, such as who wrote what, needs the same five-step check as a correction.
+
+**Guard:** none is automatic. The [meta-verification](meta-verification.md) pass reruns the checks from another system, and its findings are adjudicated against primary evidence before any row changes. A wrong fix moves its row to `rejected`, and a restored text gets an `edition-error` row, as the [errata introduction](index.md) describes.
+
+## An agent can't settle what it can't open
+
+The adjudication left rows unsettled for one reason more than any other: the evidence was outside what the agent could reach. The checkers were limited to the repository, so they couldn't judge dead links, the mailing list or the HOWTO's example archive. The adjudicating agent could fetch most web pages but not the Wayback Machine, which this environment refuses, so it couldn't say whether the 2003 snapshot of the DOS games page (`L55`) shows the games. The archive's download now returns 403 as well.
+
+**Lesson:** when a row's evidence is a page the agent can't open, the row stays unsettled, and the agent says so and hands the link to a person. It doesn't infer the page's content from its address, its status code or a search listing.
+
+**Guard:** the five-step check's second line asks for what was actually opened. A row whose evidence couldn't be opened gets the verdict `can't tell`, and the [adjudication](meta-verification/adjudication.md) lists it with the link a person needs to check.

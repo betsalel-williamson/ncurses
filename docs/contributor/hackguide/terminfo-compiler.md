@@ -38,4 +38,4 @@ The translation output code (`dump_entry()` in `progs/dump_entry.c`) is shared w
 
 The `include/Caps` file has a header comment describing ways you can specify source translations for nonstandard capabilities just by altering the master table. It's possible to set up capability aliasing or tell the compiler to plain ignore a given capability without writing any C code at all.
 
-For circumstances where you need to do algorithmic translation, there are functions in `parse_entry.c` called after the parse of each entry that are specifically intended to encapsulate such translations. This, for example, is where the XENIX forms-drawing capabilities, such as `G2` (`acs_ulcorner`), get translated to an `acsc` string. The reverse translation, from `acsc` to the AIX `box1` capability, happens on output, in `dump_entry.c`.
+For circumstances where you need to do algorithmic translation, there are functions in `parse_entry.c` called after the parse of each entry that are specifically intended to encapsulate such translations. This, for example, is where the AIX `box1` capability gets translated to an `acsc` string.

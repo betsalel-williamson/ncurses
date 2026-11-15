@@ -64,3 +64,5 @@ main(void)
 ```
 
 This program uses functions which aren't explained yet. The function `getch()` is used to get a character from the user. It is equivalent to the normal `getchar()` except that we can disable the line buffering to avoid pressing Enter after input. The functions `attron()` and `attroff()` are used to switch some attributes on and off respectively. In the example they print the character in bold.
+
+These are the calls most programs make first. [Initialization and wrapup](../init-and-debugging/initialization-and-wrapup.md) covers the rest: the functions that may be called before `initscr()`, such as `newterm()` for more than one terminal, and `endwin()`, which ends a curses session.

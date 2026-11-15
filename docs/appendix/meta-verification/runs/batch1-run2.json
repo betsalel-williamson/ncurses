@@ -1,0 +1,365 @@
+[
+  {
+    "id": "L2",
+    "claim": "Post the form with `form_post()`",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5528-5529",
+      "form/form.h:429-430",
+      "man/form_post.3x:32-41"
+    ],
+    "quote": "HOWTO: \"Post the form with form_post()\"; form.h/man export post_form()/unpost_form(), not form_post().",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "From the HOWTO wording alone I would already treat form_post() as a wrong name; form.h confirmed there is no such symbol."
+  },
+  {
+    "id": "L3",
+    "claim": "Unpost the menu with `form_unpost()`",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5538",
+      "form/form.h:429-430",
+      "man/form_post.3x:32-41"
+    ],
+    "quote": "HOWTO: \"Unpost the menu with form_unpost()\"; API is unpost_form(), and this is a form chapter (not menu).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "The printed form_unpost()/menu mix-up was already enough; headers only confirmed the real name."
+  },
+  {
+    "id": "L4",
+    "claim": "Free the memory allocated to menu by `free_form()`",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5542",
+      "form/form.h:414",
+      "man/form_new.3x:48-55"
+    ],
+    "quote": "HOWTO: \"Free the memory allocated to menu by free_form()\"; free_form() is the real form destructor, but the object is a form, not a menu.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict from the HOWTO sentence alone; free_form() existing does not make calling the form a menu correct."
+  },
+  {
+    "id": "L5",
+    "claim": "Successor and predecessor hooks set with `set_fieldtype_arg()`",
+    "opened": [
+      "doc/html/ncurses-intro.html:3349-3360",
+      "form/form.h:346-352",
+      "man/form_fieldtype.3x:59-67"
+    ],
+    "quote": "intro shows set_fieldtype_arg(... succ, pred) for order hooks; form.h/man define set_fieldtype_choice() for next/prev choice hooks, and set_fieldtype_arg() for make/copy/free arg hooks.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "The intro prototype already looked wrong; headers confirmed the distinct set_fieldtype_choice API."
+  },
+  {
+    "id": "L6",
+    "claim": "`new_fieldtype()` prototype without its closing semicolon",
+    "opened": [
+      "doc/html/ncurses-intro.html:3260-3263"
+    ],
+    "quote": "FIELDTYPE *new_fieldtype(...) /* character validator */ with no trailing semicolon; free_fieldtype on the next line has one.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict; only this prototype block was needed."
+  },
+  {
+    "id": "L7",
+    "claim": "The library routines will that call them will return error indication",
+    "opened": [
+      "doc/html/ncurses-intro.html:3341-3344"
+    ],
+    "quote": "\"The library routines will that call them will return error indication when this happens.\"",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict from that sentence alone."
+  },
+  {
+    "id": "L8",
+    "claim": "should never see a NULL file pointer",
+    "opened": [
+      "doc/html/ncurses-intro.html:3340-3344",
+      "man/form_fieldtype.3x:98-118"
+    ],
+    "quote": "intro: \"your validation functions should never see a NULL file pointer\"; surrounding text is about pile/argument-block pointers, not FILE*.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "\"file pointer\" already looked wrong in context; the man page's argument-block wording sealed it."
+  },
+  {
+    "id": "L9",
+    "claim": "Example comment: This filed is like a password field",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:6073-6074"
+    ],
+    "quote": "field_opts_off(field[1], O_PUBLIC); /* This filed is like a password field */",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict; the typo is in the comment as printed."
+  },
+  {
+    "id": "L10",
+    "claim": "Merging the guides split the `field_pad()` comment out of its code block; the stray fence turned the next paragraph and the Form Attributes heading into code",
+    "opened": [
+      "doc/html/ncurses-intro.html:2062-2065",
+      "doc/html/NCURSES-Programming-HOWTO.html:5759-5781",
+      "man/form_field_attributes.3x:56-74"
+    ],
+    "quote": "Upstream intro/HOWTO/man show field_pad prototypes in ordinary code/man markup; the merge/fence failure is about this edition's docs, which are not primary evidence here.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "Without the edition shard, upstream field_pad samples alone cannot confirm a stray Markdown fence."
+  },
+  {
+    "id": "L11",
+    "claim": "Backspace at the start of a field moved to the previous field but left the cursor at its start",
+    "opened": [
+      "form/frm_driver.c:2587-2591",
+      "form/frm_driver.c:1563-1564",
+      "form/frm_driver.c:3669-3674"
+    ],
+    "quote": "With O_BS_OVERLOAD, FE_Delete_Previous at first position calls FN_Previous_Field; _nc_Set_Current_Field sets form->currow = form->curcol = 0.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "Before reading _nc_Set_Current_Field I only knew BS-overload navigated fields, not that the cursor is forced to the start."
+  },
+  {
+    "id": "L20",
+    "claim": "see `infocmp(1)` (line 579)",
+    "opened": [
+      "man/curs_getch.3x:576-579",
+      "doc/html/man/curs_getch.3x.html:361",
+      "man/infocmp.1m:32"
+    ],
+    "quote": "man/curs_getch.3x:579 is see infocmp(1M); HTML man page prints infocmp(1) while linking infocmp.1m.html; .TH is 1M.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "From the .3x source alone I would have said disagrees (it prints 1M); the HTML man page is what prints (1)."
+  },
+  {
+    "id": "L21",
+    "claim": "`tic(1)` (line 207)",
+    "opened": [
+      "man/curs_trace.3x:207",
+      "doc/html/man/curs_trace.3x.html:185",
+      "man/tic.1m:31"
+    ],
+    "quote": "man/curs_trace.3x:207 is tic(1M); HTML prints tic(1); tic page section is 1M.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML supplies the printed (1)."
+  },
+  {
+    "id": "L22",
+    "claim": "`@TIC@(1)` (line 77)",
+    "opened": [
+      "man/curs_extend.3x:77",
+      "doc/html/man/curs_extend.3x.html:75",
+      "man/tic.1m:31"
+    ],
+    "quote": "man source: @TIC@(1M); HTML renders tic(1); utility section is 1M.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML shows (1)."
+  },
+  {
+    "id": "L23",
+    "claim": "`@TIC@(1)` (line 669)",
+    "opened": [
+      "man/curs_inopts.3x:669",
+      "doc/html/man/curs_inopts.3x.html:314",
+      "man/tic.1m:31"
+    ],
+    "quote": "man source: @TIC@(1M); HTML prints tic(1).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML shows (1)."
+  },
+  {
+    "id": "L24",
+    "claim": "`@TIC@(1)` (line 63)",
+    "opened": [
+      "man/term.5:63",
+      "doc/html/man/term.5.html:53",
+      "man/tic.1m:31"
+    ],
+    "quote": "man/term.5:63 is @TIC@(1M); HTML prints tic(1).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML shows (1)."
+  },
+  {
+    "id": "L25",
+    "claim": "`@TIC@(1)` and `@INFOCMP@(1)` (line 142)",
+    "opened": [
+      "man/term_variables.3x:142",
+      "doc/html/man/term_variables.3x.html:114",
+      "man/tic.1m:31",
+      "man/infocmp.1m:32"
+    ],
+    "quote": "man source: @TIC@(1M) and @INFOCMP@(1M); HTML prints tic(1) and infocmp(1).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML shows both as (1)."
+  },
+  {
+    "id": "L26",
+    "claim": "The background character's set of attributes becomes a property of the character cell and move with it (line 101)",
+    "opened": [
+      "man/curs_bkgd.3x:101-104",
+      "doc/html/man/curs_bkgd.3x.html:84-85"
+    ],
+    "quote": "man source: \"and moves with it\"; HTML man page: \"and move with it\".",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Against the .3x source alone (moves) I would have said disagrees; HTML prints the claimed subject-verb error."
+  },
+  {
+    "id": "L27",
+    "claim": "The background character's set of attributes becomes a property of the character cell and move with it (line 92)",
+    "opened": [
+      "man/curs_bkgrnd.3x:92-95",
+      "doc/html/man/curs_bkgrnd.3x.html:85"
+    ],
+    "quote": "man source: \"and moves with it\"; HTML man page: \"and move with it\".",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Source-only would be disagrees; HTML prints move."
+  },
+  {
+    "id": "L28",
+    "claim": "The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one copy is an error",
+    "opened": [
+      "man/curs_bkgd.3x:101-108",
+      "man/curs_bkgrnd.3x:92-99"
+    ],
+    "quote": "Both pages share the same 51-word background-attributes paragraph (narrow vs wide API pages).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Reading only curs_bkgd.3x could not establish the duplicate; curs_bkgrnd.3x did."
+  },
+  {
+    "id": "L29",
+    "claim": "The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so one copy is an error",
+    "opened": [
+      "man/curs_border.3x:228-244",
+      "man/curs_clear.3x:117-133"
+    ],
+    "quote": "Both PORTABILITY notes repeat the same SVr4/immedok return-value paragraph (about 49–50 words of prose).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "One page alone could not show the duplicate; the second page confirmed it."
+  },
+  {
+    "id": "L30",
+    "claim": "term.5 and term.7 share the title \"term\"",
+    "opened": [
+      "man/term.5:32",
+      "man/term.7:31"
+    ],
+    "quote": ".TH term 5 ... and .TH term 7 ...",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict after opening both .TH lines."
+  },
+  {
+    "id": "L34",
+    "claim": "The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the terminal does not support color …), so one copy is an error",
+    "opened": [
+      "man/curs_bkgd.3x:171-174",
+      "man/curs_bkgrnd.3x:160-163"
+    ],
+    "quote": "Identical sentence: \"If the terminal does not support color, or if color has not been initialized with start_color(3X), ncurses ignores the new background character's color pair selection.\"",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Needed the second page to confirm the duplicate color paragraph."
+  },
+  {
+    "id": "L35",
+    "claim": "The site's man pages showed literal `**` around page references and after italic words, e.g. `**curs_getch(3X),** **curs_variables(3X),** **wresize(3X)**`",
+    "opened": [
+      "man/resizeterm.3x:200-203"
+    ],
+    "quote": "SEE ALSO uses ordinary \\fB...\\fP man markup; site/pandoc rendering is outside allowed primary evidence for this run.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "Man source alone cannot show what the site emitted."
+  },
+  {
+    "id": "L36",
+    "claim": "The site showed the page as troff source because pandoc stopped at the table format `Lf(BI)`",
+    "opened": [
+      "man/infocmp.1m:205-209"
+    ],
+    "quote": "infocmp.1m has a tbl header \"Lf(BI) Lf(BI) L\"; whether the site fallback showed raw troff is not verifiable without site/.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "Finding Lf(BI) only shows a plausible trigger, not the site symptom."
+  },
+  {
+    "id": "L37",
+    "claim": "The site showed the page as troff source because pandoc stopped at a table cell continued with a trailing backslash, and the backticks in troff's quote strings closed the fallback's code fence early",
+    "opened": [
+      "man/curs_terminfo.3x:1083"
+    ],
+    "quote": "curs_terminfo.3x line 1083 ends with a continuation backslash inside a table row; site rendering was not opened.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "The trailing backslash is present, but that does not settle the site/pandoc failure claim."
+  },
+  {
+    "id": "L38",
+    "claim": "In the runnable examples the cursor blinked white and black inside a blue form field",
+    "opened": [],
+    "quote": "Claim targets site/src/components/run-example.ts; site/ is excluded from this read-only evidence pass.",
+    "verdict": "can't tell",
+    "confidence": "low",
+    "earlier": "With nothing opened, the verdict is already can't tell."
+  },
+  {
+    "id": "L41",
+    "claim": "Post the menu with `menu_post()`; Unpost the menu with `menu_unpost()`",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4311-4321",
+      "menu/menu.h:239-263",
+      "man/menu_post.3x:32-41"
+    ],
+    "quote": "HOWTO: menu_post()/menu_unpost(); API is post_menu()/unpost_menu().",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "HOWTO names alone looked wrong; menu.h confirmed the real symbols."
+  },
+  {
+    "id": "L42",
+    "claim": "The menu can then by posted",
+    "opened": [
+      "doc/html/ncurses-intro.html:1579"
+    ],
+    "quote": "\"The menu can then by posted, that is written to an associated window.\"",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict from that sentence alone."
+  },
+  {
+    "id": "L43",
+    "claim": "When you call `unpost_menu()`, you erase the subwindow, However, neither of these…",
+    "opened": [
+      "doc/html/ncurses-intro.html:1709-1713"
+    ],
+    "quote": "\"When you call unpost_menu(), you erase the subwindow, However, neither of these actually modifies the screen.\"",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same verdict from the comma-However splice alone."
+  },
+  {
+    "id": "L44",
+    "claim": "see the `menu_attribs(3x)` manual page. (no closing parenthesis)",
+    "opened": [
+      "doc/html/ncurses-intro.html:1690-1691",
+      "man/menu_attributes.3x:30-31"
+    ],
+    "quote": "intro: \"(see the menu_attribs(3x) manual page.\" — missing \")\"; real page is menu_attributes(3x).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "The missing parenthesis was enough; the man page name mismatch was extra."
+  }
+]

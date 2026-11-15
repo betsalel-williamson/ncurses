@@ -1,0 +1,212 @@
+[
+  {
+    "id": "L2",
+    "claim_as_printed": "Post the form with `form_post()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Forms chapter"
+  },
+  {
+    "id": "L3",
+    "claim_as_printed": "Unpost the menu with `form_unpost()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Forms chapter"
+  },
+  {
+    "id": "L4",
+    "claim_as_printed": "Free the memory allocated to menu by `free_form()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Forms chapter"
+  },
+  {
+    "id": "L5",
+    "claim_as_printed": "Successor and predecessor hooks set with `set_fieldtype_arg()`",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "order-functions-for-custom-types",
+    "original_source": "ncurses-intro.html, The Forms Library"
+  },
+  {
+    "id": "L6",
+    "claim_as_printed": "`new_fieldtype()` prototype without its closing semicolon",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Forms Library"
+  },
+  {
+    "id": "L7",
+    "claim_as_printed": "The library routines will that call them will return error indication",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "validation-function-arguments",
+    "original_source": "ncurses-intro.html, The Forms Library"
+  },
+  {
+    "id": "L8",
+    "claim_as_printed": "should never see a NULL file pointer",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "validation-function-arguments",
+    "original_source": "ncurses-intro.html, The Forms Library"
+  },
+  {
+    "id": "L9",
+    "claim_as_printed": "Example comment: This filed is like a password field",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Field Options example"
+  },
+  {
+    "id": "L10",
+    "claim_as_printed": "Merging the guides split the `field_pad()` comment out of its code block; the stray fence turned the next paragraph and the Form Attributes heading into code",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "field-display-attributes",
+    "original_source": "This edition"
+  },
+  {
+    "id": "L11",
+    "claim_as_printed": "Backspace at the start of a field moved to the previous field but left the cursor at its start",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "try-it-make-backspace-and-delete-work",
+    "original_source": "This edition"
+  },
+  {
+    "id": "L20",
+    "claim_as_printed": "see `infocmp(1)` (line 579)",
+    "appears_in": "man/curs_getch.3x",
+    "section": "",
+    "original_source": "man/curs_getch.3x"
+  },
+  {
+    "id": "L21",
+    "claim_as_printed": "`tic(1)` (line 207)",
+    "appears_in": "man/curs_trace.3x",
+    "section": "",
+    "original_source": "man/curs_trace.3x"
+  },
+  {
+    "id": "L22",
+    "claim_as_printed": "`@TIC@(1)` (line 77)",
+    "appears_in": "man/curs_extend.3x",
+    "section": "",
+    "original_source": "man/curs_extend.3x"
+  },
+  {
+    "id": "L23",
+    "claim_as_printed": "`@TIC@(1)` (line 669)",
+    "appears_in": "man/curs_inopts.3x",
+    "section": "",
+    "original_source": "man/curs_inopts.3x"
+  },
+  {
+    "id": "L24",
+    "claim_as_printed": "`@TIC@(1)` (line 63)",
+    "appears_in": "docs/man/term/02-description.5",
+    "section": "",
+    "original_source": "man/term.5"
+  },
+  {
+    "id": "L25",
+    "claim_as_printed": "`@TIC@(1)` and `@INFOCMP@(1)` (line 142)",
+    "appears_in": "man/term_variables.3x",
+    "section": "",
+    "original_source": "man/term_variables.3x"
+  },
+  {
+    "id": "L26",
+    "claim_as_printed": "The background character's set of attributes becomes a property of the character cell and move with it (line 101)",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "original_source": "ncurses manual page curs_bkgd(3X)"
+  },
+  {
+    "id": "L27",
+    "claim_as_printed": "The background character's set of attributes becomes a property of the character cell and move with it (line 92)",
+    "appears_in": "man/curs_bkgrnd.3x",
+    "section": "",
+    "original_source": "ncurses manual page curs_bkgrnd(3X)"
+  },
+  {
+    "id": "L28",
+    "claim_as_printed": "The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one copy is an error",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "original_source": "merlon review --no-compile (duplicate-paragraph)"
+  },
+  {
+    "id": "L29",
+    "claim_as_printed": "The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so one copy is an error",
+    "appears_in": "man/curs_border.3x",
+    "section": "",
+    "original_source": "merlon review --no-compile (duplicate-paragraph)"
+  },
+  {
+    "id": "L30",
+    "claim_as_printed": "term.5 and term.7 share the title \"term\"",
+    "appears_in": "man/term.5",
+    "section": "",
+    "original_source": "merlon review --no-compile (similar-titles)"
+  },
+  {
+    "id": "L34",
+    "claim_as_printed": "The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the terminal does not support color …), so one copy is an error",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "original_source": "merlon review --no-compile (duplicate-paragraph), after sharding"
+  },
+  {
+    "id": "L35",
+    "claim_as_printed": "The site's man pages showed literal `**` around page references and after italic words, e.g. `**curs_getch(3X),** **curs_variables(3X),** **wresize(3X)**`",
+    "appears_in": "man/resizeterm.3x",
+    "section": "SEE ALSO",
+    "original_source": "This edition's site build (sync.mjs through pandoc 3.1.3)"
+  },
+  {
+    "id": "L36",
+    "claim_as_printed": "The site showed the page as troff source because pandoc stopped at the table format `Lf(BI)`",
+    "appears_in": "man/infocmp.1m",
+    "section": "",
+    "original_source": "This edition's site build (sync.mjs through pandoc 3.1.3)"
+  },
+  {
+    "id": "L37",
+    "claim_as_printed": "The site showed the page as troff source because pandoc stopped at a table cell continued with a trailing backslash, and the backticks in troff's quote strings closed the fallback's code fence early",
+    "appears_in": "man/curs_terminfo.3x",
+    "section": "",
+    "original_source": "This edition's site build (sync.mjs through pandoc 3.1.3)"
+  },
+  {
+    "id": "L38",
+    "claim_as_printed": "In the runnable examples the cursor blinked white and black inside a blue form field",
+    "appears_in": "site/src/components/run-example.ts",
+    "section": "",
+    "original_source": "Reader report on the fields page"
+  },
+  {
+    "id": "L41",
+    "claim_as_printed": "Post the menu with `menu_post()`; Unpost the menu with `menu_unpost()`",
+    "appears_in": "docs/client-library/menus/overview.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L42",
+    "claim_as_printed": "The menu can then by posted",
+    "appears_in": "docs/client-library/menus/overview.md",
+    "section": "",
+    "original_source": "Writing Programs with NCURSES, The Menu Library"
+  },
+  {
+    "id": "L43",
+    "claim_as_printed": "When you call `unpost_menu()`, you erase the subwindow, However, neither of these…",
+    "appears_in": "docs/client-library/menus/menu-windows.md",
+    "section": "",
+    "original_source": "Writing Programs with NCURSES, The Menu Library"
+  },
+  {
+    "id": "L44",
+    "claim_as_printed": "see the `menu_attribs(3x)` manual page. (no closing parenthesis)",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "",
+    "original_source": "Writing Programs with NCURSES, The Menu Library"
+  }
+]

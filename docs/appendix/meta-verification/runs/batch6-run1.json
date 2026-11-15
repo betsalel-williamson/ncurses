@@ -1,0 +1,351 @@
+[
+  {
+    "id": "L264",
+    "claim": "to revert to the original mode, type this: printf '\\033[0;37;40m\\n'",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:723-726",
+      "doc/html/man/clear.1.html:118-122"
+    ],
+    "quote": "HOWTO Introduction tells the reader to revert with echo \"^[[0;37;40m\" (ESC then [0;37;40m). That is the same SGR sequence printf '\\033[0;37;40m\\n' sends; clear(1) HTML likewise documents printf with \\033[\u2026] escapes.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "From the HOWTO alone I would have said disagrees because it prints echo, not printf; the shared escape sequence makes the printf form equivalent."
+  },
+  {
+    "id": "L268",
+    "claim": "control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1337-1342",
+      "man/curs_inopts.3x:153-157",
+      "man/curs_inopts.3x:442-448"
+    ],
+    "quote": "HOWTO names suspend (CTRL-Z), interrupt and quit (CTRL-C). man/curs_inopts.3x likewise discusses the interrupt, quit, suspend, and flow-control characters for cbreak vs raw.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same after the man page; the HOWTO later misstates cbreak handling, but that is outside this claim fragment."
+  },
+  {
+    "id": "L271",
+    "claim": "Other border functions draws lines with them (the forms-drawing characters)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2422-2436",
+      "doc/html/NCURSES-Programming-HOWTO.html:2500-2507",
+      "man/curs_border.3x:124-125"
+    ],
+    "quote": "HOWTO \u00a79.5 says mvhline/mvvline create a horizontal or vertical line of the specified length; the example draws with ASCII '|','-','+', not ACS forms-drawing. man/curs_border.3x: forms-drawing characters are used when a border argument is 0, not that 'other border functions' inherently draw with them. Grammar: 'draws' disagrees with plural subject.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "After only the HOWTO section I already had disagrees (ASCII example, no forms-drawing claim)."
+  },
+  {
+    "id": "L272",
+    "claim": "Initially the terminal has echoing enabled and is in ordinary cooked mode, so one or the other has to be changed before calling getch(); otherwise, the program's output will be unpredictable",
+    "opened": [
+      "doc/html/ncurses-intro.html:768-772",
+      "man/curs_inopts.3x:137-160",
+      "man/curs_getch.3x (via doc/html/man/curs_getch.3x.html mode notes)"
+    ],
+    "quote": "ncurses-intro Input: 'Since initially the terminal has echoing enabled and is in ordinary cooked mode, one or the other has to changed before calling getch(); otherwise, the program's output will be unpredictable.' Substance matches; man pages require cbreak/raw for interactive getch with echo.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches after the intro alone; man pages only confirm."
+  },
+  {
+    "id": "L273",
+    "claim": "While getnstr() is reading the line, F1 is ignored, like the other function keys",
+    "opened": [
+      "man/curs_getstr.3x:96-108",
+      "ncurses/base/lib_getstr.c:112-148"
+    ],
+    "quote": "wgetnstr discards most function keys with beep(); KEY_F(1) is KEY_MIN-class and takes the discard/beep path. Not all keys are ignored: KEY_LEFT/KEY_BACKSPACE erase; KEY_DOWN/KEY_ENTER terminate. 'Ignored' is loose (beep), but F1 is not inserted.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "From the man page alone I nearly said disagrees because discards call beep and some KEY_* are handled; source confirms F1 is discarded."
+  },
+  {
+    "id": "L274",
+    "claim": "Fifth is the color index. It is the index given during init_pair()",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2187-2195",
+      "man/curs_attr.3x:240-242",
+      "man/curs_color.3x:197-199"
+    ],
+    "quote": "HOWTO chgat comment calls the fifth argument 'the color index'. man/curs_attr.3x: 'the color pair argument is a color pair index (as in the first argument of init_pair)'. Color index in curs_color is a palette color (COLOR_*), not the pair number.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "HOWTO alone would match the claim to itself; the man page supplies the contradiction."
+  },
+  {
+    "id": "L275",
+    "claim": "Do this before the next wgetch(); otherwise another mouse event might come in and make the first one inaccessible",
+    "opened": [
+      "doc/html/ncurses-intro.html:887-892",
+      "man/curs_mouse.3x:188-195"
+    ],
+    "quote": "ncurses-intro: call getmouse() 'before the next wgetch(), otherwise another mouse event might come in and make the first one inaccessible.' getmouse man: removes the event from the queue.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from the intro alone."
+  },
+  {
+    "id": "L276",
+    "claim": "An example showing all the characters, with 31 SHOW() lines and no ACS_URCORNER",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3313-3362",
+      "include/curses.h.in:370",
+      "man/curs_addch.3x:350"
+    ],
+    "quote": "HOWTO: 'Here is an example showing all the characters.' The ACS example has exactly 31 SHOW() lines (UL/LL/LR corners, etc.) and never references ACS_URCORNER, which exists in curses.h/man as the upper-right corner.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Counting SHOW lines alone suggested matches as a description; ACS_URCORNER in the headers shows 'all the characters' is false."
+  },
+  {
+    "id": "L277",
+    "claim": "Note that new_field() does not copy the pointer array into private storage",
+    "opened": [
+      "doc/html/ncurses-intro.html:1957-1968",
+      "man/form_new.3x:40-46",
+      "form/frm_def.c:167"
+    ],
+    "quote": "Intro attributes the non-copying of the FIELD** array to new_field(), but the preceding API is new_form(FIELD **fields). new_form stores form->field = fields without copying; new_field() does not take a pointer array.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Intro wording alone looked self-consistent until compared with new_form's signature and Connect_Fields."
+  },
+  {
+    "id": "L278",
+    "claim": "By default, all options are on.",
+    "opened": [
+      "doc/html/ncurses-intro.html:2096-2097",
+      "man/form_field_opts.3x:70-111",
+      "form/fld_def.c:57"
+    ],
+    "quote": "Intro: 'By default, all options are on.' man/form_field_opts.3x: standard options 'all are on by default'; extension options 'are off by default'. default_field.opts is STD_FIELD_OPTS.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "Matches the intro; the man page narrows 'all' to standard options, so confidence drops from high."
+  },
+  {
+    "id": "L279",
+    "claim": "Each field structure contains one character pointer slot ... The (char *) type is retained for System V compatibility",
+    "opened": [
+      "doc/html/ncurses-intro.html:2212-2224",
+      "man/form_field_userptr.3x:40-41",
+      "form/fld_user.c:40-48"
+    ],
+    "quote": "Intro still shows char *userptr and says '(char *) type is retained for System V compatibility.' Current man and fld_user.c use void *userptr / void *usrptr.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "Intro alone would match; headers/man show the retained char* claim is outdated."
+  },
+  {
+    "id": "L280",
+    "claim": "The growth limit can be changed whether or not the O_STATIC bit is on, but has no effect until it is.",
+    "opened": [
+      "doc/html/ncurses-intro.html:2257-2258",
+      "form/fld_max.c:66-78",
+      "man/form_field_opts.3x:97-99"
+    ],
+    "quote": "Intro repeats the claim. set_max_field stores maxgrow always, but sets _MAY_GROW only when O_STATIC is off. O_STATIC on means fixed buffers; growth applies when O_STATIC is off. As written, 'until it is' (on) is the wrong polarity.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Ambiguous intro sentence suggested can't tell; fld_max.c settles that growth is active only with O_STATIC off."
+  },
+  {
+    "id": "L281",
+    "claim": "A REQ_MOVE_RIGHT from A will go to B",
+    "opened": [
+      "doc/html/ncurses-intro.html:2743-2747",
+      "form/frm_def.c:80-95"
+    ],
+    "quote": "Intro: 'A REQ_MOVE_RIGHT from A will go to B only if A, B, and C all share the same first line; otherwise it will skip over B to C.' Field ordering uses frow/fcol. The absolute claim omits the required condition.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Same after reading the full intro sentence with the condition."
+  },
+  {
+    "id": "L282",
+    "claim": "the position of a form for purposes of these requests is its upper-left corner",
+    "opened": [
+      "doc/html/ncurses-intro.html:2737-2741",
+      "form/frm_def.c:80-95"
+    ],
+    "quote": "Intro says the position of a form is its upper-left corner for visual field moves. Insert_Field_By_Position compares each field's frow/fcol \u2014 field corners, not a form object position.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Intro alone would match; driver/sort code shows 'form' should be 'field'."
+  },
+  {
+    "id": "L283",
+    "claim": "REQ_DEL_PREV: Delete previous word at cursor.",
+    "opened": [
+      "doc/html/ncurses-intro.html:2948-2951",
+      "man/form_driver.3x:86",
+      "form/form.h:282",
+      "form/frm_driver.c:2803-2804"
+    ],
+    "quote": "Intro lists REQ_DEL_PREV as 'Delete previous word at cursor.' man/form_driver.3x: 'Delete character before the cursor.' form.h: 'delete char before cursor.' FE_Delete_Previous deletes the previous character; REQ_DEL_WORD deletes a word.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Intro alone would match; man/header/driver contradict 'word'."
+  },
+  {
+    "id": "L284",
+    "claim": "When the current page is changed by set_current_field() call; When the current field is changed by a set_form_page() call",
+    "opened": [
+      "doc/html/ncurses-intro.html:3120-3124",
+      "man/form_page.3x:50-59"
+    ],
+    "quote": "Intro swaps the APIs: set_current_field sets the current field; set_form_page sets the form's page. The printed pairing of page\u2194set_current_field and field\u2194set_form_page is reversed.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Same after man/form_page.3x."
+  },
+  {
+    "id": "L285",
+    "claim": "ncurses is intended to be base-level conformant with the X/Open Curses standard ... almost all the features not directly concerned with wide characters and internationalization",
+    "opened": [
+      "doc/html/ncurses-intro.html:1396-1400",
+      "ANNOUNCE (XSI/X/Open mentions via search context)"
+    ],
+    "quote": "ncurses-intro XSI Curses Conformance: 'intended to be base-level conformant with the XSI Curses standard from X/Open. Many extended-level features (in fact, almost all features not directly concerned with wide characters and internationalization) are also supported.'",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from the intro section alone."
+  },
+  {
+    "id": "L286",
+    "claim": "Slide the tiles with the arrow keys until they're in order",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:7512-7519"
+    ],
+    "quote": "HOWTO Shuffle section only says 'A fun game, if you have time to kill' and cites JustForFun/shuffle.c. No shuffle.c appears under primary evidence paths (ncurses/,form/,menu/,panel/,progs/,include/,Ada95/,c++/,misc/,man/,doc/html/, INSTALL/NEWS/README/ANNOUNCE).",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Missing sample would have been 'missing'; without the program source the tile-sliding instructions cannot be checked."
+  },
+  {
+    "id": "L287",
+    "claim": "[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb",
+    "opened": [
+      "doc/html/ncurses-intro.html:1227-1230",
+      "man/resizeterm.3x:115-120"
+    ],
+    "quote": "Intro: resizeterm 'pads stdscr with blanks if the screen is larger' \u2014 pads is a verb. A pad window is a different concept (resizeterm: 'It is not possible to automatically resize pads.'). Whether the edition linked glossary/pad.md is outside primary evidence (appears_in is corrected text, not evidence).",
+    "verdict": "can't tell",
+    "confidence": "medium",
+    "earlier": "Technical 'pads stdscr with blanks' matches; the glossary-link placement needs the edition shard, which is not primary evidence."
+  },
+  {
+    "id": "L293",
+    "claim": "ncurses also uses the parameter's absolute value as the number of lines to take, and the binding's Rip_Off_Lines routine relies on this.",
+    "opened": [
+      "ncurses/base/lib_set_term.c:650-661",
+      "ncurses/base/lib_set_term.c:775-782",
+      "Ada95/gen/terminal_interface-curses.ads.m4:1893-1896",
+      "Ada95/gen/terminal_interface-curses.adb.m4:2322-2327",
+      "man/curs_kernel.3x:243-255"
+    ],
+    "quote": "Public ripoffline() collapses the argument to \u00b11, but _nc_ripoffline stores the full value and later uses count = abs(line) when creating the ripped window. Ada Rip_Off_Lines imports _nc_ripoffline and documents that absolute value.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "man/curs_kernel.3x alone (one line only) would suggest disagrees; _nc_ripoffline and the Ada binding confirm the claim."
+  },
+  {
+    "id": "L294",
+    "claim": "parse an entire terminfo file into a doubly-linked circular list of entry structures",
+    "opened": [
+      "doc/html/hackguide.html:704-707",
+      "ncurses/tinfo/comp_parse.c:58-76",
+      "ncurses/tinfo/entries.c:55-62",
+      "include/term_entry.h:123-133"
+    ],
+    "quote": "Hackguide says doubly-linked circular list. ENTRY has next/last (doubly linked), but enqueue sets tail->next = NULL and the entries.c diagram shows NULL ends \u2014 a linear list, not circular.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Hackguide alone would match; enqueue/entries.c refute 'circular'."
+  },
+  {
+    "id": "L295",
+    "claim": "This, for example, is where the AIX box1 capability gets translated to an acsc string.",
+    "opened": [
+      "doc/html/hackguide.html:762-767",
+      "ncurses/tinfo/parse_entry.c:1089-1114"
+    ],
+    "quote": "Hackguide points at parse_entry translation of AIX box1 to acsc. parse_entry.c: 'Translate AIX forms characters' from box_chars_1 into acs_chars with warning 'acsc string synthesized from AIX capabilities'.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches after hackguide; source confirms."
+  },
+  {
+    "id": "L296",
+    "claim": "The tput and clear utilities just do an entry load followed by a tputs() of a selected capability.",
+    "opened": [
+      "doc/html/hackguide.html:779-781",
+      "progs/tput.c:463-464",
+      "progs/clear_cmd.c:52-61"
+    ],
+    "quote": "Hackguide states that simplification. clear_cmd uses tputs(clear_screen, \u2026) (and optional E3). tput calls setupterm then capability output \u2014 more than a single tputs, but the core path matches the description.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "Hackguide alone would be high; reading tput.c shows more command handling, so medium."
+  },
+  {
+    "id": "L297",
+    "claim": "and also interprets the contents of the $TERM environment variable",
+    "opened": [
+      "INSTALL:177-180"
+    ],
+    "quote": "INSTALL \u00a72 with --enable-termcap: 'the library will search /etc/termcap before the terminfo database, and will also interpret the contents of the $TERM environment variable.'",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from INSTALL alone (in the enable-termcap paragraph)."
+  },
+  {
+    "id": "L298",
+    "claim": "$(prefix)/man: the manual pages",
+    "opened": [
+      "INSTALL:86-93"
+    ],
+    "quote": "INSTALL: 'Under $(prefix)/man: the manual pages' among the install layout entries.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from INSTALL alone."
+  },
+  {
+    "id": "L300",
+    "claim": "The color pair is stored with the attributes, and the wide-character functions use the attr_t type and names such as attr_on().",
+    "opened": [
+      "man/curs_attr.3x:169-179",
+      "man/curs_attr.3x:548-557",
+      "man/curs_attr.3x:85-88"
+    ],
+    "quote": "COLOR_PAIR can be or'd into attributes; attr_t can hold a color pair in A_COLOR. Wide API includes attr_on/wattr_on taking attr_t.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches after curs_attr.3x."
+  },
+  {
+    "id": "L301",
+    "claim": "most are named by adding _w to the 8-bit name, so waddch() becomes wadd_wch()",
+    "opened": [
+      "man/ncurses.3x:517-522"
+    ],
+    "quote": "man/ncurses.3x: where a non-wide name contains 'ch' or 'str', prefix with '_w'; example 'waddch becomes wadd_wch'.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from ncurses.3x alone."
+  },
+  {
+    "id": "L302",
+    "claim": "the library searches /etc/termcap before the terminfo database",
+    "opened": [
+      "INSTALL:177-180"
+    ],
+    "quote": "INSTALL: with --enable-termcap, 'the library will search /etc/termcap before the terminfo database'.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matches from INSTALL (enable-termcap context)."
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "batch": 1,
+  "run": 3,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": null,
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:20Z",
+  "finished": "2026-11-15T19:15:10Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 76,
+  "tools": [
+    { "name": "Shell", "calls": 9 },
+    { "name": "Glob", "calls": 2 },
+    { "name": "Read", "calls": 35 },
+    { "name": "Grep", "calls": 24 },
+    { "name": "Write", "calls": 2 },
+    { "name": "StrReplace", "calls": 1 },
+    { "name": "GetDynamicTools", "calls": 1 },
+    { "name": "CallDynamicTool", "calls": 2 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 1 }
+  ],
+  "plugins": [
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-cloud", "version": null, "calls": 2 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "cursor", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts tallied from this session's tool invocations (Shell/Glob/Read/Grep/Write/StrReplace/GetDynamicTools/CallDynamicTool). cursor-cloud plugin calls=2 are CallDynamicTool run-info only; GetDynamicTools counted under tools not plugins. Token/cost/effort/speed/model id unreported (run-info originalModelName null). merlon-docs skill loaded (SKILL.md + references/review/evidence-check.md)."
+}

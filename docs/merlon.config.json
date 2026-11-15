@@ -46,7 +46,11 @@
     "contributor/ada/index.md",
     "contributor/announce/index.md",
     "glossary/index.md",
-    "appendix/index.md"
+    "appendix/index.md",
+    "areas/tutorials/index.md",
+    "areas/guides/index.md",
+    "areas/reference/index.md",
+    "areas/about/index.md"
   ],
   "man": {
     "quiet": [

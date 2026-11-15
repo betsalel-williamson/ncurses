@@ -1,0 +1,52 @@
+{
+  "batch": 2,
+  "run": 1,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": null,
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T18:53:53Z",
+  "finished": "2026-11-15T19:17:10Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 88,
+  "tools": [
+    { "name": "Shell", "calls": 11 },
+    { "name": "Read", "calls": 40 },
+    { "name": "Grep", "calls": 28 },
+    { "name": "Glob", "calls": 2 },
+    { "name": "Write", "calls": 2 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "CallDynamicTool", "calls": 3 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 2 }
+  ],
+  "plugins": [
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "cursor", "version": null, "calls": 2 },
+    { "name": "cursor-cloud", "version": null, "calls": 1 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts tallied from this session's assistant tool invocations (Shell/Read/Grep/Glob/Write/GetDynamicTools/CallDynamicTool); tools[].calls sum to toolCalls (88). CallDynamicTool breakdown attributed under plugins: cursor TodoWrite x2, cursor-cloud run-info x1. skills: merlon-docs uses=2 (SKILL.md + references/review/evidence-check.md). model/effort/speed/tokens/cost null — run-info.originalModelName was null and the system reported no token or cost figures. started from batch started.txt; finished at write time UTC. No transcript.json yet for this bcId at tally time."
+}

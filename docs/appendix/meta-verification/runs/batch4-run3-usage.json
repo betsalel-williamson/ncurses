@@ -1,0 +1,152 @@
+{
+  "batch": 4,
+  "run": 3,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": "Composer",
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:52Z",
+  "finished": "2026-11-15T19:17:26Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 92,
+  "tools": [
+    {
+      "name": "Shell",
+      "calls": 12
+    },
+    {
+      "name": "Read",
+      "calls": 36
+    },
+    {
+      "name": "Grep",
+      "calls": 30
+    },
+    {
+      "name": "Glob",
+      "calls": 2
+    },
+    {
+      "name": "Write",
+      "calls": 2
+    },
+    {
+      "name": "GetDynamicTools",
+      "calls": 4
+    },
+    {
+      "name": "CallDynamicTool",
+      "calls": 6
+    }
+  ],
+  "skills": [
+    {
+      "name": "merlon-docs",
+      "uses": 2
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cursor",
+      "version": null,
+      "calls": 8
+    },
+    {
+      "name": "cursor-cloud",
+      "version": null,
+      "calls": 2
+    },
+    {
+      "name": "cursor-github",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "cursor-origin",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "cursor-subscriptions",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Github",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Vercel",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Context7",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Neon",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Stripe",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Firebase",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Semgrep",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Slack",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Linear",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Figma",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Google-calendar",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Granola",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Huggingface-skills",
+      "version": null,
+      "calls": 0
+    },
+    {
+      "name": "Agent Factory",
+      "version": null,
+      "calls": 0
+    }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Token/cost/effort/speed unreported by the system (null). Tool counts manually tallied from this subagent session's tool invocations (Shell/Read/Grep/Glob/Write plus GetDynamicTools/CallDynamicTool); toolCalls equals the tools[].calls sum. cursor plugin calls count GetDynamicTools+CallDynamicTool used for TodoWrite schemas/invocations; cursor-cloud counts run-info schema+invoke. merlon-docs uses=2 for SKILL.md and references/review/evidence-check.md. No helper subagents started. No out-without-merlon or docs/appendix/site evidence opened."
+}

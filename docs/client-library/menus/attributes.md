@@ -2,7 +2,7 @@
 
 > Adapted from *Writing Programs with NCURSES*, by Eric S. Raymond and Zeyd M. Ben-Halim and *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-The functions `set_menu_fore()` and `set_menu_back()` change the attribute of the selected item and of the unselected items. The names are misleading: they don't change the menu's foreground or background, which would have been useless.
+Color makes a menu look like the ones in text-mode DOS games. The HOWTO pointed to [a collection of them](https://web.archive.org/web/20010607231808/http://www.jersey.net/~debinjoe/games/index.htm), whose site is gone; the link is to the Internet Archive's 2001 copy. The functions `set_menu_fore()` and `set_menu_back()` change the attribute of the selected item and of the unselected items. The names are misleading: they don't change the menu's foreground or background, which would have been useless.
 
 The function `set_menu_grey()` sets the display attribute for the non-selectable items in the menu. That brings us to the one and only item option, `O_SELECTABLE`. Turn it off with `set_item_opts()` or `item_opts_off()` and the item can't be selected, like a grayed item in a graphical menu. It is the only option so far defined for items, but it is good practice to code as though other option bits might be on.
 

@@ -1,0 +1,198 @@
+[
+  {
+    "id": "L264",
+    "claim_as_printed": "to revert to the original mode, type this: printf '\\033[0;37;40m\\n'",
+    "appears_in": "docs/client-library/getting-started/introduction.md",
+    "section": "terminals-and-escape-sequences",
+    "original_source": "NCURSES Programming HOWTO, Introduction"
+  },
+  {
+    "id": "L268",
+    "claim_as_printed": "control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C)",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "raw-and-cbreak",
+    "original_source": "NCURSES Programming HOWTO, Initialization"
+  },
+  {
+    "id": "L271",
+    "claim_as_printed": "Other border functions draws lines with them (the forms-drawing characters)",
+    "appears_in": "docs/client-library/output/forms-characters.md",
+    "section": "",
+    "original_source": "This edition (commit eea2d03, Output guide)"
+  },
+  {
+    "id": "L272",
+    "claim_as_printed": "Initially the terminal has echoing enabled and is in ordinary cooked mode, so one or the other has to be changed before calling getch(); otherwise, the program's output will be unpredictable",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "the-getch-class-of-functions",
+    "original_source": "Writing Programs with NCURSES, Input"
+  },
+  {
+    "id": "L273",
+    "claim_as_printed": "While getnstr() is reading the line, F1 is ignored, like the other function keys",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "original_source": "This edition (commit d341cd3, Input guide)"
+  },
+  {
+    "id": "L274",
+    "claim_as_printed": "Fifth is the color index. It is the index given during init_pair()",
+    "appears_in": "docs/client-library/attributes/chgat.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chgat()"
+  },
+  {
+    "id": "L275",
+    "claim_as_printed": "Do this before the next wgetch(); otherwise another mouse event might come in and make the first one inaccessible",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "getting-the-events",
+    "original_source": "Writing Programs with NCURSES, Mouse Interfacing"
+  },
+  {
+    "id": "L276",
+    "claim_as_printed": "An example showing all the characters, with 31 SHOW() lines and no ACS_URCORNER",
+    "appears_in": "docs/client-library/screen/line-drawing-characters.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Line Graphics"
+  },
+  {
+    "id": "L277",
+    "claim_as_printed": "Note that new_field() does not copy the pointer array into private storage",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "creating-and-freeing-fields-and-forms",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L278",
+    "claim_as_printed": "By default, all options are on.",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "field-option-bits",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L279",
+    "claim_as_printed": "Each field structure contains one character pointer slot ... The (char *) type is retained for System V compatibility",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "field-user-pointer",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L280",
+    "claim_as_printed": "The growth limit can be changed whether or not the O_STATIC bit is on, but has no effect until it is.",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "variable-sized-fields",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L281",
+    "claim_as_printed": "A REQ_MOVE_RIGHT from A will go to B",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "inter-field-navigation-requests",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L282",
+    "claim_as_printed": "the position of a form for purposes of these requests is its upper-left corner",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "inter-field-navigation-requests",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L283",
+    "claim_as_printed": "REQ_DEL_PREV: Delete previous word at cursor.",
+    "appears_in": "docs/client-library/forms/form-driver.md",
+    "section": "editing-requests",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L284",
+    "claim_as_printed": "When the current page is changed by set_current_field() call; When the current field is changed by a set_form_page() call",
+    "appears_in": "docs/client-library/forms/hooks-and-form-options.md",
+    "section": "field-change-hooks",
+    "original_source": "Writing Programs with NCURSES, The Forms Library"
+  },
+  {
+    "id": "L285",
+    "claim_as_printed": "ncurses is intended to be base-level conformant with the X/Open Curses standard ... almost all the features not directly concerned with wide characters and internationalization",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "xopen-curses-conformance",
+    "original_source": "Writing Programs with NCURSES, X/Open Curses Conformance"
+  },
+  {
+    "id": "L286",
+    "claim_as_printed": "Slide the tiles with the arrow keys until they're in order",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Just For Fun (JustForFun/shuffle.c)"
+  },
+  {
+    "id": "L287",
+    "claim_as_printed": "[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "key_resize",
+    "original_source": "This edition (glossary links, PR 53, commit df81beb)"
+  },
+  {
+    "id": "L293",
+    "claim_as_printed": "ncurses also uses the parameter's absolute value as the number of lines to take, and the binding's Rip_Off_Lines routine relies on this.",
+    "appears_in": "docs/contributor/ada/implementation-details.md",
+    "section": "extended-ripoffline-usage",
+    "original_source": "This edition (Ada95 guide, commit e3fa730)"
+  },
+  {
+    "id": "L294",
+    "claim_as_printed": "parse an entire terminfo file into a doubly-linked circular list of entry structures",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "use-capability-resolution",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L295",
+    "claim_as_printed": "This, for example, is where the AIX box1 capability gets translated to an acsc string.",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "source-form-translation",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L296",
+    "claim_as_printed": "The tput and clear utilities just do an entry load followed by a tputs() of a selected capability.",
+    "appears_in": "docs/contributor/hackguide/other-utilities.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L297",
+    "claim_as_printed": "and also interprets the contents of the $TERM environment variable",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L298",
+    "claim_as_printed": "$(prefix)/man: the manual pages",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-1-choose-where-to-install",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L300",
+    "claim_as_printed": "The color pair is stored with the attributes, and the wide-character functions use the attr_t type and names such as attr_on().",
+    "appears_in": "docs/glossary/attribute.md",
+    "section": "",
+    "original_source": "This edition (glossary, PR 53, commit df81beb)"
+  },
+  {
+    "id": "L301",
+    "claim_as_printed": "most are named by adding _w to the 8-bit name, so waddch() becomes wadd_wch()",
+    "appears_in": "docs/glossary/wide-character-library.md",
+    "section": "",
+    "original_source": "This edition (glossary, PR 53, commit df81beb)"
+  },
+  {
+    "id": "L302",
+    "claim_as_printed": "the library searches /etc/termcap before the terminfo database",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "original_source": "INSTALL"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "batch": 3,
+  "run": 3,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": null,
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:00Z",
+  "finished": "2026-11-15T19:16:30Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 103,
+  "tools": [
+    { "name": "Shell", "calls": 8 },
+    { "name": "Glob", "calls": 2 },
+    { "name": "Read", "calls": 42 },
+    { "name": "Grep", "calls": 37 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "CallDynamicTool", "calls": 3 },
+    { "name": "Write", "calls": 5 },
+    { "name": "StrReplace", "calls": 4 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 1 }
+  ],
+  "plugins": [
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-cloud", "version": null, "calls": 1 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "cursor", "version": null, "calls": 2 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts tallied manually from this run's agent transcript (no system per-tool usage log). Token/cost/effort/speed/model id unreported (run-info.originalModelName null). cursor-cloud used for run-info; cursor used for TodoWrite (2). merlon-docs skill loaded (SKILL.md + references/review/evidence-check.md). Write count includes usage-file overwrites."
+}

@@ -1,0 +1,52 @@
+{
+  "batch": 6,
+  "run": 2,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": "Composer",
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:18Z",
+  "finished": "2026-11-15T19:15:27Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 72,
+  "tools": [
+    { "name": "Shell", "calls": 11 },
+    { "name": "Glob", "calls": 1 },
+    { "name": "Read", "calls": 27 },
+    { "name": "Grep", "calls": 26 },
+    { "name": "GetDynamicTools", "calls": 3 },
+    { "name": "CallDynamicTool", "calls": 2 },
+    { "name": "Write", "calls": 2 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 1 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 2 },
+    { "name": "cursor", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts tallied manually from this subagent's tool-invocation trace (Shell/Glob/Read/Grep/GetDynamicTools/CallDynamicTool/Write). cursor-cloud CallDynamicTool used for run-info and get-events. Token/cost/effort/speed unreported by the system (null). Model id from agent identity string 'powered by Composer'; run-info originalModelName was null. merlon-docs skill loaded (SKILL.md + references/review/evidence-check.md). No subagents spawned."
+}

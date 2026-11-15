@@ -83,7 +83,7 @@ jobs:
           echo "${VALE_SHA256}  /tmp/vale.tar.gz" | sha256sum -c -
           tar -xzf /tmp/vale.tar.gz -C /tmp vale
           sh site/scripts/vale-styles.sh
-          /tmp/vale --config docs/.vale.ini docs/client-library docs/contributor docs/appendix
+          /tmp/vale --config docs/.vale.ini docs/client-library docs/contributor docs/appendix docs/areas
       - name: Check the C listings' style
         env:
           # The x86_64 Linux wheel of clang-format 18.1.3 on PyPI; pip refuses any other file.

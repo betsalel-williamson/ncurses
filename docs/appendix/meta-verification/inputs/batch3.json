@@ -1,0 +1,212 @@
+[
+  {
+    "id": "L88",
+    "claim_as_printed": "Changes should be made to through the API; To write to a different window. use the routine waddch() ... is provided",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "standard-windows",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  },
+  {
+    "id": "L89",
+    "claim_as_printed": "rearing to get started; halfdelay()is called; if he doesn't respond with in certain time",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "halfdelay",
+    "original_source": "NCURSES Programming HOWTO, chapters 1–4"
+  },
+  {
+    "id": "L90",
+    "claim_as_printed": "Mail links to zmbenhal@netcom.com and esr@snark.thyrsus.com, and a link to adahome.com for the Ada95 binding",
+    "appears_in": "docs/client-library/getting-started/history.md",
+    "section": "who-wrote-it",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  },
+  {
+    "id": "L96",
+    "claim_as_printed": "create_box() puts the corners at x + w and y + h, so a box of width 10 and height 3 is drawn 11 columns wide and 4 rows tall, and the erase loop clears one row and column more",
+    "appears_in": "docs/client-library/windows/border-functions.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapters 5 and 9"
+  },
+  {
+    "id": "L97",
+    "claim_as_printed": "printw(string); mvprintw(y, x, string); ...",
+    "appears_in": "docs/client-library/windows/windows-and-refresh.md",
+    "section": "functions-for-stdscr-and-for-other-windows",
+    "original_source": "NCURSES Programming HOWTO, chapters 5 and 9"
+  },
+  {
+    "id": "L98",
+    "claim_as_printed": "let me clear few things; It doesn't create any thing; as user press a key; Let's dissect it by line by line",
+    "appears_in": "docs/client-library/windows/creating-windows.md",
+    "section": "explanation",
+    "original_source": "NCURSES Programming HOWTO, chapters 5 and 9"
+  },
+  {
+    "id": "L102",
+    "claim_as_printed": "If the terminal does not have such characters, curses.h will map them to a recognizable (though ugly) set of ASCII defaults",
+    "appears_in": "docs/client-library/output/forms-characters.md",
+    "section": "",
+    "original_source": "Writing Programs with NCURSES, Output and Using Forms Characters"
+  },
+  {
+    "id": "L103",
+    "claim_as_printed": "If n is negative, then the entire string will be added",
+    "appears_in": "docs/client-library/output/characters-and-strings.md",
+    "section": "the-addstr-class-of-functions",
+    "original_source": "NCURSES Programming HOWTO, chapter 6"
+  },
+  {
+    "id": "L104",
+    "claim_as_printed": "It gives the number of columns and the number of rows in a given window",
+    "appears_in": "docs/client-library/output/printw.md",
+    "section": "a-simple-printw-example",
+    "original_source": "NCURSES Programming HOWTO, chapter 6"
+  },
+  {
+    "id": "L105",
+    "claim_as_printed": "let's interact with world; message to be appeared on the screen; Try resizing your window(if possible); ch(of type char); the character printed ... until it is turned off",
+    "appears_in": "docs/client-library/output/",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 6"
+  },
+  {
+    "id": "L111",
+    "claim_as_printed": "With _DEBUG defined, print_win_params() prints at row 25, below the bottom of a 24-row screen, so nothing is shown",
+    "appears_in": "docs/client-library/windows/border-functions.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 9"
+  },
+  {
+    "id": "L114",
+    "claim_as_printed": "char str[80]; ... getstr(str);",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "original_source": "NCURSES Programming HOWTO, chapter 7"
+  },
+  {
+    "id": "L115",
+    "claim_as_printed": "Example 4. A Simple scanw example",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "original_source": "NCURSES Programming HOWTO, chapter 7"
+  },
+  {
+    "id": "L116",
+    "claim_as_printed": "These pseudo-line-oriented functions turn on echoing while they execute",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "the-getstr-class-of-functions",
+    "original_source": "Writing Programs with NCURSES, Input"
+  },
+  {
+    "id": "L117",
+    "claim_as_printed": "begin read them; must used; one or the other has to changed; The resulting string of characters are pointed to",
+    "appears_in": "docs/client-library/input/",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 7; Writing Programs with NCURSES, Input"
+  },
+  {
+    "id": "L121",
+    "claim_as_printed": "Initially RED color is defined with content 1000(r), 0(g), 0(b); init_color(COLOR_RED, 700, 0, 0) is described as lightening red by a minuscule",
+    "appears_in": "docs/client-library/attributes/colors.md",
+    "section": "changing-color-definitions",
+    "original_source": "NCURSES Programming HOWTO, chapters 8 and 10"
+  },
+  {
+    "id": "L122",
+    "claim_as_printed": "attr_get() is useful in scanning areas of screen when we are not sure what attribute each character is associated with",
+    "appears_in": "docs/client-library/attributes/attribute-functions.md",
+    "section": "attr_get",
+    "original_source": "NCURSES Programming HOWTO, chapters 8 and 10"
+  },
+  {
+    "id": "L123",
+    "claim_as_printed": "Other functions wchgat(), mvchgat(), wchgat() behave similarly",
+    "appears_in": "docs/client-library/attributes/chgat.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapters 8 and 10"
+  },
+  {
+    "id": "L124",
+    "claim_as_printed": "/* pager functionality by Joseph Spainhour\" <spainhou@bellsouth.net> */",
+    "appears_in": "docs/client-library/attributes/attributes.md",
+    "section": "a-simple-attributes-example",
+    "original_source": "NCURSES Programming HOWTO, chapters 8 and 10"
+  },
+  {
+    "id": "L125",
+    "claim_as_printed": "screeen; are we are at; cut bold on; Forth parameter; Viola !!!; loose track; the the source; Don't worry about all those initialization and other crap",
+    "appears_in": "docs/client-library/attributes/",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapters 8 and 10"
+  },
+  {
+    "id": "L129",
+    "claim_as_printed": "mvprintw(24, 0, \"Character pressed is ...\"); mvprintw(23, 0, \"You chose choice ...\")",
+    "appears_in": "docs/client-library/keyboard/key-usage-example.md",
+    "section": "a-simple-key-usage-example",
+    "original_source": "NCURSES Programming HOWTO, chapter 11"
+  },
+  {
+    "id": "L130",
+    "claim_as_printed": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;",
+    "appears_in": "docs/client-library/keyboard/key-usage-example.md",
+    "section": "a-simple-key-usage-example",
+    "original_source": "NCURSES Programming HOWTO, chapter 11"
+  },
+  {
+    "id": "L131",
+    "claim_as_printed": "the Functions keys; See the initialization section; if(ch == KEY_LEFT); User did a choice come out of the infinite loop",
+    "appears_in": "docs/client-library/keyboard/",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 11"
+  },
+  {
+    "id": "L135",
+    "claim_as_printed": "The default is one fifth of a second",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "clicks-and-mouseinterval",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L136",
+    "claim_as_printed": "if (event.bstate & BUTTON1_PRESSED) with mousemask(ALL_MOUSE_EVENTS, NULL)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L137",
+    "claim_as_printed": "report_choice(event.x + 1, event.y + 1, ...); j = starty + 3; mouse_x <= i + strlen(...)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L138",
+    "claim_as_printed": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; mvprintw(23, 1, ...); mvprintw(22, 1, ...)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L139",
+    "claim_as_printed": "The event mask table stops at BUTTON4_TRIPLE_CLICKED",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L140",
+    "claim_as_printed": "lets do the same thing from mouse; any thing; a class of mouse events have been enabled; Do some thing; thousands of a second; convert to mouse co-ordinates to screen relative",
+    "appears_in": "docs/client-library/mouse/",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 12"
+  },
+  {
+    "id": "L146",
+    "claim_as_printed": "getbegyx() and getmaxyx() store the window's beginning and maximum co-ordinates",
+    "appears_in": "docs/client-library/screen/coordinates.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 13"
+  }
+]

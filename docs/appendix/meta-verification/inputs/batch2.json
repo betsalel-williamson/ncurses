@@ -1,0 +1,212 @@
+[
+  {
+    "id": "L46",
+    "claim_as_printed": "menu_driver() accepts an ascii character (HOWTO); it accumulates printable ASCII characters (Writing Programs)",
+    "appears_in": "docs/client-library/menus/menu-driver.md",
+    "section": "pattern-matching",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter; Writing Programs with NCURSES, The Menu Library"
+  },
+  {
+    "id": "L47",
+    "claim_as_printed": "Example 21. Milt Columnar Menus Example",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "multi-column-menus",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L48",
+    "claim_as_printed": "The Menu Basics listing frees only items 0 and 1 of five, and calls free_menu() on a menu that is still posted",
+    "appears_in": "docs/client-library/menus/compiling.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L49",
+    "claim_as_printed": "The Multi Valued Menus listing frees only items 0 and 1 of eight, and calls free_menu() on a menu that is still posted",
+    "appears_in": "docs/client-library/menus/selecting-items.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L50",
+    "claim_as_printed": "The Menu Options listing frees the items before the menu",
+    "appears_in": "docs/client-library/menus/attributes.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L51",
+    "claim_as_printed": "The Menu User Pointer listing frees the items before the menu",
+    "appears_in": "docs/client-library/menus/user-pointer-and-hooks.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L52",
+    "claim_as_printed": "The Menu User Pointer listing stores the address of `MY_DATA data`, a variable local to the loop body, as each item's user pointer and calls through it after the loop",
+    "appears_in": "docs/client-library/menus/user-pointer-and-hooks.md",
+    "section": "the-user-pointer",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L53",
+    "claim_as_printed": "The list of menu options ends at O_NONCYCLIC",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "menu-options",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L54",
+    "claim_as_printed": "The mouse requests are quoted from an older menu_driver(3X), with its line breaks and soft hyphens (decora­tion), and without the double-click on an item",
+    "appears_in": "docs/client-library/menus/menu-driver.md",
+    "section": "mouse-requests",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L55",
+    "claim_as_printed": "A link to text mode dos games at http://www.jersey.net/~debinjoe/games/",
+    "appears_in": "docs/client-library/menus/attributes.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Menus chapter"
+  },
+  {
+    "id": "L56",
+    "claim_as_printed": "the drive assumes it is an application-specific command",
+    "appears_in": "man/menu_driver.3x",
+    "section": "APPLICATION-DEFINED COMMANDS",
+    "original_source": "ncurses manual pages"
+  },
+  {
+    "id": "L57",
+    "claim_as_printed": "menu_driver return one of the following error codes",
+    "appears_in": "man/menu_driver.3x",
+    "section": "RETURN VALUE",
+    "original_source": "ncurses manual pages"
+  },
+  {
+    "id": "L65",
+    "claim_as_printed": "replace a panel's window with a different window by calling `replace_window`",
+    "appears_in": "docs/client-library/panels/overview.md",
+    "section": "panel-functions",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L66",
+    "claim_as_printed": "The `stsdcr` window is a special case",
+    "appears_in": "docs/client-library/panels/input-and-stdscr.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L67",
+    "claim_as_printed": "The `panel_update` code ignores hidden panels",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L68",
+    "claim_as_printed": "You cannot do `top_panel()` or `bottom_panel` on a hidden panel()",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L69",
+    "claim_as_printed": "Note that `wgetch` automatically calls `wrefresh`",
+    "appears_in": "docs/client-library/panels/input-and-stdscr.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L70",
+    "claim_as_printed": "For some reason the function `panel_hidden()` which tells whether a panel is hidden or not is not working, with a link to a 1999 bug report",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Panel Library chapter"
+  },
+  {
+    "id": "L71",
+    "claim_as_printed": "/* Update the stacking order. 2nd panel will be on top */ (also in the moving and hiding listings)",
+    "appears_in": "docs/client-library/panels/browsing.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Panel Library chapter"
+  },
+  {
+    "id": "L72",
+    "claim_as_printed": "The program reads a panel's position and size from its PANEL_DATA when it comes to the top, but never writes them back, so a moved panel jumps back to where it started the next time it is moved",
+    "appears_in": "docs/client-library/panels/moving-and-resizing.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Panel Library chapter"
+  },
+  {
+    "id": "L73",
+    "claim_as_printed": "\"Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Window)\", 83 characters on an 80-column screen",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Panel Library chapter"
+  },
+  {
+    "id": "L74",
+    "claim_as_printed": "Mainpulate; is used to created panels; removes it form the stack; Entered Resizing :Use",
+    "appears_in": "docs/client-library/panels/overview.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Panel Library chapter"
+  },
+  {
+    "id": "L75",
+    "claim_as_printed": "`bottom_panel` on a hidden panel()",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "original_source": "ncurses-intro.html, The Panels Library"
+  },
+  {
+    "id": "L81",
+    "claim_as_printed": "In the `cbreak()` mode these control characters are interpreted as any other character by the terminal driver",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "raw-and-cbreak",
+    "original_source": "NCURSES Programming HOWTO, chapters 1–4"
+  },
+  {
+    "id": "L82",
+    "claim_as_printed": "`endwin()` frees the memory taken by curses sub-system and its data structures and puts the terminal in normal mode",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "endwin",
+    "original_source": "NCURSES Programming HOWTO, chapters 1–4"
+  },
+  {
+    "id": "L83",
+    "claim_as_printed": "`<curses.h>` also includes `<termios.h>`, `<termio.h>`, or `<sgtty.h>` depending on your system",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  },
+  {
+    "id": "L84",
+    "claim_as_printed": "In linking with `curses` you need to have `-lncurses` ... There is no need for any other libraries",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  },
+  {
+    "id": "L85",
+    "claim_as_printed": "To use ncurses library functions, you have to include ncurses.h in your programs",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "original_source": "NCURSES Programming HOWTO, chapters 1–4"
+  },
+  {
+    "id": "L86",
+    "claim_as_printed": "`bool`: boolean type, actually a \"char\"",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "variables",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  },
+  {
+    "id": "L87",
+    "claim_as_printed": "`OK`: error flag returned by routines when things go right",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "variables",
+    "original_source": "ncurses-intro.html, Introduction and An Overview of Curses"
+  }
+]

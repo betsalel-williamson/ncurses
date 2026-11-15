@@ -1,0 +1,52 @@
+{
+  "batch": 3,
+  "run": 1,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": "Composer",
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:17Z",
+  "finished": "2026-11-15T19:17:35Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 77,
+  "tools": [
+    { "name": "Shell", "calls": 12 },
+    { "name": "Glob", "calls": 1 },
+    { "name": "Read", "calls": 39 },
+    { "name": "Grep", "calls": 18 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "CallDynamicTool", "calls": 3 },
+    { "name": "Write", "calls": 2 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 2 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 3 },
+    { "name": "cursor", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Token/cost/effort/speed unreported (run-info originalModelName null; no usage events). toolCalls tallied manually from this session's tool invocations (12+1+39+18+2+3+2=77). merlon-docs loaded twice (SKILL.md + references/review/evidence-check.md). cursor-cloud plugin calls are CallDynamicTool invocations (run-info, list-cloud-agents, get-events). No subagents spawned. Model id taken from host identity text (Composer); system did not return a more specific model id."
+}

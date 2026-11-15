@@ -1,0 +1,122 @@
+[
+  {
+    "id": "L56",
+    "batch": 2,
+    "claim": "the drive assumes it is an application-specific command",
+    "appears_in": "man/menu_driver.3x",
+    "section": "APPLICATION-DEFINED COMMANDS",
+    "votes": [
+      "matches",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 1,
+      "superseded": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L57",
+    "batch": 2,
+    "claim": "menu_driver return one of the following error codes",
+    "appears_in": "man/menu_driver.3x",
+    "section": "RETURN VALUE",
+    "votes": [
+      "matches",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 1,
+      "superseded": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L203",
+    "batch": 4,
+    "claim": "`timed_wait()`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "keyboard-input",
+    "votes": [
+      "disagrees",
+      "superseded",
+      "missing"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "superseded": 1,
+      "missing": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L215",
+    "batch": 5,
+    "claim": "`comp_main.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "",
+    "votes": [
+      "missing",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 1,
+      "superseded": 1,
+      "disagrees": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L287",
+    "batch": 6,
+    "claim": "[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "key_resize",
+    "votes": [
+      "can't tell",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "matches": 1,
+      "disagrees": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "batch": 6,
+  "run": 3,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": "Composer",
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:26Z",
+  "finished": "2026-11-15T19:17:20Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 126,
+  "tools": [
+    { "name": "Shell", "calls": 14 },
+    { "name": "Read", "calls": 53 },
+    { "name": "Grep", "calls": 48 },
+    { "name": "Glob", "calls": 1 },
+    { "name": "Write", "calls": 3 },
+    { "name": "StrReplace", "calls": 5 },
+    { "name": "GetDynamicTools", "calls": 1 },
+    { "name": "CallDynamicTool", "calls": 1 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 2 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 2 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "cursor", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts tallied manually from this session's tool invocations (14+53+48+1+3+5+1+1=126). skills.merlon-docs uses=2 for loading SKILL.md and references/review/evidence-check.md (five-step check applied to all 28 claims). plugins list every MCP/connector namespace available to the run; cursor-cloud calls=2 (GetDynamicTools + CallDynamicTool run-info). Token/cost/effort/speed null — system does not report them (run-info originalModelName null; model recorded as Composer per agent identity). No subagents."
+}

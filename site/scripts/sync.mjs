@@ -44,11 +44,17 @@ const GUIDES = [
   { src: 'docs/contributor/hackguide', route: 'contributing/hackguide', indexLabel: 'Introduction' },
   { src: 'docs/contributor/install', route: 'contributing/install', indexLabel: 'Introduction' },
   { src: 'docs/contributor/ada', route: 'contributing/ada', indexLabel: 'Introduction' },
-  { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Overview' },
-  { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Overview' },
-  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Overview' },
-  { src: 'docs/glossary', route: 'glossary', indexLabel: 'Overview' },
+  { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Introduction' },
+  // A glossary is looked up, not read in order, so its terms are listed A to Z.
+  { src: 'docs/glossary', route: 'glossary', indexLabel: 'Introduction', alphabetical: true },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
+  // The landing page of each top-level area of the sidebar, as MDN has.
+  { src: 'docs/areas/tutorials', route: 'learn', indexLabel: 'Overview' },
+  { src: 'docs/areas/guides', route: 'topics', indexLabel: 'Overview' },
+  { src: 'docs/areas/reference', route: 'reference', indexLabel: 'Overview' },
+  { src: 'docs/areas/about', route: 'about', indexLabel: 'Overview' },
 ];
 const base = `/${repoSlug.split('/')[1]}`;
 for (const g of GUIDES) rmSync(join(content, g.route.split('/')[0]), { recursive: true, force: true });
@@ -62,7 +68,15 @@ const routeOf = (target) => {
 for (const g of GUIDES) {
   const dir = join(repo, g.src);
   // Sidebar order follows the guide's index: the order its links list the shards.
-  const order = [...readFileSync(join(dir, 'index.md'), 'utf8').matchAll(/\]\(([^)#\s]+\.md)\)/g)].map((m) => m[1]);
+  // When the index has a "## Guide" list, that list sets the order; links in the prose above it
+  // (such as "packagers should read …") don't.
+  const indexText = readFileSync(join(dir, 'index.md'), 'utf8');
+  const guideList = indexText.split(/^## Guide$/m)[1] ?? indexText;
+  const order = [...guideList.matchAll(/\]\(([^)#\s]+\.md)\)/g)].map((m) => m[1]);
+  if (g.alphabetical) {
+    const term = (f) => (/^# (.+)$/m.exec(readFileSync(join(dir, f), 'utf8'))?.[1] ?? f).toLowerCase();
+    order.sort((x, y) => term(x).localeCompare(term(y), 'en'));
+  }
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
     let text = readFileSync(join(dir, file), 'utf8');
     const h1 = /^# (.+)\n+/.exec(text);
