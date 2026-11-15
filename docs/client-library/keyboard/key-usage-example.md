@@ -111,4 +111,4 @@ Use the up and down arrows to move the highlight, and press Enter to choose. Any
 
 The window is centered with `LINES` and `COLS`, so the menu stays in the middle at any terminal size.
 
-The program prints your choice just before `endwin()`. A terminal that draws curses programs on an alternate screen, as xterm and the terminal on this page do, switches back to the normal screen at `endwin()`, so the message disappears with the menu.
+The program prints your choice just before `endwin()`. A terminal that draws curses programs on an alternate screen, as xterm and the terminal on this page do, switches back to the normal screen at `endwin()`, so on xterm the message disappears with the menu. The terminal on this page keeps the program's last screen in view after it ends, so you can read the choice there.
