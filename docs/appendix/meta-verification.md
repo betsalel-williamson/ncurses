@@ -35,7 +35,8 @@ Commit `568319e5809ad365ba195ebbd100946c53b42cb4`, Cursor Cloud Agent, six batch
 | Bo3 rollups | [findings/](meta-verification/findings/) |
 | Per-run cards and usage | [runs/](meta-verification/runs/) |
 | Batch inputs | [inputs/](meta-verification/inputs/) |
+| Adjudication of the misaligned rows and splits | [adjudication.md](meta-verification/adjudication.md) |
 
-Bo3 on 178 claims: 78 `disagrees`, 70 `matches`, 16 `can't tell`, 8 `superseded`, 1 `missing`, 5 three-way splits (`L56`, `L57`, `L203`, `L215`, `L287`). Against `errata.csv` under the map above: 76 aligned, 97 misaligned. The acting agent starts from the cover note and the handoff report's checklist.
+Bo3 on 178 claims: 78 `disagrees`, 70 `matches`, 16 `can't tell`, 8 `superseded`, 1 `missing`, 5 three-way splits (`L56`, `L57`, `L203`, `L215`, `L287`). Against `errata.csv` under the map above: 76 aligned, 97 misaligned. The acting agent starts from the cover note and the handoff report's checklist. The [adjudication](meta-verification/adjudication.md) rechecked every misaligned row and split from primary evidence: 83 rows stand, 9 were wrong because the original was right, and 10 can't be settled from the repository.
 
 A prior attempt inside the Claude docs session failed (safety filter / interrupted runs) and must not be treated as a completed pass; it is recorded in [Lessons learned](lessons-learned.md).
