@@ -19,7 +19,7 @@ int field_opts_off(FIELD *field,          /* field to alter */
 int field_opts(FIELD *field);             /* field to query */
 ```
 
-By default, all options are on. Here are the available option bits:
+By default, all the options below are on. ncurses adds four more options as extensions, which are off by default: `O_DYNAMIC_JUSTIFY`, `O_NO_LEFT_STRIP`, `O_EDGE_INSERT_STAY` and `O_INPUT_LIMIT`. The `form_field_opts(3X)` manual page describes them. Here are the standard option bits:
 
 `O_VISIBLE`  
 Controls whether the field is visible on the screen. Can be used during form processing to hide or pop up fields depending on the value of parent fields.
@@ -72,7 +72,7 @@ Calling `field_status()` on a field not currently selected for input will return
 
 ## Field User Pointer
 
-Each field structure contains one character pointer slot that is not used by the forms library. It is intended to be used by applications to store private per-field data. You can manipulate it with:
+Each field structure contains one pointer slot that is not used by the forms library. It is intended to be used by applications to store private per-field data. You can manipulate it with:
 
 ```c
 int set_field_userptr(FIELD *field,       /* field to alter */
@@ -80,8 +80,6 @@ int set_field_userptr(FIELD *field,       /* field to alter */
 
 char *field_userptr(FIELD *field);        /* fetch mode of field */
 ```
-
-(Properly, this user pointer field ought to have `(void *)` type. The `(char *)` type is retained for System V compatibility.)
 
 It is valid to set the user pointer of the default field (with a `set_field_userptr()` call passed a NULL field pointer.) When a new field is created, the default-field user pointer is copied to initialize the new field's user pointer.
 
@@ -98,7 +96,7 @@ int set_max_field(FIELD *field,     /* field to alter (may not be NULL) */
                    int max_size);   /* upper limit on field size */
 ```
 
-If the field is one-line, `max_size` is taken to be a column size limit; if it is multi-line, it is taken to be a line size limit. To disable any limit, use an argument of zero. The growth limit can be changed whether or not the `O_STATIC` bit is on, but has no effect until it is.
+If the field is one-line, `max_size` is taken to be a column size limit; if it is multi-line, it is taken to be a line size limit. To disable any limit, use an argument of zero. The growth limit can be changed whether or not the `O_STATIC` bit is on, but has no effect until that bit is turned off.
 
 The following properties of a field change when it becomes dynamic:
 
@@ -107,9 +105,7 @@ The following properties of a field change when it becomes dynamic:
 - The `dup_field()` and `link_field()` calls copy dynamic-buffer sizes. If the `O_STATIC` option is set on one of a collection of links, buffer resizing will occur only when the field is edited through that link.
 - The call `field_info()` will retrieve the original static size of the field; use `dynamic_field_info()` to get the actual dynamic size.
 
-A field's options cannot be changed while the field is currently selected. However, options may be changed on posted fields that are not current.
-
-The option values are bit-masks and can be composed with logical-or in the obvious way. You have seen the usage of switching off `O_AUTOSKIP` option. The following example clarifies usage of some more options. Other options are explained where appropriate.
+You have seen the usage of switching off `O_AUTOSKIP` option. The following example clarifies usage of some more options. Other options are explained where appropriate.
 
 **Example: Field Options Usage example**
 

@@ -36,7 +36,7 @@ These functions allow you to either set or query four different hooks. In each o
 This hook is called when the form is posted; also, just after each page change operation.
 
 `field_init`  
-This hook is called when the form is posted; also, just after each field change
+This hook is called when the form is posted; also, just after each field change.
 
 `field_term`  
 This hook is called just after field validation; that is, just before the field is altered. It is also called when the form is unposted.
@@ -47,10 +47,10 @@ This hook is called when the form is unposted; also, just before each page chang
 Calls to these hooks may be triggered
 
 1.  When user editing requests are processed by the forms driver
-2.  When the current page is changed by `set_current_field()` call
-3.  When the current field is changed by a `set_form_page()` call
+2.  When the current field is changed by a `set_current_field()` call
+3.  When the current page is changed by a `set_form_page()` call
 
-See <span id="ffocus">Field Change Commands</span> for discussion of the latter two cases.
+See [Field Change Commands](#field-change-commands) for discussion of the latter two cases.
 
 You can set a default hook for all fields by passing one of the set functions a NULL first argument.
 

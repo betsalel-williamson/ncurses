@@ -15,7 +15,7 @@ FIELD *link_fieldtype(FIELDTYPE *type1,
                       FIELDTYPE *type2);
 ```
 
-This function creates a field type that will accept any of the values legal for either of its argument field types (which may be either predefined or programmer-defined). If a `set_field_type()` call later requires arguments, the new composite type expects all arguments for the first type, than all arguments for the second. Order functions (see [Order Requests](form-driver.md#order-requests)) associated with the component types will work on the composite; what it does is check the validation function for the first type, then for the second, to figure what type the buffer contents should be treated as.
+This function creates a field type that will accept any of the values legal for either of its argument field types (which may be either predefined or programmer-defined). If a `set_field_type()` call later requires arguments, the new composite type expects all arguments for the first type, then all arguments for the second. Order functions (see [Order Requests](form-driver.md#order-requests)) associated with the component types will work on the composite; what it does is check the validation function for the first type, then for the second, to figure what type the buffer contents should be treated as.
 
 ### New Field Types
 
@@ -98,4 +98,4 @@ The interface for defining custom types is complicated and tricky. Rather than a
 
 Use that code as a model, and evolve it towards what you really want. You will avoid many problems and annoyances that way. The code in the `ncurses` library has been specifically exempted from the package copyright to support this.
 
-If your custom type defines order functions, have do something intuitive with a blank field. A useful convention is to make the successor of a blank field the types minimum value, and its predecessor the maximum.
+If your custom type defines order functions, have them do something intuitive with a blank field. A useful convention is to make the successor of a blank field the type's minimum value, and its predecessor the maximum.

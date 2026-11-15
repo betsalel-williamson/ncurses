@@ -18,7 +18,7 @@ int set_field_type(FIELD *field,          /* field to alter */
 FIELDTYPE *field_type(FIELD *field);      /* field to query */
 ```
 
-The validation type of a field is considered an attribute of the field. As with other field attributes, Also, doing `set_field_type()` with a `NULL` field default will change the system default for validation of newly-created fields.
+The validation type of a field is considered an attribute of the field. As with other field attributes, doing `set_field_type()` with a `NULL` field will change the system default for validation of newly-created fields.
 
 Here are the pre-defined validation types:
 
@@ -94,7 +94,7 @@ int set_field_type(FIELD *field,              /* field to alter */
                    double vmin, double vmax); /* valid range */
 ```
 
-Valid characters consist of an optional leading minus and digits. possibly including a decimal point. If your system supports locale's, the decimal point character used must be the one defined by your locale. The range check is performed on exit. If the range maximum is less than or equal to the minimum, the range is ignored.
+Valid characters consist of an optional leading minus and digits, possibly including a decimal point. If your system supports locales, the decimal point character used must be the one defined by your locale. The range check is performed on exit. If the range maximum is less than or equal to the minimum, the range is ignored.
 
 If the value passes its range check, it is padded with as many trailing zero digits as necessary to meet the padding argument.
 

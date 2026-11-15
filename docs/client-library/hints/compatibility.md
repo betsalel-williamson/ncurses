@@ -30,7 +30,7 @@ This change conforms ncurses to System V release 4 and the X/Open Curses standar
 
 ## X/Open Curses conformance
 
-ncurses is intended to be base-level conformant with the X/Open Curses standard. Many extended-level features are supported too: in fact, almost all the features not directly concerned with wide characters and internationalization.
+ncurses implements the interface that X/Open Curses Issue 7 describes, including the wide-character functions, which its [wide-character library](../../glossary/wide-character-library.md) provides. Where the standard leaves behavior open, ncurses follows SVr4 curses.
 
 One effect of conforming to X/Open Curses is the change in [background erase](#background-erase) behavior.
 

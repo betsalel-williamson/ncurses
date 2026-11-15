@@ -4,6 +4,8 @@
 
 A sliding-tile game, if you have time to kill. Slide the tiles with the arrow keys until they're in order, or press F1 to give up. The board's order is the program's argument, and the Run button runs it with 4.
 
+The program deals the tiles in a random order without checking that the result can be solved, and only half of all arrangements of a sliding-tile puzzle can be. In an unsolvable deal, such as one where everything is in order except two swapped tiles, no sequence of moves finishes the puzzle; press F1 and run it again.
+
 **Example: Shuffle**
 
 ```c args="4"

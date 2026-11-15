@@ -4,7 +4,7 @@
 
 ## Attributes of Forms
 
-As with field attributes, form attributes inherit a default from a system default form structure. These defaults can be queried or set by of these functions using a form-pointer argument of `NULL`.
+As with field attributes, form attributes inherit a default from a system default form structure. These defaults can be queried or set by these functions using a form-pointer argument of `NULL`.
 
 The principal attribute of a form is its field list. You can query and change this list with:
 
@@ -21,15 +21,15 @@ The second argument of `set_form_fields()` may be a NULL-terminated field pointe
 
 It may also be null, in which case the old fields are disconnected (and not freed) but no new ones are connected.
 
-The `field_count()` function simply counts the number of fields connected to a given from. It returns -1 if the form-pointer argument is NULL.
+The `field_count()` function simply counts the number of fields connected to a given form. It returns -1 if the form-pointer argument is NULL.
 
 ## Control of Form Display
 
-In the overview section, you saw that to display a form you normally start by defining its size (and fields), posting it, and refreshing the screen. There is an hidden step before posting, which is the association of the form with a frame window (actually, a pair of windows) within which it will be displayed. By default, the forms library associates every form with the full-screen window `stdscr`.
+In the overview section, you saw that to display a form you normally start by defining its size (and fields), posting it, and refreshing the screen. There is a hidden step before posting, which is the association of the form with a frame window (actually, a pair of windows) within which it will be displayed. By default, the forms library associates every form with the full-screen window `stdscr`.
 
-By making this step explicit, you can associate a form with a declared frame window on your screen display. This can be useful if you want to adapt the form display to different screen sizes, dynamically tile forms on the screen, or use a form as part of an interface layout managed by [panels](../../../doc/html/ncurses-intro.html#panels).
+By making this step explicit, you can associate a form with a declared frame window on your screen display. This can be useful if you want to adapt the form display to different screen sizes, dynamically tile forms on the screen, or use a form as part of an interface layout managed by [panels](../panels/index.md).
 
-The two windows associated with each form have the same functions as their analogues in the [menu library](../../../doc/html/ncurses-intro.html#menu). Both these windows are painted when the form is posted and erased when the form is unposted.
+The two windows associated with each form have the same functions as their analogues in the [menu library](../menus/index.md). Both these windows are painted when the form is posted and erased when the form is unposted.
 
 The outer or frame window is not otherwise touched by the form routines. It exists so the programmer can associate a title, a border, or perhaps help text with the form and have it properly refreshed or erased at post/unpost time. The inner window or subwindow is where the current form page is actually displayed.
 
@@ -41,7 +41,7 @@ int scale_form(FORM *form,                /* form to query */
                int *cols);                /* form cols */
 ```
 
-The form dimensions are passed back in the locations pointed to by the arguments. Once you have this information, you can use it to declare of windows, then use one of these functions:
+The form dimensions are passed back in the locations pointed to by the arguments. Once you have this information, you can use it to declare windows, then use one of these functions:
 
 ```c
 int set_form_win(FORM *form,              /* form to alter */
