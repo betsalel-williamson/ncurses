@@ -72,7 +72,7 @@ All five are confirmed. None of the splits came from conflicting evidence. The r
 
 - `L55`, `L178`: dead links. A fetch on 2026-11-15 agrees with the rows.
 - `L199`, `L241`, `L259`: the list is on GNU Mailman. A fetch on 2026-11-15 agrees with the rows.
-- `L55`'s sentence is back, with the URL as plain text marked as a dead link. The Wayback Machine lists a 2003 snapshot, but this environment couldn't open it to check that it shows the games.
+- `L55`'s sentence is back, linked to the Internet Archive's 2001 copy of the games collection. This environment can't reach the Wayback Machine, so the owner opened the copy and confirmed it.
 - `L174`, `L175`, `L176`: the original programs are in the HOWTO's example archive, which isn't in the repo, and its download now returns 403. A copy of the archive read for this check agrees. The rows now cite the programs as this edition runs them (`hanoi.md`, `shuffle.md`, `typing-tutor.md`) as well.
 
 Settled since the first count:

@@ -1299,7 +1299,7 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Repo confirms only that the link is printed. A fetch today agrees with the row; left as it is.",
+   "note": "Repo confirms only that the link is printed. A fetch today agrees with the row; left as it is. The sentence now links the Internet Archive's 2001 copy (web.archive.org/web/20010607231808/http://www.jersey.net/~debinjoe/games/index.htm), which the owner opened and confirmed; this environment can't reach the Wayback Machine.",
    "claim_states_error": false,
    "error_real": null,
    "errata_finding": "unsettled",
