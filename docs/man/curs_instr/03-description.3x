@@ -1,0 +1,28 @@
+.SH DESCRIPTION
+.B \%winstr
+extracts a string from a
+.I curses
+window
+.IR win ","
+starting at the cursor and stopping at the end of the line,
+and stores it in
+.IR str ","
+terminating it with a null character
+and
+omitting any attributes and color pair identifier
+that
+.I curses
+associates with each character.
+.B \%winnstr
+does the same,
+but copies at most
+.I n
+characters from
+.IR win "."
+A negative
+.I n
+implies no limit;
+.B \%winnstr
+then works like
+.BR \%winstr "."
+\fB\%ncurses\fP(3X) describes the variants of these functions.

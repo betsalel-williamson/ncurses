@@ -1,0 +1,23 @@
+.SH HISTORY
+X/Open Curses Issue\ 4 (1995) initially specified these functions.
+The System\ V Interface Definition Version\ 4 (1995),
+specified functions named
+.I \%winswstr
+and
+.I \%winsnwstr
+(and the usual variants).
+.\" SVID 4, vol 3., p. 513
+.\" The prototypes also identify the data type as `wchar`, not
+.\" `wchar_t`, but this may be an error since the "DESCRIPTION" section
+.\" consistently uses the latter. --GBR
+These were later additions to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+They differ from X/Open's later
+.I \%wins_wstr
+and
+.I \%wins_nwstr
+in that their
+.I wstr
+parameters are not
+.IR const "-qualified."

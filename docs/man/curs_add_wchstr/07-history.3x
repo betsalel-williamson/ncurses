@@ -1,0 +1,21 @@
+.SH HISTORY
+X/Open Curses Issue\ 4 (1995) initially specified these functions.
+The System\ V Interface Definition Version\ 4
+of the same year
+specified functions named
+.I \%waddwchstr
+and
+.I \%waddwchnstr
+(and the usual variants).
+.\" SVID 4, vol 3., p. 477
+These were later additions to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+They differed from X/Open's later
+.I \%wadd_wchstr
+and
+.I \%wadd_wchnstr
+in that they each took an argument of type
+.I \%wchar_t
+instead of
+.IR \%cchar_t "."

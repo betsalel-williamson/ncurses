@@ -1,0 +1,22 @@
+.SH DESCRIPTION
+\fB\%printw\fP,
+\fB\%wprintw\fP,
+\fB\%mvprintw\fP,
+and
+\fB\%mvwprintw\fP
+are analogous to \fI\%printf\fP(3).
+In effect,
+the string that would be output by \fI\%printf\fP(3) is instead output
+as though \fB\%waddstr\fP(3X) were used with
+.I win
+(or
+.BR \%stdscr )
+as its first argument.
+.PP
+\fB\%vwprintw\fP
+and
+\fB\%vw_printw\fP are analogous to \fI\%vprintf\fP(3),
+and perform a \fB\%wprintw\fP using a variable argument list.
+The third argument is a \fI\%va_list\fP,
+a pointer to a list of arguments,
+as defined in \fI\%stdarg.h\fP.

@@ -1,0 +1,15 @@
+.SH DESCRIPTION
+.B \%winsch
+inserts the
+.I curses
+character
+.I ch
+at the cursor position in the window
+.IR win "."
+The character previously at the cursor and any to its right move one
+cell to the right;
+the formerly rightmost character on the line is discarded.
+Unlike \fB\%addch\fP(3X),
+.B \%winsch
+does not advance the cursor.
+\fB\%ncurses\fP(3X) describes the variants of this function.

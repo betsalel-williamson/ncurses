@@ -1,0 +1,26 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+.B beep
+and
+.B flash
+return
+.B OK
+if the terminal type supports the corresponding capability:
+.B bell
+.RB ( bel )
+for
+.B beep
+and
+.B \%flash_screen
+.RB ( flash )
+for
+.BR flash "."
+Otherwise they return
+.BR ERR "."

@@ -1,0 +1,159 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+These functions are described in X/Open Curses Issue\ 4.
+It specifies no error conditions for them.
+.PP
+The defaults specified for forms-drawing characters apply in the POSIX
+locale.
+X/Open Curses makes it clear that the WACS_ symbols should be defined as
+a pointer to
+.I \%cchar_t
+data, e.g., in the discussion of
+.IR \%border_set "."
+A few implementations are problematic:
+.bP
+NetBSD
+.I curses
+defines the symbols as a
+.I \%wchar_t
+within a
+.IR \%cchar_t "."
+.bP
+HP-UX
+.I curses
+equates some of the
+.I \%ACS_
+symbols to the analogous
+.I \%WACS_
+symbols as if the
+.I \%ACS_
+symbols were
+wide characters.
+The misdefined symbols are the arrows
+and other symbols which are not used for line-drawing.
+.PP
+X/Open Curses does not specify symbols for thick- or double-lines.
+SVr4
+.I curses
+implementations defined their line-drawing symbols
+in terms of intermediate symbols.
+.I \%ncurses
+extends those symbols,
+providing new definitions not found in SVr4 implementations.
+.PP
+Not all Unicode-capable terminals provide support for VT100-style
+alternate character sets (i.e., the
+.I \%acsc_chars
+.RB ( acsc )
+capability),
+with their corresponding line-drawing characters.
+X/Open Curses did not address the aspect of integrating Unicode with
+line-drawing characters.
+Existing implementations of System\ V
+.I curses
+(AIX, HP-UX, Solaris)
+use only the
+.I \%acsc_chars
+.RB ( acsc )
+character-mapping to provide this feature.
+As a result,
+those implementations can use only single-byte line-drawing characters.
+.I \%ncurses
+5.3 (2002) provided a table of Unicode values to solve
+these problems.
+NetBSD
+.I curses
+incorporated that table in 2010.
+.PP
+.I \%ncurses
+uses the Unicode values instead of the terminal type description's
+.I \%acsc_chars
+.RB ( acsc )
+mapping as discussed in
+\fB\%ncurses\fP(3X) for the environment variable
+.IR \%NCURSES_NO_UTF8_ACS "."
+In contrast, for the same cases, the line-drawing characters
+described in \fB\%addch\fP(3X) will use only the ASCII default values.
+.PP
+Having Unicode available does not solve all of the problems with
+line-drawing for
+.IR curses ":"
+.bP
+The closest Unicode equivalents to the
+VT100 graphics
+.IR S1 ","
+.IR S3 ","
+.IR S7 ","
+and
+.I S9
+frequently are not displayed at
+the regular intervals which the terminal used.
+.bP
+The
+.I lantern
+is a special case.
+It originated with the AT&T 4410 terminal in the early 1980s.
+There is no accessible documentation depicting the lantern symbol
+on the AT&T terminal.
+.IP
+Lacking documentation, most readers assume that a
+.I "storm lantern"
+was intended.
+But there are several possibilities, all with problems.
+.IP
+Unicode 6.0 (2010) does provide two lantern symbols: U+1F383 and U+1F3EE.
+Those were not available in 2002,
+and are irrelevant since they lie outside the Basic Multilingual Plane
+and as a result are unavailable on many terminals.
+They are not storm lanterns, in any case.
+.IP
+Most
+.I "storm lanterns"
+have a tapering glass chimney
+(to guard against tipping);
+some have a wire grid protecting the chimney.
+.IP
+For the tapering appearance, \[u2603] U+2603 was adequate.
+In use on a terminal, no one can tell what the image represents.
+Unicode calls it a snowman.
+.IP
+Others have suggested these alternatives:
+\[sc] U+00A7 (section mark),
+\[u0398] U+0398 (theta),
+\[u03A6] U+03A6 (phi),
+\[u03B4] U+03B4 (delta),
+\[u2327] U+2327 (x in a rectangle),
+\[u256C] U+256C (forms double vertical and horizontal), and
+\[u2612] U+2612 (ballot box with x).
+.SS "Complex Characters"
+The complex character type
+.I \%cchar_t
+can store more than one wide character
+.RI \%( wchar_t ).
+X/Open Curses does not mention this possibility,
+specifying behavior only where
+.I wch
+is a single character,
+either spacing or non-spacing.
+.PP
+.I \%ncurses
+assumes that
+.I wch
+is constructed using \fB\%setcchar\fP(3X),
+and in turn that the result
+.bP
+contains at most one spacing character at the beginning of its list of
+wide characters,
+and zero or more non-spacing characters,
+or
+.bP
+holds one non-spacing character.
+.PP
+In the latter case,
+.I \%ncurses
+adds the non-spacing character to the active complex character.

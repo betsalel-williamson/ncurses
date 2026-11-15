@@ -1,0 +1,42 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 510
+.PP
+Issue\ 4 distinguished
+.I \%insnstr
+and
+.I \%winsnstr
+from the other functions documented above
+by stating they \*(``do not perform wrapping\*(''.
+This was probably an error,
+since it makes this group of functions inconsistent.
+No implementation of
+.I curses
+manifests this inconsistency,
+and Issue\ 7 removed the claim.
+.PP
+Issue\ 4 states that the entire string is inserted if
+.I n
+is less than 1.
+This is probably an error,
+.\" ...copied from SVID 4, which made the same error; see p. 510.
+because it is inconsistent with other functions
+such as
+.IR \%waddstr ","
+and differs from the SVr4
+.I curses
+and Solaris
+.I xcurses
+implementations.
+Nevertheless,
+Issue\ 7 retains the language.

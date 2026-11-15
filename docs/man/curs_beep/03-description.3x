@@ -1,0 +1,19 @@
+.SH DESCRIPTION
+.B beep
+and
+.B flash
+alert the terminal user:
+the former by sounding the terminal's audible alarm,
+and the latter by visibly attracting attention.
+Commonly,
+a terminal implements a visual bell by momentarily reversing the
+character foreground and background colors on the entire display;
+even a monochrome device can do this.
+These functions each attempt the other alert type if the one requested
+is unavailable.
+If neither is available,
+.I curses
+performs no action.
+Nearly all terminals have an audible alert mechanism such as a bell or
+piezoelectric buzzer,
+but only some can flash the screen.

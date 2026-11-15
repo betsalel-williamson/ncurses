@@ -1,0 +1,20 @@
+.SH RETURN VALUE
+These functions return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+In
+.IR \%ncurses ,
+failure occurs if the library cannot allocate enough memory for the
+buffer into which the output is formatted,
+or if the window pointer
+.I win
+is null.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

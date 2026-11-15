@@ -1,0 +1,15 @@
+.SH DESCRIPTION
+.B \%wdelch
+deletes the character at the cursor position in
+.IR win .
+It moves all characters to the right of the cursor on the same line to
+the left one position and replaces the contents of the rightmost
+position on the line with the window's background character;
+see \fB\%bkgd\fP(3X)
+(wide-character API users: \fB\%bkgrnd\fP(3X)).
+The cursor position does not change
+(after moving to
+.RI ( y ,
+.IR x ),
+if specified).
+\fB\%ncurses\fP(3X) describes the variants of this function.

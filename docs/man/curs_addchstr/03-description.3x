@@ -1,0 +1,38 @@
+.SH DESCRIPTION
+.B \%waddchstr
+copies the string of
+.I curses
+characters
+.I \%chstr
+to the window
+.IR win "."
+A null
+.I curses
+character terminates the string.
+.B \%waddchnstr
+does the same,
+but copies at most
+.I n
+characters,
+or as many as possible if
+.I n
+is
+.BR \-1 "."
+\fB\%ncurses\fP(3X) describes the variants of these functions.
+.PP
+Because these functions do not call \fB\%waddch\fP(3X) internally,
+they are faster than \fB\%waddstr\fP(3X) and \fB\%waddnstr\fP(3X).
+On the other hand,
+they
+.bP
+do not treat the backspace,
+carriage return,
+or line feed characters specially;
+.bP
+do not represent unprintable characters with \fB\%unctrl\fP(3X);
+.bP
+do not update the cursor position to follow the last character written;
+and
+.bP
+truncate the string at the window's right margin,
+rather than wrapping it to the next line and potentially scrolling.

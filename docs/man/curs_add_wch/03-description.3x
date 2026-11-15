@@ -1,0 +1,411 @@
+.SH DESCRIPTION
+.SS wadd_wch
+.B \%wadd_wch
+writes the
+.I curses
+complex character
+.I wch
+to the window
+.IR win ","
+then may advance the cursor position,
+analogously to the standard C library's \fI\%putwchar\fP(3).
+\fB\%ncurses\fP(3X) describes the variants of this function.
+.PP
+Construct a
+.I curses
+complex character
+from a
+.I wchar_t
+with \fB\%setcchar\fP(3X).
+A
+.I \%cchar_t
+can be copied from place to place using \fB\%win_wch\fP(3X) and
+.BR \%wadd_wch "."
+.I curses
+defines constants to aid the manipulation of character attributes;
+see \fB\%curs_attr\fP(3X).
+A complex character whose only character component is a wide space,
+and whose only attribute is
+.BR \%WA_NORMAL ,
+is a
+.IR "blank character" ","
+and therefore combines with the window's background character;
+see \fB\%curs_bkgrnd\fP(3X).
+.PP
+Much behavior depends on whether the wide characters in
+.I wch
+are spacing or non-spacing;
+see subsection \*(``Complex Characters\*('' below.
+.bP
+If
+.I wch
+contains a spacing character,
+then any character at the cursor is first removed.
+The complex character
+.IR wch ","
+with its attributes and color pair identifier,
+becomes the
+.I base
+of the
+.IR "active complex character" "."
+.bP
+If
+.I wch
+contains only non-spacing characters,
+.\" XXX: see wadd_wch_literal (the beginning of the array may be
+.\" nonspacing)
+they are combined with the active complex character.
+.I curses
+ignores its attributes and color pair identifier,
+and does not advance the cursor.
+.PP
+Further non-spacing characters added with
+.B \%wadd_wch
+are not written at the new cursor position but combine with the active
+complex character until another spacing character is written to the
+window or the cursor is moved.
+.PP
+If
+.I wch
+is a
+backspace,
+carriage return,
+line feed,
+or
+tab,
+the cursor moves appropriately within the window.
+.bP
+Backspace moves the cursor one character left;
+at the left margin of a window,
+it does nothing.
+.bP
+Carriage return moves the cursor to the left margin on the same line of
+the window.
+.bP
+Line feed performs \fB\%clrtoeol\fP(3X),
+then advances as if from the right margin
+(see below).
+.bP
+Tab advances the cursor to the next tab stop
+(possibly on the next line);
+these are placed at every eighth column by default.
+.IP
+You can alter the tab interval with the
+.B \%TABSIZE
+extension;
+see \fB\%curs_variables\fP(3X).
+.PP
+If
+.I wch
+is any other nonprintable character,
+.I curses
+draws it in printable form using the same convention as
+\fB\%wunctrl\fP(3X).
+Calling \fB\%win_wch\fP(3X) on the location of a nonprintable character
+does not retrieve the character itself,
+but its \fB\%wunctrl\fP(3X) representation.
+.PP
+Adding spacing characters with \fB\%wadd_wch\fP
+causes it to wrap at the right margin of the window.
+.bP
+If the cursor is not at the bottom of the scrolling region
+and advancement occurs at the right margin,
+the cursor automatically wraps to the beginning of the next line.
+.bP
+If the cursor is at the bottom of the scrolling region
+when advancement occurs at the right margin,
+and \fB\%scrollok\fP(3X) is enabled for
+.IR win ,
+the scrolling region scrolls up one line
+and the cursor wraps as above.
+Otherwise,
+advancement and scrolling do not occur,
+and
+.B \%wadd_wch
+returns
+.BR ERR "."
+.PP
+A window's margins may coincide with the screen boundaries.
+This may be a problem when
+.I \%ncurses
+updates the screen to match the
+.I curses
+window.
+When their right and bottom margins coincide,
+.I \%ncurses
+employs varying strategies
+to handle the ways in which scrolling and wrapping behaviors
+combine at the lower-right corner of the terminal display
+by detecting and configuring the terminal's capabilities.
+.bP
+If the terminal does not wrap its cursor to the next line
+when a character is written to the rightmost cell on a line \(em
+.I \%terminfo
+capability
+.B \%auto_right_margin
+.RB ( am )
+\(em
+.I \%ncurses
+simply writes the character.
+.bP
+If the terminal possesses the \*(lqauto right margin\*(rq
+capability,
+but also enables it to be configured on and off \(em
+.I \%terminfo
+capabilities
+.B \%enter_am_mode
+.RB ( smam )
+and
+.B \%exit_am_mode
+.RB ( rmam )
+\(em
+.I \%ncurses
+disables auto right margin temporarily
+when writing a character to lower-right cell of the terminal display.
+.bP
+If the terminal does not permit auto right margin deconfiguration,
+but has an \*(lqinsert mode\*(rq \(em
+.I \%terminfo
+capabilities
+.B \%enter_insert_mode
+.RB ( smir )
+and
+.B \%exit_insert_mode
+.RB ( rmir )
+\(em
+.I \%ncurses
+saves the contents of the character cell
+preceding that at the bottom right,
+writes the character with which the application wishes to populate
+the bottom right character cell
+to the cell preceding it on the same line,
+then uses the terminal's insert mode to rewrite the contents
+of the saved character cell to that location,
+\*(lqpushing\*(rq the desired character
+into the bottom right cell.
+.SS wecho_wchar
+.B \%echo_wchar
+and
+.B \%wecho_wchar
+are equivalent to calling
+.RB \%( w ) add_wch
+followed by
+.RB \%( w ) refresh
+on
+.B \%stdscr
+or the specified window.
+.I curses
+interprets these functions as a hint that only a single (complex)
+character is being output;
+for non-control characters,
+a considerable performance gain may be enjoyed by employing them.
+.\" TODO: Combine the following with the "Line Drawing" subsection of
+.\" terminfo(5) and replace this with a cross reference there.
+.SS "Forms-Drawing Characters"
+.I curses
+defines macros starting with
+.B \%WACS_
+that can be used with
+.B \%wadd_wch
+to write line-drawing and other symbols to the screen.
+.I \%ncurses
+terms these
+.I "forms-drawing characters."
+.I curses
+uses the ACS default listed below if the terminal type lacks the
+.B \%acs_chars
+.RB \%( acsc )
+capability;
+that capability does not define a replacement for the character;
+or if the terminal type and locale configuration
+require Unicode to access these characters,
+but the library is unable to use Unicode.
+The \*(``acsc char\*('' column corresponds to how the characters are
+specified in the
+.B \%acs_chars
+.RB \%( acsc )
+string capability,
+and the characters in it may appear on the screen if the terminal type's
+database entry incorrectly advertises ACS support.
+The name \*(``ACS\*('' originates in the Alternate Character Set feature
+of the DEC VT100 terminal.
+.PP
+.ie t .ne 4v
+.el   .ne 5v
+.TS
+Lb Lb Lb Lb Lb
+Lb Lb Lb Lb Lb
+Lb L  L  L  Lw(15n)x.
+\&	Unicode	ACS	acsc	\&
+Symbol	Default	Default	char	Glyph Name
+_
+WACS_BLOCK	U+25ae	#	0	T{
+solid square block
+T}
+WACS_BOARD	U+2592	#	h	board of squares
+WACS_BTEE	U+2534	+	v	bottom tee
+WACS_BULLET	U+00b7	o	~	bullet
+WACS_CKBOARD	U+2592	:	a	T{
+checker board (stipple)
+T}
+WACS_DARROW	U+2193	v	.	T{
+arrow pointing down
+T}
+WACS_DEGREE	U+00b0	'	f	degree symbol
+WACS_DIAMOND	U+25c6	+	\(ga	diamond
+WACS_GEQUAL	U+2265	>	>	T{
+.if n .na \" avoid adjustment warning from groff
+greater-than-or-equal-to
+T}
+WACS_HLINE	U+2500	\-	q	horizontal line
+WACS_LANTERN	U+2603	#	i	lantern symbol
+WACS_LARROW	U+2190	<	,	T{
+arrow pointing left
+T}
+WACS_LEQUAL	U+2264	<	y	T{
+.if n .na \" avoid adjustment warning from groff
+less-than-or-equal-to
+T}
+WACS_LLCORNER	U+2514	+	m	T{
+lower left-hand corner
+T}
+WACS_LRCORNER	U+2518	+	j	T{
+lower right-hand corner
+T}
+WACS_LTEE	U+2524	+	t	left tee
+WACS_NEQUAL	U+2260	!	|	not-equal
+WACS_PI	U+03c0	*	{	greek pi
+WACS_PLMINUS	U+00b1	#	g	plus/minus
+WACS_PLUS	U+253c	+	n	plus
+WACS_RARROW	U+2192	>	+	T{
+arrow pointing right
+T}
+WACS_RTEE	U+251c	+	u	right tee
+WACS_S1	U+23ba	\-	o	scan line 1
+WACS_S3	U+23bb	\-	p	scan line 3
+WACS_S7	U+23bc	\-	r	scan line 7
+WACS_S9	U+23bd	\&_	s	scan line 9
+WACS_STERLING	U+00a3	f	}	T{
+.if n .na \" avoid adjustment warning from groff
+pound-sterling symbol
+T}
+WACS_TTEE	U+252c	+	w	top tee
+WACS_UARROW	U+2191 	^	\-	T{
+arrow pointing up
+T}
+WACS_ULCORNER	U+250c	+	l	T{
+upper left-hand corner
+T}
+WACS_URCORNER	U+2510	+	k	T{
+upper right-hand corner
+T}
+WACS_VLINE	U+2502	|	x	vertical line
+.TE
+.PP
+The
+.I \%ncurses
+wide API also defines symbols for thick lines
+.RB \%( acsc
+\*(``J\*('' through \*(``N\*('',
+\*(``T\*('' through \*(``X\*('',
+and \*(``Q\*(''):
+.PP
+.TS
+Lb Lb Lb Lb Lb
+Lb Lb Lb Lb Lb
+Lb L  L  L  Lw(14n)x.
+\&	Unicode	ASCII	acsc	\&
+ACS Name	Default	Default	Char	Glyph Name
+_
+WACS_T_BTEE	U+253b	+	V	T{
+thick tee pointing up
+T}
+WACS_T_HLINE	U+2501	-	Q	T{
+thick horizontal line
+T}
+WACS_T_LLCORNER	U+2517	+	M	T{
+thick lower left corner
+T}
+WACS_T_LRCORNER	U+251b	+	J	T{
+thick lower right corner
+T}
+WACS_T_LTEE	U+252b	+	T	T{
+thick tee pointing right
+T}
+WACS_T_PLUS	U+254b	+	N	T{
+thick large plus
+T}
+WACS_T_RTEE	U+2523	+	U	T{
+thick tee pointing left
+T}
+WACS_T_TTEE	U+2533	+	W	T{
+thick tee pointing down
+T}
+WACS_T_ULCORNER	U+250f	+	L	T{
+thick upper left corner
+T}
+WACS_T_URCORNER	U+2513	+	K	T{
+thick upper right corner
+T}
+WACS_T_VLINE	U+2503	|	X	T{
+thick vertical line
+T}
+.TE
+.PP
+and for double lines
+.RB \%( acsc
+\*(``A\*('' through \*(``I\*('',
+plus \*(``R\*('' and \*(``Y\*(''):
+.PP
+.TS
+Lb Lb Lb Lb Lb
+Lb Lb Lb Lb Lb
+Lb L  L  L  Lw(14n)x.
+\&	Unicode	ASCII	acsc	\&
+ACS Name	Default	Default	Char	Glyph Name
+_
+WACS_D_BTEE	U+2569	+	H	T{
+double tee pointing up
+T}
+WACS_D_HLINE	U+2550	-	R	T{
+double horizontal line
+T}
+WACS_D_LLCORNER	U+255a	+	D	T{
+double lower left corner
+T}
+WACS_D_LRCORNER	U+255d	+	A	T{
+double lower right corner
+T}
+WACS_D_LTEE	U+2560	+	F	T{
+double tee pointing right
+T}
+WACS_D_PLUS	U+256c	+	E	T{
+double large plus
+T}
+WACS_D_RTEE	U+2563	+	G	T{
+double tee pointing left
+T}
+WACS_D_TTEE	U+2566	+	I	T{
+double tee pointing down
+T}
+WACS_D_ULCORNER	U+2554	+	C	T{
+double upper left corner
+T}
+WACS_D_URCORNER	U+2557	+	B	T{
+double upper right corner
+T}
+WACS_D_VLINE	U+2551	|	Y	T{
+double vertical line
+T}
+.TE
+.PP
+Unicode's descriptions for these characters differs slightly from
+\fI\%ncurses\fP,
+by introducing the term \*(``light\*('' (along with less important details).
+Here are its descriptions for the normal, thick, and double horizontal lines:
+.bP
+U+2500 BOX DRAWINGS LIGHT HORIZONTAL
+.bP
+U+2501 BOX DRAWINGS HEAVY HORIZONTAL
+.bP
+U+2550 BOX DRAWINGS DOUBLE HORIZONTAL

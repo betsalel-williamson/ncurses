@@ -1,0 +1,16 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint addchstr(const chtype * \fIchstr\fP);
+\fBint waddchstr(WINDOW * \fIwin\fP, const chtype * \fIchstr\fP);
+\fBint mvaddchstr(int \fIy\fP, int \fIx\fP, const chtype * \fIchstr\fP);
+\fBint mvwaddchstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP,
+      const chtype * \fIchstr\fP);
+.PP
+\fBint addchnstr(const chtype * \fIchstr\fP, int \fIn\fP);
+\fBint waddchnstr(WINDOW * \fIwin\fP, const chtype * \fIchstr\fP, int \fIn\fP);
+\fBint mvaddchnstr(int \fIy\fP, int \fIx\fP, const chtype * \fIchstr\fP, int \fIn\fP);
+\fBint mvwaddchnstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP,
+      const chtype * \fIchstr\fP, int \fIn\fP);
+.fi

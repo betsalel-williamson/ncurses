@@ -1,0 +1,38 @@
+.SH DESCRIPTION
+.B \%wadd_wchstr
+copies the string of complex characters
+.I \%wchstr
+to the window
+.IR win "."
+A null complex character terminates the string.
+If a complex character does not completely fit at the end of the line,
+.I curses
+fills its remaining cells with the window's background character;
+see \fB\%bkgrnd\fP(3X).
+.B \%wadd_wchnstr
+does the same,
+but copies at most
+.I n
+characters,
+or as many as possible if
+.I n
+is
+.BR \-1 "."
+\fB\%ncurses\fP(3X) describes the variants of these functions.
+.PP
+Because these functions do not call \fB\%wadd_wch\fP(3X) internally,
+they are faster than \fB\%waddwstr\fP(3X) and \fB\%waddnwstr\fP(3X).
+On the other hand,
+they
+.bP
+do not treat the backspace,
+carriage return,
+or line feed characters specially;
+.bP
+do not represent unprintable characters with \fB\%wunctrl\fP(3X);
+.bP
+do not update the cursor position to follow the last character written;
+and
+.bP
+truncate the string at the window's right margin,
+rather than wrapping it to the next line and potentially scrolling.

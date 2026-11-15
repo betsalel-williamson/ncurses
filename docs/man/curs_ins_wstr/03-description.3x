@@ -1,0 +1,35 @@
+.SH DESCRIPTION
+.B \%wins_wstr
+inserts a wide-character string
+.I wstr
+before the character at the cursor in window
+.I win
+as if by calling \fBwins_wch\fP(3X) for each
+.I \%wchar_t
+in
+.IR wstr "."
+No line wrapping is performed.
+Characters to the right of the cursor are shifted right;
+those at the right edge of the window may be lost.
+.B \%wins_wstr
+stops inserting if it would have to wrap to the next line to write the
+next
+.I \%wchar_t
+in
+.IR wstr "."
+The cursor position does not change
+(after moving to
+.RI ( y ,
+.IR x "),"
+if specified).
+.B \%wins_nwstr
+does the same,
+but inserts at most
+.I n
+wide characters,
+or as many as possible
+(up to the end of the line)
+if
+.I n
+is negative.
+\fB\%ncurses\fP(3X) describes the variants of these functions.

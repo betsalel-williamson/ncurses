@@ -1,0 +1,71 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint add_wch(const cchar_t * \fIwch\fP);
+\fBint wadd_wch(WINDOW * \fIwin\fP, const cchar_t * \fIwch\fP);
+\fBint mvadd_wch(int \fIy\fP, int \fIx\fP, const cchar_t * \fIwch\fP);
+\fBint mvwadd_wch(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, const cchar_t * \fIwch\fP);
+.PP
+\fBint echo_wchar(const cchar_t * \fIwch\fP);
+\fBint wecho_wchar(WINDOW * \fIwin\fP, const cchar_t *\fIwch\fP);
+.PP
+\fI/* (integer) constants */\fP
+/*\fI .\|.\|. */ \fBWACS_BLOCK;\fR
+/*\fI .\|.\|. */ \fBWACS_BOARD;\fR
+/*\fI .\|.\|. */ \fBWACS_BTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_BULLET;\fR
+/*\fI .\|.\|. */ \fBWACS_CKBOARD;\fR
+/*\fI .\|.\|. */ \fBWACS_DARROW;\fR
+/*\fI .\|.\|. */ \fBWACS_DEGREE;\fR
+/*\fI .\|.\|. */ \fBWACS_DIAMOND;\fR
+/*\fI .\|.\|. */ \fBWACS_HLINE;\fR
+/*\fI .\|.\|. */ \fBWACS_LANTERN;\fR
+/*\fI .\|.\|. */ \fBWACS_LARROW;\fR
+/*\fI .\|.\|. */ \fBWACS_LLCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_LRCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_LTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_PLMINUS;\fR
+/*\fI .\|.\|. */ \fBWACS_PLUS;\fR
+/*\fI .\|.\|. */ \fBWACS_RARROW;\fR
+/*\fI .\|.\|. */ \fBWACS_RTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_S1;\fR
+/*\fI .\|.\|. */ \fBWACS_S9;\fR
+/*\fI .\|.\|. */ \fBWACS_TTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_UARROW;\fR
+/*\fI .\|.\|. */ \fBWACS_ULCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_URCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_VLINE;\fR
+\fI/* extensions */\fP
+/*\fI .\|.\|. */ \fBWACS_GEQUAL;\fR
+/*\fI .\|.\|. */ \fBWACS_LEQUAL;\fR
+/*\fI .\|.\|. */ \fBWACS_NEQUAL;\fR
+/*\fI .\|.\|. */ \fBWACS_PI;\fR
+/*\fI .\|.\|. */ \fBWACS_S3;\fR
+/*\fI .\|.\|. */ \fBWACS_S7;\fR
+/*\fI .\|.\|. */ \fBWACS_STERLING;\fR
+\fI/* extensions for thick lines */\fP
+/*\fI .\|.\|. */ \fBWACS_T_BTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_T_HLINE;\fR
+/*\fI .\|.\|. */ \fBWACS_T_LLCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_T_LRCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_T_LTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_T_PLUS;\fR
+/*\fI .\|.\|. */ \fBWACS_T_RTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_T_TTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_T_ULCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_T_URCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_T_VLINE;\fR
+\fI/* extensions for double lines */\fP
+/*\fI .\|.\|. */ \fBWACS_D_BTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_D_HLINE;\fR
+/*\fI .\|.\|. */ \fBWACS_D_LLCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_D_LRCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_D_LTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_D_PLUS;\fR
+/*\fI .\|.\|. */ \fBWACS_D_RTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_D_TTEE;\fR
+/*\fI .\|.\|. */ \fBWACS_D_ULCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_D_URCORNER;\fR
+/*\fI .\|.\|. */ \fBWACS_D_VLINE;\fR
+.fi

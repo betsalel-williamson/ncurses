@@ -1,0 +1,37 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ,
+these functions fail if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+.bP
+wrapping to a new line is impossible because \fB\%scrollok\fP(3X) has
+not been called on
+.I win
+(or
+.BR \%stdscr ","
+as applicable)
+when writing to its bottom right location is attempted,
+or
+.bP
+it is not possible to add a complete character at the cursor position.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

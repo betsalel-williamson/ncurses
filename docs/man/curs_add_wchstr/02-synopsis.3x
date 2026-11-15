@@ -1,0 +1,15 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint add_wchstr(const cchar_t * \fIwchstr\fP);
+\fBint wadd_wchstr(WINDOW *  \fIwin\fP, const cchar_t * \fIwchstr\fP);
+\fBint mvadd_wchstr(int \fIy\fP, int \fIx\fP, const cchar_t * \fIwchstr\fP);
+\fBint mvwadd_wchstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, const cchar_t * \fIwchstr\fP);
+.PP
+\fBint add_wchnstr(const cchar_t * \fIwchstr\fP, int \fIn\fP);
+\fBint wadd_wchnstr(WINDOW *  \fIwin\fP, const cchar_t * \fIwchstr\fP, int \fIn\fP);
+\fBint mvadd_wchnstr(int \fIy\fP, int \fIx\fP, const cchar_t * \fIwchstr\fP, int \fIn\fP);
+\fBint mvwadd_wchnstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP,
+      const cchar_t * \fIwchstr\fP, int \fIn\fP);
+.fi
