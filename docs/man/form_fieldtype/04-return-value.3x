@@ -1,0 +1,30 @@
+.SH RETURN VALUE
+The pointer-valued routines return NULL on error.
+They set \fBerrno\fP according to their success:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred, e.g., malloc failure.
+.PP
+The integer-valued routines return one of the following codes on
+error:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_CONNECTED
+The field is already connected to a form.
+.TP 5
+.B E_CURRENT
+The field is the current field.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred (see \fBerrno\fP(3)).

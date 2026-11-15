@@ -1,0 +1,25 @@
+.SH RETURN VALUE
+The function \fBmenu_items\fP returns a pointer (which may be
+.IR NULL ")."
+It does not set \fBerrno\fP.
+.PP
+The function \fBitem_count\fP returns \fBERR\fP (the general \fBcurses\fP error
+return value) if its \fImenu\fP parameter is
+.I NULL "."
+.PP
+The function \fBset_menu_items\fP returns one of the following codes on error:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_NOT_CONNECTED
+No items are connected to the menu.
+.TP 5
+.B E_POSTED
+The menu is already posted.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred (see \fBerrno\fP(3)).

@@ -1,0 +1,44 @@
+.SH DESCRIPTION
+The function \fBset_field_buffer\fP sets the numbered buffer of the given field
+to contain a given string:
+.RS 3
+.bP
+Buffer 0 is the displayed value of the field.
+.bP
+Other numbered buffers may be allocated by applications through the \fBnbuf\fP
+argument of (see \fBform_field_new\fP(3X))
+but are not manipulated by the forms library.
+.RE
+.PP
+The function \fBfield_buffer\fP returns a pointer to
+the contents of the given numbered buffer:
+.RS 3
+.bP
+The buffer contents always have the same length,
+and are padded with trailing spaces
+as needed to ensure this length is the same.
+.bP
+The buffer may contain leading spaces, depending on how it was set.
+.bP
+The buffer contents are set with \fBset_field_buffer\fP,
+or as a side effect of any editing operations on the corresponding field.
+.bP
+Editing operations are based on the \fIwindow\fP which displays the field,
+rather than a \fIstring\fP.
+The window contains only printable characters, and is filled with blanks.
+If you want the raw data, you must write your
+own routine that copies the value out of the buffer and removes the leading
+and trailing spaces.
+.bP
+Because editing operations change the content of the buffer to
+correspond to the window, you should not rely on using buffers
+for long-term storage of form data.
+.RE
+.PP
+The function \fBset_field_status\fP sets the associated status flag of
+\fIfield\fP; \fBfield_status\fP gets the current value.
+The status flag
+is set to a nonzero value whenever the field changes.
+.PP
+The function \fBset_max_field\fP sets the maximum size for a dynamic field.
+An argument of 0 turns off any maximum size threshold for that field.

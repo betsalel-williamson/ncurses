@@ -1,0 +1,14 @@
+.SH RETURN VALUE
+The function \fBfield_just\fP returns one of: NO_JUSTIFICATION,
+JUSTIFY_RIGHT, JUSTIFY_LEFT, or JUSTIFY_CENTER.
+.PP
+The function \fBset_field_just\fP returns one of the following:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred (see \fBerrno\fP(3)).
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.

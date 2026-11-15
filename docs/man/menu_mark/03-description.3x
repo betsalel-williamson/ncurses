@@ -1,0 +1,18 @@
+.SH DESCRIPTION
+In order to make menu selections visible on older terminals without
+highlighting or color capability, the menu library marks selected items
+in a menu with a prefix string.
+.PP
+The function \fBset_menu_mark\fP sets the mark string for the given menu.
+Calling \fBset_menu_mark\fP with a null menu item will abolish the mark string.
+Note that changing the length of the mark string for a menu while the
+menu is posted is likely to produce unhelpful behavior.
+.PP
+The default string is "\-" (a dash).
+Calling \fBset_menu_mark\fP with a
+.IR non- NULL
+menu argument will change this default.
+.PP
+The function \fBmenu_mark\fP returns the menu's mark string (or
+.I NULL
+if there is none).

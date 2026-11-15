@@ -1,0 +1,38 @@
+.SH DESCRIPTION
+The function \fBset_menu_opts\fP sets all the given menu's option bits
+(menu option bits may be logically \*(``or\*(''-ed together).
+.PP
+The function \fBmenu_opts_on\fP turns on the given option bits, and leaves
+others alone.
+.PP
+The function \fBmenu_opts_off\fP turns off the given option bits, and leaves
+others alone.
+.PP
+The function \fBmenu_opts\fP returns the menu's current option bits.
+.PP
+The following options are defined (all are on by default):
+.TP 5
+O_ONEVALUE
+Only one item can be selected for this menu.
+.TP 5
+O_SHOWDESC
+Display the item descriptions when the menu is posted.
+.TP 5
+O_ROWMAJOR
+Display the menu in row-major order.
+.TP 5
+O_IGNORECASE
+Ignore the case when pattern-matching.
+.TP 5
+O_SHOWMATCH
+Move the cursor to within the item name while pattern-matching.
+.TP 5
+O_NONCYCLIC
+Don't wrap around next-item and previous-item,
+requests to the other end of the menu.
+.TP 5
+O_MOUSE_MENU
+If user clicks with the mouse
+and it does not fall on the currently active menu,
+push \fBKEY_MOUSE\fP and the \fBMEVENT\fP data
+back on the queue to allow processing in another part of the calling program.

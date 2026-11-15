@@ -1,0 +1,25 @@
+.SH RETURN VALUE
+The functions \fBnew_field\fP, \fBdup_field\fP, \fBlink_field\fP return
+.I NULL
+on error.
+They set \fBerrno\fP according to their success:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred, e.g., malloc failure.
+.PP
+The function \fBfree_field\fP returns one of the following:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_CONNECTED
+field is connected.

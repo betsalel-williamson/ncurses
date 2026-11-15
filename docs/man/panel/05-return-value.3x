@@ -1,0 +1,17 @@
+.SH "RETURN VALUE"
+Each routine that returns a pointer returns
+.I NULL
+if an error occurs.
+Each routine that returns an int value returns \fBOK\fP if it
+executes successfully and \fBERR\fP if not.
+.PP
+Except as noted,
+the \fIpan\fP and \fIwindow\fP parameters must be non-null.
+If either is null,
+an error is returned.
+.PP
+The \fB\%move_panel\fP function uses \fBmvwin\fP(3X),
+and returns
+.B ERR
+if \fB\%mvwin\fP returns
+.BR ERR "."

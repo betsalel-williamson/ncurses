@@ -1,0 +1,107 @@
+.SH "FIELD TYPES"
+The
+.I form
+library defines several field types.
+They are implemented via the \fBFIELDTYPE\fP data structure,
+which contains several pointers to functions.
+.PP
+See the \fBform_fieldtype\fP(3X) manual page,
+which describes functions which can be used to construct
+a field-type dynamically.
+.PP
+The predefined types are as follows:
+.SS TYPE_ALNUM
+Alphanumeric data.
+Required parameter:
+.bP
+a third \fBint\fP argument, a minimum field width.
+.SS TYPE_ALPHA
+Character data.
+Required parameter:
+.bP
+a third \fBint\fP argument, a minimum field width.
+.SS TYPE_ENUM
+Accept one of a specified set of strings.
+Required parameters:
+.bP
+a third \fB(char **)\fP argument pointing to a string list;
+.bP
+a fourth \fBint\fP flag argument to enable case-sensitivity;
+.bP
+a fifth \fBint\fP flag argument specifying whether a partial
+match must be a unique one.
+If this flag is off, a prefix matches the first
+of any set of more than one list elements with that prefix.
+.PP
+The library copies the string list,
+so you may use a list that lives in automatic variables on the stack.
+.SS TYPE_INTEGER
+Integer data, parsable to an integer by \fBatoi\fP(3).
+Required parameters:
+.bP
+a third \fBint\fP argument controlling the precision,
+.bP
+a fourth \fBlong\fP argument constraining minimum value,
+.bP
+a fifth \fBlong\fP constraining maximum value.
+If the maximum value is less than or equal to the minimum value, the range is
+simply ignored.
+.PP
+On return, the field buffer is formatted according to the
+\fBprintf\fP format specification \*(``.*ld\*('',
+where the \*(``*\*('' is replaced by the precision argument.
+.PP
+For details of the precision handling see \fBprintf\fP(3).
+.SS TYPE_NUMERIC
+Numeric data (may have a decimal-point part).
+Required parameters:
+.bP
+a third \fBint\fP argument controlling the precision,
+.bP
+a fourth \fBdouble\fP argument constraining minimum value,
+.bP
+and a fifth \fBdouble\fP constraining maximum value.
+If your system supports locales,
+the decimal point character must be the one specified by your locale.
+If the maximum value is less than or equal to the minimum value,
+the range is simply ignored.
+.PP
+On return, the field buffer is formatted according to the
+\fBprintf\fP format specification \*(``.*f\*('',
+where the \*(``*\*('' is replaced by the precision argument.
+.PP
+For details of the precision handling see \fBprintf\fP(3).
+.SS TYPE_REGEXP
+Regular expression data.
+Required parameter:
+.bP
+a third argument, a regular expression \fB(char *)\fP string.
+The data is valid if the regular expression matches it.
+.PP
+Regular expressions
+are in the format of \fBregcomp\fP and \fBregexec\fP.
+.PP
+The regular expression must match the whole field.
+If you have for example, an eight character wide field,
+a regular expression "^[0\-9]*$" always
+means that you have to fill all eight positions with digits.
+If you want to allow fewer digits,
+you may use for example "^[0\-9]* *$" which is good for
+trailing spaces (up to an empty field),
+or "^ *[0\-9]* *$" which is good for
+leading and trailing spaces around the digits.
+.SS TYPE_IPV4
+An Internet Protocol Version\ 4 address.
+Required parameter:
+.bP
+none
+.PP
+The form library checks whether or not the buffer has the form \fIa.b.c.d\fP,
+where \fIa\fP, \fIb\fP, \fIc\fP, and \fId\fP are numbers in the range 0 to 255.
+Trailing blanks in the buffer are ignored.
+The address itself is not validated.
+.PP
+This is an \fI\%ncurses\fP extension;
+this field type may not be available in other curses implementations.
+.PP
+It is possible to set up new programmer-defined field types.

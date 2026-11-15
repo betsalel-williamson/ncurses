@@ -1,0 +1,22 @@
+.SH SYNOPSIS
+.nf
+\fB#include <form.h>
+.PP
+\fBFIELDTYPE *new_fieldtype(
+    \fBbool (* const \fIfield_check\fB)(FIELD *, const void *),\fR
+    \fBbool (* const \fIchar_check\fB)(int, const void *));\fR
+\fBint free_fieldtype(FIELDTYPE *\fIfieldtype\fB);\fR
+.PP
+\fBint set_fieldtype_arg(\fP
+    \fBFIELDTYPE *\fIfieldtype\fB,\fR
+    \fBvoid *(* const \fImake_arg\fB)(va_list *),\fR
+    \fBvoid *(* const \fIcopy_arg\fB)(const void *),\fR
+    \fBvoid  (* const \fIfree_arg\fB)(void *));\fR
+\fBint set_fieldtype_choice(\fP
+    \fBFIELDTYPE *\fIfieldtype\fB,\fR
+    \fBbool (* const \fInext_choice\fB)(FIELD *, const void *),\fR
+    \fBbool (* const \fIprev_choice\fB)(FIELD *, const void *));\fR
+.PP
+\fBFIELDTYPE *link_fieldtype(FIELDTYPE *\fItype1\fB,\fR
+                          \fBFIELDTYPE *\fItype2\fB);\fR
+.fi

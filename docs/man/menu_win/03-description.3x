@@ -1,0 +1,18 @@
+.SH DESCRIPTION
+Every menu has an associated pair of \fBcurses\fP windows.
+The menu window
+displays any title and border associated with the window; the menu subwindow
+displays the items of the menu that are currently available for selection.
+.PP
+.so common/default-windows-stdscr.3x
+.PP
+In the \fBset_\fP functions, window argument of
+.I NULL
+is treated as though
+it were \fBstsdcr\fP.  A menu argument of
+.I NULL
+is treated as a request
+to change the system default menu window or subwindow.
+.PP
+The function \fBscale_menu\fP returns the minimum size required for the
+subwindow of \fImenu\fP.

@@ -1,0 +1,44 @@
+.SH RETURN VALUE
+Routines that return pointers return
+.I NULL
+on error,
+and set \fBerrno\fP to the corresponding error-code returned by functions
+returning an integer.
+Routines that return
+an integer return one of the following error codes:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_BAD_STATE
+Routine was called from an initialization or termination function.
+.TP 5
+.B E_CONNECTED
+The field is already connected to a form.
+.TP 5
+.B E_INVALID_FIELD
+Contents of a field are not valid.
+.TP 5
+.B E_NOT_CONNECTED
+No fields are connected to the form.
+.TP 5
+.B E_NOT_POSTED
+The form has not been posted.
+.TP 5
+.B E_NO_ROOM
+Form is too large for its window.
+.TP 5
+.B E_POSTED
+The form is already posted.
+.TP 5
+.B E_REQUEST_DENIED
+The form driver could not process the request.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred (see \fBerrno\fP(3)).
+.TP 5
+.B E_UNKNOWN_COMMAND
+The form driver code saw an unknown request code.

@@ -1,0 +1,114 @@
+.SH FUNCTIONS
+.\" ---------
+.SS bottom_panel
+\fB\%bottom_panel(\fIpan\fB)\fR
+puts panel \fIpan\fP at the bottom of all panels.
+.\" ---------
+.SS ceiling_panel
+\fB\%ceiling_panel(\fIsp\fB)\fR
+acts like \fB\%panel_below(NULL)\fP
+for the given \fISCREEN\fP \fIsp\fP.
+.\" ---------
+.SS del_panel
+\fB\%del_panel(\fIpan\fB)\fR
+removes the given panel \fIpan\fP from the stack and deallocates the
+\fI\%PANEL\fP structure (but not its associated window).
+.\" ---------
+.SS ground_panel
+\fB\%ground_panel(\fIsp\fB)\fR
+acts like \fB\%panel_above(NULL)\fP
+for the given \fISCREEN\fP \fIsp\fP.
+.\" ---------
+.SS hide_panel
+\fB\%hide_panel(\fIpan\fB)\fR
+removes the given panel \fIpan\fP from the panel stack
+and thus hides it from view.
+The \fI\%PANEL\fP structure is not lost,
+merely removed from the stack.
+.\" ---------
+.SS move_panel
+\fB\%move_panel(\fIpan\fB, \fIstarty\fB, \fIstartx\fB)\fR
+moves the given panel \fIpan\fP's window so that its upper-left corner
+is at
+\fIstarty\fP,
+\fIstartx\fP.
+It does not change the position of the panel in the stack.
+Be sure to use this function,
+not \fB\%mvwin\fP(3X),
+to move a panel window.
+.\" ---------
+.SS new_panel
+\fB\%new_panel(\fIwin\fB)\fR allocates a \fI\%PANEL\fR structure,
+associates it with \fIwin\fP,
+places the panel on the top of the stack
+(causes it to be displayed above any other panel)
+and returns a pointer to the new panel.
+.\" ---------
+.SS panel_above
+\fB\%panel_above(\fIpan\fB)\fR
+returns a pointer to the panel above \fIpan\fP.
+If the panel argument is
+\*(``\fB(PANEL *)0\fP\*('',
+it returns a pointer to the bottom panel in the stack.
+.\" ---------
+.SS panel_below
+\fB\%panel_below(\fIpan\fB)\fR
+returns a pointer to the panel just below \fIpan\fP.
+If the panel argument is
+\*(``\fB(PANEL *)0\fP\*('',
+it returns a pointer to the top panel in the stack.
+.\" ---------
+.SS panel_hidden
+\fB\%panel_hidden(\fIpan\fB)\fR
+returns \fBFALSE\fP if the panel \fIpan\fP is in the panel stack,
+and \fBTRUE\fP if it is not.
+If the panel is a null pointer,
+it returns \fBERR\fP.
+.\" ---------
+.SS panel_userptr
+\fB\%panel_userptr(\fIpan\fB)\fR
+returns the user pointer for a given panel \fIpan\fP.
+.\" ---------
+.SS panel_window
+\fB\%panel_window(\fIpan\fB)\fR
+returns a pointer to the window of the given panel \fIpan\fP.
+.\" ---------
+.SS replace_panel
+\fB\%replace_panel(\fIpan\fB, \fIwindow\fB)\fR
+replaces the current window of panel \fIpan\fP with \fIwindow\fP
+This is useful if,
+for example,
+you want to resize a panel.
+In \fI\%ncurses\fP,
+you can call \fB\%replace_panel\fP
+to resize a panel using a window resized with \fB\%wresize\fP(3X).
+It does not change the position of the panel in the stack.
+.\" ---------
+.SS set_panel_userptr
+\fB\%set_panel_userptr(\fIpan\fB, \fIptr\fB)\fR
+sets the panel's user pointer.
+.\" ---------
+.SS show_panel
+\fB\%show_panel(\fIpan\fB)\fR
+makes a hidden panel visible by placing it on top of the panels in the
+panel stack.
+See \*(``PORTABILITY\*('' below.
+.\" ---------
+.SS top_panel
+\fB\%top_panel(\fIpan\fB)\fR
+puts the given visible panel \fIpan\fP on top of all panels in the
+stack.
+See \*(``PORTABILITY\*('' below.
+.\" ---------
+.SS update_panels
+\fB\%update_panels()\fR
+refreshes the virtual screen to reflect the relations between the panels
+in the stack,
+but does not call \fB\%doupdate\fP(3X) to refresh the physical screen.
+Use this function and not \fB\%wrefresh\fP(3X) or
+\fB\%wnoutrefresh\fP(3X).
+.PP
+\fB\%update_panels\fP may be called more than once before a call to
+\fB\%doupdate\fP,
+but \fB\%doupdate\fP is the function responsible for updating
+the physical screen.
