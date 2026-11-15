@@ -12,7 +12,7 @@ To make forms, you create groups of fields and connect them with form frame obje
 
 Once defined, a form can be *posted*, that is written to an associated [window](../../glossary/window.md). Actually, each form has two associated windows; a containing window in which the programmer can scribble titles or borders, and a [subwindow](../../glossary/subwindow.md) in which the form fields proper are displayed.
 
-As the form user fills out the posted form, navigation and editing keys support movement between fields, editing keys support modifying field, and plain text adds to or changes data in a current field. The form library allows you (the forms designer) to bind each navigation and editing key to any keystroke accepted by `curses` Fields may have validation conditions on them, so that they check input data for type and value. The form library supplies a rich set of pre-defined field types, and makes it relatively easy to define new ones.
+As the form user fills out the posted form, navigation and editing keys support movement between fields, editing keys support modifying field, and plain text adds to or changes data in a current field. The form library allows you (the forms designer) to bind each navigation and editing key to any keystroke accepted by `curses`. Fields may have validation conditions on them, so that they check input data for type and value. The form library supplies a rich set of pre-defined field types, and makes it relatively easy to define new ones.
 
 Once its transaction is completed (or aborted), a form may be *unposted* (that is, undisplayed), and finally freed to make the storage associated with it and its items available for re-use.
 
@@ -29,6 +29,6 @@ The general flow of control of a form program looks like this:
 9.  Free the fields using `free_field()`.
 10. Terminate `curses`.
 
-Note that this looks much like a menu program; the form library handles tasks which are in many ways similar, and its interface was obviously designed to resemble that of the [menu library](../../../doc/html/ncurses-intro.html#menu) wherever possible.
+Note that this looks much like a menu program; the form library handles tasks which are in many ways similar, and its interface was obviously designed to resemble that of the [menu library](../menus/index.md) wherever possible.
 
-In forms programs, however, the “process user requests” is somewhat more complicated than for menus. Besides menu-like navigation operations, the menu driver loop has to support field editing and data validation.
+In forms programs, however, the “process user requests” is somewhat more complicated than for menus. Besides menu-like navigation operations, the form driver loop has to support field editing and data validation.

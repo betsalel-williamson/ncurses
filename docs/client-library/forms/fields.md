@@ -13,13 +13,13 @@ FIELD *new_field(int height, int width,   /* new field size */
                  int nbuf);               /* number of working buffers */
 ```
 
-Menu items always occupy a single row, but forms fields may have multiple rows. So `new_field()` requires you to specify a width and height (the first two arguments, which mist both be greater than zero).
+Menu items always occupy a single row, but forms fields may have multiple rows. So `new_field()` requires you to specify a width and height (the first two arguments, which must both be greater than zero).
 
 You must also specify the location of the field's upper left corner on the screen (the third and fourth arguments, which must be zero or greater). Note that these coordinates are relative to the form subwindow, which will coincide with [`stdscr`](../../glossary/stdscr.md) by default but need not be `stdscr` if you have done an explicit `set_form_win()` call.
 
 The fifth argument allows you to specify a number of off-screen rows. If this is zero, the entire field will always be displayed. If it is nonzero, the form will be scrollable, with only one screen-full (initially the top part) displayed at any given time. If you make a field dynamic and grow it so it will no longer fit on the screen, the form will become scrollable even if the `offscreen` argument was initially zero.
 
-The forms library allocates one working buffer per field; the size of each buffer is `((height + offscreen)*width + 1`, one character for each position in the field plus a NUL terminator. The sixth argument is the number of additional data buffers to allocate for the field; your application can use them for its own purposes.
+The forms library allocates one working buffer per field; the size of each buffer is `(height + offscreen) * width + 1`, one character for each position in the field plus a NUL terminator. The sixth argument is the number of additional data buffers to allocate for the field; your application can use them for its own purposes.
 
 ```c
 FIELD *dup_field(FIELD *field,            /* field to copy */
@@ -49,9 +49,9 @@ FORM *new_form(FIELD **fields);
 
 This function expects to see a NULL-terminated array of field pointers. Said fields are connected to a newly-allocated form object; its address is returned (or else NULL if the allocation fails).
 
-Note that `new_field()` does *not* copy the pointer array into private storage; if you modify the contents of the pointer array during forms processing, all manner of bizarre things might happen. Also note that any given field may only be connected to one form.
+Note that `new_form()` does *not* copy the pointer array into private storage; if you modify the contents of the pointer array during forms processing, all manner of bizarre things might happen. Also note that any given field may only be connected to one form.
 
-The functions `free_field()` and `free_form` are available to free field and form objects. It is an error to attempt to free a field connected to a form, but not vice-versa; thus, you will generally free your form objects first.
+The functions `free_field()` and `free_form()` are available to free field and form objects. It is an error to attempt to free a field connected to a form, but not vice-versa; thus, you will generally free your form objects first.
 
 ## Fetching and Changing Field Attributes
 
@@ -82,7 +82,7 @@ int move_field(FIELD *field,              /* field to alter */
                int top, int left);        /* new upper-left corner */
 ```
 
-You can, of course. query the current location through `field_info()`.
+You can, of course, query the current location through `field_info()`.
 
 ### The Justification Attribute
 

@@ -8,7 +8,7 @@ If you find yourself thinking you need `noraw()` or `nocbreak()`, think again an
 
 ## Don't mix `stdscr` with other windows
 
-Bear in mind that `refresh()` is a synonym for `wrefresh(stdscr)`. Don't mix [`stdscr`](../../glossary/stdscr.md) with [windows](../../glossary/window.md) created by `newwin()`: a `refresh()` call will blow them off the screen. Use `subwin()` instead, or don't touch `stdscr` at all. Tile the screen with your own windows, call `wnoutrefresh()` for each of them in your program's event loop, and trigger the actual repainting with a single `doupdate()` call. [Windows and refresh](../windows/windows-and-refresh.md) explains how these calls work together.
+Bear in mind that `refresh()` is a synonym for `wrefresh(stdscr)`. Don't mix [`stdscr`](../../glossary/stdscr.md) with [windows](../../glossary/window.md) created by `newwin()`: a `refresh()` call will blow them off the screen. Use `subwin()` instead, or don't touch `stdscr` at all. Tile the screen with your own windows, call `wnoutrefresh()` for each of them in your program's event loop, and trigger the actual repainting with a single `doupdate()` call. [Windows and the screen](../windows/windows-and-refresh.md) explains how these calls work together.
 
 ## Prefer tiled windows to overlapping ones
 

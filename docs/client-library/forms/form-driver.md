@@ -4,7 +4,7 @@
 
 ## Input Processing in the Forms Driver
 
-The function `form_driver()` handles virtualized input requests for form navigation, editing, and validation requests, just as `menu_driver` does for menus (see the section on [menu input handling](../../../doc/html/ncurses-intro.html#minput)).
+The function `form_driver()` handles virtualized input requests for form navigation, editing, and validation requests, just as `menu_driver` does for menus (see [menu input handling](../menus/menu-driver.md)).
 
 ```c
 int form_driver(FORM *form,               /* form to pass input to */
@@ -73,13 +73,13 @@ Move up to field.
 `REQ_DOWN_FIELD`  
 Move down to field.
 
-These requests treat the list of fields on a page as cyclic; that is, `REQ_NEXT_FIELD` from the last field goes to the first, and `REQ_PREV_FIELD` from the first field goes to the last. The order of the fields for these (and the `REQ_FIRST_FIELD` and `REQ_LAST_FIELD` requests) is simply the order of the field pointers in the form array (as set up by `new_form()` or `set_form_fields()`
+These requests treat the list of fields on a page as cyclic; that is, `REQ_NEXT_FIELD` from the last field goes to the first, and `REQ_PREV_FIELD` from the first field goes to the last. The order of the fields for these (and the `REQ_FIRST_FIELD` and `REQ_LAST_FIELD` requests) is simply the order of the field pointers in the form array (as set up by `new_form()` or `set_form_fields()`).
 
 It is also possible to traverse the fields as if they had been sorted in screen-position order, so the sequence goes left-to-right and top-to-bottom. To do this, use the second group of four sorted-movement requests.
 
-Finally, it is possible to move between fields using visual directions up, down, right, and left. To accomplish this, use the third group of four requests. Note, however, that the position of a form for purposes of these requests is its upper-left corner.
+Finally, it is possible to move between fields using visual directions up, down, right, and left. To accomplish this, use the third group of four requests. Note, however, that the position of a field for purposes of these requests is its upper-left corner.
 
-For example, suppose you have a multi-line field B, and two single-line fields A and C on the same line with B, with A to the left of B and C to the right of B. A `REQ_MOVE_RIGHT` from A will go to B only if A, B, and C *all* share the same first line; otherwise it will skip over B to C.
+For example, suppose you have a multi-line field B, and two single-line fields A and C on the same line with B, with A to the left of B and C to the right of B. A `REQ_RIGHT_FIELD` from A will go to B only if A, B, and C *all* share the same first line; otherwise it will skip over B to C.
 
 ### Intra-Field Navigation Requests
 
@@ -173,7 +173,7 @@ For scrolling purposes, a *page* of a field is the height of its visible part.
 
 ### Editing Requests
 
-When you pass the forms driver an ASCII character, it is treated as a request to add the character to the field's data buffer. Whether this is an insertion or a replacement depends on the field's edit mode (insertion is the default.
+When you pass the forms driver an ASCII character, it is treated as a request to add the character to the field's data buffer. Whether this is an insertion or a replacement depends on the field's edit mode (insertion is the default).
 
 The following requests support editing the field and changing the edit mode:
 
@@ -196,7 +196,7 @@ Insert blank line at character location.
 Delete character at cursor.
 
 `REQ_DEL_PREV`  
-Delete previous word at cursor.
+Delete character before the cursor.
 
 `REQ_DEL_LINE`  
 Delete line at cursor.
@@ -221,7 +221,7 @@ The normal behavior of `REQ_NEW_LINE` in insert mode is to break the current lin
 
 The normal behavior of `REQ_NEW_LINE` in overlay mode is to clear the current line from the position of the edit cursor to end of line. The cursor is then moved to the beginning of the next line.
 
-However, `REQ_NEW_LINE` at the beginning of a field, or on the last line of a field, instead does a `REQ_NEXT_FIELD`. `O_NL_OVERLOAD` option is off, this special action is disabled.
+However, `REQ_NEW_LINE` at the beginning of a field, or on the last line of a field, instead does a `REQ_NEXT_FIELD`. If the `O_NL_OVERLOAD` option is off, this special action is disabled.
 
 Now, let us consider `REQ_DEL_PREV`:
 
@@ -243,8 +243,8 @@ Place the successor value of the current value in the buffer.
 `REQ_PREV_CHOICE`  
 Place the predecessor value of the current value in the buffer.
 
-Of the built-in field types, only `TYPE_ENUM` has built-in successor and predecessor functions. When you define a field type of your own (see [Custom Validation Types](custom-field-types.md#custom-validation-types)), you can associate our own ordering functions.
+Of the built-in field types, only `TYPE_ENUM` has built-in successor and predecessor functions. When you define a field type of your own (see [Custom Validation Types](custom-field-types.md#custom-validation-types)), you can associate your own ordering functions.
 
 ### Application Commands
 
-Form requests are represented as integers above the `curses` value greater than `KEY_MAX` and less than or equal to the constant `MAX_COMMAND`. If your input-virtualization routine returns a value above `MAX_COMMAND`, the forms driver will ignore it.
+Form requests are integers from `MIN_FORM_COMMAND` (`KEY_MAX + 1`) to `MAX_FORM_COMMAND`. For any other value that isn't a character to enter, `form_driver()` does nothing and returns `E_UNKNOWN_COMMAND`, so an application can define its own commands above `MAX_COMMAND` (`KEY_MAX + 128`) and handle them itself.
