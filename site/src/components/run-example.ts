@@ -30,6 +30,12 @@ const terminalTheme = (): ITheme => {
   });
   return theme as ITheme;
 };
+// The cursor's default shape, until the program sets its own: the BIOS underline in Text mode
+// (--nc-term-cursor-style in styles.css), a block elsewhere.
+const cursorStyle = (): 'block' | 'underline' | 'bar' => {
+  const v = getComputedStyle(document.documentElement).getPropertyValue('--nc-term-cursor-style').trim();
+  return v === 'underline' || v === 'bar' ? v : 'block';
+};
 /** Terminal sizes a reader can pick, columns by rows. The first is the default. */
 const SIZES: [number, number][] = [[80, 24], [100, 30], [60, 20]];
 
@@ -162,6 +168,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
         cols,
         rows,
         cursorBlink: true,
+        cursorStyle: cursorStyle(),
         fontSize: FONT_SIZE,
         theme: terminalTheme(),
       });
@@ -169,6 +176,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       const restyle = term;
       new MutationObserver(() => {
         restyle.options.theme = terminalTheme();
+        restyle.options.cursorStyle = cursorStyle();
       }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-style'] });
       // On the alternate screen xterm.js turns the wheel into arrow keys, which a curses program
       // reads as input (getstr() echoed them as ^[[A) while the page scrolls too. Leave the wheel

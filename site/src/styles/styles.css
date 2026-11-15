@@ -37,6 +37,18 @@
   src: url('@fontsource/vt323/files/vt323-latin-400-normal.woff2') format('woff2');
 }
 
+/* VT323 joins "fi" into one cell-wide glyph, so a listing line with "configure" in it came out a
+   column short and its comment no longer lined up. Code keeps one character to a cell in every
+   style, and Text mode, drawn as a character screen, keeps it everywhere. */
+code,
+kbd,
+samp,
+pre,
+.expressive-code,
+:root[data-style='textmode'] body {
+  font-variant-ligatures: none;
+}
+
 /* Code hints. code-links.mjs links each curses call in a C listing to its man page, and
    code-hints.js shows the page's NAME summary in this box on hover or focus. Modern draws it
    from Starlight's colors; each other style sets the --nc-hint-* tokens. */
@@ -1585,5 +1597,733 @@
 @media (prefers-reduced-motion: reduce) {
   .nc-search-hint-cursor.blinking {
     animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   The search field's caret (style-caret.ts): the style's own cursor, in place of the browser's
+   I-beam. Text mode draws the BIOS underline, Terminal a solid amber block, Workstation and
+   Manual page a thin bar. Modern keeps the browser's caret. Where the browser has caret-shape,
+   CSS draws it; desktop Firefox and Safari get a drawn underline or block; elsewhere the native
+   bar takes the style's color. The Run this example terminal's default cursor follows too
+   (--nc-term-cursor-style, read by run-example.ts). */
+:root[data-style="textmode"] {
+  --nc-caret-shape: underscore;
+  --nc-caret-drawn: underline;
+  --nc-caret-color: var(--nc-input-fg);
+  --nc-caret-blink: 534ms;
+  --nc-term-cursor-style: underline;
+}
+:root[data-style="workstation"] {
+  --nc-caret-shape: bar;
+  --nc-caret-drawn: bar;
+  --nc-caret-color: #33332f;
+  --nc-caret-blink: 1000ms;
+}
+:root[data-style="manpage"] {
+  --nc-caret-shape: bar;
+  --nc-caret-drawn: bar;
+  --nc-caret-color: #2c2c28;
+  --nc-caret-blink: 1000ms;
+}
+:root[data-style="terminal"] {
+  --nc-caret-shape: block;
+  --nc-caret-drawn: block;
+  --nc-caret-color: var(--nc-amber);
+  --nc-caret-blink: 600ms;
+}
+#starlight__search .pagefind-ui__search-input[data-nc-caret="tint"] {
+  caret-color: var(--nc-caret-color);
+}
+#starlight__search .pagefind-ui__search-input[data-nc-caret="drawn"] {
+  caret-color: transparent;
+}
+/* During IME composition the system's caret comes back, so the candidate window sits where the
+   system expects it. */
+#starlight__search
+  .pagefind-ui__search-input[data-nc-caret="drawn"].nc-caret-ime {
+  caret-color: var(--nc-caret-color);
+}
+@supports (caret-shape: block) {
+  #starlight__search .pagefind-ui__search-input[data-nc-caret="native"] {
+    caret-shape: var(--nc-caret-shape);
+    caret-color: var(--nc-caret-color);
+    caret-animation: manual;
+    animation: nc-caret-blink var(--nc-caret-blink) steps(1) infinite;
+  }
+  #starlight__search
+    .pagefind-ui__search-input[data-nc-caret="native"].nc-caret-typing {
+    animation: none;
+  }
+}
+@keyframes nc-caret-blink {
+  50% {
+    caret-color: transparent;
+  }
+}
+/* One cursor at a time: while the hint types behind its own cursor, the field's caret waits. */
+#starlight__search .pagefind-ui__search-input.nc-hint-owns-caret {
+  caret-color: transparent !important;
+  animation: none;
+}
+.nc-caret {
+  position: absolute;
+  z-index: 2;
+  height: 1.2em;
+  line-height: 1.2em;
+  white-space: pre;
+  text-align: center;
+  pointer-events: none;
+}
+.nc-caret[hidden] {
+  display: none;
+}
+.nc-caret-underline::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.1em;
+  height: 0.12em;
+  background: var(--nc-caret-color);
+}
+.nc-caret-block {
+  background: var(--nc-caret-color);
+  color: var(--nc-dialog-bg);
+  opacity: 0.85;
+}
+.nc-caret-blink {
+  animation: nc-caret-dim var(--nc-caret-blink) steps(1) infinite;
+}
+@keyframes nc-caret-dim {
+  50% {
+    opacity: 0;
+  }
+}
+.nc-caret-mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #starlight__search .pagefind-ui__search-input[data-nc-caret="native"],
+  .nc-caret-blink {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  .nc-caret {
+    display: none;
+  }
+  #starlight__search .pagefind-ui__search-input[data-nc-caret] {
+    caret-color: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   The search pull-down (search-panel.ts). From 50rem up the header's search button is drawn as
+   the style's text field, showing the rotating hint (search-hint.ts) in place of the word
+   Search. The search dialog becomes a panel hanging under it: the dialog's own box is
+   transparent and sits on the button (--nc-sb-* are the button's box, measured by
+   search-panel.ts), Pagefind's input lies exactly over the button, and #starlight__search::before
+   draws the panel below it in the style's window. Below 50rem Starlight's full-screen dialog is
+   unchanged. */
+:root {
+  --nc-pull-gap: 0.375rem;
+  --nc-pull-bw: 1px;
+  --nc-pull-bg: var(--sl-color-gray-6);
+  --nc-pull-fg: var(--sl-color-gray-2);
+  --nc-pull-border: 1px solid;
+  --nc-pull-border-color: var(--sl-color-gray-5);
+  --nc-pull-radius: 0.5rem;
+  --nc-pull-shadow: var(--sl-shadow-lg);
+  --nc-pull-well-bg: transparent;
+  --nc-pull-well-border: 0;
+  --nc-pull-well-border-color: transparent;
+  --nc-pull-row-bg: transparent;
+  --nc-pull-row-fg: var(--sl-color-gray-2);
+  --nc-pull-row-gap: 0.125rem;
+  --nc-pull-row-radius: 0.375rem;
+  --nc-pull-row-rule: 0;
+  --nc-pull-title-fg: var(--sl-color-white);
+  --nc-pull-title-weight: 600;
+  --nc-pull-meta-fg: var(--sl-color-gray-3);
+  --nc-pull-sel-bg: var(--sl-color-gray-5);
+  --nc-pull-sel-fg: var(--sl-color-gray-1);
+  --nc-pull-sel-title: var(--sl-color-white);
+  --nc-pull-sel-deco: none;
+  --nc-pull-mark-bg: var(--sl-color-accent-low);
+  --nc-pull-mark-fg: var(--sl-color-white);
+  --nc-pull-sel-mark-bg: var(--nc-pull-mark-bg);
+  --nc-pull-sel-mark-fg: var(--nc-pull-mark-fg);
+  --nc-pull-foot-bg: transparent;
+  --nc-pull-foot-fg: var(--sl-color-gray-3);
+  --nc-pull-foot-rule: 1px solid var(--sl-color-gray-5);
+  --nc-pull-key-fg: var(--sl-color-gray-1);
+  --nc-pull-key-bg: var(--sl-color-gray-5);
+  --nc-pull-focus-border: var(--sl-color-accent);
+  --nc-pull-focus-ring: none;
+}
+/* Text mode: a DOS drop-down window, its title on the frame giving the match count. */
+:root[data-style="textmode"] {
+  --nc-pull-gap: 0.875rem;
+  --nc-pull-bw: 4px;
+  --nc-pull-bg: var(--nc-cga-gray);
+  --nc-pull-fg: var(--nc-cga-black);
+  --nc-pull-border: 4px double;
+  --nc-pull-border-color: var(--nc-cga-white);
+  --nc-pull-radius: 0;
+  --nc-pull-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset)
+    0 var(--nc-cga-black);
+  --nc-pull-row-bg: var(--nc-cga-cyan);
+  --nc-pull-row-fg: var(--nc-cga-black);
+  --nc-pull-row-gap: 3px;
+  --nc-pull-row-radius: 0;
+  --nc-pull-title-fg: var(--nc-cga-black);
+  --nc-pull-title-weight: 400;
+  --nc-pull-meta-fg: var(--nc-cga-blue);
+  --nc-pull-sel-bg: var(--nc-cga-black);
+  --nc-pull-sel-fg: var(--nc-cga-gray);
+  --nc-pull-sel-title: var(--nc-cga-yellow);
+  --nc-pull-mark-bg: var(--nc-cga-blue);
+  --nc-pull-mark-fg: var(--nc-cga-white);
+  --nc-pull-sel-mark-bg: var(--nc-cga-cyan);
+  --nc-pull-sel-mark-fg: var(--nc-cga-black);
+  --nc-pull-foot-fg: var(--nc-cga-black);
+  --nc-pull-foot-rule: 0;
+  --nc-pull-key-fg: var(--nc-cga-red);
+  --nc-pull-key-bg: transparent;
+  --nc-pull-focus-border: transparent;
+}
+/* Workstation: a raised Motif panel holding a sunken list, with the Motif selection color. */
+:root[data-style="workstation"] {
+  --nc-pull-bw: 2px;
+  --nc-pull-bg: #d6d6d1;
+  --nc-pull-fg: #33332f;
+  --nc-pull-border: 2px solid;
+  --nc-pull-border-color: var(--nc-raised);
+  --nc-pull-radius: 0;
+  --nc-pull-shadow: 0.25rem 0.25rem 0 rgb(0 0 0 / 0.35);
+  --nc-pull-well-bg: #ffffff;
+  --nc-pull-well-border: 2px solid;
+  --nc-pull-well-border-color: var(--nc-sunken);
+  --nc-pull-row-fg: #33332f;
+  --nc-pull-row-gap: 0;
+  --nc-pull-row-radius: 0;
+  --nc-pull-title-fg: #161616;
+  --nc-pull-title-weight: 700;
+  --nc-pull-meta-fg: #66665f;
+  --nc-pull-sel-bg: #22577a;
+  --nc-pull-sel-fg: #e6edf2;
+  --nc-pull-sel-title: #ffffff;
+  --nc-pull-mark-bg: #dfe8ee;
+  --nc-pull-mark-fg: #161616;
+  --nc-pull-sel-mark-bg: #ffffff;
+  --nc-pull-sel-mark-fg: #22577a;
+  --nc-pull-foot-fg: #33332f;
+  --nc-pull-foot-rule: 0;
+  --nc-pull-key-fg: #161616;
+  --nc-pull-key-bg: transparent;
+  --nc-pull-focus-border: var(--nc-sunken);
+  --nc-pull-focus-ring: 0 0 0 1px #161616;
+}
+/* Manual page: a sheet of paper with dotted rules, and the pager's reverse-video prompt line. */
+:root[data-style="manpage"] {
+  --nc-pull-bw: 1px;
+  --nc-pull-bg: #fdfdf8;
+  --nc-pull-fg: #2c2c28;
+  --nc-pull-border: 1px solid;
+  --nc-pull-border-color: #1b1b1b;
+  --nc-pull-radius: 0;
+  --nc-pull-shadow: 0.25rem 0.25rem 0 #d8d8cc;
+  --nc-pull-row-fg: #2c2c28;
+  --nc-pull-row-gap: 0;
+  --nc-pull-row-radius: 0;
+  --nc-pull-row-rule: 1px dotted #b8b8ac;
+  --nc-pull-title-fg: #1b1b1b;
+  --nc-pull-title-weight: 700;
+  --nc-pull-meta-fg: #6b6b62;
+  --nc-pull-sel-bg: #f1f1e8;
+  --nc-pull-sel-fg: #2c2c28;
+  --nc-pull-sel-title: #1d3f8f;
+  --nc-pull-sel-deco: underline;
+  --nc-pull-mark-bg: #1d3f8f;
+  --nc-pull-mark-fg: #fdfdf8;
+  --nc-pull-foot-bg: #2c2c28;
+  --nc-pull-foot-fg: #fdfdf8;
+  --nc-pull-foot-rule: 0;
+  --nc-pull-key-fg: #fdfdf8;
+  --nc-pull-key-bg: transparent;
+  --nc-pull-focus-border: #1d3f8f;
+}
+/* Terminal: black in one amber line; the selected row in inverse video. */
+:root[data-style="terminal"] {
+  --nc-pull-bw: 1px;
+  --nc-pull-bg: #050504;
+  --nc-pull-fg: #b3ae9f;
+  --nc-pull-border: 1px solid;
+  --nc-pull-border-color: var(--nc-amber);
+  --nc-pull-radius: 0;
+  --nc-pull-shadow: 0 0 1rem rgb(255 176 0 / 0.25);
+  --nc-pull-row-fg: #b3ae9f;
+  --nc-pull-row-radius: 0;
+  --nc-pull-title-fg: var(--nc-amber);
+  --nc-pull-title-weight: 700;
+  --nc-pull-meta-fg: #7a7566;
+  --nc-pull-sel-bg: var(--nc-amber);
+  --nc-pull-sel-fg: #1d1a12;
+  --nc-pull-sel-title: #050504;
+  --nc-pull-mark-bg: var(--nc-amber);
+  --nc-pull-mark-fg: #050504;
+  --nc-pull-sel-mark-bg: #050504;
+  --nc-pull-sel-mark-fg: var(--nc-amber);
+  --nc-pull-foot-fg: #7a7566;
+  --nc-pull-foot-rule: 1px solid #2a2720;
+  --nc-pull-key-fg: var(--nc-amber);
+  --nc-pull-key-bg: transparent;
+  --nc-pull-focus-border: var(--nc-amber);
+}
+
+/* The header field's hint, the suggestions and the legend exist only on desktop. */
+.nc-search-hint--header,
+#starlight__search > :is(.nc-search-suggest, .nc-search-legend) {
+  display: none;
+}
+
+@media (min-width: 50rem) {
+  /* The header field. The rotating hint takes the place of the word Search. */
+  :root[data-style] site-search button[data-open-modal] {
+    font-size: max(1rem, var(--sl-text-sm));
+  }
+  site-search button[data-open-modal] > span:not(.nc-search-hint) {
+    display: none;
+  }
+  .nc-search-hint.nc-search-hint--header {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 1.4em;
+    text-align: start;
+  }
+  :root[data-style]
+    .nc-search-hint.nc-search-hint--header.nc-search-hint--query {
+    color: var(--nc-input-fg, var(--sl-color-white));
+  }
+
+  /* While the pull-down is open, its field lies over the header's; the header's own text,
+     seen through a see-through field such as Terminal's, would double it. */
+  [data-search-modal-open] site-search button[data-open-modal] > * {
+    visibility: hidden;
+  }
+
+  /* The dialog's own box: transparent, on the header field, as wide as the panel. */
+  :root[data-style] site-search dialog[open]:modal {
+    inset: var(--nc-sb-y) auto auto var(--nc-sb-x);
+    margin: 0;
+    padding: 0;
+    width: min(max(var(--nc-sb-w), 30rem), calc(100vw - var(--nc-sb-x) - 1rem));
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    max-height: min(
+      calc(var(--nc-sb-h) + var(--nc-pull-gap) + 22rem),
+      calc(100dvh - var(--nc-sb-y) - 1.5rem)
+    );
+    overflow: visible;
+    background: transparent;
+    color: var(--nc-pull-fg);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  :root[data-style] site-search dialog[open]:modal::backdrop {
+    background: transparent;
+    backdrop-filter: none;
+  }
+  :root[data-style] site-search dialog[open]:modal::before {
+    content: none;
+  }
+  site-search dialog .dialog-frame {
+    min-height: 0;
+    padding: 0;
+    gap: 0;
+    overflow: visible;
+  }
+  site-search dialog .search-container {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  /* The panel: everything below the field, framed by ::before. */
+  :root[data-style] #starlight__search {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    padding-bottom: var(--nc-pull-bw);
+    font-family: var(--sl-font);
+  }
+  #starlight__search::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: calc(var(--nc-sb-h) + var(--nc-pull-gap)) 0 0;
+    background: var(--nc-pull-bg);
+    border: var(--nc-pull-border);
+    border-color: var(--nc-pull-border-color);
+    border-radius: var(--nc-pull-radius);
+    box-shadow: var(--nc-pull-shadow);
+  }
+  /* Text mode's window title, on the top edge of the frame: the match count, or Suggestions. */
+  :root[data-style="textmode"] #starlight__search::after {
+    content: attr(data-nc-title);
+    position: absolute;
+    top: calc(var(--nc-sb-h) + var(--nc-pull-gap));
+    left: 50%;
+    transform: translate(-50%, -55%);
+    padding: 0 0.5rem;
+    background: var(--nc-pull-bg);
+    color: var(--nc-cga-white);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  #starlight__search > .pagefind-ui,
+  #starlight__search .pagefind-ui__form {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+  #starlight__search > .nc-search-suggest {
+    order: 1;
+  }
+  #starlight__search > .nc-search-legend {
+    order: 2;
+  }
+
+  /* The field: Pagefind's input, on the header button, drawn the same way. */
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__form
+    > .pagefind-ui__search-input[type] {
+    flex: none;
+    width: var(--nc-sb-w);
+    height: var(--nc-sb-h);
+    padding: 0 2.75rem 0 calc(var(--nc-sb-text-x) - var(--nc-sb-bl, 0px));
+    font-size: max(1rem, var(--sl-text-sm));
+    background: var(--nc-input-bg, var(--sl-color-black));
+    border: var(--nc-input-border, 1px solid);
+    border-color: var(--nc-input-border-color, var(--sl-color-gray-5));
+    border-radius: var(--nc-input-radius, 0.5rem);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__form
+    > .pagefind-ui__search-input[type]:focus {
+    border-color: var(--nc-pull-focus-border);
+    box-shadow: var(--nc-pull-focus-ring);
+  }
+  :root[data-style] #starlight__search .pagefind-ui__form::before {
+    top: calc((var(--nc-sb-h) - var(--nc-sb-icon-size, 1rem)) / 2);
+    left: var(--nc-sb-icon-x, 0.75rem);
+    width: var(--nc-sb-icon-size, 1rem);
+    height: var(--nc-sb-icon-size, 1rem);
+    opacity: 1;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+  :root[data-style] #starlight__search .pagefind-ui__search-clear {
+    top: 0;
+    inset-inline-end: auto;
+    left: calc(var(--nc-sb-w) - 2.75rem);
+    width: 2.75rem;
+    height: var(--nc-sb-h);
+  }
+
+  /* The clear button's cross, in the field's text color: Text mode's accent is the field's own
+     blue. */
+  :root[data-style] #starlight__search .pagefind-ui__search-clear::before {
+    background-color: var(--nc-input-fg, var(--sl-color-text-accent));
+  }
+
+  /* Results, compact: the page, its best section, and two lines of excerpt. */
+  #starlight__search .pagefind-ui__drawer {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    gap: 0;
+    min-height: 0;
+    margin-top: calc(var(--nc-pull-gap) + var(--nc-pull-bw));
+    padding: 0.375rem calc(var(--nc-pull-bw) + 0.5rem) 0.5rem;
+  }
+  :root[data-style="textmode"] #starlight__search .pagefind-ui__drawer {
+    padding-top: 0.875rem;
+  }
+  #starlight__search .pagefind-ui__results-area {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  #starlight__search .pagefind-ui__message {
+    height: auto;
+    padding: 0 0.125rem 0.375rem;
+    font-size: 0.85em;
+    font-weight: 400;
+    color: var(--nc-pull-meta-fg);
+  }
+  :root[data-style="textmode"] #starlight__search .pagefind-ui__message {
+    display: none;
+  }
+  #starlight__search :is(.pagefind-ui__results, .nc-search-suggest ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--nc-pull-well-bg);
+    border: var(--nc-pull-well-border);
+    border-color: var(--nc-pull-well-border-color);
+  }
+  :root[data-style] #starlight__search .pagefind-ui__results > * + * {
+    margin-top: var(--nc-pull-row-gap);
+  }
+  :root[data-style] #starlight__search .pagefind-ui__result {
+    position: relative;
+    padding: 0.375rem 0.625rem;
+    background: var(--nc-pull-row-bg);
+    color: var(--nc-pull-row-fg);
+    border-bottom: var(--nc-pull-row-rule);
+    border-radius: var(--nc-pull-row-radius);
+  }
+  #starlight__search .pagefind-ui__result-inner {
+    display: block;
+    margin: 0;
+  }
+  :root[data-style]
+    #starlight__search
+    :is(
+      .pagefind-ui__result-inner > .pagefind-ui__result-title,
+      .pagefind-ui__result-nested
+    ) {
+    position: static;
+    display: inline;
+    padding: 0;
+    background: transparent;
+    outline: none;
+  }
+  #starlight__search
+    :is(
+      .pagefind-ui__result-inner > .pagefind-ui__result-title,
+      .pagefind-ui__result-nested
+    )::before {
+    content: none;
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__result-nested
+    ~ .pagefind-ui__result-nested {
+    display: none;
+  }
+  #starlight__search .pagefind-ui__result-title {
+    font-size: 1em;
+  }
+  #starlight__search .pagefind-ui__result-nested .pagefind-ui__result-title {
+    display: inline;
+    margin-inline-start: 0.35em;
+    font-size: 0.95em;
+  }
+  #starlight__search
+    .pagefind-ui__result-nested
+    .pagefind-ui__result-title::before {
+    content: "› ";
+    color: var(--nc-pull-title-fg);
+  }
+  :root[data-style] #starlight__search .pagefind-ui__result-link {
+    color: var(--nc-pull-title-fg);
+    font-weight: var(--nc-pull-title-weight);
+    text-decoration: none;
+  }
+  #starlight__search .pagefind-ui__result-nested .pagefind-ui__result-link {
+    font-weight: 400;
+  }
+  #starlight__search
+    .pagefind-ui__result-nested
+    .pagefind-ui__result-link::after {
+    content: none;
+  }
+  #starlight__search .pagefind-ui__result-excerpt {
+    display: -webkit-box;
+    min-width: 0;
+    margin-top: 0.125rem;
+    overflow: hidden;
+    font-size: 0.9em;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  :root[data-style] #starlight__search .pagefind-ui__result mark {
+    background: var(--nc-pull-mark-bg);
+    color: var(--nc-pull-mark-fg);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__result:is(:hover, :focus-within) {
+    background: var(--nc-pull-sel-bg);
+    color: var(--nc-pull-sel-fg);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__result:is(:hover, :focus-within)
+    .pagefind-ui__result-link {
+    color: var(--nc-pull-sel-title);
+    text-decoration: var(--nc-pull-sel-deco);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__result:is(:hover, :focus-within)
+    .pagefind-ui__result-title::before {
+    color: var(--nc-pull-sel-title);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__result:is(:hover, :focus-within)
+    mark {
+    background: var(--nc-pull-sel-mark-bg);
+    color: var(--nc-pull-sel-mark-fg);
+  }
+  #starlight__search .pagefind-ui__result-link:focus-visible {
+    outline: none;
+  }
+  :root[data-style] #starlight__search .pagefind-ui__button {
+    width: 100%;
+    height: auto;
+    margin-top: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.9em;
+    background: var(--nc-pull-row-bg);
+    color: var(--nc-pull-title-fg);
+    border: 0;
+    border-radius: var(--nc-pull-row-radius);
+  }
+  :root[data-style]
+    #starlight__search
+    .pagefind-ui__button:is(:hover, :focus-visible) {
+    background: var(--nc-pull-sel-bg);
+    color: var(--nc-pull-sel-title);
+    outline: none;
+  }
+
+  /* Suggestions, while the field is empty. */
+  #starlight__search[data-nc-empty] > .nc-search-suggest {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: calc(var(--nc-pull-gap) + var(--nc-pull-bw));
+    padding: 0.375rem calc(var(--nc-pull-bw) + 0.5rem) 0.5rem;
+  }
+  :root[data-style="textmode"] #starlight__search > .nc-search-suggest {
+    padding-top: 0.875rem;
+  }
+  .nc-search-suggest-head {
+    margin: 0;
+    padding: 0 0.125rem 0.375rem;
+    font-size: 0.85em;
+    color: var(--nc-pull-meta-fg);
+  }
+  :root[data-style="textmode"] .nc-search-suggest-head {
+    display: none;
+  }
+  #starlight__search .nc-search-suggest ul {
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  #starlight__search .nc-search-suggest li + li {
+    margin-top: var(--nc-pull-row-gap);
+  }
+  .nc-search-suggest-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    width: 100%;
+    padding: 0.3rem 0.625rem;
+    font: inherit;
+    text-align: start;
+    background: var(--nc-pull-row-bg);
+    color: var(--nc-pull-row-fg);
+    border: 0;
+    border-bottom: var(--nc-pull-row-rule);
+    border-radius: var(--nc-pull-row-radius);
+    cursor: pointer;
+  }
+  .nc-search-suggest-term {
+    font-weight: var(--nc-pull-title-weight);
+    color: var(--nc-pull-title-fg);
+  }
+  .nc-search-suggest-where {
+    overflow: hidden;
+    font-size: 0.85em;
+    text-align: end;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--nc-pull-meta-fg);
+  }
+  .nc-search-suggest-item:is(:hover, :focus-visible) {
+    background: var(--nc-pull-sel-bg);
+    color: var(--nc-pull-sel-fg);
+    outline: none;
+  }
+  .nc-search-suggest-item:is(:hover, :focus-visible) .nc-search-suggest-term {
+    color: var(--nc-pull-sel-title);
+    text-decoration: var(--nc-pull-sel-deco);
+  }
+  .nc-search-suggest-item:is(:hover, :focus-visible) .nc-search-suggest-where {
+    color: var(--nc-pull-sel-fg);
+  }
+
+  /* The key legend along the bottom; Manual page's is the pager's prompt line. */
+  #starlight__search > .nc-search-legend {
+    display: flex;
+    flex: none;
+    margin: 0 var(--nc-pull-bw);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8em;
+    background: var(--nc-pull-foot-bg);
+    color: var(--nc-pull-foot-fg);
+    border-top: var(--nc-pull-foot-rule);
+  }
+  .nc-search-legend-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+  .nc-search-legend b {
+    padding: 0 0.25rem;
+    font-weight: 400;
+    color: var(--nc-pull-key-fg);
+    background: var(--nc-pull-key-bg);
+    border-radius: 0.25rem;
+  }
+  :root[data-style="manpage"] .nc-search-legend b {
+    padding: 0;
+    font-weight: 700;
+  }
+  .nc-search-legend-pager,
+  :root[data-style="manpage"] .nc-search-legend-keys {
+    display: none;
+  }
+  :root[data-style="manpage"] .nc-search-legend-pager {
+    display: inline;
   }
 }

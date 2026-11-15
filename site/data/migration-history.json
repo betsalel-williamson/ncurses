@@ -1392,6 +1392,102 @@
     "rows": 298,
     "originalErrors": 158
    }
+  },
+  {
+   "pr": 59,
+   "merge": "82dba11ce7b6",
+   "mergedAt": "2026-11-15T09:58:30-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 302,
+    "originalErrors": 159
+   }
+  },
+  {
+   "pr": 60,
+   "merge": "568319e5809a",
+   "mergedAt": "2026-11-15T10:31:16-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 302,
+    "originalErrors": 159
+   }
+  },
+  {
+   "pr": 61,
+   "merge": "1adccd5f0d04",
+   "mergedAt": "2026-11-15T11:31:24-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 302,
+    "originalErrors": 159
+   }
+  },
+  {
+   "pr": 62,
+   "merge": "4a752e13f450",
+   "mergedAt": "2026-11-15T11:53:26-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 302,
+    "originalErrors": 159
+   }
   }
  ]
 }
