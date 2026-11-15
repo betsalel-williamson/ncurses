@@ -37,6 +37,18 @@
   src: url('@fontsource/vt323/files/vt323-latin-400-normal.woff2') format('woff2');
 }
 
+/* VT323 joins "fi" into one cell-wide glyph, so a listing line with "configure" in it came out a
+   column short and its comment no longer lined up. Code keeps one character to a cell in every
+   style, and Text mode, drawn as a character screen, keeps it everywhere. */
+code,
+kbd,
+samp,
+pre,
+.expressive-code,
+:root[data-style='textmode'] body {
+  font-variant-ligatures: none;
+}
+
 /* Code hints. code-links.mjs links each curses call in a C listing to its man page, and
    code-hints.js shows the page's NAME summary in this box on hover or focus. Modern draws it
    from Starlight's colors; each other style sets the --nc-hint-* tokens. */
