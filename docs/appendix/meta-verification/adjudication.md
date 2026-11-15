@@ -51,7 +51,7 @@ Moved to `rejected`, with no change to the text, because the edition's wording i
 
 Moved to `rejected`, with the edition's "fix" reverted or corrected in the content commit, and an `edition-error` row for each:
 
-- `L195` Front page: "He has revised every manual page, which Eric S. Raymond first wrote" was wrong. AUTHORS sections name Dickey on ten manual pages (`curs_extend`, `default_colors`, `define_key`, `key_defined`, `keybound`, `keyok`, `legacy_coding`, `new_pair`, `resizeterm`, `wresize`). It now says he revised every page and wrote several.
+- `L195` Front page: "He has revised every manual page, which Eric S. Raymond first wrote" doesn't hold for every page: AUTHORS sections name Dickey alone on twelve (`curs_extend`, `default_colors`, `define_key`, `key_defined`, `keybound`, `keyok`, `legacy_coding`, `new_pair`, `panel`, `resizeterm`, `wresize`, `user_caps`). A rewrite to "wrote several of them" undersold Raymond's part, so the owner chose to keep the sentence as first written, and an `open` row records the twelve pages.
 - `L272` Input guide: `curs_getch(3X)` says getch() "with echo and neither cbreak nor raw is not well-defined", so the original warning is restored.
 - `L295` Hacker's guide: `parse_entry.c` does translate `box1` (`box_chars_1`) to `acsc` ("acsc string synthesized from AIX capabilities"), so the original example is restored, with `get` corrected to `gets` (a `formatting` row).
 - `L301` Glossary: `ncurses(3X)` gives `_w` as the rule and `addwstr` and `inwstr` as the exceptions, so the rule is restored with its exception.
