@@ -78,3 +78,25 @@ test('festival dates match the published calendars, 2025–2036', async () => {
     for (const shift of [-1, 1]) assert.ok(!occasionsOn(day(iso, shift)).includes('lunarnewyear'), `${iso} ${shift}`);
   }
 });
+
+test('the federal holidays follow 5 U.S.C. 6103 for a year', async () => {
+  const { federal } = await import('../scripts/calendar.mjs');
+  const on = Object.fromEntries(federal(2026).map((h) => [h.occasion, h.date]));
+  assert.deepEqual(on, {
+    newyear: '2026-01-01', mlk: '2026-01-19', washington: '2026-02-16', memorial: '2026-05-25',
+    juneteenth: '2026-06-19', independence: '2026-07-04', labor: '2026-09-07', indigenous: '2026-10-12',
+    veterans: '2026-11-11', thanksgiving: '2026-11-26', christmas: '2026-12-25',
+  });
+});
+
+test('a solstice instant falls on the reader\'s own day', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const day = (tz) =>
+    execFileSync(process.execPath, ['--input-type=module', '-e', `
+      const { occasionsOn } = await import(${JSON.stringify(new URL('../src/components/boot-screen.js', import.meta.url).href)});
+      console.log([20, 21, 22].filter((d) => occasionsOn(new Date(2027, 11, d)).includes('solstice')).join());`],
+    { env: { ...process.env, TZ: tz }, encoding: 'utf8' }).trim();
+  // USNO: 2027-12-22 02:42 UT, which is still the 21st in Los Angeles.
+  assert.equal(day('UTC'), '22');
+  assert.equal(day('America/Los_Angeles'), '21');
+});

@@ -1,0 +1,987 @@
+{
+ "about": "The dates the boot screen easter eggs fall on, each with its source. Written by site/scripts/calendar.mjs.",
+ "sources": {
+  "hebcal": "https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&i=off&year=",
+  "hko": "https://www.hko.gov.hk/en/gts/time/calendar/text/files/T<year>e.txt",
+  "usno": "https://aa.usno.navy.mil/api/seasons?year=",
+  "usc": "https://www.law.cornell.edu/uscode/text/5/6103"
+ },
+ "years": [
+  2025,
+  2036
+ ],
+ "dates": [
+  {
+   "occasion": "newyear",
+   "date": "2025-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2025-01-20",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2025-01-29",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2025-02-17",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2025-05-26",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2025-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2025-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2025-09-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2025-10-13",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2025-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2025-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2025-11-27",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2025-12-14",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2025-12-21",
+   "time": "15:03Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2025-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2025-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2026-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2026-01-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "washington",
+   "date": "2026-02-16",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2026-02-17",
+   "source": "hko"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2026-05-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2026-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2026-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2026-09-07",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2026-10-12",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2026-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2026-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2026-11-26",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2026-12-04",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2026-12-21",
+   "time": "20:50Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2026-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2026-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2027-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2027-01-18",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2027-02-06",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2027-02-15",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2027-05-31",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2027-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2027-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2027-09-06",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2027-10-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2027-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2027-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2027-11-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2027-12-22",
+   "time": "02:42Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2027-12-24",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2027-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2027-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2028-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2028-01-17",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2028-01-26",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2028-02-21",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2028-05-29",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2028-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2028-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2028-09-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2028-10-09",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2028-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2028-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2028-11-23",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2028-12-12",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2028-12-21",
+   "time": "08:19Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2028-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2028-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2029-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2029-01-15",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2029-02-13",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2029-02-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2029-05-28",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2029-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2029-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2029-09-03",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2029-10-08",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2029-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2029-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2029-11-22",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2029-12-01",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2029-12-21",
+   "time": "14:14Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2029-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2029-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2030-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2030-01-21",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2030-02-03",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2030-02-18",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2030-05-27",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2030-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2030-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2030-09-02",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2030-10-14",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2030-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2030-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2030-11-28",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2030-12-20",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2030-12-21",
+   "time": "20:09Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2030-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2030-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2031-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2031-01-20",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2031-01-23",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2031-02-17",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2031-05-26",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2031-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2031-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2031-09-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2031-10-13",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2031-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2031-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2031-11-27",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2031-12-09",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2031-12-22",
+   "time": "01:55Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2031-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2031-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2032-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2032-01-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2032-02-11",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2032-02-16",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2032-05-31",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2032-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2032-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2032-09-06",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2032-10-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2032-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2032-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2032-11-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2032-11-27",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2032-12-21",
+   "time": "07:56Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2032-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2032-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2033-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2033-01-17",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2033-01-31",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2033-02-21",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2033-05-30",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2033-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2033-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2033-09-05",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2033-10-10",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2033-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2033-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2033-11-24",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2033-12-16",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2033-12-21",
+   "time": "13:46Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2033-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2033-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2034-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2034-01-16",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2034-02-19",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2034-02-20",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2034-05-29",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2034-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2034-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2034-09-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2034-10-09",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2034-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2034-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2034-11-23",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2034-12-06",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2034-12-21",
+   "time": "19:34Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2034-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2034-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2035-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2035-01-15",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2035-02-08",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2035-02-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2035-05-28",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2035-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2035-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2035-09-03",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2035-10-08",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2035-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2035-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2035-11-22",
+   "source": "usc"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2035-12-22",
+   "time": "01:31Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2035-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2035-12-25",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2035-12-26",
+   "source": "fixed"
+  },
+  {
+   "occasion": "newyear",
+   "date": "2036-01-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "mlk",
+   "date": "2036-01-21",
+   "source": "usc"
+  },
+  {
+   "occasion": "lunarnewyear",
+   "date": "2036-01-28",
+   "source": "hko"
+  },
+  {
+   "occasion": "washington",
+   "date": "2036-02-18",
+   "source": "usc"
+  },
+  {
+   "occasion": "memorial",
+   "date": "2036-05-26",
+   "source": "usc"
+  },
+  {
+   "occasion": "juneteenth",
+   "date": "2036-06-19",
+   "source": "usc"
+  },
+  {
+   "occasion": "independence",
+   "date": "2036-07-04",
+   "source": "usc"
+  },
+  {
+   "occasion": "labor",
+   "date": "2036-09-01",
+   "source": "usc"
+  },
+  {
+   "occasion": "indigenous",
+   "date": "2036-10-13",
+   "source": "usc"
+  },
+  {
+   "occasion": "birthday",
+   "date": "2036-11-04",
+   "source": "fixed"
+  },
+  {
+   "occasion": "veterans",
+   "date": "2036-11-11",
+   "source": "usc"
+  },
+  {
+   "occasion": "thanksgiving",
+   "date": "2036-11-27",
+   "source": "usc"
+  },
+  {
+   "occasion": "hanukkah",
+   "date": "2036-12-13",
+   "source": "hebcal"
+  },
+  {
+   "occasion": "solstice",
+   "date": "2036-12-21",
+   "time": "07:13Z",
+   "source": "usno"
+  },
+  {
+   "occasion": "christmas",
+   "date": "2036-12-25",
+   "source": "usc"
+  },
+  {
+   "occasion": "kwanzaa",
+   "date": "2036-12-26",
+   "source": "fixed"
+  }
+ ]
+}

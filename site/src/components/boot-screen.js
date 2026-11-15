@@ -19,6 +19,8 @@
 //   New Year), side by side or in turn when they fall together. With reduced motion each picture
 //   is drawn still.
 
+import calendar from '../../data/calendar.json' with { type: 'json' };
+
 export const FIRST_MS = 4000;
 export const AGAIN_MS = 1200;
 /** The length of any boot that plays an easter egg, so the egg can be seen. */
@@ -82,106 +84,49 @@ const lightBackground = (hex) => {
 const visible = (s) => s.replace(/\x1b\[[0-9;]*m/g, '').length;
 const padTo = (s, n) => s + ' '.repeat(Math.max(0, n - visible(s)));
 
-// ---- Dates. Everything is the reader's local date. ---------------------------------------------
-/** The nth weekday (0 = Sunday) of a month, or the last one when n is -1. */
-function nthWeekday(year, month, weekday, n) {
-  if (n < 0) {
-    const last = new Date(year, month + 1, 0);
-    return last.getDate() - ((last.getDay() - weekday + 7) % 7);
+// ---- Dates. Every date comes from site/data/calendar.json, which names a source for each one
+// (site/scripts/calendar.mjs). The reader's local date is looked up in it; a year past the file
+// gets no occasion rather than a guessed one.
+const local = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const addDays = (iso, n) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return local(new Date(y, m - 1, d + n));
+};
+/** For each local date, the occasions on it: one-day occasions as listed, and the runs that last. */
+const ON = new Map();
+const mark = (date, occasion, value = true) => {
+  if (!ON.has(date)) ON.set(date, new Map());
+  ON.get(date).set(occasion, value);
+};
+for (const { occasion, date, time } of calendar.dates) {
+  if (occasion === 'hanukkah') for (let n = 1; n <= 8; n++) mark(addDays(date, n - 1), 'hanukkah', n);
+  else if (occasion === 'kwanzaa') for (let n = 1; n <= 7; n++) mark(addDays(date, n - 1), 'kwanzaa', n);
+  // The solstice is an instant in UT; the reader's day is the one it falls on where they are.
+  else if (occasion === 'solstice') mark(local(new Date(`${date}T${time}`)), 'solstice');
+  else mark(date, occasion);
+  // The December season, around Christmas: the tree from the 20th, Christmas Eve on the 24th.
+  if (occasion === 'christmas') {
+    for (let n = -5; n <= 6; n++) if (n) mark(addDays(date, n), n === -1 ? 'christmaseve' : 'tree');
   }
-  const first = new Date(year, month, 1).getDay();
-  return 1 + ((weekday - first + 7) % 7) + (n - 1) * 7;
 }
-const part = (fmt, date, type) => fmt.formatToParts(date).find((p) => p.type === type)?.value;
-const HEBREW = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long' });
-const CHINESE = new Intl.DateTimeFormat('en-u-ca-chinese', { day: 'numeric', month: 'numeric' });
-const kislevCache = new Map();
-/** The civil date that is 25 Kislev in a Gregorian year's late autumn. */
-function kislev25(year) {
-  if (!kislevCache.has(year)) {
-    let found = null;
-    for (let d = new Date(year, 10, 15); d.getFullYear() === year; d.setDate(d.getDate() + 1)) {
-      if (part(HEBREW, d, 'month') === 'Kislev' && part(HEBREW, d, 'day') === '25') { found = new Date(d); break; }
-    }
-    kislevCache.set(year, found);
-  }
-  return kislevCache.get(year);
-}
-/**
- * The night of Hanukkah lit on this date's evening (1–8), or 0. Night 1 is the eve of 25 Kislev.
- * Its first nights for 2025–2036 match Hebcal's (site/tests/boot-screen.test.mjs).
- */
+/** The night of Hanukkah lit on this date's evening (1–8), or 0. Night 1 is Hebcal's first candle. */
 export function hanukkahNight(date) {
-  const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  for (const y of [day.getFullYear(), day.getFullYear() - 1]) {
-    const k = kislev25(y);
-    if (!k) continue;
-    const n = Math.round((day - k) / 864e5) + 2;
-    if (n >= 1 && n <= 8) return n;
-  }
-  return 0;
+  return ON.get(local(date))?.get('hanukkah') ?? 0;
 }
 /** The day of Kwanzaa (1–7, December 26 to January 1), or 0. */
 export function kwanzaaDay(date) {
-  const m = date.getMonth(), d = date.getDate();
-  return m === 11 && d >= 26 ? d - 25 : m === 0 && d === 1 ? 7 : 0;
+  return ON.get(local(date))?.get('kwanzaa') ?? 0;
 }
 const PRINCIPLES = [['Umoja', 'unity'], ['Kujichagulia', 'self-determination'], ['Ujima', 'collective work and responsibility'],
   ['Ujamaa', 'cooperative economics'], ['Nia', 'purpose'], ['Kuumba', 'creativity'], ['Imani', 'faith']];
-// The December solstice as the US Naval Observatory publishes it (aa.usno.navy.mil/api/seasons),
-// to the minute. Meeus's mean formula below drifts up to 14 minutes from it in these years, enough
-// to put a reader near midnight on the wrong day, so it is used only for years past the table.
-const SOLSTICE = {
-  2025: '2025-12-21T15:03Z', 2026: '2026-12-21T20:50Z', 2027: '2027-12-22T02:42Z', 2028: '2028-12-21T08:19Z',
-  2029: '2029-12-21T14:14Z', 2030: '2030-12-21T20:09Z', 2031: '2031-12-22T01:55Z', 2032: '2032-12-21T07:56Z',
-  2033: '2033-12-21T13:46Z', 2034: '2034-12-21T19:34Z', 2035: '2035-12-22T01:31Z', 2036: '2036-12-21T07:13Z',
-};
-/** The December solstice as an instant. */
-export function decemberSolstice(year) {
-  if (SOLSTICE[year]) return new Date(SOLSTICE[year]);
-  const Y = (year - 2000) / 1000;
-  const jde = 2451900.05952 + 365242.74049 * Y - 0.06223 * Y ** 2 - 0.00823 * Y ** 3 + 0.00032 * Y ** 4;
-  return new Date((jde - 2440587.5) * 864e5);
-}
-const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-// Lunar New Year as the Hong Kong Observatory publishes it, in its Gregorian-Lunar conversion tables
-// (www.hko.gov.hk/en/gts/time/calendar/text/files/T<year>e.txt, the "1st Lunar Month" line). The
-// browser's Chinese calendar (ICU 78) puts 2027 on 7 February and 2030 on 2 February, a day off,
-// so it is used only for years past the table.
-const LUNAR_NEW_YEAR = {
-  2025: [0, 29], 2026: [1, 17], 2027: [1, 6], 2028: [0, 26], 2029: [1, 13], 2030: [1, 3],
-  2031: [0, 23], 2032: [1, 11], 2033: [0, 31], 2034: [1, 19], 2035: [1, 8], 2036: [0, 28],
-};
-/** Whether this date is the first day of the first month of the Chinese calendar. */
-function lunarNewYear(date) {
-  const known = LUNAR_NEW_YEAR[date.getFullYear()];
-  if (known) return date.getMonth() === known[0] && date.getDate() === known[1];
-  return part(CHINESE, date, 'month') === '1' && part(CHINESE, date, 'day') === '1';
-}
 const ZODIAC = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+const ORDER = ['newyear', 'mlk', 'washington', 'memorial', 'juneteenth', 'independence', 'labor', 'indigenous',
+  'birthday', 'veterans', 'thanksgiving', 'christmaseve', 'christmas', 'tree', 'hanukkah', 'kwanzaa', 'solstice', 'lunarnewyear'];
 
 /** Every occasion on a local date, in display order. Federal holidays fall on the actual day, not the observed one. */
 export function occasionsOn(date) {
-  const y = date.getFullYear(), m = date.getMonth(), d = date.getDate();
-  const is = (mm, dd) => m === mm && d === dd;
-  const list = [];
-  if (is(0, 1)) list.push('newyear');
-  if (is(0, nthWeekday(y, 0, 1, 3))) list.push('mlk');
-  if (is(1, nthWeekday(y, 1, 1, 3))) list.push('washington');
-  if (is(4, nthWeekday(y, 4, 1, -1))) list.push('memorial');
-  if (is(5, 19)) list.push('juneteenth');
-  if (is(6, 4)) list.push('independence');
-  if (is(8, nthWeekday(y, 8, 1, 1))) list.push('labor');
-  if (is(9, nthWeekday(y, 9, 1, 2))) list.push('indigenous');
-  if (is(10, 4)) list.push('birthday');
-  if (is(10, 11)) list.push('veterans');
-  if (is(10, nthWeekday(y, 10, 4, 4))) list.push('thanksgiving');
-  if (m === 11 && d >= 20) list.push(d === 24 ? 'christmaseve' : d === 25 ? 'christmas' : 'tree');
-  if (hanukkahNight(date)) list.push('hanukkah');
-  if (kwanzaaDay(date)) list.push('kwanzaa');
-  if (sameDay(decemberSolstice(y), date)) list.push('solstice');
-  if (lunarNewYear(date)) list.push('lunarnewyear');
-  return list;
+  const on = ON.get(local(date));
+  return on ? ORDER.filter((o) => on.has(o)) : [];
 }
 /** The name the header carries for an occasion. */
 function occasionName(key, date) {
