@@ -94,16 +94,21 @@ function buildExample(ex, id, defines) {
     ], quiet);
     const ir = readFileSync(ll, 'utf8')
       .replace(/^@__main_void = .*\n/m, '')
-      .replace(/@main\b/g, '@example_main');
+      // main(argc, argv) is __main_argc_argv in WebAssembly.
+      .replace(/@(?:__main_argc_argv|main)\b/g, '@example_main');
     writeFileSync(ll, ir);
     execFileSync('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
   } catch (e) {
     return { status: 'compile-error', detail: tail(e) };
   }
   const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(wasmBuild, `lib/lib${l}.a`));
+  // A listing whose main() takes a file name (the attributes pager) gets its own source to
+  // read, embedded as example.c, and the page passes that name as its argument.
+  const files = ex.args.length ? ['--embed-file', `${c}@/example.c`] : [];
+  const entry = join(site, ex.args.length ? 'examples/main-args.c' : 'examples/main.c');
   try {
     execFileSync('emcc', [
-      '-O2', obj, join(site, 'examples/main.c'), ...libs,
+      '-O2', obj, entry, ...libs, ...files,
       '-o', join(out, `${id}.mjs`),
       '--js-library', join(site, 'examples/pty.js'),
       '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll"]',
@@ -113,8 +118,9 @@ function buildExample(ex, id, defines) {
   } catch (e) {
     return { status: 'link-error', detail: tail(e) };
   }
-  const smoke = execFileSync('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`)], quiet);
+  const smoke = execFileSync('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], quiet);
   const result = JSON.parse(smoke.trim().split('\n').pop());
+  if (ex.args.length) result.args = ex.args;
   if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
   return result;
 }

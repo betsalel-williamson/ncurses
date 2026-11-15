@@ -5,7 +5,7 @@
  * comes, and exit with status 0 when it gets F1, pressed up to three times (every guide example
  * quits on F1). A program reading a line (getstr) ignores F1, so it gets Enter, then F1 again.
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
- * Usage: node smoke-example.mjs <path to .mjs>
+ * Usage: node smoke-example.mjs <path to .mjs> [program arguments]
  */
 import { pathToFileURL } from 'node:url';
 
@@ -26,6 +26,7 @@ const { default: create } = await import(pathToFileURL(process.argv[2]).href);
 setTimeout(() => report('no-quit', 'still running after F1 three times, then Enter and F1'), 10000);
 let pty;
 create({
+  arguments: process.argv.slice(3),
   preRun: [
     (m) => {
       Object.assign(m.ENV, { TERM: 'xterm-256color', ESCDELAY: '25' });
