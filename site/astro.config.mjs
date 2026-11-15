@@ -27,6 +27,7 @@ export default defineConfig({
         { label: 'Attributes and colors', items: [{ autogenerate: { directory: 'guides/attributes' } }] },
         { label: 'Keyboard', items: [{ autogenerate: { directory: 'guides/keyboard' } }] },
         { label: 'Mouse', items: [{ autogenerate: { directory: 'guides/mouse' } }] },
+        { label: 'Screen and other features', items: [{ autogenerate: { directory: 'guides/screen' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
