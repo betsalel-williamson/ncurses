@@ -119,3 +119,11 @@ The adjudication left rows unsettled for one reason more than any other: the evi
 **Lesson:** when a row's evidence is a page the agent can't open, the row stays unsettled, and the agent says so and hands the link to a person. It doesn't infer the page's content from its address, its status code or a search listing.
 
 **Guard:** the five-step check's second line asks for what was actually opened. A row whose evidence couldn't be opened gets the verdict `can't tell`, and the [adjudication](meta-verification/adjudication.md) lists it with the link a person needs to check.
+
+## Keep changesets out of the docs
+
+The guides link each library name in their inline code to its manual page, and the hint shows the name's declaration from this tree's manual pages: the ncurses 6.6 one. That is right on every page that describes the library as it is, and wrong on the [compatibility notes](../contributor/install/compatibility/index.md), which describe changes in older releases. The 5.4 note that the `slk_*` prototypes switched to `chtype` describes a declaration that no longer matches the one the hint would show.
+
+**Lesson:** a changeset, a list of what changed in which release, is history, and every automatic step that treats the docs as current needs an exception for it. The strict Merlon Docs method keeps changesets outside the docs for this reason.
+
+**Guard:** each hint names the release it quotes, and the compatibility notes are marked historical in `site/scripts/sync.mjs`, so their links show the page and summary but not the 6.6 declaration. A new history page needs the same mark until the changesets move out of the docs.
