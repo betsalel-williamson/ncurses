@@ -1,22 +1,23 @@
 ---
 // The front page's Migration progress section: how far the move to Merlon Docs shards has got,
 // and what it took. Each guide chapter, manual page and contributor document counts once, in
-// two steps: sharded, then reviewed against its sources. The manual-page counts, merged pull
-// requests and errata are read from the repository at build time; the rest is in
-// site/data/migration.json.
+// two steps: sharded, then reviewed against its sources. Every count comes from git through
+// scripts/migration-history.mjs, which also checks the per-pull-request history CI verifies.
+// The session figures and the tracks' notes are in site/data/migration.json.
 import { execFileSync } from 'node:child_process';
-import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { readErrata } from '../../scripts/errata.mjs';
+import { current, readHistory } from '../../scripts/migration-history.mjs';
 import data from '../../data/migration.json';
 
 // Astro builds from site/, so the repository is its parent.
 const repo = resolve(process.cwd(), '..');
-const pages = (dir: string) => readdirSync(`${repo}/${dir}`).filter((f) => /\.[1-9][a-z]*$/.test(f));
-
-const tracks = data.tracks.map((t: any) =>
-  t.name === 'Manual pages' ? { ...t, total: pages('man').length, sharded: pages('docs/man').length } : t,
-);
+const now = current();
+const note = (name: string) => data.tracks.find((t: any) => t.name === name)?.note ?? '';
+const tracks = [
+  { name: 'Guides', unit: 'chapters', ...now.guides },
+  { name: 'Manual pages', unit: 'pages', ...now.man },
+  { name: 'Contributor and install docs', unit: 'documents', ...now.contributor },
+].map((t) => ({ ...t, note: note(t.name) }));
 const total = tracks.reduce((n: number, t: any) => n + t.total, 0);
 const sharded = tracks.reduce((n: number, t: any) => n + t.sharded, 0);
 const reviewed = tracks.reduce((n: number, t: any) => n + t.reviewed, 0);
@@ -29,8 +30,17 @@ try {
   const log = execFileSync('git', ['log', '--format=%s', 'HEAD'], { cwd: repo, encoding: 'utf8' });
   merged = log.split('\n').filter((s) => /^Merge pull request #\d+ /.test(s)).length;
 } catch {}
-const errata = readErrata(repo).rows;
-const fixed = errata.filter((r) => r.category === 'original-error').length;
+const errata = now.errata.rows;
+const fixed = now.errata.originalErrors;
+// The history, newest first, with the overall percentage at each merge.
+const history = readHistory()
+  .map((r: any) => {
+    const ts = [r.guides, r.man, r.contributor];
+    const sum = (k: string) => ts.reduce((n: number, t: any) => n + t[k], 0);
+    return { ...r, done: percent(sum('sharded'), sum('reviewed'), sum('total')) };
+  })
+  .reverse();
+const repoUrl = `https://github.com/${process.env.GITHUB_REPOSITORY || 'betsalel-williamson/ncurses'}`;
 
 const s = data.session;
 const n = new Intl.NumberFormat('en-US');
@@ -101,8 +111,53 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     <div><dt>Agent working time</dt><dd>{hours(s.agentActiveSeconds)}</dd><dd class="nc-stat-note">Gaps of 5 minutes or less between the agent's steps; waits for CI and for the maintainer aren't counted</dd></div>
     <div><dt>Maintainer time</dt><dd>{hours(s.maintainerSeconds)}</dd><dd class="nc-stat-note">{s.maintainerMessages} messages; gaps of 15 minutes or less between them, so reading time is undercounted</dd></div>
     {merged !== undefined && <div><dt>Pull requests merged</dt><dd>{merged}</dd><dd class="nc-stat-note">Each one reviewed and merged by the maintainer</dd></div>}
-    <div><dt>Errata recorded</dt><dd>{errata.length}</dd><dd class="nc-stat-note">{fixed} errors in the original text, each checked against the library; see <a href="appendix/">Errata</a></dd></div>
+    <div><dt>Errata recorded</dt><dd>{errata}</dd><dd class="nc-stat-note">{fixed} errors in the original text, each checked against the library; see <a href="appendix/">Errata</a></dd></div>
   </dl>
+
+  <h3>Checking these figures</h3>
+  <p>
+    Every count above comes from git, at build time.
+    The history below keeps the same counts for each merged pull request, taken at its merge commit, in
+    <a href={`${repoUrl}/blob/master/site/data/migration-history.json`}><code>migration-history.json</code></a>.
+    Which pull request reviewed each document is listed in
+    <a href={`${repoUrl}/blob/master/site/data/migration-units.csv`}><code>migration-units.csv</code></a>.
+    To check both against the repository, clone it and run:
+  </p>
+  <pre><code>node site/scripts/migration-history.mjs verify</code></pre>
+  <p>
+    It recounts every row from git and fails on any difference.
+    It also checks each review claim: the pull request merged, changed that document, and recorded its corrections in the errata.
+    CI runs it on every pull request.
+    The token and cost figures are the exception. They come from the agent's session API, and the repository keeps each response's numbers in
+    <a href={`${repoUrl}/tree/master/site/data/session`}><code>site/data/session</code></a>, along with a timeline of the session that the time figures are recomputed from.
+    <code>node site/scripts/migration-stats.mjs verify</code> checks the figures above against those files.
+  </p>
+  <details class="nc-history">
+    <summary>Progress at each merged pull request</summary>
+    <div class="nc-history-scroll">
+    <table>
+      <thead>
+        <tr><th>Pull request</th><th>Merged</th><th>Done</th><th>Guides</th><th>Manual pages</th><th>Contributor docs</th><th>Errata</th></tr>
+      </thead>
+      <tbody>
+        {
+          history.map((r: any) => (
+            <tr>
+              <td><a href={`${repoUrl}/pull/${r.pr}`}>#{r.pr}</a></td>
+              <td>{date(r.mergedAt)}</td>
+              <td>{r.done}%</td>
+              <td>{r.guides.sharded}/{r.guides.reviewed} of {r.guides.total}</td>
+              <td>{r.man.sharded}/{r.man.reviewed} of {r.man.total}</td>
+              <td>{r.contributor.sharded}/{r.contributor.reviewed} of {r.contributor.total}</td>
+              <td>{r.errata.rows}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    </div>
+    <p class="nc-stat-note">Each track shows sharded/reviewed of its total.</p>
+  </details>
 </section>
 
 <style>
@@ -186,7 +241,28 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     font-size: var(--sl-text-2xl);
     font-weight: 600;
   }
-  .nc-stats dd.nc-stat-note {
+  .nc-history summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .nc-progress pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem 0.75rem;
+  }
+  .nc-history-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .nc-history table {
+    font-size: var(--sl-text-sm);
+  }
+  .nc-history td,
+  .nc-history th {
+    white-space: nowrap;
+  }
+  .nc-stats dd.nc-stat-note,
+  .nc-history .nc-stat-note {
     margin-top: 0.25rem;
     font-size: var(--sl-text-xs);
     font-weight: 400;
