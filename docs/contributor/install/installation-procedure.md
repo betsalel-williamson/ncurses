@@ -8,13 +8,13 @@ The `--prefix` option to configure changes the root directory for installing ncu
 
 The package gets installed beneath the `--prefix` directory as follows:
 
-| Directory                 | Contents                                                                         |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| `$(prefix)/bin`           | tic, infocmp, captoinfo, infotocap, tset, reset, clear, tput, toe, tabs           |
-| `$(prefix)/lib`           | `libncurses*.*`, `libcurses.a`                                                   |
-| `$(prefix)/share/terminfo` | compiled terminal descriptions                                                  |
-| `$(prefix)/include`       | C header files                                                                   |
-| `$(prefix)/man`           | the manual pages                                                                 |
+| Directory                  | Contents                                                                |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `$(prefix)/bin`            | tic, infocmp, captoinfo, infotocap, tset, reset, clear, tput, toe, tabs |
+| `$(prefix)/lib`            | `libncurses*.*`, `libcurses.a`                                          |
+| `$(prefix)/share/terminfo` | compiled terminal descriptions                                          |
+| `$(prefix)/include`        | C header files                                                          |
+| `$(prefix)/share/man`      | the manual pages                                                        |
 
 The configure script chooses the default prefix from the system type alone. It doesn't look for an earlier installation of ncurses.
 
@@ -40,14 +40,14 @@ If your operating system isn't supported, read the [porting hints](../hackguide/
 
 The configure script generates makefile rules for one or more object models and their associated libraries:
 
-| Library             | Model                                                                         |
-| ------------------- | ----------------------------------------------------------------------------- |
-| `libncurses.a`      | normal                                                                        |
-| `libcurses.a`       | normal, a link to `libncurses.a`. It's left out when overwrite is disabled.   |
-| `libncurses.so`     | shared                                                                        |
-| `libncurses_g.a`    | debug                                                                         |
-| `libncurses_p.a`    | profile                                                                       |
-| `libncurses.la`     | libtool                                                                       |
+| Library          | Model                                                                       |
+| ---------------- | --------------------------------------------------------------------------- |
+| `libncurses.a`   | normal                                                                      |
+| `libcurses.a`    | normal, a link to `libncurses.a`. It's left out when overwrite is disabled. |
+| `libncurses.so`  | shared                                                                      |
+| `libncurses_g.a` | debug                                                                       |
+| `libncurses_p.a` | profile                                                                     |
+| `libncurses.la`  | libtool                                                                     |
 
 With the wide-character code, a "w" is appended to the library names (for example, `libncursesw.a`), and the libraries support wide characters, for example through a UTF-8 locale. Since ncurses 6.5 this is the default, and `--disable-widec` builds the 8-bit libraries without the "w". The header files are compatible with both configurations, because the wide-character features are provided by `#ifdef`s in the headers. The [wide-character library](../../glossary/wide-character-library.md) interfaces aren't binary-compatible with the 8-bit version. Building and running the wide-character code relies on a fairly recent implementation of libiconv. We have built this configuration on various systems using libiconv, sometimes requiring libutf8.
 
@@ -87,7 +87,7 @@ If you have libtool installed, you can type this to generate the appropriate sta
 ./configure --with-libtool
 ```
 
-You can make curses and terminfo fall back to an existing file of termcap definitions by configuring with `--enable-termcap`. If you do this, the library searches `/etc/termcap` before the terminfo database, and also interprets the contents of the `$TERM` environment variable. See [BSD conversion notes](bsd-conversion.md).
+You can make curses and terminfo fall back to an existing file of termcap definitions by configuring with `--enable-termcap`. If you do this, the library searches `/etc/termcap` before the terminfo database, and also interprets the contents of the `$TERMCAP` environment variable. See [BSD conversion notes](bsd-conversion.md).
 
 ## Step 3: build
 
@@ -109,13 +109,13 @@ The `ncurses` program is designed specifically to test the ncurses library. You 
 
 Once you've tested, you can type `make install` to install the libraries, the programs, the terminfo database and the manual pages. Alternatively, you can type `make install` in each directory you want to install. In the top-level directory, you can do a partial install using these commands:
 
-| Command                 | Installs                                                                       |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| `make install.progs`    | tic, infocmp, and the other programs                                           |
-| `make install.includes` | the headers                                                                    |
-| `make install.libs`     | the libraries (and the headers)                                                |
+| Command                 | Installs                                                                           |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `make install.progs`    | tic, infocmp, and the other programs                                               |
+| `make install.includes` | the headers                                                                        |
+| `make install.libs`     | the libraries (and the headers)                                                    |
 | `make install.data`     | the terminfo data. tic must be installed before the terminfo data can be compiled. |
-| `make install.man`      | the manual pages                                                               |
+| `make install.man`      | the manual pages                                                                   |
 
 > **Caution:** `make install.data` run as root will destroy any existing terminfo database. If you have any custom or unusual entries, save them before you install ncurses.
 

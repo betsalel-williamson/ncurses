@@ -20,7 +20,7 @@ The background problem that makes `tic` tricky isn't the capability translation 
 
 This won't do for ncurses. The problem is that the whole compilation process has to be embeddable in the ncurses library so that it can be called by the startup code to translate termcap entries on the fly. The embedded version can't go promiscuously writing everything it translates out to disk; for one thing, it will typically be running with non-root permissions.
 
-So our `tic` is designed to parse an entire terminfo file into a doubly-linked circular list of entry structures in-core, and then do `use` resolution in-memory before writing everything out. This design has other advantages: it makes forward and back use-references equally easy (so we get the latter for free), and it makes checking for name collisions before they are written out easy to do.
+So our `tic` is designed to parse an entire terminfo file into a doubly-linked list of entry structures in-core, and then do `use` resolution in-memory before writing everything out. This design has other advantages: it makes forward and back use-references equally easy (so we get the latter for free), and it makes checking for name collisions before they are written out easy to do.
 
 And this is exactly how the embedded version works. But the stand-alone user-accessible version of `tic` partly reverts to the historical strategy; it writes to disk (not keeping in core) any entry with no `use` references.
 
@@ -38,4 +38,4 @@ The translation output code (`dump_entry()` in `progs/dump_entry.c`) is shared w
 
 The `include/Caps` file has a header comment describing ways you can specify source translations for nonstandard capabilities just by altering the master table. It's possible to set up capability aliasing or tell the compiler to plain ignore a given capability without writing any C code at all.
 
-For circumstances where you need to do algorithmic translation, there are functions in `parse_entry.c` called after the parse of each entry that are specifically intended to encapsulate such translations. This, for example, is where the AIX `box1` capability gets translated to an `acsc` string.
+For circumstances where you need to do algorithmic translation, there are functions in `parse_entry.c` called after the parse of each entry that are specifically intended to encapsulate such translations. This, for example, is where the XENIX forms-drawing capabilities, such as `G2` (`acs_ulcorner`), get translated to an `acsc` string. The reverse translation, from `acsc` to the AIX `box1` capability, happens on output, in `dump_entry.c`.
