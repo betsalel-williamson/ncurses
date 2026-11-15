@@ -41,7 +41,10 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
     '--without-progs', '--without-tests', '--without-manpages', '--without-debug',
     '--disable-database', '--with-fallbacks=xterm-256color',
     '--disable-stripping', '--enable-widec', '--without-pthread',
-  ], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'] });
+    // configure can't run its poll() test when cross-compiling, and without it ncurses waits
+    // with select(), which Emscripten answers at once. examples/pty.js gives poll() a real wait,
+    // which mouse click resolution and ESCDELAY need.
+  ], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'], env: { ...process.env, cf_cv_working_poll: 'yes' } });
   run('emmake', ['make', '-j4', 'libs'], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'] });
 }
 
