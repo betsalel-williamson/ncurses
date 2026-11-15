@@ -74,7 +74,7 @@ function link(name, sym) {
 export function codeLinks() {
   return {
     name: 'ncurses-code-links',
-    jsModules: [readFileSync(new URL('./src/components/code-hints.js', import.meta.url), 'utf8')],
+    jsModules: ['code-hints.js', 'code-relayout.js'].map((f) => readFileSync(new URL(`./src/components/${f}`, import.meta.url), 'utf8')),
     hooks: {
       postprocessRenderedLine({ codeBlock, lineIndex, renderData }) {
         if (!LANGS.has(codeBlock.language)) return;
