@@ -1,20 +1,36 @@
 ---
-// Starlight's theme provider, plus the reader's chosen style (styles.css). It runs inline at the
-// top of <body>, like Starlight's, so the page never paints in the wrong style first.
+// Starlight's theme provider, plus the reader's chosen style (styles.css). Starlight renders it
+// inside <head>, so its script runs before the page's first paint and the page never paints in
+// the wrong style. It must hold nothing but scripts: an element such as a <div> would end <head>
+// there, and the stylesheets after it would land in <body>, where the page paints before they
+// load. The status bar is in SkipLink.astro for that reason.
 import Default from '@astrojs/starlight/components/ThemeProvider.astro';
+import vt323 from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
+import arimo400 from '@fontsource/arimo/files/arimo-latin-400-normal.woff2?url';
+import arimo700 from '@fontsource/arimo/files/arimo-latin-700-normal.woff2?url';
+import gelasio400 from '@fontsource/gelasio/files/gelasio-latin-400-normal.woff2?url';
+import gelasio700 from '@fontsource/gelasio/files/gelasio-latin-700-normal.woff2?url';
+import tinos400 from '@fontsource/tinos/files/tinos-latin-400-normal.woff2?url';
+import tinos400i from '@fontsource/tinos/files/tinos-latin-400-italic.woff2?url';
+import tinos700 from '@fontsource/tinos/files/tinos-latin-700-normal.woff2?url';
+import cousine400 from '@fontsource/cousine/files/cousine-latin-400-normal.woff2?url';
+
+// The web fonts each style draws its first screen with. A browser finds a font only once the
+// stylesheets have loaded and the page is laid out, so it paints the page in a fallback font
+// first and swaps when the font arrives. VT323 is far narrower than any fallback, so headings
+// shrank and the page jumped, most on phones, where a title wrapped onto a second line. The
+// script preloads these alongside the stylesheets, so they are usually in before the first paint.
+const fonts = {
+  textmode: [vt323],
+  workstation: [gelasio400, gelasio700, arimo700, cousine400],
+  terminal: [vt323, arimo400, arimo700, cousine400],
+  manpage: [tinos400, tinos400i, tinos700, cousine400],
+};
 ---
 
 <Default />
 
-{/* A status bar of keys that work on every page, shown only by styles that draw one. */}
-<div class="nc-statusbar" aria-hidden="true">
-  <span><b>Ctrl+K</b> Search</span>
-  <span><b>Tab</b> Next link</span>
-  <span><b>Shift+Tab</b> Previous link</span>
-  <span><b>Enter</b> Follow link</span>
-</div>
-
-<script is:inline>
+<script is:inline define:vars={{ fonts }}>
   (() => {
     // Styles drawn for one color scheme only. Modern follows the Auto/Light/Dark picker.
     const modes = { textmode: 'dark', workstation: 'light', terminal: 'dark', manpage: 'light' };
@@ -49,6 +65,15 @@ import Default from '@astrojs/starlight/components/ThemeProvider.astro';
       if (mode && root.dataset.theme !== mode) root.dataset.theme = mode;
     };
     force();
+    for (const href of fonts[root.dataset.style] ?? []) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'font';
+      link.type = 'font/woff2';
+      link.crossOrigin = '';
+      link.href = href;
+      document.head.append(link);
+    }
     new MutationObserver(force).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-style'] });
   })();
 </script>

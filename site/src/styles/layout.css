@@ -60,3 +60,26 @@
     transition: inset-block-start 0.2s ease;
   }
 }
+
+/* Copy button on listings. On touch screens Expressive Code draws it at 75% opacity over the code,
+   so a long first line showed through it; it is opaque there instead. While a listing scrolls
+   further to the right, its end fades out under the button (code-scroll-fade.js). */
+@media (hover: none) {
+  .expressive-code .copy button {
+    opacity: 1;
+  }
+}
+.expressive-code .copy {
+  z-index: 2;
+}
+.expressive-code .frame[data-nc-more]::after {
+  content: '';
+  position: absolute;
+  top: var(--nc-fade-top, 0);
+  height: var(--nc-fade-height, 100%);
+  right: 0;
+  width: 4.5rem;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to right, transparent, var(--code-background) 70%);
+}

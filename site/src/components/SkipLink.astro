@@ -1,0 +1,15 @@
+---
+// Starlight's skip link, the first thing in <body>, plus the status bar of keys that work on
+// every page, shown only by styles that draw one (styles.css). It can't go in ThemeProvider.astro,
+// which renders inside <head>.
+import Default from '@astrojs/starlight/components/SkipLink.astro';
+---
+
+<Default />
+
+<div class="nc-statusbar" aria-hidden="true">
+  <span><b>Ctrl+K</b> Search</span>
+  <span><b>Tab</b> Next link</span>
+  <span><b>Shift+Tab</b> Previous link</span>
+  <span><b>Enter</b> Follow link</span>
+</div>
