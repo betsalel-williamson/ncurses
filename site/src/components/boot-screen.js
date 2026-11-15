@@ -48,14 +48,18 @@ const HISTORY = [
   'today Thomas E. Dickey maintains ncurses',
 ];
 
-/** The fraction of the bar to fill at time t of a boot that lasts `length`, before the load ends. */
-export function barFill(t, length) {
+/**
+ * The fraction of the bar to fill at time t of a boot that lasts `length`. The bar runs from half
+ * way through the boot to its end, and never ahead of the download: `loaded` is the fraction of
+ * the program's bytes that have arrived, so on a slow link the bar moves with them instead of
+ * racing ahead and waiting at the end. Without a byte count it eases toward 92% and creeps on.
+ */
+export function barFill(t, length, loaded = null) {
   const start = length / 2;
-  if (t <= start) return 0;
-  // Fills to 92% as the planned length runs out, then creeps on while a slow load continues.
-  const planned = Math.min(1, (t - start) / (length - start)) * 0.92;
+  const time = t <= start ? 0 : Math.min(1, (t - start) / (length - start));
+  if (loaded !== null) return Math.min(time, Math.max(0, Math.min(1, loaded)));
   const extra = t > length ? (1 - Math.exp(-(t - length) / 2000)) * 0.06 : 0;
-  return planned + extra;
+  return time * 0.92 + extra;
 }
 
 const lightBackground = (hex) => {
@@ -85,6 +89,7 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
   let done = false;
   let timer = 0;
   let released = null;
+  let loaded = null;
   const out = (s) => {
     if (!done) term.write(s);
   };
@@ -94,6 +99,10 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
   };
   const boot = {
     stop,
+    /** The fraction of the program's bytes that have arrived, for the bar. */
+    progress(fraction) {
+      loaded = fraction;
+    },
     get done() {
       return done;
     },
@@ -162,7 +171,7 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
     const t = performance.now() - t0;
     while (next < steps.length && steps[next][0] <= t) steps[next++][1]();
     if (t < 2000 * k) return;
-    drawBar(barFill(t, length), '|/-\\'[frame++ % 4]);
+    drawBar(barFill(t, length, loaded), '|/-\\'[frame++ % 4]);
     // History only where there is time to read it: the long boot, or a slow load.
     if (historyRow && t >= 2300 && (length === FIRST_MS || t > length)) {
       const i = Math.floor((t - 2300) / 1200) % HISTORY.length;

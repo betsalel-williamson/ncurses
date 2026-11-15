@@ -23,3 +23,11 @@ test('the bar starts half way through, reaches 92% at the planned end, and never
   const late = barFill(FIRST_MS + 60000, FIRST_MS);
   assert.ok(late > 0.97 && late < 1);
 });
+
+test('with a byte count the bar never runs ahead of the download, and fills when both are done', () => {
+  // Half the bytes in, past the planned end: the bar shows half.
+  assert.equal(barFill(FIRST_MS * 2, FIRST_MS, 0.5), 0.5);
+  // All the bytes in early: the bar still follows the boot's own pace.
+  assert.equal(barFill(FIRST_MS * 0.75, FIRST_MS, 1), 0.5);
+  assert.equal(barFill(FIRST_MS, FIRST_MS, 1), 1);
+});

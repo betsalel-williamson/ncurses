@@ -68,10 +68,10 @@ type Pty = {
 };
 
 /** A second build of a listing with one of its own macros defined (build-examples.mjs). */
-type Variant = { define: string; id: string };
+type Variant = { define: string; id: string; bytes?: number };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[] };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number };
 
 const REASONS: Record<string, string> = {
   'compile-error': "doesn't compile",
@@ -163,7 +163,7 @@ function keyGroup(wanted: string[], send: (key: string) => void) {
   return { group, stop };
 }
 
-function setup(box: HTMLElement, variants: Variant[], args: string[]) {
+function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: number) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
   const wantedKeys = (box.dataset.keys ?? '').split(/\s+/).filter(Boolean);
@@ -268,7 +268,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
     if (running) pty?.resize(rows, cols);
   });
 
-  const run = async (example: string, label: string, clicked: HTMLButtonElement) => {
+  const run = async (example: string, label: string, clicked: HTMLButtonElement, size?: number) => {
     if (running) return;
     running = true;
     for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
@@ -360,8 +360,23 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
       if (hadFocus) clicked.focus();
     };
     try {
-      const { default: create } = await import(/* @vite-ignore */ `${base}/examples/${example}.mjs`);
+      const [{ default: create }, wasmBinary] = await Promise.all([
+        import(/* @vite-ignore */ `${base}/examples/${example}.mjs`),
+        download(`${base}/examples/${example}.wasm`, size, (f) => boot.progress(f)),
+      ]);
       await create({
+        // This Emscripten build fetches its .wasm itself and ignores wasmBinary, so the bytes
+        // downloaded above (for the boot screen's bar) are handed over here instead.
+        instantiateWasm: (
+          imports: WebAssembly.Imports,
+          receive: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
+        ) => {
+          WebAssembly.instantiate(wasmBinary, imports).then(
+            (r) => receive(r.instance, r.module),
+            (e: Error) => done(`Could not start ${label}: ${e.message}`),
+          );
+          return {};
+        },
         locateFile: (f: string) => `${base}/examples/${f}`,
         // A program that reads a file gets its own listing, embedded in the build as example.c.
         arguments: args,
@@ -383,8 +398,8 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
     }
   };
 
-  main.addEventListener('click', () => run(id, title, main));
-  for (const { v, b } of extra) b.addEventListener('click', () => run(v.id, `${title} (${v.define} defined)`, b));
+  main.addEventListener('click', () => run(id, title, main, bytes));
+  for (const { v, b } of extra) b.addEventListener('click', () => run(v.id, `${title} (${v.define} defined)`, b, v.bytes));
 }
 
 // exit() ends a program by throwing ExitStatus out of the resumed Asyncify stack; it is the
@@ -392,6 +407,36 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
 window.addEventListener('error', (e) => {
   if ((e.error as { name?: string } | null)?.name === 'ExitStatus') e.preventDefault();
 });
+
+/**
+ * Downloads a program's WebAssembly, reporting the fraction that has arrived so the boot screen's
+ * bar can follow it. `size` is the file's length from status.json: the server may compress it, so
+ * the response's own length can't be used. Without a size, or a body to read in pieces, it reports
+ * nothing and the bar keeps its own pace.
+ */
+async function download(url: string, size: number | undefined, progress: (fraction: number) => void): Promise<ArrayBuffer> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url.split('/').pop()}`);
+  if (!size || !res.body) return res.arrayBuffer();
+  const reader = res.body.getReader();
+  const parts: Uint8Array[] = [];
+  let at = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    parts.push(value);
+    at += value.length;
+    progress(Math.min(1, at / size));
+  }
+  progress(1);
+  const all = new Uint8Array(at);
+  let k = 0;
+  for (const p of parts) {
+    all.set(p, k);
+    k += p.length;
+  }
+  return all.buffer;
+}
 
 /**
  * Drops the "leave the alternate screen" sequence (rmcup, CSI ?1049 l) from a program's output.
@@ -415,7 +460,7 @@ if (boxes.length) {
   void statuses().then((all) => {
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
-      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? []);
+      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? [], s.bytes);
       else if (s) flag(box, `This program doesn't run in the browser${s.status === 'needs-shell' ? '' : ' yet'}: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }
