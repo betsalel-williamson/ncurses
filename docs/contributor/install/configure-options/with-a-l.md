@@ -80,7 +80,7 @@ Override the size of the wide-character array in `cchar_t` structures. Changing 
 
 ## `--with-chtype=TYPE`
 
-Override type of chtype, which stores the video attributes and (if `--enable-widec` is not given) a character. Prior to ncurses 5.5, this was always unsigned long, but with ncurses 5.5, it may be unsigned. Use this option if you need to preserve compatibility with 64-bit executables, e.g., by setting "`--with-chtype=long`" (the configure script supplies "unsigned").
+Override type of `chtype`, which stores the video attributes and (if `--enable-widec` is not given) a character. Prior to ncurses 5.5, this was always unsigned long, but with ncurses 5.5, it may be unsigned. Use this option if you need to preserve compatibility with 64-bit executables, e.g., by setting "`--with-chtype=long`" (the configure script supplies "unsigned").
 
 ## `--with-config-suffix=XXX`
 

@@ -6,13 +6,13 @@
 
 - add an alternate library configuration, i.e., "terminal driver" to support port to Windows, built with MinGW. There are two drivers (terminfo and Windows console). The terminfo driver works on other platforms.
 
-- add a new set of functions which accept a SCREEN* parameter, in contrast with the original set which use the global value "sp". By default, these names end with "_sp", and are otherwise functionally identical with the originals.
+- add a new set of functions which accept a `SCREEN`* parameter, in contrast with the original set which use the global value "sp". By default, these names end with "_sp", and are otherwise functionally identical with the originals.
 
   In addition to the "_sp" functions, there are a few new functions associated with this feature: `ceiling_panel`, `ground_panel`, `new_prescr`.
 
   If the library is not built with the sp-funcs extension, there are no related interface changes.
 
-- add tiparm function based on review of X/Open Curses Issue 7.
+- add `tiparm` function based on review of X/Open Curses Issue 7.
 
 - change internal `_nc_has_mouse` function to public `has_mouse` function
 
@@ -52,7 +52,7 @@
 
 ### Interface changes
 
-- generate linkable stubs for some macros: getattrs
+- generate linkable stubs for some macros: `getattrs`
 
 - Add new library configuration for tic-library (the non-curses portion of the ncurses library used for the tic program as well as some others such as tack. There is no API change, but makefiles would be changed to use the tic-library built separately.
 
@@ -60,7 +60,7 @@
 
   The reason for providing this separate library is that none of the functions in it are suitable for threaded applications.
 
-- Add new library configuration (ncursest, ncurseswt) which provides rudimentary support for POSIX threads. This introduces opaque access functions to the WINDOW structure and adds a parameter to several internal functions.
+- Add new library configuration (ncursest, ncurseswt) which provides rudimentary support for POSIX threads. This introduces opaque access functions to the `WINDOW` structure and adds a parameter to several internal functions.
 
 - move most internal variables (except tic-library) into data blocks `_nc_globals` and `_nc_prescreen` to simplify analysis. Those were globally accessible, but since they were not part of the documented API, there is no ABI change.
 
@@ -68,7 +68,7 @@
 
 ### Added extensions
 
-- add `NCURSES_OPAQUE` definition in curses.h to control whether internal details of the WINDOW structure are visible to an application. This is always defined when the threaded library is built, and is optional otherwise. New functions for this: `is_cleared`, `is_idcok`, `is_idlok`, `is_immedok`, `is_keypad`, `is_leaveok`, `is_nodelay`, `is_notimeout`, `is_scrollok`, `is_syncok`, wgetparent and wgetscrreg.
+- add `NCURSES_OPAQUE` definition in curses.h to control whether internal details of the `WINDOW` structure are visible to an application. This is always defined when the threaded library is built, and is optional otherwise. New functions for this: `is_cleared`, `is_idcok`, `is_idlok`, `is_immedok`, `is_keypad`, `is_leaveok`, `is_nodelay`, `is_notimeout`, `is_scrollok`, `is_syncok`, `wgetparent` and `wgetscrreg`.
 
 - the threaded library (ncursest) also disallows direct updating of global curses-level variables, providing functions (via macros) for obtaining their value. A few of those variables can be modified by the application, using new functions: `set_escdelay`, `set_tabsize`
 
@@ -120,11 +120,11 @@ Use new typedef TRIES to replace "struct tries":
 
 - generate linkable stubs for some macros:
 
-  getbegx, getbegy, getcurx, getcury, getmaxx, getmaxy, getparx, getpary, getpary,
+  `getbegx`, `getbegy`, `getcurx`, `getcury`, `getmaxx`, `getmaxy`, `getparx`, `getpary`, `getpary`,
 
   and (for libncursesw)
 
-  wgetbkgrnd
+  `wgetbkgrnd`
 
 ### Added extensions
 
@@ -185,7 +185,7 @@ Also (if using the hashed database configuration):
 
 - form and menu libraries now work with wide-character data. Applications which bypassed the form library and manipulated the FIELD.buf data directly will not work properly with libformw, since that no longer points to an array of char. The `set_field_buffer()` and `field_buffer()` functions translate to/from the actual field data.
 
-- change SP->_current_attr to a pointer, adjust ifdef's to ensure that libtinfo.so and libtinfow.so have the same ABI. The reason for this is that the corresponding data which belongs to the upper-level ncurses library has a different size in each model.
+- change `SP->_current_attr` to a pointer, adjust ifdef's to ensure that libtinfo.so and libtinfow.so have the same ABI. The reason for this is that the corresponding data which belongs to the upper-level ncurses library has a different size in each model.
 
 - `winnstr()` now returns multibyte character strings for the [wide-character configuration](../../../glossary/wide-character-library.md).
 

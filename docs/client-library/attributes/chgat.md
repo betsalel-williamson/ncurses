@@ -14,7 +14,7 @@ This function is useful when changing attributes for characters that are already
 
 The other functions `wchgat()`, `mvchgat()` and `mvwchgat()` behave similarly, except that the w functions operate on the particular window. The mv functions first move the cursor, then perform the work given to them. Actually, `chgat()` is a macro which is replaced by a `wchgat()` with `stdscr` as the window. Most of the "w-less" functions are macros.
 
-**Example: chgat usage example**
+**Example: `chgat()` usage example**
 
 ```c
 #include <stdlib.h>

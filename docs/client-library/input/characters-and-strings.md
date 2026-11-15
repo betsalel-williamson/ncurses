@@ -24,9 +24,9 @@ These functions are used to get strings from the terminal. In essence, this func
 
 `getstr()` doesn't know how big the buffer behind `str` is, and ncurses lets it write up to `LINE_MAX` characters, usually 2048. To avoid overrunning the buffer, use `getnstr()` (or `wgetnstr()`), which reads at most `n` characters and beeps at any more.
 
-## A simple getstr example
+## A simple `getstr()` example
 
-**Example: A Simple getstr example**
+**Example: A Simple `getstr()` example**
 
 ```c
 #include <stdlib.h>

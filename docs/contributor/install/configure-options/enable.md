@@ -14,7 +14,7 @@ NOTE: With ncurses 5.1, this may not be necessary, since we are told that some l
 
 ## `--enable-bsdpad`
 
-Recognize BSD-style prefix padding. Some programs written using the [BSD curses](../../../glossary/bsd-curses.md) API use tputs("50") to implement delays.
+Recognize BSD-style prefix padding. Some programs written using the [BSD curses](../../../glossary/bsd-curses.md) API use `tputs("50")` to implement delays.
 
 ## `--enable-check-size`
 
@@ -166,7 +166,7 @@ Compile support for ncurses' SIGWINCH handler. If your application has its own S
 
 ## `--enable-sp-funcs`
 
-Compile-in support for extended functions which accept a SCREEN pointer, reducing the need for juggling the global SP value with `set_term()` and `delscreen()`.
+Compile-in support for extended functions which accept a `SCREEN` pointer, reducing the need for juggling the global `SP` value with `set_term()` and `delscreen()`.
 
 This option is on by default for ABI 6, the default ABI.
 
@@ -204,7 +204,7 @@ Turn on GCC compiler warnings. There should be only a few.
 
 ## `--enable-wattr-macros`
 
-The 6.0 ABI adds support for extended colors and for extended mouse. The former is a noticeable problem when developers inadvertently compile using the ncurses6 header files and link with an ncurses5 library, because the wattr* macros use a new field in the WINDOW structure. These macros are used in several applications.
+The 6.0 ABI adds support for extended colors and for extended mouse. The former is a noticeable problem when developers inadvertently compile using the ncurses6 header files and link with an ncurses5 library, because the `wattr*` macros use a new field in the `WINDOW` structure. These macros are used in several applications.
 
 Since ncurses provides an actual function for each of these macros, suppressing them from the curses.h header allows the ncurses5 libraries to be used in most applications.
 

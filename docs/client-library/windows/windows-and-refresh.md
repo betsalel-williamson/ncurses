@@ -16,7 +16,7 @@ To make the section of physical screen corresponding to a window reflect the con
 
 A given physical screen section may be within the scope of any number of overlapping windows. Also, changes can be made to windows in any order, without regard to motion efficiency. Then, at will, the programmer can effectively say "make it look like this," and let the package implementation determine the most efficient way to repaint the screen.
 
-## Functions for stdscr and for other windows
+## Functions for `stdscr` and for other windows
 
 For example, if you call
 

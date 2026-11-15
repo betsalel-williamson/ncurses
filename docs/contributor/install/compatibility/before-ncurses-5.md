@@ -42,7 +42,7 @@ This fixed most of the problems with 1.9.9e, and made these interface changes:
 
 - corrected misspelled `getbkgd()`. Some applications used the misspelled name.
 
-- added _yoffset to WINDOW. The size of WINDOW does not impact applications, since they use only pointers to WINDOW structs.
+- added _yoffset to `WINDOW`. The size of `WINDOW` does not impact applications, since they use only pointers to `WINDOW` structs.
 
 ### These changes were made to the terminfo database
 

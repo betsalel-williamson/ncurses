@@ -27,7 +27,7 @@
 
 ### Interface changes
 
-- the WINDOW structure and some related internal data types declared in `<curses.h>` have been made opaque by default;
+- the `WINDOW` structure and some related internal data types declared in `<curses.h>` have been made opaque by default;
 - the FORM, MENU, and PANEL structures and related internal data types from their corresponding header files have been made opaque by default; and
 - support for wide characters is now enabled by default.
 
@@ -79,13 +79,13 @@
 
 ### Added extensions
 
-- add sp-funcs for erasewchar, killwchar.
+- add sp-funcs for `erasewchar`, `killwchar`.
 
 ### Added internal functions (other than "_sp" variants)
 
 - `_nc_safe_fopen` and `_nc_safe_open3` limit privileges if possible when opening a file; otherwise disallow access for updating files.
 
-- `_nc_tiparm` is a variant of tiparm which is used when all of the parameters are known to be numbers rather than possibly strings.
+- `_nc_tiparm` is a variant of `tiparm` which is used when all of the parameters are known to be numbers rather than possibly strings.
 
 - `_nc_reset_tparm` improves tic's checks by resetting the terminfo "static variables" before calling functions which may update them.
 
@@ -107,7 +107,7 @@
 
 - "*.pc" and "ncurses*-config" files give the same information.
 
-- vwprintw and vwscanw are deprecated.
+- `vwprintw` and `vwscanw` are deprecated.
 
 ### Added extensions
 
@@ -131,7 +131,7 @@
 
 ### Interface changes
 
-- X/Open Curses specifies a "reserved" void* parameter in several functions, saying that it must be NULL. In this release, if the parameter is non-NULL, it is interpreted as a point to an integer containing a [color pair](../../../glossary/color-pair.md). In previous releases, a non-NULL parameter caused an error return. Portable applications are unaffected. Here are the functions which have been extended: `attr_get` `attr_off` `attr_on` `attr_set` chgat `color_set` mvchgat mvwchgat `slk_attr_off` `slk_attr_on` `slk_attr_set` `wattr_get` `wattr_on` `wattr_off` `wattr_set` wchgat `wcolor_set`
+- X/Open Curses specifies a "reserved" void* parameter in several functions, saying that it must be NULL. In this release, if the parameter is non-NULL, it is interpreted as a point to an integer containing a [color pair](../../../glossary/color-pair.md). In previous releases, a non-NULL parameter caused an error return. Portable applications are unaffected. Here are the functions which have been extended: `attr_get` `attr_off` `attr_on` `attr_set` `chgat` `color_set` `mvchgat` `mvwchgat` `slk_attr_off` `slk_attr_on` `slk_attr_set` `wattr_get` `wattr_on` `wattr_off` `wattr_set` `wchgat` `wcolor_set`
 
 - the TERMINAL structure declared in `<term.h>` has been made opaque, and its size increased to handle the increased size of color pair and color value, as well as other numeric capabilities.
 
@@ -175,13 +175,13 @@
 
 - ncurses supports symbol versioning. If you use this feature, about half of the "_nc_" private symbols are changed to local symbols.
 
-- a few applications may need to explicitly flush the standard output when switching between printf's and (curses) printw.
+- a few applications may need to explicitly flush the standard output when switching between printf's and (curses) `printw`.
 
 ### Added extensions
 
 - `use_tioctl` is an improvement over `use_env`
 
-- added wgetdelay to support the `NCURSES_OPAQUE` feature.
+- added `wgetdelay` to support the `NCURSES_OPAQUE` feature.
 
 ### Added internal functions (other than "_sp" variants)
 
