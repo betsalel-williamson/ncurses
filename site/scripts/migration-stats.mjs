@@ -11,8 +11,10 @@
  *   node site/scripts/migration-stats.mjs session                 # write the session block from the two files
  *   node site/scripts/migration-stats.mjs usage <get_session.json> # refresh usage.json from a saved response
  *   node site/scripts/migration-stats.mjs timeline <transcript.jsonl> # refresh timeline.csv (agent only)
+ *   node site/scripts/migration-stats.mjs refresh <get_session.json> <transcript.jsonl> # all three at once
  *
- * Only the agent can run the last two, since the API response and the transcript are its own. The
+ * The agent runs refresh as the last commit of each pull request, so every release carries the
+ * figures up to it. Only the agent can run the last three, since the API response and the transcript are its own. The
  * tokens and cost can't be checked beyond the API's word; the times can be recomputed from the
  * timeline, and each refresh is a commit, so the history of every figure is in git.
  *
@@ -110,9 +112,16 @@ export function sessionStats(events, usage) {
 const read = (p) => readFileSync(join(repo, p), 'utf8');
 const computed = () => sessionStats(parseTimeline(read(TIMELINE)), JSON.parse(read(USAGE)));
 
-function main([cmd, file]) {
+function main([cmd, file, transcript]) {
   mkdirSync(join(repo, 'site/data/session'), { recursive: true });
   const data = JSON.parse(read(DATA));
+  if (cmd === 'refresh' && file && transcript) {
+    for (const step of [['usage', file], ['timeline', transcript], ['session']]) {
+      const status = main(step);
+      if (status) return status;
+    }
+    return main(['verify']);
+  }
   if (cmd === 'timeline' && file) {
     const events = timeline(readFileSync(file, 'utf8').split('\n'));
     writeFileSync(join(repo, TIMELINE), timelineCsv(events));
@@ -133,7 +142,9 @@ function main([cmd, file]) {
     }
     console.log(`session figures match ${USAGE} and ${TIMELINE}`);
   } else {
-    console.error('usage: migration-stats.mjs verify | session | usage <get_session.json> | timeline <transcript.jsonl>');
+    console.error(
+      'usage: migration-stats.mjs verify | session | usage <get_session.json> | timeline <transcript.jsonl> | refresh <get_session.json> <transcript.jsonl>',
+    );
     return 2;
   }
   return 0;

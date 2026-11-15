@@ -2,6 +2,16 @@
 
 The front page's token, cost and time figures come from the two files here. `site/scripts/migration-stats.mjs` turns them into the session block of `site/data/migration.json`, and CI checks that block against them with `node site/scripts/migration-stats.mjs verify`.
 
+## When they are refreshed
+
+The agent refreshes all of them as the last commit of each pull request, before it is marked ready, so each release carries the figures up to that point:
+
+```sh
+node site/scripts/migration-stats.mjs refresh get_session.json transcript.jsonl
+```
+
+That runs the `usage`, `timeline` and `session` steps below, then `verify`. The pull request template has a box for it.
+
 ## `usage.json`
 
 The token counts and cost come from the Claude Code session API. The agent calls `get_session`, the `claude-code-remote` tool that describes its own session, with no arguments. It saves the response, then runs:

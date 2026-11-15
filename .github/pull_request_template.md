@@ -16,4 +16,6 @@
 
 - [ ] Every change to the docs' content, formatting or structure has a row in `docs/appendix/errata.csv`, with this pull request's number and the SHA of the commit that made the change.
 
+- [ ] The front page's session figures are refreshed as this pull request's last commit (`node site/scripts/migration-stats.mjs refresh`, see `site/data/session/README.md`), when an agent did the work.
+
 <!-- The Docs site workflow fails a pull request that changes docs/ without an entry. For a change no reader sees, add the no-errata label. -->
