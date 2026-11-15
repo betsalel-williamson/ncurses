@@ -1,0 +1,39 @@
+.SH NOTES
+.BR \%attr_on ","
+.BR \%attr_off ","
+.BR \%attr_set ","
+.BR \%wattr_set ","
+.BR \%chgat ","
+.BR \%mvchgat ","
+.BR \%mvwchgat ","
+.BR \%wchgat ","
+and
+.B \%color_set
+are part of
+.IR \%ncurses "'s"
+wide-character API,
+and are not available in its non-wide-character configuration.
+.PP
+.BR \%attron ","
+.BR \%wattron ","
+.BR \%attroff ","
+.BR \%wattroff ","
+.BR \%attrset ","
+.BR \%wattrset ","
+.BR \%standout ","
+and
+.B \%standend
+may be implemented as macros.
+.PP
+Color pair values may be logically \*(``or\*(''-ed with attributes
+if the pair number is less than 256.
+The alternate functions such as \fBcolor_set\fP can pass a color pair
+value directly.
+However,
+.I \%ncurses
+ABI 4 and 5 simply logically \*(``or\*('' this value
+within the alternate functions.
+You must use
+.I \%ncurses
+ABI 6 to support more than 256 color pairs.
+.\" ---------------------------------------------------------------------------

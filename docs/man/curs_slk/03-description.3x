@@ -1,0 +1,118 @@
+.SH DESCRIPTION
+These functions manipulate the soft function key labels that some
+hardware terminals support.
+For those terminals that do not have soft labels,
+\fIcurses\fP takes over the bottom line of \fB\%stdscr\fP,
+reducing its vertical size and the value of \fBLINES\fP by one.
+By default,
+\fIcurses\fP uses eight labels of up to eight characters each.
+.PP
+\fI\%ncurses\fP
+furthermore supports a mode comprising twelve labels of up to five
+characters each,
+following a convention associated with the IBM PC/AT keyboard.
+\fI\%ncurses\fP simulates this mode by taking over up to two lines at
+the bottom of the screen;
+it does not try to use any hardware support for this
+mode.
+.SS Initialization
+\fB\%slk_init\fP must be called before \fB\%initscr\fP or
+\fB\%newterm\fP.
+If \fB\%initscr\fP eventually uses a line from \fB\%stdscr\fP to
+emulate the soft labels,
+then \fIfmt\fP determines how the labels are arranged on the screen.
+.TP 3
+.B 0
+indicates a 3\-2\-3 arrangement of
+the labels.
+.TP 3
+.B 1
+indicates a 4\-4 arrangement
+.TP 3
+.B 2
+indicates the PC-like 4\-4\-4 mode.
+.TP 3
+.B 3
+is again the PC-like 4\-4\-4 mode,
+but in addition an index line is generated,
+helping the user to associate each label with its numbered function key.
+\fBLINES\fP and the vertical size of \fB\%stdscr\fP are further reduced.
+.SS Labels
+Populate the labels with normal strings
+\%(\fBslk_set\fP)
+or wide-character strings
+\%(\fBslk_wset\fP).
+Each function takes three parameters.
+.TP 8 \" "labnum" + 2n
+.I labnum
+is the label number, from \fB1\fP to \fB8\fP
+(12 if \fIfmt\fP in \fB\%slk_init\fP is \fB2\fP or \fB3\fP);
+.TP
+.I label
+is be the string to put on the label,
+up to eight
+(five if \fIfmt\fP in \fB\%slk_init\fP is \fB2\fP or \fB3\fP)
+characters in length.
+A empty string or a null pointer sets up a blank label.
+.TP
+.I align
+is
+.BR 0 ,
+.BR 1 ,
+or
+.BR 2 ,
+aligning
+.I label
+to the left,
+center,
+or right,
+respectively,
+within the 8 (5) character cells housing it.
+.PP
+\fB\%slk_label\fP obtains the string assigned to label number
+\fIlabnum\fP,
+with any leading and trailing blanks stripped.
+.SS "Screen Updates"
+\fB\%slk_refresh\fP and \fB\%slk_noutrefresh\fP affect the soft key
+label lines as \fB\%wrefresh\fP and \fB\%wnoutrefresh\fP do the
+.I curses
+window.
+.PP
+The \fB\%slk_clear\fP routine clears the soft labels from the screen.
+.PP
+The \fB\%slk_restore\fP routine restores the soft labels to the screen
+after a \fB\%slk_clear\fP has been performed.
+.PP
+The \fB\%slk_touch\fP routine forces all the soft labels to be output
+the next time a \fB\%slk_noutrefresh\fP is performed.
+.SS "Video Attributes"
+The
+\fB\%slk_attron\fP,
+\fB\%slk_attrset\fP,
+\fB\%slk_attroff\fP,
+and
+\fB\%slk_attr\fP
+routines correspond to
+\fB\%attron\fP,
+\fB\%attrset\fP,
+\fB\%attroff\fP,
+and
+\fB\%attr_get\fP,
+respectively.
+They have an effect only if soft labels are simulated on the bottom line
+of the screen.
+The default highlight for soft key labels is \fB\%A_STANDOUT\fP
+(as in System\ V \fIcurses\fP,
+which does not document this fact).
+.SS Colors
+The \fB\%slk_color\fP routine corresponds to \fB\%color_set\fP.
+It has an effect only
+if soft labels are simulated on the bottom line of the screen.
+.PP
+Because \fB\%slk_color\fP accepts
+only \fIshort\fP
+(signed 16-bit integer)
+values,
+this implementation provides
+\fB\%extended_slk_color\fP,
+which accepts an \fIint\fP value of at least 32 bits.

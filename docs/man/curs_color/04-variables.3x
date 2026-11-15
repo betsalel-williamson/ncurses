@@ -1,0 +1,23 @@
+.SH VARIABLES
+.SS COLORS
+is initialized by \fB\%start_color\fP to the maximum number of colors
+the terminal can support.
+.SS COLOR_PAIRS
+is initialized by \fB\%start_color\fP to the maximum number of color
+pairs the terminal can support.
+Often,
+its value is the product \fB\%COLORS\fP \(mu \fB\%COLORS\fP,
+but this is not always true.
+.bP
+A few terminals use the HLS color space,
+ignoring this rule;
+and
+.bP
+while a terminal type may support many colors,
+a portable
+.I curses
+application is limited
+to the number of distinct color indices and color pair identifiers
+that a
+.I "signed short"
+value can represent.

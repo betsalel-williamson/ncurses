@@ -1,0 +1,38 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint attr_get(attr_t *\fIattrs\fP, short *\fIpair\fP, void *\fIopts\fP);
+\fBint wattr_get(WINDOW *\fIwin\fP, attr_t *\fIattrs\fP, short *\fIpair\fP,\fR \fPvoid *\fIopts\fP);
+\fBint attr_set(attr_t \fIattrs\fP, short \fIpair\fP, void *\fIopts\fP);
+\fBint wattr_set(WINDOW *\fIwin\fP, attr_t \fIattrs\fP, short \fIpair\fP, void *\fIopts\fP);
+.PP
+\fBint attr_off(attr_t \fIattrs\fP, void *\fIopts\fP);
+\fBint wattr_off(WINDOW *\fIwin\fP, attr_t \fIattrs\fP, void *\fIopts\fP);
+\fBint attr_on(attr_t \fIattrs\fP, void *\fIopts\fP);
+\fBint wattr_on(WINDOW *\fIwin\fP, attr_t \fIattrs\fP, void *\fIopts\fP);
+.PP
+\fBint attroff(int \fIattrs\fP);
+\fBint wattroff(WINDOW *\fIwin\fP, int \fIattrs\fP);
+\fBint attron(int \fIattrs\fP);
+\fBint wattron(WINDOW *\fIwin\fP, int \fIattrs\fP);
+\fBint attrset(int \fIattrs\fP);
+\fBint wattrset(WINDOW *\fIwin\fP, int \fIattrs\fP);
+.PP
+\fBint chgat(int \fIn\fP, attr_t \fIattr\fP, short \fIpair\fP,\fR \fPconst void *\fIopts\fP);
+\fBint wchgat(WINDOW *\fIwin\fP,
+      \fBint \fIn\fB, attr_t \fIattr\fB,\fR \fBshort \fIpair\fB, const void *\fIopts\fB);\fR
+\fBint mvchgat(int \fIy\fB, int \fIx\fB,\fR
+      \fBint \fIn\fB, attr_t \fIattr\fB, short \fIpair\fB, const void *\fIopts\fB);\fR
+\fBint mvwchgat(WINDOW *\fIwin\fB, int \fIy\fB, int \fIx\fB,\fR
+      \fBint \fIn\fB, attr_t \fIattr\fB, short \fIpair\fB, const void *\fIopts\fB);\fR
+.PP
+\fBint color_set(short \fIpair\fB, void* \fIopts\fB);\fR
+\fBint wcolor_set(WINDOW *\fIwin\fB, short \fIpair\fB,\fR \fBvoid* \fIopts\fP);\fR
+.PP
+\fBint standend(void);\fP
+\fBint wstandend(WINDOW *\fIwin\fB);\fR
+\fBint standout(void);\fP
+\fBint wstandout(WINDOW *\fIwin\fB);\fR
+.fi
+.\" ---------------------------------------------------------------------------

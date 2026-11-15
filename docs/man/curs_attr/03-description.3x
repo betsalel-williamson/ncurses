@@ -1,0 +1,207 @@
+.SH DESCRIPTION
+These routines manipulate the current attributes of the named window,
+which then apply to all characters that are written into
+the window with \fBwaddch\fP, \fBwaddstr\fP and \fBwprintw\fP.
+Attributes are
+a property of the character, and move with the character through any scrolling
+and insert/delete line/character operations.
+To the extent possible, they are
+displayed as appropriate modifications to the graphic rendition of characters
+put on the screen.
+.PP
+These routines do not affect the attributes used
+when erasing portions of the window.
+See \fBcurs_bkgd\fP(3X) for functions which modify the attributes used for
+erasing and clearing.
+.\" ---------------------------------------------------------------------------
+.SS "Window Attributes"
+There are two sets of functions:
+.bP
+functions for manipulating the window attributes and color:
+\fBwattr_set\fP and \fBwattr_get\fP.
+.bP
+functions for manipulating only the window attributes (not color):
+\fBwattr_on\fP and \fBwattr_off\fP.
+.PP
+The \fBwattr_set\fP function sets the current attributes
+of the given window to \fIattrs\fP, with color specified by \fIpair\fP.
+.PP
+Use \fBwattr_get\fP to retrieve attributes for the given window.
+.PP
+Use \fBattr_on\fP and \fBwattr_on\fP to turn on window attributes, i.e.,
+values logically \*(``or\*(''-ed together in \fIattr\fP,
+without affecting other attributes.
+Use \fBattr_off\fP and \fBwattr_off\fP to turn off window attributes,
+again values logically \*(``or\*(''-ed together in \fIattr\fP,
+without affecting other attributes.
+.\" ---------------------------------------------------------------------------
+.SS "Legacy Window Attributes"
+The X/Open window attribute routines which \fIset\fP or \fIget\fP,
+turn \fIon\fP or \fIoff\fP
+are extensions of older routines
+which assume that color pairs are logically \*(``or\*(''-ed
+into the attribute parameter.
+These newer routines use similar names, because
+X/Open simply added an underscore (\fB_\fP) for the newer names.
+.PP
+The
+.I int
+datatype used in the legacy routines is treated as if
+it is the same size as
+.I \%chtype
+(used by \fBaddch\fP(3X)).
+It holds the common video attributes (such as bold, reverse),
+as well as a few bits for color.
+Those bits correspond to the \fBA_COLOR\fP symbol.
+The \fBCOLOR_PAIR\fP macro provides a value which can be
+logically \*(``or\*(''-ed into the attribute parameter.
+For example,
+as long as that value fits into the \fBA_COLOR\fP mask,
+then these calls produce similar results:
+.PP
+.RS 4
+.EX
+.nf
+attrset(A_BOLD | COLOR_PAIR(\fIpair\fP));
+attr_set(A_BOLD, \fIpair\fP, NULL);
+.fi
+.EE
+.RE
+.PP
+However, if the value does not fit, then the \fBCOLOR_PAIR\fP macro
+uses only the bits that fit.
+For example,
+because in
+.I \%ncurses
+\fBA_COLOR\fP has eight (8) bits,
+then \fBCOLOR_PAIR(\fI259\fB)\fR is 4
+(i.e., 259 is 4 more than the limit 255).
+.PP
+The \fBPAIR_NUMBER\fP macro extracts a pair number from an
+.I int
+(or
+.IR \%chtype ")."
+For example, the \fIinput\fP and \fIoutput\fP values in these statements
+would be the same:
+.PP
+.RS 4
+.EX
+.nf
+int value = A_BOLD | COLOR_PAIR(\fIinput\fP);
+int \fIoutput\fP = PAIR_NUMBER(value);
+.fi
+.EE
+.RE
+.PP
+The \fBattrset\fP routine is a legacy feature predating SVr4
+.I curses
+but kept in X/Open Curses for the same reason that SVr4
+.I curses
+kept it:
+compatibility.
+.PP
+The remaining \fBattr\fP* functions operate exactly like the corresponding
+\fBattr_\fP* functions, except that they take arguments of type
+.I int
+rather than
+.IR \%attr_t "."
+.PP
+There is no corresponding \fB\%attrget\fP function as such
+in X/Open Curses,
+although
+.I \%ncurses
+provides \fB\%getattrs\fP
+(see \fB\%curs_legacy\fP(3X)).
+.\" ---------------------------------------------------------------------------
+.SS "Change Character Rendition"
+The routine \fBchgat\fP changes the attributes of a given number of characters
+starting at the current cursor location of \fBstdscr\fP.
+It does not update
+the cursor and does not perform wrapping.
+A character count of \-1 or greater
+than the remaining window width means to change attributes all the way to the
+end of the current line.
+The \fBwchgat\fP function generalizes this to any window;
+the \fBmvwchgat\fP function does a cursor move before acting.
+.PP
+In these functions,
+the color \fIpair\fP argument is a color pair index
+(as in the first argument of \fBinit_pair\fP, see \fBcurs_color\fP(3X)).
+.\" ---------------------------------------------------------------------------
+.SS "Change Window Color"
+The routine \fBcolor_set\fP sets the current color of the given window to the
+foreground/background combination described by the color \fIpair\fP parameter.
+.\" ---------------------------------------------------------------------------
+.SS Standout
+The routine \fBstandout\fP is
+the same as \fBattron(A_STANDOUT)\fP.
+The routine \fBstandend\fP is the same
+as \fBattrset(A_NORMAL)\fP or \fBattrset(0)\fP, that is, it turns off all
+attributes.
+.PP
+X/Open Curses does not mark these \*(``restricted\*('', because
+.bP
+they have well established legacy use, and
+.bP
+there is no ambiguity about the way the attributes
+might be combined with a color pair.
+.\" ---------------------------------------------------------------------------
+.SS "Video Attributes"
+The following video attributes,
+defined in
+.IR \%curses.h ","
+can be passed to
+.BR \%attron ","
+.BR \%attroff ","
+.BR \%attrset ","
+and
+logically \*(``or\*(''-ed with characters passed to \fBaddch\fP(3X).
+.PP
+.if t .ne 15
+.if n .ne 16
+.RS
+.TS
+Lb Lb
+Lb Lx.
+Name	Description
+_
+A_NORMAL	Normal display (no highlight)
+A_STANDOUT	Best highlighting mode available
+A_UNDERLINE	Underlining
+A_REVERSE	Reverse video
+A_BLINK	Blinking
+A_DIM	Half bright
+A_BOLD	Extra bright or bold
+A_PROTECT	Protected mode
+A_INVIS	Invisible or blank mode
+A_ALTCHARSET	Alternate character set
+A_ITALIC	Italics (non-X/Open extension)
+A_ATTRIBUTES	Mask to extract character code
+A_CHARTEXT	Mask to extract attributes
+A_COLOR	Mask to extract color pair identifier
+.TE
+.RE
+.PP
+.BR \%attr_on ","
+.BR \%attr_off ","
+and
+.B \%attr_set
+support the foregoing as well as the following additional attributes.
+.PP
+.if t .ne 7
+.if n .ne 8
+.RS
+.TS
+Lb Lb
+Lb Lx.
+Name	Description
+_
+WA_HORIZONTAL	Horizontal highlight
+WA_LEFT	Left highlight
+WA_LOW	Low highlight
+WA_RIGHT	Right highlight
+WA_TOP	Top highlight
+WA_VERTICAL	Vertical highlight
+.TE
+.RE
+.\" ---------------------------------------------------------------------------

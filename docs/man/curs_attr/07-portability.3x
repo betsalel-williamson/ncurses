@@ -1,0 +1,139 @@
+.SH PORTABILITY
+These functions are described in X/Open Curses Issue\ 4.
+It specifies no error conditions for them.
+.PP
+The standard defined the dedicated type for highlights,
+.IR \%attr_t ","
+which was not defined in SVr4
+.IR curses "."
+The functions taking
+.I \%attr_t
+arguments were not supported under SVr4.
+.PP
+SVr4 describes the functions not taking
+.I \%attr_t
+or
+.I pair
+arguments as always returning
+.BR 1 "." \" Courier roman in source; SVID 4, vol. 3, p. 480
+.PP
+Very old versions of this library did not force an update of the screen
+when changing the attributes.
+Use
+.B \%touchwin
+to force the screen to match the updated attributes.
+.PP
+X/Open Curses states that whether the traditional functions
+.BR \%attron / attroff / attrset
+can manipulate attributes other than
+.BR \%A_BLINK ","
+.BR \%A_BOLD ","
+.BR \%A_DIM ","
+.BR \%A_REVERSE ","
+.BR \%A_STANDOUT ","
+or
+.B \%A_UNDERLINE
+is \*(``unspecified\*(''.
+Under this implementation as well as
+SVr4
+.IR curses ","
+these functions correctly manipulate all other highlights
+(specifically,
+.BR \%A_ALTCHARSET ","
+.BR \%A_PROTECT ","
+and
+.BR \%A_INVIS ")."
+.PP
+X/Open Curses added these entry points:
+.sp
+.RS
+\fBattr_get\fP, \fBattr_on\fP,
+\fBattr_off\fP, \fBattr_set\fP, \fBwattr_on\fP, \fBwattr_off\fP,
+\fBwattr_get\fP, \fBwattr_set\fP
+.RE
+.PP
+The new functions are intended to work with
+a new series of highlight macros prefixed with \fBWA_\fP.
+The older macros have direct counterparts in the newer set of names:
+.PP
+.RS
+.ne 9
+.TS
+Lb Lb
+Lb L .
+Name	Description
+_
+WA_NORMAL	Normal display (no highlight)
+WA_STANDOUT	Best highlighting mode available
+WA_UNDERLINE	Underlining
+WA_REVERSE	Reverse video
+WA_BLINK	Blinking
+WA_DIM	Half bright
+WA_BOLD	Extra bright or bold
+WA_ALTCHARSET	Alternate character set
+.TE
+.RE
+.PP
+X/Open Curses does not assign values to these symbols,
+nor does it state whether or not they are related to the
+similarly-named A_NORMAL, etc.:
+.bP
+X/Open Curses specifies that each pair of corresponding \fBA_\fP
+and \fBWA_\fP-using functions operates on the same current-highlight
+information.
+.bP
+However, in some implementations, those symbols have unrelated values.
+.IP
+For example, the Solaris \fIxpg4\fP (X/Open)
+.I curses
+declares
+.I \%attr_t
+to be an unsigned short integer (16-bits),
+while
+.I \%chtype
+is a unsigned integer (32-bits).
+The \fBWA_\fP symbols in this case are different from the \fBA_\fP symbols
+because they are used for a smaller datatype which does not
+represent \fBA_CHARTEXT\fP or \fBA_COLOR\fP.
+.IP
+In this implementation (as in many others), the values happen to be
+the same because it simplifies copying information between
+.I \%chtype
+and
+.I \%cchar_t
+variables.
+.bP
+Because
+.IR \%ncurses 's
+.I \%attr_t
+can hold a color pair
+(in the \fBA_COLOR\fP field),
+a call to
+\fBwattr_on\fP,
+\fBwattr_off\fP, or
+\fBwattr_set\fP
+may alter the window's color.
+If the color pair information in the attribute parameter is zero,
+no change is made to the window's color.
+.IP
+This is consistent with SVr4
+.IR curses ";"
+X/Open Curses does not specify this.
+.PP
+The X/Open Curses extended conformance level adds new highlights
+.BR \%A_HORIZONTAL ","
+.BR \%A_LEFT ","
+.BR \%A_LOW ","
+.BR \%A_RIGHT ","
+.BR \%A_TOP ","
+and
+.B \%A_VERTICAL
+(and corresponding
+.B WA_
+macros for each).
+As of August 2013,
+no known terminal provides these highlights
+(i.e., via the
+.B sgr1
+capability).
+.\" ---------------------------------------------------------------------------

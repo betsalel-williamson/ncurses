@@ -1,0 +1,53 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+.I \%ncurses
+satisfies X/Open Curses's minimum maximums for
+.I \%COLORS
+and
+.IR \%COLOR_PAIRS "."
+.PP
+.I \%ncurses
+does not refresh the screen if
+.B \%init_pair
+is used to no effect on an existing color pair.
+.PP
+X/Open Curses does not specify a limit for the number of color indices
+and color pair identifiers a terminal can support.
+However,
+in its use of
+.I short
+for the parameters,
+it carries over SVr4's implementation detail for the compiled
+.I \%term\%info
+database,
+which uses signed 16-bit numbers.
+.I \%ncurses
+provides extended versions of the functions using
+.I int
+parameters,
+allowing applications to use larger index and pair identifiers.
+.PP
+SVr4
+.I curses
+returns
+.I ERR
+from
+.I \%pair_content
+if its
+.I pair
+argument
+was not initialized using
+.IR \%init_pairs ,
+and from
+.I \%color_content
+if the terminal does not support changing colors.
+.I \%ncurses
+does neither.

@@ -1,0 +1,227 @@
+.SH HISTORY
+4BSD (1980)
+used a
+.I char
+to represent each cell of the terminal screen.
+It assumed 7-bit character codes,
+employing the eighth bit of a byte to represent a
+.I \%standout
+attribute
+(often implemented as bold and/or reverse video).
+It introduced
+.IR \%standout ","
+.IR \%standend ","
+.IR \%wstandout ","
+and
+.I \%wstandend
+functions to manipulate this bit.
+Despite their inflexibility,
+they carried over into System\ V
+.I curses
+and ultimately X/Open Curses
+due to their pervasive use in legacy applications.
+While some 1980s terminals supported a variety of video attributes,
+BSD
+.I curses
+could do nothing with them.
+.PP
+SVr2 (1984)
+provided an improved
+.I curses
+library,
+introducing
+.I \%chtype
+to create the abstract notion of a
+.I curses
+character;
+this was by default an
+.IR "unsigned short" ","
+with a provision for compile-time redefinition to other integral types
+(a freedom not necessarily available to users of shared libraries,
+and in any event a source license was necessary to exercise it).
+It added the functions
+.IR \%attron ","
+.IR \%attroff ","
+.IR \%attrset ","
+.IR \%wattron ","
+.IR \%wattroff ","
+and
+.IR \%wattrset ","
+and defined the
+.I A_
+macros listed above
+(except for
+.I \%A_ITALIC
+and
+.IR \%A_COLOR ")"
+for use by applications to manipulate other attributes.
+The values of these macros
+were not necessarily the same in different systems,
+even among those certified as System\ V.
+.PP
+SVr3.2 (1988)
+added the
+.I \%A_COLOR
+macro along with a color system;
+see \fBcurs_color\fP(3X).
+.PP
+X/Open Curses Issue\ 4 (1995) is largely based on SVr4
+.IR curses ","
+but recognized that the
+.I \%wchar_t
+type of ISO C95 was intended to house only a single character code,
+not a sequence of codes combining with a base character,
+let alone could it reliably offer room for a color pair identifier
+and a set of attribute bits with a potential for further growth \(em
+thus the standard invented the
+.I curses
+complex character type
+.I \%cchar_t
+and a separate type
+.I \%attr_t
+for storage of attribute bits.
+The new types brought along several new functions to manipulate them,
+some corresponding to existing
+.IR chtype -based
+functions
+.RI \%( attr_on ,
+.IR \%attr_off ","
+.IR \%attr_set ","
+.IR \%wattr_on ","
+.IR \%wattr_off ","
+and
+.IR \%wattr_set "),"
+and some new
+.RI \%( chgat
+and its variants,
+.IR \%color_set ","
+and
+.IR \%wcolor_set ")."
+.PP
+Different Unix systems used differently sized bit fields in
+.I \%chtype
+for the character code and the color pair identifier,
+and took into account platforms' different integer sizes
+(32- versus 64-bit).
+.PP
+The following table showing the number of bits for
+.I \%A_COLOR
+and
+.I \%A_CHARTEXT
+was gleaned from the
+.I curses
+header files for various operating systems and architectures.
+The inferred architecture and notes
+reflect the format and size of the defined constants
+as well as clues such as the alternate character set implementation.
+A 32-bit library can be used on a 64-bit system,
+but not necessarily the converse.
+.PP
+.TS
+Lb  Lb Lb  Cb  S   Lb
+Lb2 Lb Lb2 Lb2 Lb2 Lb
+L   L  L   L   L   Lx.
+\&	\&	\&	Bits	\&
+Year	System	Arch	Color	Char	Notes
+_
+1992	Solaris 5.2	32	6	17	SVr4 \fIcurses\fP
+1992	HP-UX 9	32	no	8	SVr2 \fIcurses\fP
+1992	AIX 3.2	32	no	23	SVr2 \fIcurses\fP
+1994	OSF/1 r3	32	no	23	SVr2 \fIcurses\fP
+1995	HP-UX 10.00	32	6	16	SVr3 \fIcurses_colr\fP
+1995	HP-UX 10.00	32	6	8	SVr4, X/Open \fIcurses\fP
+1995	Solaris 5.4	32/64	7	16	X/Open \fIcurses\fP
+1996	AIX 4.2	32	7	16	X/Open \fIcurses\fP
+1996	OSF/1 r4	32	6	16	X/Open \fIcurses\fP
+1997	HP-UX 11.00	32	6	8	X/Open \fIcurses\fP
+2000	UWIN	32/64	7/31	16	uses \fIchtype\fP
+.TE
+.PP
+Notes:
+.RS 3
+.PP
+Regarding HP-UX,
+.bP
+HP-UX 10.20 (1996) added support for 64-bit PA-RISC processors in 1996.
+.bP
+HP-UX 10.30 (1997) marked \*(``curses_colr\*('' obsolete.
+That version of
+.I curses
+was dropped with HP-UX 11.30 in 2006.
+.PP
+Regarding OSF/1 (and Tru64),
+.bP
+These used 64-bit hardware.
+Like
+.IR \%ncurses ","
+the OSF/1
+.I curses
+interface is not customized for 32-bit and 64-bit
+versions.
+.bP
+Unlike other systems which evolved from AT&T code,
+OSF/1 provided a new implementation for X/Open Curses.
+.PP
+Regarding Solaris,
+.bP
+The initial release of Solaris was in 1992.
+.bP
+Its XPG4
+(X/Open Curses-conforming)
+.I xcurses
+library was developed by Mortice Kern Systems from 1990 to 1995.
+Sun's copyright began in 1996.
+.bP
+Sun updated the X/Open Curses interface
+after 64-bit support was introduced in 1997,
+but did not modify the SVr4
+.I curses
+interface.
+.PP
+Regarding UWIN,
+.bP
+Development of the
+.I curses
+library began in 1991, stopped in 2000.
+.bP
+Color support was added in 1998.
+.bP
+The library uses only
+.I \%chtype
+(not
+.IR \%cchar_t ")."
+.RE
+.PP
+Once X/Open Curses was adopted in the mid-1990s, the constraint of
+a 32-bit interface with many colors and wide-characters for
+.I \%chtype
+became a moot point.
+The
+.I \%cchar_t
+structure
+(whose size and members are not specified in X/Open Curses)
+could be extended as needed.
+.PP
+Other interfaces are rarely used now.
+.bP
+BSD
+.I curses
+was improved slightly in 1993/1994 using Keith Bostic's
+modification to make the library 8-bit clean for \fInvi\fP(1).
+He moved the
+.I \%standout
+attribute to a structure member.
+The resulting 4.4BSD
+.I curses
+was replaced by
+.I \%ncurses
+over the next ten years.
+.bP
+UWIN has been defunct since 2012.
+.PP
+.I \%ncurses
+6.0 (2015)
+added the
+.I A_ITALIC
+macro.
+.\" ---------------------------------------------------------------------------

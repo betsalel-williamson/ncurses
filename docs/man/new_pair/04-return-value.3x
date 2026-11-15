@@ -1,0 +1,13 @@
+.SH RETURN VALUE
+The \fBalloc_pair\fP function returns a color pair number in the range
+1 through \fBCOLOR_PAIRS\fP\-1, unless it encounters an error updating
+its fast index to the color pair values, preventing it from allocating
+a color pair.
+In that case, it returns \-1.
+.PP
+The \fBfind_pair\fP function returns a color pair number if the
+given color combination has been associated with a color pair,
+or \-1 if not.
+.PP
+Likewise, \fBfree_pair\fP returns \fBOK\fP unless it encounters an
+error updating the fast index or if no such color pair is in use.

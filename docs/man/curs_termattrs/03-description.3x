@@ -1,0 +1,82 @@
+.SH DESCRIPTION
+.SS baudrate
+.B \%baudrate
+returns the line speed of the terminal,
+an integer value measured in bits per second,
+for example
+.BR 9600 "."
+.SS "erasechar, erasewchar"
+.B \%erasechar
+returns the terminal's erase character.
+.PP
+.B \%erasewchar
+stores the erase character in the location referenced by
+.IR wc "."
+If no erase character has been defined,
+it fails and the location referenced by
+.I wc
+is not changed.
+.SS "has_ic, has_il"
+.B \%has_ic
+returns
+.B TRUE
+if the terminal has insert- and delete-character capabilities.
+.PP
+.B \%has_il
+returns
+.B TRUE
+if the terminal has insert- and delete-line capabilities,
+or can simulate them using scrolling regions.
+It might be used to determine whether it would be appropriate
+to use \fBscrollok\fP(3X) to turn on scrolling.
+.SS "killchar, killwchar"
+.B \%killchar
+returns the terminal's line kill character.
+.PP
+.B \%killwchar
+stores the line-kill character in the location referenced by
+.IR wc "."
+If no line-kill character has been defined,
+it fails and the location referenced by
+.I wc
+is not changed.
+.SS longname
+.B \%longname
+returns a pointer to static storage
+containing a verbose description of the terminal being managed by
+.IR curses "."
+The maximum length of a verbose description is 128 characters.
+The storage is populated only after \fBinitscr\fP(3X) or
+\fBnewterm\fP(3X) is called.
+This storage is overwritten by each call to
+.B \%newterm
+and not restored by \fBset_term\fP(3X),
+so its contents should be saved between calls to
+.B \%initscr
+or
+.B \%newterm
+if
+.B \%longname
+is to be used with multiple terminals.
+.SS "termattrs, term_attrs"
+If a given terminal does not support a video attribute that an
+application program is trying to use,
+.I curses
+may substitute a
+different video attribute for it.
+.B \%termattrs
+and
+.B \%term_attrs
+return a logical \*(``or\*('' of all video attributes supported by the
+terminal using
+.B A_
+and
+.B WA_
+constants respectively.
+This information is useful when a
+.I curses
+program
+needs complete control over the appearance of the screen.
+.SS termname
+.B \%termname
+returns the terminal name used by \fBsetupterm\fP(3X).

@@ -1,0 +1,83 @@
+.SH RETURN VALUE
+.B \%can_change_color
+and
+.B \%has_colors
+return
+.B TRUE
+or
+.BR FALSE "."
+The other functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+color manipulation functions returning an
+.I int
+recognize several error conditions.
+.bP
+All return
+.B ERR
+if the screen has not been initialized;
+see \fBinitscr\fP(3X) or \fBnewterm\fP(3X).
+.bP
+All except
+.B \%start_color
+return
+.B ERR
+if
+.B \%start_color
+has not been called,
+or itself returned
+.BR ERR "."
+.bP
+.B \%start_color
+returns
+.B ERR
+if it cannot allocate memory for its color pair table.
+.bP
+.B \%init_color
+returns
+.B ERR
+if the terminal type does not support assignable color values;
+that is,
+if the
+.B \%initialize_color
+.RB ( initc )
+capability is absent from its description.
+.bP
+.B \%init_color
+returns
+.B ERR
+if any of its
+.IR r ","
+.IR g ","
+.I b
+arguments is outside the range 0-1000 inclusive.
+.bP
+.BR \%init_pair ","
+.BR \%init_color ","
+.BR \%init_extended_pair ","
+.BR \%init_extended_color ","
+.BR \%color_content ","
+.BR \%pair_content ","
+.BR \%extended_color_content ","
+and
+.B \%extended_pair_content
+return
+.B ERR
+on attempts to use
+.RS
+.bP
+color identifiers outside the range
+.RB \%0- COLORS \-1
+inclusive,
+the default colors extension notwithstanding,
+or
+.bP
+color pair identifiers outside the range
+.RB \%0- COLOR_PAIRS \-1
+inclusive.
+.RE
