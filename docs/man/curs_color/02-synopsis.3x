@@ -1,0 +1,41 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fI/* variables */
+\fBint COLOR_PAIRS;
+\fBint COLORS;
+.PP
+\fBint start_color(void);
+.PP
+\fBbool has_colors(void);
+\fBbool can_change_color(void);
+.PP
+\fBint init_pair(short \fIpair\fP, short \fIf\fP, short \fIb\fP);
+\fBint init_color(short \fIindex\fP, short \fIr\fP, short \fIg\fP, short \fIb\fP);
+\fI/* extensions */
+\fBint init_extended_pair(int \fIpair\fP, int \fIf\fP, int \fIb\fP);
+\fBint init_extended_color(int \fIindex\fP, int \fIr\fP, int \fIg\fP, int \fIb\fP);
+.PP
+\fBint color_content(short \fIindex\fP, short *\fIr\fP, short *\fIg\fP, short *\fIb\fP);
+\fBint pair_content(short \fIpair\fP, short *\fIf\fP, short *\fIb\fP);
+\fI/* extensions */
+\fBint extended_color_content(int \fIindex\fP, int *\fIr\fP, int *\fIg\fP, int *\fIb\fP);
+\fBint extended_pair_content(int \fIpair\fP, int *\fIf\fP, int *\fIb\fP);
+.PP
+\fI/* extension */
+\fBvoid reset_color_pairs(void);
+.PP
+\fI/* macros */
+\fBint COLOR_PAIR(int \fIn\fP);
+\fBPAIR_NUMBER(int \fIattr\fP);
+\fBCOLOR_BLACK
+\fBCOLOR_RED
+\fBCOLOR_GREEN
+\fBCOLOR_YELLOW
+\fBCOLOR_BLUE
+\fBCOLOR_MAGENTA
+\fBCOLOR_CYAN
+\fBCOLOR_WHITE
+\fBA_COLOR
+.fi

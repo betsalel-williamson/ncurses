@@ -1,0 +1,17 @@
+.SH EXTENSIONS
+X/Open Curses documents the
+.I opts
+argument as reserved for future use,
+saying that it must be a null pointer.
+The
+.IR \%ncurses\  6
+ABI uses it
+for the functions that accept a color pair parameter
+to support extended color pairs.
+.PP
+For functions which modify the color,
+e.g.,
+\fB\%slk_attr_set\fP,
+if \fIopts\fP is set it is treated as a pointer to \fIint\fP,
+and used to set the color pair instead of the \fIshort\fP pair
+parameter.

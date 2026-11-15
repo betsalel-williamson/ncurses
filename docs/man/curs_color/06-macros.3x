@@ -1,0 +1,73 @@
+.SH MACROS
+.\" We do _not_ mention ANSI X3.64 here.  It was initially issued in
+.\" (or at least dated) 1979, and reputedly, was never revised or
+.\" updated prior its withdrawal in 1994.  ANSI X3.64 did not address
+.\" color features.
+.\" See <https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub86.pdf>,
+.\" p. H-1 (PDF p. 81).
+ISO\ 6429 and ECMA-48
+define eight standard colors
+(known inaccurately as \*(``ANSI\*('' colors),
+to which X/Open Curses assigns symbolic names as object-like macros
+.BR \%COLOR_BLACK ","
+.BR \%COLOR_RED ","
+.BR \%COLOR_GREEN ","
+.BR \%COLOR_YELLOW ","
+.BR \%COLOR_BLUE ","
+.BR \%COLOR_MAGENTA ","
+.BR \%COLOR_CYAN ","
+and
+.BR \%COLOR_WHITE "."
+.I curses
+assumes that
+.B \%COLOR_BLACK
+is the default background color for all terminals.
+.I \%ncurses
+offers an extension to override that assumption;
+see \fB\%assume_default_colors\fP(3X).
+Some terminals support additional colors that lack standard names.
+.PP
+.B \%A_COLOR
+is a bit mask that,
+when bitwise \*(``and\*(''-ed with a
+.IR \%chtype ","
+extracts its color pair identifier.
+X/Open Curses mandates the provision of two function-like macros.
+They have no application in the wide-character API of
+.IR curses "."
+.SS COLOR_PAIR
+.BI \%COLOR_PAIR( n )
+replaces color pair identifier
+.I n
+with its encoded value appropriate for use in a
+.IR chtype "."
+Such values have a limited,
+implementation-dependent range.
+Non-wide API functions such as \fB\%attrset\fP(3X)
+cannot handle larger color pair identifiers than this.
+A portable application checks that
+.IR n 's
+value is less than
+.I COLOR_PAIRS
+before employing this macro on it.
+If you need to transform a larger color pair identifier,
+you must use the wide API and call,
+for example,
+\fB\%attr_set\fP(3X),
+which passes the color pair identifier
+as a parameter separate from the attributes.
+.SS PAIR_NUMBER
+.BI \%PAIR_NUMBER( n )
+replaces its
+.I chtype
+or
+.I attr_t
+argument
+.I n
+with the color pair identifier encoded within it.
+.\" X/Open Curses Issue 7 explains that terribly; see p. 57 (PDF p. 71).
+.PP
+.B \%COLOR_PAIR()
+and
+.B \%PAIR_NUMBER()
+are inverse operations.

@@ -1,0 +1,115 @@
+.SH HISTORY
+SVr3.2 (1988) introduced color support to
+.I curses
+with all of the symbols
+in the synopsis above except those marked as extensions.
+It reserved color pair 0 as the terminal's initial,
+\*(``uncolored\*('' state,
+.\" "we assume that color 0 is always a default background.", SVr3.2
+.\" usr/src/lib/libcurses/screen/start_col.c
+and limited the number of possible color pairs to 64,
+because the color pair datum was encoded in six bits of a
+.IR \%chtype "."
+.PP
+SVr4 (1989) made only internal changes,
+such as moving the storage of color state
+from the
+.I SCREEN
+structure
+(pointed to by
+.IR SP )
+to the
+.I \%TERMINAL
+structure
+(pointed to by
+.IR \%cur_term ")."
+.PP
+Other
+.I curses
+implementations impose different limits
+on the number of color indices and color pairs.
+.bP
+.I \%PCCurses
+(1987-1990) provided for only 8 color indices
+(and therefore permitted at most 8\(mu8 = 64 color pairs).
+.bP
+.I \%PDCurses
+(1992-present) initially inherited the 8-color limitation from
+.IR \%PCCurses ","
+but increased it to 256 in version 2.5 (2001),
+and widened its
+.I \%chtype
+from 16 to 32 bits.
+.bP
+X/Open Curses (1992-present)
+specified a new integral type,
+.IR attr_t ","
+storing rendering attributes
+(see \fB\%attr_on\fP(3X))
+and a color pair identifier,
+and a new structure type,
+.IR \%cchar_t ","
+to store a sequence of wide character codes
+separately from the character cell's attributes and color pair,
+allowing an increased range of color pairs.
+The standard specifies
+.I attr_t
+as a
+.IR short ","
+limiting portable values to 15 bits;
+negative values are invalid in System\ V.
+.bP
+.I \%ncurses
+(1992-present),
+in its non-wide-character configuration,
+uses 8 bits of
+.I \%chtype
+for the color pair identifier.
+.IP
+Version 5.3 (2002) introduced a wide-character interface,
+but encoded the color pair identifier with attributes
+in the character type.
+.IP
+Since version 6 (2015),
+.I \%ncurses
+uses a separate
+.I int
+for the color pair identifier in a
+.IR \%cchar_t ","
+adding extension functions to manage the wider type.
+When a color pair identifier fits in 8 bits,
+.I \%ncurses
+permits manipulation of color pair identifiers with functions taking
+.I \%chtype
+arguments,
+even when a
+.I curses
+window uses wide-character cells.
+.bP
+NetBSD
+.I curses
+used 6 bits for the color pair identifier from 2000
+(when it first added color support)
+until 2004.
+At that point,
+NetBSD widened the color pair identifier to use 9 bits.
+As of 2025,
+that size is unchanged.
+.\" http://cvsweb.netbsd.org/bsdweb.cgi/src/lib/libcurses/curses.h?rev=1.133
+.\" indicates a mask of 0x03fe0000.
+Like
+.I \%ncurses
+before version 6,
+the NetBSD color pair identifier is stored in
+the attributes field of
+.IR \%cchar_t ","
+limiting the number of color pairs.
+.PP
+.I \%ncurses
+6.1 (2018) introduced
+.IR \%init_extended_pair ","
+.IR \%init_extended_color ","
+.IR \%extended_pair_content ","
+.IR \%extended_color_content ","
+and
+.IR \%reset_color_pairs "."

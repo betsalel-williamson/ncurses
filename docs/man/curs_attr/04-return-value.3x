@@ -1,0 +1,40 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+they return
+.B ERR
+if
+.I win
+is
+.IR NULL "."
+.PP
+.B \%wcolor_set
+returns
+.B ERR
+if
+.I pair
+is outside the range
+.BR 0 .\|. COLOR_PAIRS\-1 .
+.PP
+.B \%wattr_get
+does
+.I not
+fail if its
+.I \%attrs
+or
+.I \%pair
+parameter is
+.IR NULL "."
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.
+.\" ---------------------------------------------------------------------------

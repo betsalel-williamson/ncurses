@@ -80,6 +80,10 @@ jobs:
         with:
           version: 7.0.0
           actions-cache-folder: emsdk-cache
+          # The action's default key starts with the workflow's name, which differs between
+          # docs-site-pr.yml and docs-site.yml, so a pull request never found master's copy and
+          # downloaded the 320 MB toolchain again on its first run. One key for both fixes that.
+          cache-key: emsdk-7.0.0-${{ runner.os }}-${{ runner.arch }}
       # Caches. A pull request can restore only what its own branch or master saved, so
       # docs-site.yml's cache job saves these on master after every merge.
       - name: Key the WebAssembly ncurses build by its sources

@@ -1,0 +1,43 @@
+.SH EXTENSIONS
+This implementation provides the \fBA_ITALIC\fP attribute for terminals
+which have the \fBenter_italics_mode\fP (\fBsitm\fP)
+and \fBexit_italics_mode\fP (\fBritm\fP) capabilities.
+Italics are not mentioned in X/Open Curses.
+Unlike the other video attributes, \fBA_ITALIC\fP is unrelated
+to the \fBset_attributes\fP capabilities.
+This implementation makes the assumption that
+\fBexit_attribute_mode\fP may also reset italics.
+.PP
+Each of the functions added by XSI Curses has a parameter \fIopts\fP,
+which X/Open Curses still (after more than twenty years) documents
+as reserved for future use, saying that it should be
+.IR NULL "."
+This implementation uses that parameter in ABI 6 for the functions which
+have a color pair parameter to support \fIextended color pairs\fP:
+.bP
+For functions which modify the color, e.g.,
+\fBwattr_set\fP and \fBwattr_on\fP,
+if \fIopts\fP is set it is treated as a pointer to
+.IR int ","
+and used to set the color pair instead of the
+.I short
+.I pair
+parameter.
+.bP
+For functions which retrieve the color, e.g.,
+\fBwattr_get\fP,
+if \fIopts\fP is set it is treated as a pointer to
+.IR int ","
+and used to retrieve the color pair as an
+.I int
+value,
+in addition to
+retrieving it via the standard pointer to
+.I short
+parameter.
+.bP
+For functions which turn attributes off, e.g.,
+\fBwattr_off\fP,
+the \fIopts\fP parameter is ignored except to check that it is
+.IR NULL "."
+.\" ---------------------------------------------------------------------------

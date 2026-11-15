@@ -1,0 +1,116 @@
+.SH DESCRIPTION
+.I curses
+supports color rendering on terminals with applicable capabilities.
+Once the library has initialized the terminal,
+.B \%has_colors
+tells an application whether that terminal type has color capability.
+If it does,
+calling
+.B \%start_color
+enables the feature.
+(See section \*(``NOTES\*('' below regarding \fB\%ripoffline\fP(3X).)
+.PP
+When applying colors to a
+.I curses
+window,
+the library manages them in pairs.
+A
+.I "color pair"
+couples a foreground color applied
+to the visible strokes of a glyph
+with a background color for the field in the character cell
+within which the glyph appears.
+Configure at least one color pair to use the color feature.
+.B \%init_pair
+initializes a color pair identifier,
+whose value you select,
+from a pair of
+.I "color indices,"
+foreground and background.
+Each index represents a color.
+X/Open Curses standardizes,
+and a
+.I curses
+library defines,
+a small set of color indices;
+see section \*(``MACROS\*('' below.
+The macro
+.B \%COLOR_PAIR(\fIn\fP)
+converts a pair
+.I n
+thus initialized to the value required to encode it in a
+.I \%chtype
+or
+.IR \%attr_t "."
+Another macro,
+.B \%PAIR_NUMBER(\fIn\fP)
+conversely extracts a color pair identifier
+from variables of those data types.
+.B \%pair_content
+permits discovery of a color pair's current definition.
+.B \%color_content
+extracts the
+red,
+green,
+and blue components of the color using the given index.
+.PP
+.B \%can_change_color
+tells an application whether the terminal type
+permits (re)definition of a color.
+If it does,
+you can call
+.B \%init_color
+to update the specified color index to use
+red,
+green,
+and blue components of your choice.
+.PP
+Subsection \*(``Color Handling\*('' of \fB\%terminfo\fP(5)
+describes the capabilities that terminal types use to manage color.
+.PP
+Passing a
+.I curses
+function
+a color index outside the range
+.B 0
+to
+.BR \%COLORS\-1 ","
+or a color pair identifier outside the range
+.B 0
+to
+.B \%COLOR_PAIRS\-1
+may result in a runtime error.
+.B COLORS
+corresponds to the terminal type's
+.B \%max_colors
+.RB \%( colors )
+capability,
+and
+.B \%COLOR_PAIRS
+to
+.B \%max_pairs
+.RB \%( pairs ).
+.I \%ncurses
+permits specification of a color index of
+.B \-1
+in certain extended functions to select a
+.IR "default color" ";"
+see \fB\%use_default_colors\fP(3X).
+.PP
+Color pair
+.B 0
+is special;
+it denotes \*(``no color\*('',
+meaning the terminal's
+(typically monochrome)
+power-up default fore- and background.
+.PP
+For each screen,
+.I \%ncurses
+maintains a
+.I "color palette"
+that maps color indices into the RGB
+(red,
+green,
+blue)
+color space.

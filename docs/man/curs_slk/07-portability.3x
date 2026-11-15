@@ -1,0 +1,77 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 533
+.bP
+X/Open added functions like the SVr4 attribute-manipulation functions
+\fB\%slk_attron\fP,
+\fB\%slk_attroff\fP,
+and
+\fB\%slk_attrset\fP,
+but which use \fI\%attr_t\fP parameters
+(rather than \fI\%chtype\fP),
+along with a reserved \fIopts\fP parameter.
+.IP
+Two of these new functions
+(unlike the SVr4 functions)
+have no provision for color:
+\fB\%slk_attr_on\fP and \fB\%slk_attr_off\fP.
+.IP
+The third function \%(\fBslk_attr_set\fP) has a color pair parameter.
+.bP
+It added \fIconst\fP qualifiers to parameters (unnecessarily),
+and
+.bP
+It added \fB\%slk_color\fP.
+.PP
+Although \fB\%slk_start\fP is declared in the \fIcurses\fP header file,
+it was not documented by SVr4 other than its presence in a list
+of libtermlib.so.1 symbols.
+Reading the source code (i.e., Illumos):
+.bP
+\fB\%slk_start\fP has two parameters:
+.RS
+.bP
+\fIng\fP (number of groups) and
+.bP
+\fIgp\fP (group pointer).
+.RE
+.bP
+Soft-key groups are an array of \fIng\fP integers.
+.bP
+In SVr4, \fB\%slk_init\fP calls \fB\%slk_start\fP passing a null for \fIgp\fP.
+For this case, \fB\%slk_start\fP uses the number of groups \fIng\fP
+(3 for the 3-2-3 layout, 2 for the 4-4 layout) which \fB\%slk_init\fP provided.
+.IP
+If \fIng\fP is neither 2 or 3,
+\fB\%slk_start\fP checks the terminfo \fBfln\fP (label_format) capability,
+interpreting that as a comma-separated list of numbers,
+e.g., \*(``3,2,3\*('' for the 3-2-3 layout.
+.IP
+Finally, if there is no \fBfln\fP capability,
+\fB\%slk_start\fP returns \fBERR\fP.
+.bP
+If \fB\%slk_start\fP is given a non-null \fIgp\fP,
+it copies the \fIng\fP elements of the group of soft-keys, up to 16.
+.IP
+If there are more than 16 elements, \fB\%slk_start\fP returns
+.BR ERR "."
+.bP
+The format codes \fB2\fP and \fB3\fP for \fB\%slk_init\fP
+were added by \fI\%ncurses\fP in 1996.
+.I \%PDCurses
+2.4 added this feature in 2001.
+.PP
+The function \fB\%slk_attr\fP was added by \fI\%ncurses\fP in 1996.
+.PP
+X/Open Curses does not specify a limit for the number of colors and
+color pairs which a terminal can support.
+However, in its use of \fIshort\fP for the parameters,
+it carries over SVr4's implementation detail for the compiled
+terminfo database, which uses signed 16-bit numbers.
+This implementation provides extended versions of those functions
+which use \fIint\fP parameters,
+allowing applications to use larger color- and pair-numbers.

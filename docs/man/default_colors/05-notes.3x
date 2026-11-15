@@ -1,0 +1,24 @@
+.SH NOTES
+Associated with this extension, the \fBinit_pair\fP function accepts
+negative arguments to specify default foreground or background colors.
+.PP
+The \fBuse_default_colors\fP function was added to support \fBded\fP.
+This is a full-screen application which uses curses to manage only part
+of the screen.
+The bottom portion of the screen, which is of adjustable
+size, is left uncolored to display the results from shell commands.
+The top portion of the screen colors filenames using a scheme like the
+\*(``color ls\*('' programs.
+Attempting to manage the background color of the screen for this application
+would give unsatisfactory results for a variety of reasons.
+This extension was devised after
+noting that color xterm (and similar programs) provides a background color
+which does not necessarily correspond to any of the ANSI colors.
+While a special terminfo entry could be constructed using nine colors,
+there was no mechanism provided within curses to account for the related
+\fBorig_pair\fP and \fBback_color_erase\fP capabilities.
+.PP
+The \fBassume_default_colors\fP function was added to solve
+a different problem: support for applications which would use
+environment variables and other configuration to bypass curses'
+notion of the terminal's default colors, setting specific values.

@@ -1,0 +1,54 @@
+.SH RETURN VALUE
+Functions that return integers return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+In
+.IR \%ncurses ","
+.RS 3
+.TP 5
+\fBslk_attr\fP
+returns the attribute used for the soft keys.
+.TP 5
+\fBslk_attroff\fP, \fBslk_attron\fP, \fBslk_clear\fP, \fBslk_noutrefresh\fP, \fBslk_refresh\fP, \fBslk_touch\fP
+return
+.B ERR
+if the terminal or the softkeys were not initialized.
+.TP 5
+\fBslk_attrset\fP
+returns
+.B ERR
+if the terminal or the softkeys were not initialized.
+.TP 5
+\fBslk_attr_set\fP
+returns
+.B ERR
+if the terminal or the softkeys were not initialized, or
+the color pair is outside the range 0..\fBCOLOR_PAIRS\fP\-1.
+.TP 5
+\fBslk_color\fP
+returns
+.B ERR
+if the terminal or the softkeys were not initialized, or
+the color pair is outside the range 0..\fBCOLOR_PAIRS\fP\-1.
+.TP 5
+\fBslk_init\fP
+returns
+.B ERR
+if the format parameter is outside the range 0..3.
+.TP 5
+\fBslk_label\fP
+returns
+.I NULL
+on error.
+.TP 5
+\fBslk_set\fP
+returns
+.B ERR
+if the terminal or the softkeys were not initialized, or
+the \fIlabnum\fP parameter is outside the range of label counts, or
+if the format parameter is outside the range 0..2, or if
+memory for the labels cannot be allocated.
+.RE

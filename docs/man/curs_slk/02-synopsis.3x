@@ -1,0 +1,30 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint slk_init(int \fIfmt\fP);
+.PP
+\fBint slk_set(int \fIlabnum\fP, const char *\fIlabel\fP, int \fIalign\fP);
+\fBint slk_wset(int \fIlabnum\fP, const wchar_t *\fIlabel\fP, int \fIalign\fP);
+.PP
+\fBchar *slk_label(int \fIlabnum\fP);
+.PP
+\fBint slk_refresh(void);
+\fBint slk_noutrefresh(void);
+\fBint slk_clear(void);
+\fBint slk_restore(void);
+\fBint slk_touch(void);
+.PP
+\fBint slk_attron(const chtype \fIattrs\fP);
+\fBint slk_attroff(const chtype \fIattrs\fP);
+\fBint slk_attrset(const chtype \fIattrs\fP);
+\fBint slk_attr_on(attr_t \fIattrs\fP, void *\fIopts\fP);
+\fBint slk_attr_off(const attr_t \fIattrs\fP, void *\fIopts\fP);
+\fBint slk_attr_set(const attr_t \fIattrs\fP, short \fIpair\fP, void*\fIopts\fP);
+\fI/* extension */
+\fBattr_t slk_attr(void);
+.PP
+\fBint slk_color(short \fIpair\fP);
+\fI/* extension */
+\fBint extended_slk_color(int \fIpair\fP);
+.fi

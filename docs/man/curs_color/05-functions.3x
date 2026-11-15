@@ -1,0 +1,233 @@
+.SH FUNCTIONS
+.SS has_colors
+.B \%has_colors
+returns
+.B TRUE
+if the terminal supports colors and
+.B FALSE
+if it does not.
+\fB\%initscr\fP(3X) or \fB\%newterm\fP(3X) must be called first,
+but
+.B \%start_color
+need not be.
+An application might call
+.B \%has_colors
+to inform its decision whether to use color
+or a video attribute like
+.B \%A_BOLD
+to render text.
+.SS start_color
+If your application requires color,
+call
+.B \%start_color
+before any other color manipulation function.
+As a rule,
+do so immediately after
+.BR \%initscr "."
+If the terminal type supports color,
+.BR \%start_color ":"
+.bP
+initializes the two global variables,
+.B \%COLORS
+and
+.BR \%COLOR_PAIRS ","
+described above;
+.bP
+initializes (only) the color pair
+.B 0
+to the terminal type's power-up foreground and background colors
+(but see the
+.I \%ncurses
+extension \fB\%use_default_colors\fP(3X));
+.bP
+initializes the color palette;
+and
+.bP
+selects color pair
+.BR 0 "."
+.\" ...by calling internal functions `set_{fore,back}ground_color()`.
+.PP
+.B \%start_color
+sets up the color palette
+for the eight colors named by the X/Open Curses standard
+(see section \*(``CONSTANTS\*('' above)
+applying weights appropriate to the color space.
+.I curses
+does not attempt to initialize the color palette
+to match a terminal type's power-up configuration.
+.\" Init and reset string capabilities could do so.
+See section \*(``NOTES\*('' below.
+.PP
+Calling
+.B \%start_color
+again after it has returned
+.B OK
+does nothing.
+.SS init_pair
+(Re-)define a color pair with
+.BR \%init_pair ","
+which takes three arguments:
+the color pair identifier to be updated,
+a foreground color index,
+and
+a background color index.
+A portable application restricts these argument values
+to the valid ranges stated above.
+If the application uses
+.IR \%ncurses 's
+default color extension
+(see below),
+the library adjusts the upper limit to allow for extra pairs
+that use a default color in the foreground and/or background.
+.PP
+If a color pair was previously defined,
+.B \%init_pair
+causes a refresh of the entire screen,
+and all occurrences of that color pair change to use its new definition.
+.I \%ncurses
+suppresses this refresh if the color pair's new color indices
+are the same as the old.
+.PP
+.I \%ncurses
+extensions
+allow you to update color pair
+.B 0
+via \fB\%assume_default_colors\fP(3X),
+and to access the terminal's default colors as color index
+.B \-1
+if you first call \fB\%use_default_colors\fP(3X).
+.SS init_extended_pair
+Because
+.B \%init_pair
+uses signed
+.IR short s
+for its parameters,
+its color pair identifiers and color indices
+are limited to 32767 even for terminal types that are much more capable.
+.\" ...not 65535 because the System V terminfo compiled entry format
+.\" foreclosed use of an unsigned type for this purpose and others.
+This
+.I \%ncurses
+extension uses
+.IR int s
+instead,
+expanding their range.
+.SS pair_content
+An application can discover the color index assignments of a color pair
+with
+.BR \%pair_content "."
+Its first argument is the color pair identifier of interest,
+and the remaining two are each a pointer to
+.I short
+that the function populates
+with the foreground and background color indices,
+respectively.
+.SS extended_pair_content
+Because
+.B \%pair_content
+uses signed
+.IR short s
+for its parameters,
+its color pair identifiers and color indices
+are limited to 32767 even for terminal types that are much more capable.
+.\" ...not 65535 because the System V terminfo compiled entry format
+.\" foreclosed use of an unsigned type for this purpose and others.
+This
+.I \%ncurses
+extension uses
+.IR int s
+instead,
+expanding their range.
+.SS reset_color_pairs
+This
+.I \%ncurses
+extension directs the library to discard
+all color pair assignments configured by application calls of
+.B \%init_pair
+and
+.BR \%init_extended_pair "."
+.\" Due to the library's internal design, this has the effect of
+.\" resetting color pair zero, so it still exists and works afterward.
+It furthermore marks the entire screen as requiring refresh;
+an application can thus easily reconfigure its color scheme
+by subsequently initializing as many color pairs as required.
+.SS can_change_color
+.B \%can_change_color
+returns
+.B TRUE
+if the terminal supports colors and can change their mappings,
+and
+.B FALSE
+if it does not.
+.SS init_color
+Change a color's mapping (definition) by supplying this function
+four arguments:
+the color index;
+and
+red,
+green,
+and
+blue
+color channel values in the range 0-1000.
+.PP
+If the color index is in use in a color pair on the screen,
+all occurrences of it change to use its new definition.
+No \fB\%refresh\fP(3X) is necessary.
+.\" The library essentially does `putp(tiparm("initc", idx, r, g, b));`.
+.\" But for the interposition of the higher-level color palette ncurses
+.\" stores in `SCREEN`, `init_color` would be a "lower-level" API, like
+.\" `mvcur()`.
+.SS init_extended_color
+Because
+.B \%init_color
+uses signed
+.IR short s
+for its parameters,
+the maximum value of its color index argument
+is limited to 32767 even for terminal types that are much more capable.
+(The range of valid RGB channel values remains 0-1000.)
+.\" Here the System V terminfo compiled entry format imposes no
+.\" limitation, because these values exist only as parameters to string
+.\" capabilities.  We still say "32767" because that is the smallest
+.\" possible maximum value of a `signed short` in standard C.
+This
+.I \%ncurses
+extension uses
+.IR int s
+instead,
+expanding the range of permissible color indices.
+.PP
+If the color index is in use in a color pair on the screen,
+all occurrences of it change to use its new definition.
+No \fB\%refresh\fP(3X) is necessary.
+.\" The library essentially does `putp(tiparm("initc", idx, r, g, b));`.
+.\" But for the interposition of the higher-level color palette ncurses
+.\" stores in `SCREEN`, `init_extended_color` would be a "lower-level"
+.\" API, like `mvcur()`.
+.SS color_content
+An application can query a color index's location in RGB space
+by calling
+.BR \%color_content .
+The library stores the color channel values
+corresponding to the specified color index
+in the
+.IR red ","
+.IR green ","
+and
+.I blue
+.RI pointer-to- short
+arguments.
+.SS extended_color_content
+Because
+.B \%color_content
+uses signed
+.IR short s
+for its parameters,
+the maximum value of its color index argument
+is limited to 32767 even for terminal types that are much more capable.
+This
+.I \%ncurses
+extension uses
+.IR int s
+instead,
+expanding the range of permissible color indices.

@@ -1,0 +1,184 @@
+.SH NOTES
+X/Open Curses says nothing about how the standard colors
+are to be configured in a color space.
+.I \%ncurses
+initializes a screen's color palette such that,
+in the RGB color space,
+each channel of the eight standard colors has a value of either
+.B 680
+or
+.BR 0 "."
+If the terminal type supports at least 16 colors,
+this configuration aids an application
+to support a terminal type with only one typeface
+to simulate bold text with \*(``bright\*('' colors.
+With appropriate configuration of the bright color pairs
+by the application,
+increasing nonzero channel values to
+.BR 1000 ","
+this scheme suffices to approximate the 16 colors
+.\" ...that we can think of as a 4-bit RGBI color space...
+of IBM CGA text mode video
+and the power-up configuration of the DEC VT525.
+.\" XXX: What does the following mean?  ncurses does not initialize
+.\" palette entries for colors beyond the standard 8.  See the
+.\" `cga_palette` struct in ncurses/base/lib_color.c.  Who wrote this?
+.\" --GBR
+.\"After the initial eight colors
+.\"(if the terminal supports more than eight colors)
+.\"the components are initialized using the same pattern,
+.\"but with weights of \fB1000\fP.
+SVr4
+.I curses
+instead assigns values of
+.B 1000
+to the nonzero color channel values of the eight standard colors.
+.PP
+Setting a background color via a color pair identifier
+affects only character cells
+that a character write operation explicitly touches.
+To change the background color used
+when parts of a window are blanked by erasing or scrolling operations,
+see \fB\%bkgd\fP(3X)
+(wide-character API users: \fB\%bkgrnd\fP(3X)).
+.PP
+Windows created by \fB\%ripoffline\fP(3X)
+do not inherit color pair configuration applied to
+.IR stdscr ";"
+they must be configured independently.
+.PP
+In
+.IR \%ncurses ","
+.B \%init_pair
+accepts negative foreground and background color arguments
+to support its \fB\%use_default_colors\fP(3X) extension,
+but only after the latter function has been called.
+.PP
+The assumption that
+.B \%COLOR_BLACK
+is the terminal's default background color can be overridden using
+.IR \%ncurses 's
+\fB\%assume_default_colors\fP(3X) extension.
+.PP
+In
+.IR \%ncurses ","
+each pointer passed to
+.B \%color_content
+and
+.B \%pair_content
+can be null,
+in which case the library ignores it,
+permitting the application to disregard unnecessary information.
+.PP
+In
+.IR \%ncurses ","
+each screen has a
+color activation flag,
+color palette,
+color pair table,
+and associated
+.B \%COLORS
+and
+.B \%COLOR_PAIRS
+values;
+.B \%start_color
+affects only the current screen.
+The SVr4
+.I curses
+interface,
+standardized by X/Open Curses,
+was not designed with distinguishable screens clearly in mind;
+historical implementations may use a single shared color palette
+for all screens the library manages.
+.PP
+Several caveats apply to emulation of the CGA/EGA/VGA video
+of IBM PC-compatible machines of the 80486 era and earlier.
+.bP
+.B \%COLOR_YELLOW
+was frequently converted,
+in the analog domain,
+to a shade of brown if the intensity bit was not set.
+.\" https://nerdlypleasures.blogspot.com/2023/03/the-saga-of-color-brown-in-early-years.html
+To get yellow on such devices,
+one would combine
+.B \%COLOR_YELLOW
+with the
+.B \%A_BOLD
+attribute.
+.bP
+The
+.B \%A_BLINK
+attribute should in theory make the background bright.
+This often fails to work,
+and even VGA controllers for which it mostly works,
+such as those from Paradise and compatibles,
+do the wrong thing
+when you try to set a bright \*(``yellow\*('' background \(em
+you get a blinking yellow foreground instead.
+.bP
+Color RGB values are not configurable on these devices
+(in text mode).
+.SS "Why This Color Model?"
+A programmer new to
+.I curses
+may wonder why the library works with pairs of indexed colors
+instead of \*(``direct\*('' foreground and background RGB triples.
+The answer lies in the limited bandwidth between terminals
+and their time-sharing host machines.
+In the 1980s,
+a 9600bps serial link was considered fast.
+That speed typically corresponded to a data rate
+of 960 bytes per second.
+.\" Consider BSD curses's single "standout" attribute occupying the most
+.\" significant bit of a 7-bit ASCII-encoded character cell, and 8N1
+.\" transmission.  (There is always 1 start bit, thus 8N1 -> 10 bits.)
+Using a single-byte character encoding,
+refreshing an 80\(mu24 terminal screen took two full seconds.
+In other words,
+such a terminal refreshing its entire screen contents
+rendered half a frame per second.
+Adding data to each character cell
+necessary for the \*(``direct\*('' color model
+at 8 bits per color channel
+would add 6 bytes to every character cell,
+extending the full-screen refresh time to 14 seconds.
+Even a pair of 8-bit color values would triple the refresh time.
+.PP
+Moreover,
+the vast majority of
+.I curses
+applications do not demand a wide gamut of colors.
+Even a colorful application like the game \fB\%nethack\fP(6)
+renders most of its interface in monochrome by default.
+A text user interface
+employing the \fBform\fP(3X) or \fBmenu\fP(3X) libraries
+often uses fewer than ten distinct colors at any one time.
+Thus,
+small integers suffice both to index individual colors
+and to pair them.
+Typically,
+each color pair is assigned to a type of user interface element,
+like a button or scroll bar control.
+Further,
+in the original SVr3.2
+.I curses
+implementation of color and today still in
+.IR ncurses 's
+non-wide library,
+.I chtype
+affords few bits for encoding of the color pair identifier.
+.PP
+Even in the common modern scenario where a terminal emulator
+runs on the same host as the
+.I curses
+application,
+and available bandwidth is limited only by the speed of the system bus,
+efficient encoding of character cell data aids performance
+by minimizing the copies to and from the kernel's memory space
+by use of the pseudoterminal (pty) system interface.
+For example,
+in the Linux 7.2 kernel,
+the pty buffer size is 4\ KiB,
+ensuring a CPU mode switch every time it fills up.
+.\" https://www.kernel.org/doc/html/v7.2/driver-api/tty/n_tty.html
+Parsimonious data management also reduces memory cache pressure.
