@@ -58,13 +58,17 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     border-left: 3px solid var(--sl-color-orange);
     padding-left: 0.75rem;
   }
-  .run-example-screen {
+  .run-example-scroller {
     margin-top: 0.75rem;
+    max-width: 100%;
+    overflow-x: auto;
+    /* Room for the frame's shadow, which would otherwise be clipped. */
+    padding: 0 0.75rem 0.75rem 0;
+  }
+  .run-example-screen {
     padding: 0.5rem;
     background: #1e1e1e;
     border-radius: 0.4rem;
-    overflow-x: auto;
     width: fit-content;
-    max-width: 100%;
   }
 </style>

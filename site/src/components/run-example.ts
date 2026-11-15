@@ -110,8 +110,13 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   bar.append(main, ...extra.map((x) => x.b), sizeLabel, note);
   const screen = document.createElement('div');
   screen.className = 'run-example-screen not-content';
-  screen.hidden = true;
-  box.append(bar, screen);
+  // The frame wraps the whole terminal. When the terminal is wider than the column, the frame
+  // runs past the edge too, and its scroller lets the reader drag to see the rest.
+  const scroller = document.createElement('div');
+  scroller.className = 'run-example-scroller not-content';
+  scroller.hidden = true;
+  scroller.append(screen);
+  box.append(bar, scroller);
 
   const chosen = () => SIZES[size.selectedIndex];
   let term: Terminal | null = null;
@@ -122,12 +127,18 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
   // fits, down to 9px, then scroll.
   const fit = () => {
     if (!term) return;
-    const style = getComputedStyle(screen);
-    const avail = box.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const px = (el: Element, ...keys: ('paddingLeft' | 'paddingRight' | 'borderLeftWidth' | 'borderRightWidth')[]) => {
+      const style = getComputedStyle(el);
+      return keys.reduce((n, k) => n + (parseFloat(style[k]) || 0), 0);
+    };
+    const avail =
+      scroller.clientWidth -
+      px(scroller, 'paddingLeft', 'paddingRight') -
+      px(screen, 'paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth');
     const width = () => screen.querySelector('.xterm-screen')?.getBoundingClientRect().width ?? 0;
-    let px = FONT_SIZE;
-    term.options.fontSize = px;
-    while (width() > avail && px > 9) term.options.fontSize = px -= 0.5;
+    let fontPx = FONT_SIZE;
+    term.options.fontSize = fontPx;
+    while (width() > avail && fontPx > 9) term.options.fontSize = fontPx -= 0.5;
   };
 
   // A new size applies at once: the terminal changes, and a running program gets SIGWINCH and
@@ -144,7 +155,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
     if (running) return;
     running = true;
     for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
-    screen.hidden = false;
+    scroller.hidden = false;
     const [cols, rows] = chosen();
     if (!term) {
       term = new Terminal({
