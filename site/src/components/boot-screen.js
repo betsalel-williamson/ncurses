@@ -7,7 +7,8 @@
 // A reader's first run plays it slowly (FIRST_MS), as a bit of theatre; later runs play the same
 // sequence faster (AGAIN_MS) but still slowly enough to see rather than flash. The program's output
 // waits until the sequence has played, and a slow load keeps it going until the program is ready.
-// With reduced motion there is one static line and no wait.
+// With reduced motion the report is drawn at once, still, with every check ok; only the bar moves,
+// with the download, and the program shows as soon as it is ready.
 
 export const FIRST_MS = 4000;
 export const AGAIN_MS = 1200;
@@ -110,7 +111,7 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
     release() {
       released ??= new Promise((resolve) => {
         const finish = () => {
-          if (length) drawBar(1);
+          drawBar(1);
           stop();
           setTimeout(() => {
             term.reset();
@@ -124,11 +125,7 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
   };
 
   out('\x1b[?25l\x1b[2J');
-  if (!length) {
-    out(`${at(2)}\x1b[2mLoading ${name}…\x1b[0m`);
-    return boot;
-  }
-  markSeen();
+  if (!reduced) markSeen();
 
   // The sequence, timed for the long boot and scaled for a shorter one.
   const k = length / FIRST_MS;
@@ -146,12 +143,18 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
     const n = Math.round(Math.min(1, p) * bw);
     out(`${at(9, x + 10)}[\x1b[1m${'█'.repeat(n)}\x1b[0;2m${'░'.repeat(bw - n)}\x1b[0m] ${spin}`);
   };
+  // The power-on line is motion only, so reduced motion leaves it out.
+  const power = reduced
+    ? []
+    : [
+        [0, () => crt(2, hot)],
+        [150, () => crt(Math.round(C * 0.15), hot)],
+        [300, () => crt(Math.round(C * 0.45), warm)],
+        [450, () => crt(C, warm)],
+        [650, () => crt(Math.round(C * 0.7), '2')],
+      ];
   const steps = [
-    [0, () => crt(2, hot)],
-    [150, () => crt(Math.round(C * 0.15), hot)],
-    [300, () => crt(Math.round(C * 0.45), warm)],
-    [450, () => crt(C, warm)],
-    [650, () => crt(Math.round(C * 0.7), '2')],
+    ...power,
     [800, () => {
       out(`${at(mid, 1)}\x1b[2K`);
       const left = ' ncurses 6.6 ';
@@ -171,9 +174,9 @@ export function bootScreen(term, name, { reduced = matchMedia('(prefers-reduced-
     const t = performance.now() - t0;
     while (next < steps.length && steps[next][0] <= t) steps[next++][1]();
     if (t < 2000 * k) return;
-    drawBar(barFill(t, length, loaded), '|/-\\'[frame++ % 4]);
+    drawBar(barFill(t, length, loaded), reduced ? ' ' : '|/-\\'[frame++ % 4]);
     // History only where there is time to read it: the long boot, or a slow load.
-    if (historyRow && t >= 2300 && (length === FIRST_MS || t > length)) {
+    if (historyRow && !reduced && t >= 2300 && (length === FIRST_MS || t > length)) {
       const i = Math.floor((t - 2300) / 1200) % HISTORY.length;
       if (i !== shown) {
         shown = i;
