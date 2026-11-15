@@ -15,11 +15,11 @@ The runnable examples need Emscripten (`emcc` on `PATH`). Without it, `build-exa
 
 ## Reader styles
 
-A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose how the site looks. The choice is saved in their browser.
+A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose how the site looks. The choice is saved in their browser. A link can name a style with `?style=` and the style's value (`modern`, `textmode`, `workstation`, `terminal` or `manpage`). Following it shows that style and saves it, as if it were chosen from the menu. The address bar always carries the style in use other than Modern, so a link copied from it opens in the same style.
 
 | File | What it does |
 | --- | --- |
-| `src/components/ThemeProvider.astro` | Runs at the top of `<body>`, before anything paints. It sets `data-style` on `<html>` from `localStorage`, forces the color scheme a style is drawn for, and holds the status bar that Text mode shows. |
+| `src/components/ThemeProvider.astro` | Runs at the top of `<body>`, before anything paints. It sets `data-style` on `<html>` from the link's `?style=` or else `localStorage`, keeps `?style=` in the address bar, forces the color scheme a style is drawn for, and holds the status bar that Text mode shows. |
 | `src/components/ThemeSelect.astro` | The Style menu. Starlight's color-scheme picker hides while a style with only one scheme is chosen. |
 | `src/styles/styles.css` | Each style's tokens, then the components written once against them. |
 | `src/code-themes/*.json` | Each style's syntax colors for code blocks, used by `ec.config.mjs`. |

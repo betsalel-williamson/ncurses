@@ -47,6 +47,7 @@ const options = [
     document.querySelectorAll<HTMLSelectElement>('ncurses-style-select select').forEach((s) => {
       s.value = style;
     });
+    (window as unknown as { ncursesStyleUrl?: (s: string) => void }).ncursesStyleUrl?.(style);
   }
 
   class NcursesStyleSelect extends HTMLElement {
