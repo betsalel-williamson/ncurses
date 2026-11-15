@@ -4,6 +4,14 @@ name: Docs site
 # Pull requests build it without deploying. One-time setup: Settings > Pages > Source: GitHub Actions.
 # Every action is pinned to a full commit SHA, with its release in a comment; Dependabot
 # (.github/dependabot.yml) proposes updates once a release is 7 days old.
+#
+# A merge deploys the site its pull request already built and checked, when that build is of
+# exactly the same source. A pull request's run checks out the merge of the pull request into
+# master and uploads its site as site-<tree>, named by that merge's git tree hash. After a push
+# to master, the reuse job looks for site-<tree of master>: from this workflow, run on a pull
+# request from this repository (not a fork), that passed. If one exists, its files are what
+# deploys, and the build job is skipped. If not (master moved after the pull request's last
+# run, or the artifact expired), the build job builds and checks master as before.
 
 on:
   push:
@@ -20,7 +28,54 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  reuse:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read # to find and download another run's artifact
+    outputs:
+      reused: ${{ steps.find.outputs.artifact-id != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Find a passing pull-request build of this exact tree
+        id: find
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tree=$(git rev-parse 'HEAD^{tree}')
+          echo "Looking for site-$tree"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=site-$tree&per_page=20" \
+            --jq '.artifacts[] | select(.expired | not)
+                  | [.id, .workflow_run.id, .workflow_run.head_repository_id] | @tsv' > found.tsv
+          want=$(printf '%s\t%s\t%s' .github/workflows/docs-site.yml pull_request success)
+          while IFS=$'\t' read -r id run repo_id; do
+            [ "$repo_id" = "$GITHUB_REPOSITORY_ID" ] || continue
+            got=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run" --jq '[.path, .event, .conclusion] | @tsv')
+            [ "$got" = "$want" ] || continue
+            echo "Deploying artifact $id from run $run"
+            echo "artifact-id=$id" >> "$GITHUB_OUTPUT"
+            echo "run-id=$run" >> "$GITHUB_OUTPUT"
+            exit 0
+          done < found.tsv
+          echo "No passing pull-request build of this tree; the build job will build it."
+      - if: steps.find.outputs.artifact-id != ''
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          artifact-ids: ${{ steps.find.outputs.artifact-id }}
+          run-id: ${{ steps.find.outputs.run-id }}
+          github-token: ${{ github.token }}
+          path: site/dist
+      - if: steps.find.outputs.artifact-id != ''
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site/dist
+
   build:
+    needs: reuse
+    if: ${{ !cancelled() && needs.reuse.outputs.reused != 'true' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -60,9 +115,14 @@ jobs:
           tar -xzf /tmp/vale.tar.gz -C /tmp vale
           /tmp/vale --config docs/.vale.ini docs/client-library docs/appendix
       - name: Check the C listings' style
+        env:
+          # The x86_64 Linux wheel of clang-format 18.1.3 on PyPI; pip refuses any other file.
+          CLANG_FORMAT_REQ: clang-format==18.1.3 --hash=sha256:059f2c2e7166f97cf06f78d9bd31d83a9c0416527845cb397296daa43bd2c6e2
         run: |
-          pipx install clang-format==18.1.3
-          node site/scripts/check-listings.mjs
+          python3 -m venv /tmp/clang-format
+          echo "$CLANG_FORMAT_REQ" > /tmp/clang-format.txt
+          /tmp/clang-format/bin/pip install --quiet --disable-pip-version-check --require-hashes -r /tmp/clang-format.txt
+          PATH="/tmp/clang-format/bin:$PATH" node site/scripts/check-listings.mjs
       - name: Install Emscripten, for the runnable examples
         uses: mymindstorm/setup-emsdk@4528d102f7230f0e7b276855c01ea1159be0e984 # v16
         with:
@@ -75,13 +135,28 @@ jobs:
           npm run build
       - name: Check the built pages for Markdown shown as text
         run: node site/scripts/check-rendered.mjs
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+      - name: Name the build by its source tree
+        if: github.event_name == 'pull_request'
+        id: tree
+        run: echo "tree=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_OUTPUT"
+      - name: Keep the build, for the deploy when this pull request merges
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site-${{ steps.tree.outputs.tree }}
+          path: site/dist
+          retention-days: 30
+          if-no-files-found: error
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site/dist
 
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-    needs: build
+    needs: [reuse, build]
+    if: >-
+      ${{ !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      && (needs.reuse.outputs.reused == 'true' || needs.build.result == 'success') }}
     runs-on: ubuntu-24.04
     permissions:
       pages: write

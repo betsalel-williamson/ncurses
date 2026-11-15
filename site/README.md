@@ -62,3 +62,24 @@ A program's button appears only if its build passes the smoke test. The test run
 3. A click on the word Exit, for a program that turned on mouse tracking. The test finds the word on a rough model of the 80×24 screen.
 
 A program that fails shows a note instead of a button, with its build log, and CI lists it in the run summary.
+
+### Build messages
+
+`build-examples.mjs` sorts what the ncurses build prints to stderr. Messages in its `EXPECTED` list are counted and hidden, each with the reason it is safe. Any other line is printed, and in CI it also becomes a warning annotation on the run. The expected messages are:
+
+- `cross compiling: assume setvbuf params not reversed`. Configure can't run its test program, and the assumption is right for musl.
+- `MB_LEN_MAX is missing/inconsistent`. musl sets it to 4, and ncurses falls back to its own value of 16, which is what it needs.
+- `cat: write error: Broken pipe`. `make_hash` reads only the lines it needs, so the `cat` feeding it sees the pipe close early.
+- The `emconfigure` and `emmake` banner lines.
+
+Two warnings are fixed rather than hidden. Configure gets `CPPFLAGS=-D_XOPEN_SOURCE=600`, which ends the `_POSIX_C_SOURCE` and `_XOPEN_SOURCE` warnings. `CFLAGS` adds `-Wno-unknown-warning-option`, because clang doesn't know the GCC-only warning that one ncurses pragma names.
+
+### Deploying a merge without rebuilding
+
+A pull request's run builds the site from the merge ref and uploads it as the artifact `site-<tree>`, where `<tree>` is the git tree hash of what it built. When the pull request merges and `master` has the same tree, the `reuse` job deploys that artifact instead of building again. It uses the artifact only if all of these hold:
+
+- It was uploaded by this repository, not a fork.
+- It came from this workflow, run on a `pull_request` event.
+- That run succeeded.
+
+If no artifact matches, because `master` moved on after the pull request's last run, the `build` job builds and deploys as before. Requiring branches to be up to date before merging makes the trees match every time.
