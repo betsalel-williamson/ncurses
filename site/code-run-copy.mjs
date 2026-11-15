@@ -130,22 +130,10 @@ function releaseVersion() {
   return `${ver('NCURSES_MAJOR')}.${ver('NCURSES_MINOR')}`;
 }
 
-/**
- * The SHA-256 of a release's tarball, from data/release-checksums.json, or undefined for a
- * release not listed there. A listing that checks <sha256> then gets no Copy to run button, rather
- * than one that pastes a check that can't pass.
- */
-export function releaseChecksum(version, table = JSON.parse(readFileSync(new URL('./data/release-checksums.json', import.meta.url), 'utf8'))) {
-  return table[version]?.sha256;
-}
-
 const svg = (name) => readFileSync(new URL(`./src/icons/pixel/${name}.svg`, import.meta.url), 'utf8').replace(/\s*\n\s*/g, '');
 
 export function codeRunCopy() {
-  const version = releaseVersion();
-  const placeholders = { '<version>': version };
-  const sha256 = releaseChecksum(version);
-  if (sha256) placeholders['<sha256>'] = sha256;
+  const placeholders = { '<version>': releaseVersion() };
   // The page script, with the pixel styles' icons filled in from src/icons/pixel.
   const script = readFileSync(new URL('./src/components/run-copy.js', import.meta.url), 'utf8')
     .replace('__PIXEL_PROMPT__', JSON.stringify(svg('prompt')))
