@@ -1,6 +1,7 @@
 // The hint for a linked library name in a code listing (code-links.mjs adds the links): the
-// name, its man page's NAME summary and the page, shown on hover or keyboard focus. Escape hides
-// it. The link itself goes to the man page, so the hint adds nothing a reader without it misses.
+// function's declaration, its man page's NAME summary and the page, shown on hover or keyboard
+// focus. Escape hides it. The link itself goes to the man page, so the hint adds nothing a
+// reader without it misses.
 (() => {
   if (window.__ncHints) return;
   window.__ncHints = true;
@@ -20,8 +21,9 @@
     }
     current = a;
     hint.replaceChildren();
+    // The declaration from the man page's SYNOPSIS when it has one, else the bare name.
     const name = document.createElement('code');
-    name.textContent = a.textContent;
+    name.textContent = a.dataset.proto || a.textContent;
     const summary = document.createElement('span');
     summary.textContent = a.dataset.summary;
     const page = document.createElement('span');

@@ -27,7 +27,8 @@ function link(name, sym) {
       className: ['nc-sym'],
       dataSummary: sym.summary,
       dataPage: sym.page,
-      ariaLabel: `${name}: ${sym.summary}, in ${sym.page}`,
+      dataProto: sym.proto,
+      ariaLabel: `${sym.proto ?? name} ${sym.summary}, in ${sym.page}`,
     },
     children: [{ type: 'text', value: name }],
   };

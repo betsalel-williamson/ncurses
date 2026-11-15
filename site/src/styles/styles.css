@@ -39,7 +39,7 @@
 .nc-hint {
   position: fixed;
   z-index: 100;
-  max-width: min(28rem, calc(100vw - 1rem));
+  max-width: min(36rem, calc(100vw - 1rem));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -64,6 +64,8 @@
 .nc-hint code {
   font-family: var(--sl-font-mono);
   font-weight: 700;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   color: var(--nc-hint-name-fg, var(--sl-color-white));
 }
 .nc-hint-page {
@@ -1308,5 +1310,124 @@
   & #starlight__search .pagefind-ui__search-clear::before {
     -webkit-mask-image: var(--nc-icon-close);
     mask-image: var(--nc-icon-close);
+  }
+}
+
+/* Scrollbars. Each style draws its own, always shown, as the systems it recalls did, instead
+   of today's overlay bars that hide until you scroll: a dithered track with a solid thumb and
+   arrow buttons in Text mode, a sunken trough with a raised thumb in Workstation, a thin amber
+   bar in Terminal and a plain gray bar in Manual page. Chrome and Safari draw ::-webkit-scrollbar;
+   Firefox has no arrow buttons and takes only the colors. Chrome ignores ::-webkit-scrollbar
+   when scrollbar-color is set, so the colors go to Firefox alone. */
+:root[data-style='textmode'] {
+  --nc-sb-size: 1rem;
+  --nc-sb-track: repeating-conic-gradient(var(--nc-cga-blue) 0 25%, var(--nc-cga-cyan) 0 50%) 0 0 / 4px 4px;
+  --nc-sb-thumb: var(--nc-cga-cyan);
+  --nc-sb-button: var(--nc-cga-cyan);
+  --nc-sb-ff-thumb: var(--nc-cga-cyan);
+  --nc-sb-ff-track: var(--nc-cga-blue);
+  --nc-sb-up: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%230000a8'><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='0' y='4' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='7' y='4' width='1' height='1'/></svg>");
+  --nc-sb-down: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%230000a8'><rect x='0' y='3' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='7' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/></svg>");
+  --nc-sb-left: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%230000a8'><rect x='4' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='4' y='7' width='1' height='1'/></svg>");
+  --nc-sb-right: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%230000a8'><rect x='3' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='3' y='7' width='1' height='1'/></svg>");
+}
+:root[data-style='workstation'] {
+  --nc-sb-size: 1rem;
+  --nc-sb-track: #b5b5b0;
+  --nc-sb-thumb: #d6d6d1;
+  --nc-sb-button: #d6d6d1;
+  --nc-sb-ff-thumb: #d6d6d1;
+  --nc-sb-ff-track: #b5b5b0;
+  --nc-sb-up: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23161616'><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='0' y='4' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='7' y='4' width='1' height='1'/></svg>");
+  --nc-sb-down: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23161616'><rect x='0' y='3' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='7' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/></svg>");
+  --nc-sb-left: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23161616'><rect x='4' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='4' y='7' width='1' height='1'/></svg>");
+  --nc-sb-right: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23161616'><rect x='3' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='3' y='7' width='1' height='1'/></svg>");
+}
+:root[data-style='workstation']::-webkit-scrollbar-thumb,
+:root[data-style='workstation'] *::-webkit-scrollbar-thumb {
+  border: 2px solid; border-color: var(--nc-raised);
+}
+:root[data-style='workstation']::-webkit-scrollbar-button,
+:root[data-style='workstation'] *::-webkit-scrollbar-button {
+  border: 2px solid; border-color: var(--nc-raised);
+}
+:root[data-style='terminal'] {
+  --nc-sb-size: 0.75rem;
+  --nc-sb-track: #12110e;
+  --nc-sb-thumb: #a87400;
+  --nc-sb-button: #12110e;
+  --nc-sb-ff-thumb: #a87400;
+  --nc-sb-ff-track: #12110e;
+  --nc-sb-up: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23ffb000'><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='0' y='4' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='7' y='4' width='1' height='1'/></svg>");
+  --nc-sb-down: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23ffb000'><rect x='0' y='3' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='7' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/></svg>");
+  --nc-sb-left: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23ffb000'><rect x='4' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='4' y='7' width='1' height='1'/></svg>");
+  --nc-sb-right: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%23ffb000'><rect x='3' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='3' y='7' width='1' height='1'/></svg>");
+}
+:root[data-style='manpage'] {
+  --nc-sb-size: 0.9375rem;
+  --nc-sb-track: #f1f1e8;
+  --nc-sb-thumb: #8a8a80;
+  --nc-sb-button: #f1f1e8;
+  --nc-sb-ff-thumb: #8a8a80;
+  --nc-sb-ff-track: #f1f1e8;
+  --nc-sb-up: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%231b1b1b'><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='0' y='4' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='7' y='4' width='1' height='1'/></svg>");
+  --nc-sb-down: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%231b1b1b'><rect x='0' y='3' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='7' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/></svg>");
+  --nc-sb-left: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%231b1b1b'><rect x='4' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='2' y='3' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='1' y='4' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='4' y='7' width='1' height='1'/></svg>");
+  --nc-sb-right: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12' shape-rendering='crispEdges' fill='%231b1b1b'><rect x='3' y='0' width='1' height='1'/><rect x='3' y='1' width='1' height='1'/><rect x='4' y='1' width='1' height='1'/><rect x='3' y='2' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='3' width='1' height='1'/><rect x='5' y='3' width='1' height='1'/><rect x='6' y='3' width='1' height='1'/><rect x='3' y='4' width='1' height='1'/><rect x='4' y='4' width='1' height='1'/><rect x='5' y='4' width='1' height='1'/><rect x='6' y='4' width='1' height='1'/><rect x='3' y='5' width='1' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='5' y='5' width='1' height='1'/><rect x='3' y='6' width='1' height='1'/><rect x='4' y='6' width='1' height='1'/><rect x='3' y='7' width='1' height='1'/></svg>");
+}
+:root[data-style='manpage']::-webkit-scrollbar-thumb,
+:root[data-style='manpage'] *::-webkit-scrollbar-thumb {
+  border: 3px solid #f1f1e8;
+}
+:root[data-style]:not([data-style='modern'])::-webkit-scrollbar,
+:root[data-style]:not([data-style='modern']) *::-webkit-scrollbar {
+  width: var(--nc-sb-size);
+  height: var(--nc-sb-size);
+}
+:root[data-style]:not([data-style='modern'])::-webkit-scrollbar-track,
+:root[data-style]:not([data-style='modern']) *::-webkit-scrollbar-track {
+  background: var(--nc-sb-track);
+}
+:root[data-style]:not([data-style='modern'])::-webkit-scrollbar-thumb,
+:root[data-style]:not([data-style='modern']) *::-webkit-scrollbar-thumb {
+  background-color: var(--nc-sb-thumb);
+  background-clip: padding-box;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+}
+:root[data-style]:not([data-style='modern'])::-webkit-scrollbar-corner,
+:root[data-style]:not([data-style='modern']) *::-webkit-scrollbar-corner {
+  background: var(--nc-sb-button);
+}
+/* One arrow button at each end. Chrome matches these only without an element before the
+   pseudo-element on the page's own scrollbar, so they stand alone; they apply only where a style
+   above sets ::-webkit-scrollbar, and the arrows come from tokens Modern doesn't define. */
+::-webkit-scrollbar-button:single-button {
+  display: block;
+  width: var(--nc-sb-size);
+  height: var(--nc-sb-size);
+  background-color: var(--nc-sb-button);
+  background-size: 100% 100%;
+  box-sizing: border-box;
+}
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background-image: var(--nc-sb-up);
+}
+::-webkit-scrollbar-button:vertical:end:increment {
+  background-image: var(--nc-sb-down);
+}
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background-image: var(--nc-sb-left);
+}
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background-image: var(--nc-sb-right);
+}
+::-webkit-scrollbar-button:start:increment,
+::-webkit-scrollbar-button:end:decrement {
+  display: none;
+}
+@supports not selector(::-webkit-scrollbar) {
+  :root[data-style]:not([data-style='modern']) * {
+    scrollbar-color: var(--nc-sb-ff-thumb) var(--nc-sb-ff-track);
   }
 }

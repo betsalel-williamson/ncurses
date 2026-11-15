@@ -179,6 +179,35 @@ const pages = sources.map(({ file, text }) => {
   return { file, name, section, md, aliases, summary: summary.replace(/[*\\]/g, '').trim(), failed };
 });
 
+/**
+ * pandoc writes troff's example blocks as indented code, with no language, so they show
+ * uncolored. On the library pages (3X), an indented block that reads as C, the SYNOPSIS and
+ * the examples, becomes a fenced c block: colored like the guides' listings, with its curses
+ * calls linked (code-links.mjs). A block holding Markdown (a list item's continued paragraph)
+ * or nothing C-like stays as it is.
+ */
+function tagCode(md) {
+  const lines = md.split('\n');
+  const out = [];
+  for (let i = 0; i < lines.length; ) {
+    const starts = /^ {4}\S/.test(lines[i]) && (i === 0 || lines[i - 1].trim() === '');
+    if (!starts) {
+      out.push(lines[i++]);
+      continue;
+    }
+    let j = i;
+    // The block runs on through blank lines that another indented line follows.
+    while (j < lines.length && (/^ {4}/.test(lines[j]) || (lines[j].trim() === '' && /^ {4}\S/.test(lines[j + 1] ?? '')))) j++;
+    const block = lines.slice(i, j);
+    const text = block.join('\n');
+    const isC = /;\s*$|^\s*#\s*include\b|^\s*(?:\/\*|\{|\})/m.test(text) && !/\*\*[^*\s][^*\n]*[^*\s]\*\*|\]\(/.test(text);
+    if (isC) out.push('```c', ...block.map((l) => l.slice(4)), '```');
+    else out.push(...block);
+    i = j;
+  }
+  return out.join('\n');
+}
+
 const route = (p) => `man/${p.section}/${p.name}`;
 const byName = new Map();
 for (const p of pages) {
@@ -191,6 +220,7 @@ for (const p of pages) {
 rmSync(join(content, 'man'), { recursive: true, force: true });
 for (const p of pages) {
   let md = p.md.replace(/^(#+) /gm, '#$1 '); // NAME, SYNOPSIS... become level-2 sections
+  if (p.section === '3x') md = tagCode(md);
   // Page references: **addch**(3X) or addch(3X) -> a link to that page.
   md = md.replace(/(\*\*|\*)?([A-Za-z_][\w.+-]*)\1?\\?\(([1-9][A-Za-z]*)\)/g, (m, em = '', n, sec) => {
     const hit = byName.get(`${n}(${sec})`.toLowerCase());
@@ -227,11 +257,36 @@ writeFileSync(join(tmp, 'sidebar.json'), JSON.stringify(sidebar, null, 2));
 const symbols = {};
 for (const p of pages) {
   if (p.section !== '3x') continue;
+  const protos = prototypes(p.md);
   for (const n of [p.name, ...p.aliases]) {
     if (/^[A-Za-z_]\w*$/.test(n) && !(n in symbols)) {
       symbols[n] = { href: `${base}/${route(p)}/`, page: `${p.name}(3X)`, summary: p.summary };
+      if (protos.has(n)) symbols[n].proto = protos.get(n);
     }
   }
+}
+
+/**
+ * The declarations in a page's SYNOPSIS, by name: "int wrefresh(WINDOW *win);" for wrefresh,
+ * one line each, so a code hint can show what a function takes and returns.
+ */
+function prototypes(md) {
+  const synopsis = /^# SYNOPSIS\n([\s\S]*?)(?=^# )/m.exec(md)?.[1] ?? '';
+  const code = synopsis
+    .split('\n')
+    .filter((l) => /^ {4}/.test(l))
+    .map((l) => l.slice(4))
+    .join('\n')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*#.*$/gm, '');
+  const found = new Map();
+  for (const statement of code.split(';')) {
+    const decl = statement.replace(/\s+/g, ' ').replace(/\(\s+/g, '(').replace(/\s+\)/g, ')').trim();
+    // The declared name: the one before the parameter list, or the last word of a variable.
+    const name = /([A-Za-z_]\w*)\s*\(/.exec(decl)?.[1] ?? /([A-Za-z_]\w*)(?:\s*\[[^\]]*\])?$/.exec(decl)?.[1];
+    if (name && !found.has(name)) found.set(name, `${decl};`);
+  }
+  return found;
 }
 writeFileSync(join(tmp, 'symbols.json'), JSON.stringify(symbols, null, 2));
 const failed = pages.filter((p) => p.failed).map((p) => p.file);
