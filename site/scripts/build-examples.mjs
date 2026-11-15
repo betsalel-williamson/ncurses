@@ -12,13 +12,17 @@
  * (gitignored). Requires emcc on PATH; without it
  * this prints a note and exits 0, and the site shows the listings without a Run button.
  */
-import { execFileSync, spawnSync } from 'node:child_process';
-import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { execFile, execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { appendFileSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { availableParallelism } from 'node:os';
+import { promisify } from 'node:util';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GUIDE_DIRS, findPrograms } from './examples.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
+const run = promisify(execFile);
 const repo = join(site, '..');
 
 try {
@@ -116,48 +120,124 @@ mkdirSync(out, { recursive: true });
 const src = join(site, '.generated/examples');
 mkdirSync(src, { recursive: true });
 
+// Each build of a listing is cached under a hash of everything it depends on: the listing, its
+// macros and arguments, the libraries it links, the files linked in, this script, the smoke
+// test and the emcc version. A build whose hash is in .generated/example-cache/ is copied from
+// there, result and all, so CI rebuilds only the listings a change touched. Same input, same
+// .wasm, same smoke-test result. Entries this run didn't use are deleted at the end, so the
+// cache CI saves holds exactly the current examples.
+const cacheDir = join(site, '.generated/example-cache');
+mkdirSync(cacheDir, { recursive: true });
+const fileHash = new Map();
+const hashFile = (f) => {
+  if (!fileHash.has(f)) fileHash.set(f, createHash('sha256').update(readFileSync(f)).digest('hex'));
+  return fileHash.get(f);
+};
+const emccVersion = execFileSync('emcc', ['--version'], { encoding: 'utf8' }).split('\n')[0];
+const toolHash = createHash('sha256')
+  .update(emccVersion)
+  .update(hashFile(fileURLToPath(import.meta.url)))
+  .update(hashFile(join(site, 'scripts/smoke-example.mjs')))
+  .update(hashFile(join(site, 'examples/pty.js')))
+  .digest('hex');
+const used = new Set();
+let hits = 0;
+let builds = 0;
+
+// Builds run in parallel, one per CPU: emcc and the smoke test each use one core and spend
+// much of their time waiting.
+const jobs = Math.max(1, availableParallelism());
+async function pool(items, fn) {
+  const results = new Array(items.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(jobs, items.length) }, async () => {
+      while (next < items.length) {
+        const i = next++;
+        results[i] = await fn(items[i]);
+      }
+    }),
+  );
+  return results;
+}
+
 // Build each program, then run it, and record how far it got. A listing that doesn't compile,
 // link or run is flagged on its page (status.json) and in the CI summary, not an error.
 const status = [];
 const tail = (e) => String(e.stderr ?? e.message ?? e).trim().split('\n').slice(-12).join('\n');
+const programs = [];
 for (const dir of GUIDE_DIRS) {
   for (const file of readdirSync(join(repo, dir)).filter((f) => f.endsWith('.md')).sort()) {
     const shard = `${dir}/${file}`;
     for (const ex of findPrograms(readFileSync(join(repo, shard), 'utf8'), shard)) {
       const entry = { id: ex.id, title: ex.title, shard };
       status.push(entry);
-      if (ex.shell) {
-        entry.status = 'needs-shell';
-        continue;
-      }
-      Object.assign(entry, buildExample(ex, ex.id, []));
-      if (entry.status !== 'runs') continue;
-      // A listing that tests a macro of its own (#ifdef _DEBUG) gets a second build with the
-      // macro defined, so a reader can run the code it hides.
-      const variants = [];
-      for (const name of ex.macros) {
-        const vid = `${ex.id}--${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
-        const result = buildExample(ex, vid, [name]);
-        if (result.status === 'runs') variants.push({ define: name, id: vid });
-        else console.log(`--- ${vid}: ${result.status} with -D${name}\n${result.detail}`);
-      }
-      if (variants.length) entry.variants = variants;
+      if (ex.shell) entry.status = 'needs-shell';
+      else programs.push({ ex, entry });
     }
   }
 }
+await pool(programs, async ({ ex, entry }) => Object.assign(entry, await cachedBuild(ex, ex.id, [])));
+// A listing that tests a macro of its own (#ifdef _DEBUG) gets a second build with the macro
+// defined, so a reader can run the code it hides.
+const variantBuilds = programs
+  .filter(({ entry }) => entry.status === 'runs')
+  .flatMap(({ ex, entry }) =>
+    ex.macros.map((name) => ({
+      ex,
+      entry,
+      name,
+      vid: `${ex.id}--${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`,
+    })),
+  );
+const variantResults = await pool(variantBuilds, (v) => cachedBuild(v.ex, v.vid, [v.name]));
+variantBuilds.forEach((v, i) => {
+  const result = variantResults[i];
+  if (result.status === 'runs') (v.entry.variants ??= []).push({ define: v.name, id: v.vid });
+  else console.log(`--- ${v.vid}: ${result.status} with -D${v.name}\n${result.detail}`);
+});
+for (const d of readdirSync(cacheDir)) if (!used.has(d)) rmSync(join(cacheDir, d), { recursive: true, force: true });
+console.log(`build-examples: ${hits} build(s) from the cache, ${builds} built, ${jobs} at a time`);
+
+/** One build of a listing: from the cache when its inputs are unchanged, else built and cached. */
+async function cachedBuild(ex, id, defines) {
+  const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(wasmBuild, `lib/lib${l}.a`));
+  const entryFile = join(site, ex.args.length ? 'examples/main-args.c' : 'examples/main.c');
+  const key = createHash('sha256')
+    .update(JSON.stringify({ id, code: ex.code, defines, args: ex.args, libs: ex.libs }))
+    .update(toolHash)
+    .update(hashFile(entryFile))
+    .update(libs.map(hashFile).join())
+    .digest('hex')
+    .slice(0, 32);
+  used.add(key);
+  const dir = join(cacheDir, key);
+  if (existsSync(join(dir, 'result.json'))) {
+    const result = JSON.parse(readFileSync(join(dir, 'result.json'), 'utf8'));
+    if (result.status === 'runs') for (const ext of ['mjs', 'wasm']) copyFileSync(join(dir, `${id}.${ext}`), join(out, `${id}.${ext}`));
+    hits++;
+    return result;
+  }
+  const result = await buildExample(ex, id, defines, libs, entryFile);
+  mkdirSync(dir, { recursive: true });
+  if (result.status === 'runs') for (const ext of ['mjs', 'wasm']) copyFileSync(join(out, `${id}.${ext}`), join(dir, `${id}.${ext}`));
+  writeFileSync(join(dir, 'result.json'), JSON.stringify(result));
+  builds++;
+  return result;
+}
 
 /** Compile, link and smoke-test one build of a listing; returns { status, detail }. */
-function buildExample(ex, id, defines) {
+async function buildExample(ex, id, defines, libs, entryFile) {
   const c = join(src, `${id}.c`);
   const obj = join(src, `${id}.o`);
   writeFileSync(c, ex.code);
-  const quiet = { stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' };
+  const quiet = { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 };
   // main() is renamed to example_main() in the compiled IR, not with -Dmain=: C gives
   // main(), and only main(), an implicit "return 0" at its closing brace, so a listing that
   // ends without a return would otherwise report a garbage exit status.
   const ll = join(src, `${id}.ll`);
   try {
-    execFileSync('emcc', [
+    await run('emcc', [
       '-O2', '-DNCURSES_STATIC', ...defines.map((d) => `-D${d}`), '-S', '-emit-llvm', c, '-o', ll,
       '-I', join(wasmBuild, 'include'),
       ...ex.libs.map((l) => ['-I', join(repo, l)]).flat(),
@@ -167,18 +247,16 @@ function buildExample(ex, id, defines) {
       // main(argc, argv) is __main_argc_argv in WebAssembly.
       .replace(/@(?:__main_argc_argv|main)\b/g, '@example_main');
     writeFileSync(ll, ir);
-    execFileSync('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
+    await run('emcc', ['-O2', '-c', ll, '-o', obj], quiet);
   } catch (e) {
     return { status: 'compile-error', detail: tail(e) };
   }
-  const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(wasmBuild, `lib/lib${l}.a`));
   // A listing whose main() takes a file name (the attributes pager) gets its own source to
   // read, embedded as example.c, and the page passes that name as its argument.
   const files = ex.args.length ? ['--embed-file', `${c}@/example.c`] : [];
-  const entry = join(site, ex.args.length ? 'examples/main-args.c' : 'examples/main.c');
   try {
-    execFileSync('emcc', [
-      '-O2', obj, entry, ...libs, ...files,
+    await run('emcc', [
+      '-O2', obj, entryFile, ...libs, ...files,
       '-o', join(out, `${id}.mjs`),
       '--js-library', join(site, 'examples/pty.js'),
       '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll"]',
@@ -188,8 +266,8 @@ function buildExample(ex, id, defines) {
   } catch (e) {
     return { status: 'link-error', detail: tail(e) };
   }
-  const smoke = execFileSync('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], quiet);
-  const result = JSON.parse(smoke.trim().split('\n').pop());
+  const { stdout } = await run('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], quiet);
+  const result = JSON.parse(stdout.trim().split('\n').pop());
   if (ex.args.length) result.args = ex.args;
   if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
   return result;

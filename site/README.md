@@ -28,15 +28,16 @@ A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose h
 
 The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323, with a menu bar, a function-key bar and boxed panels), Workstation (Motif-era beveled gray panels, Charter text, Helvetica-style headings and an xterm terminal) Terminal (amber on near black with VT323 headings) and Manual page (set like a printed man page: Times-metric Tinos and Courier-metric Cousine on paper, bold capital section headings, monochrome code).
 
-Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's (`--nc-*`). The `--nc-*` tokens name every part a style draws: the menu bar and status bar, the contents, page and "On this page" panels (background, border, shadow, title), headings, links, inline code, code blocks, buttons, the shell listing's title bar, the search dialog, the code hint, the terminal frame, and the terminal's 16 colors (`--nc-ansi-0` to `--nc-ansi-15`). To add a style, copy one style's token block in `styles.css`, add its option to `ThemeSelect.astro`, its color scheme to `modes` in `ThemeProvider.astro`, and a syntax theme to `src/code-themes/` and `ec.config.mjs`. The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site.
+Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's (`--nc-*`). The `--nc-*` tokens name every part a style draws: the menu bar and status bar, the contents, page and "On this page" panels (background, border, shadow, title), headings, links, inline code, code blocks, buttons, the shell listing's title bar, the search dialog, the code hint, the terminal frame, and the terminal's 16 colors (`--nc-ansi-0` to `--nc-ansi-15`). To add a style, copy one style's token block in `styles.css`, add its option to `ThemeSelect.astro`, its color scheme to `modes` in `ThemeProvider.astro`, and a syntax theme to `src/code-themes/` and `ec.config.mjs`. Each style but Modern also draws its own scrollbars at the end of `styles.css`, always shown, with arrow buttons in Chrome and Safari and only the colors in Firefox. The arrow-button rules stand alone, without `:root[data-style]` in front, because Chrome doesn't match them on the page's own scrollbar otherwise. They take effect only where a style sets `::-webkit-scrollbar`. The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site.
 
 Astro caches the code-block stylesheet's name between local builds. After changing `ec.config.mjs`, delete `node_modules/.astro` before building, or the pages link a stylesheet that no longer exists.
 
 ## Code hints
 
-In C listings, each call of a curses library function links to its man page, and hovering or focusing the name shows the page's NAME summary.
+In C listings, each call of a curses library function links to its man page. Hovering or focusing the name shows the function's declaration from the page's SYNOPSIS, so a reader sees its arguments, and the page's NAME summary.
 
-- `scripts/sync.mjs` writes `.generated/symbols.json` from the NAME line of every 3X page: each name, its page and the summary.
+- `scripts/sync.mjs` writes `.generated/symbols.json` from every 3X page: each name from the NAME line, its page, the summary and its declaration from SYNOPSIS (598 of 708 names have one).
+- pandoc leaves the man pages' code blocks without a language, so `sync.mjs` marks an indented block in a 3X page as C when it looks like code (a line ending in `;`, an `#include`, a comment or a brace). The blocks are then highlighted and linked like the guides' listings.
 - `code-links.mjs` is an Expressive Code plugin, loaded from `ec.config.mjs`. It links a name only when a `(` follows it, so a variable called `box` or `move` stays plain.
 - `src/components/code-hints.js` draws the hint, and `src/styles/styles.css` styles it from the `--nc-hint-*` tokens of each reader style.
 
@@ -111,3 +112,13 @@ A pull request's run (`.github/workflows/docs-site-pr.yml`) builds the site from
 - That run succeeded.
 
 If no artifact matches, because `master` moved on after the pull request's last run, the `build` job builds and deploys as before. Requiring branches to be up to date before merging makes the trees match every time.
+
+### Build caches
+
+Most of a cold CI run went to the runnable examples. The WebAssembly ncurses build took 46 seconds, and compiling and smoke-testing the examples one at a time took two minutes. Three caches skip that work:
+
+- **The WebAssembly ncurses build** (`.generated/ncurses-wasm`). It is keyed by every tracked file outside `docs/`, `site/`, `man/` and `.github/`, plus `build-examples.mjs` and the Emscripten version. A change to the docs or the site keeps the key, so the library restores and is not rebuilt.
+- **Each example build** (`.generated/example-cache/<hash>`). `build-examples.mjs` keys each build of a listing by a hash of its inputs: the listing, its macros and arguments, the libraries it links, `examples/`, the smoke test, the script itself and the `emcc` version. A build whose hash is cached is copied with its smoke-test result. Only listings whose inputs changed are compiled and run, in parallel, one per CPU. CI restores the newest saved set (a partial restore), and the script deletes the entries the run didn't use, so the saved set matches the current examples.
+- **Emscripten itself and npm**, through `setup-emsdk` and `setup-node`.
+
+A pull request can restore caches saved only on its own branch or on `master`. When a merge deploys the pull request's build, nothing builds on `master`, so the `cache` job in `docs-site.yml` runs the build there, publishes nothing, and saves the caches for the next pull request. The deploy doesn't wait for it. The same caches work locally: a second `npm run build` reuses `.generated/`.
