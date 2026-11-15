@@ -1,0 +1,47 @@
+.SH DESCRIPTION
+.B scroll
+scrolls the given window up one line.
+That is,
+every visible line we might number
+.I i
+becomes line
+.IR i "\-1."
+.B \%wscrl
+and
+.B \%scrl
+scroll the specified window or
+.BR \%stdscr ","
+respectively,
+up or down per the sign of
+.IR n "."
+.bP
+For positive
+.IR n ","
+line
+.IR i + n
+becomes
+.I i
+(scrolling up);
+.bP
+for negative
+.IR n ","
+line
+.IR i \- n
+becomes
+.I i
+(scrolling down).
+.PP
+A line that scrolls beyond the window boundaries disappears;
+.I curses
+populates a new one emerging at the opposite boundary
+with the background character;
+see \fB\%bkgd\fP(3X)
+(wide-character API users: \fB\%bkgrnd\fP(3X)).
+As an optimization,
+if the scrolling region of the window is the entire screen,
+the physical screen may be scrolled at the same time;
+see \fB\%curscr\fP(3X).
+.PP
+The cursor does not move.
+These functions perform no operation unless scrolling is enabled for the
+window via \fB\%scrollok\fP(3X).

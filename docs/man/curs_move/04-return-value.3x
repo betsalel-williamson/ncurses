@@ -1,0 +1,24 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+In
+.IR \%ncurses ,
+these functions fail if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for
+.BR \%wmove ")"
+.I win
+is a null pointer,
+or
+.bP
+the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

@@ -1,0 +1,33 @@
+.SH RETURN VALUE
+Functions returning integers return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+In
+.IR \%ncurses ","
+.RS 3
+.TP 5
+\fBis_linetouched\fP
+returns
+.B ERR
+if the window pointer is null, or
+if the line number is outside the window boundaries.
+.IP
+The constant \fBERR\fP is distinct from \fBTRUE\fP and \fBFALSE\fP,
+which are the normal return values of this function.
+Because the function returns a \fBbool\fP,
+returning \fBERR\fP (which is neither \fBTRUE\fP nor \fBFALSE\fP)
+may not be supported by the compiler.
+.IP
+To provide error-checking and also match the X/Open function prototype,
+the \fBERR\fP is provided by a macro named \fB\%is_linetouched\fP.
+The actual function returns \fBFALSE\fP when it detects an error.
+.TP 5
+\fBwtouchln\fP
+returns
+.B ERR
+if the window pointer is null, or
+if the line number is outside the window boundaries.
+.RE

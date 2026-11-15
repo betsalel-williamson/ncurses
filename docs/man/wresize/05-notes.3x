@@ -1,0 +1,15 @@
+.SH NOTES
+The only restriction placed on the values of
+.I lines
+and
+.I columns
+is that they be greater than zero.
+They are
+.I not
+compared to the dimensions of the
+.I curses
+screen;
+this keeps the logic of \fB\%resizeterm\fP(3X) simple.
+The caller must ensure that
+.IR win 's
+dimensions fit within those of the screen.

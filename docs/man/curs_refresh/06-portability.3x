@@ -1,0 +1,16 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 527
+.PP
+Whether \fBwnoutrefresh\fP copies to the virtual screen the entire contents
+of a window or just its changed portions has never been well-documented in
+historic curses versions (including SVr4).
+It might be unwise to rely on
+either behavior in programs that might have to be linked with other curses
+implementations.
+Instead, you can do an explicit \fBtouchwin\fP before the
+\fBwnoutrefresh\fP call to guarantee an entire-contents copy anywhere.

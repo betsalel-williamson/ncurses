@@ -1,0 +1,14 @@
+.SH RETURN VALUE
+.B \%wresize
+returns
+.B OK
+on success and
+.B ERR
+on failure.
+It fails if either
+.I lines
+or
+.I columns
+is less than or equal to zero,
+or if an error occurs while (re)allocating memory for
+.IR win "."

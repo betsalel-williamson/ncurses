@@ -1,0 +1,110 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 524
+.PP
+The behavior of
+.I \%subpad
+if the parent window is not a pad is undocumented,
+and is not checked by the vendor Unix implementations.
+.bP
+SVr4
+.IR curses 's
+.I \%newpad
+sets a flag in the
+.I \%WINDOW
+structure indicating that the window is a pad.
+.IP
+However,
+it uses this information only in
+.I \%waddch
+(to decide if it should call
+.IR \%wrefresh ")"
+and
+.I \%wscrl
+(to avoid scrolling a pad);
+its
+.I \%wrefresh
+does not check it to ensure that a pad is properly updated.
+.bP
+Solaris
+.I \%xcurses
+checks whether a window is a pad in its
+.IR \%wnoutrefresh ","
+returning
+.I ERR
+in that case.
+.IP
+However,
+it sets the flag on subwindows only if the parent window is a pad.
+Its
+.I \%newpad
+does not set this information.
+Consequently,
+the check never fails.
+.IP
+It makes no comparable check in
+.I \%pnoutrefresh
+\(em though interestingly enough,
+a comment in the source code states that the lack of a check
+was an MKS extension.
+.bP
+NetBSD\ 7
+.I curses
+sets a flag in the
+.I \%WINDOW
+structure for
+.I \%newpad
+and
+.IR \%subpad ","
+aiding itself to distinguish between
+.I \%wnoutrefresh
+and
+.IR \%pnoutrefresh "."
+.IP
+It does not check for the case where a subwindow is created in
+a pad using
+.I \%subwin
+or
+.IR \%derwin "."
+.IP
+Its
+.I \%dupwin
+returns a regular window when duplicating a pad.
+Likewise,
+its
+.I \%getwin
+always returns a window,
+even if the saved data was from a pad.
+.PP
+.IR \%ncurses ":"
+.bP
+sets a flag in the
+.I \%WINDOW
+structure for
+.I \%newpad
+and
+.IR \%subpad ","
+.bP
+allows a
+.I \%subwin
+or
+.I \%derwin
+call to succeed having a pad parent
+by forcing the subwindow to be a pad,
+.bP
+checks in both
+.I \%wnoutrefresh
+and
+.I \%pnoutrefresh
+to ensure that pads and windows are handled distinctly,
+and
+.bP
+ensures that
+.I \%dupwin
+and
+.I \%getwin
+treat pads versus windows consistently.

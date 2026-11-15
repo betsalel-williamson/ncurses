@@ -1,0 +1,22 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBWINDOW * newwin(\fR
+	\fBint \fInlines\fP, int \fIncols\fP,
+	\fBint \fIbegin_y\fP, int \fIbegin_x\fP);
+\fBint delwin(WINDOW * \fIwin\fP);
+\fBint mvwin(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP);
+\fBWINDOW * subwin(WINDOW * \fIorig\fP,
+	\fBint \fInlines\fP, int \fIncols\fP,
+	\fBint \fIbegin_y\fP, int \fIbegin_x\fP);
+\fBWINDOW * derwin(WINDOW * \fIorig\fP,
+	\fBint \fInlines\fP, int \fIncols\fP,
+	\fBint \fIbegin_y\fP, int \fIbegin_x\fP);
+\fBint mvderwin(WINDOW * \fIwin\fP, int \fIpar_y\fP, int \fIpar_x\fP);
+\fBWINDOW * dupwin(WINDOW * \fIwin\fP);
+\fBvoid wsyncup(WINDOW * \fIwin\fP);
+\fBint syncok(WINDOW * \fIwin\fP, bool \fIbf\fP);
+\fBvoid wcursyncup(WINDOW * \fIwin\fP);
+\fBvoid wsyncdown(WINDOW * \fIwin\fP);
+.fi

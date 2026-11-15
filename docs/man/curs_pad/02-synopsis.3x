@@ -1,0 +1,16 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBWINDOW *newpad(int \fInlines\fP, int \fIncols\fP);
+\fBWINDOW *subpad(WINDOW *\fIparent\fP, int \fInlines\fP, int \fIncols\fP,
+      \fBint \fIbegin_y\fB, int \fIbegin_x\fB);\fR
+.PP
+\fBint prefresh(WINDOW *\fIpad\fB, int \fIpminrow\fB, int \fIpmincol\fB,\fR
+      \fBint \fIsminrow\fB, int \fIsmincol\fB, int \fIsmaxrow\fB, int \fIsmaxcol\fB);\fR
+\fBint pnoutrefresh(WINDOW *\fIpad\fB, int \fIpminrow\fB, int \fIpmincol\fB,\fR
+      \fBint \fIsminrow\fB, int \fIsmincol\fB, int \fIsmaxrow\fB, int \fIsmaxcol\fB);\fR
+.PP
+\fBint pechochar(WINDOW *\fIpad\fB, chtype \fIch\fB);\fR
+\fBint pecho_wchar(WINDOW *\fIpad\fB, const cchar_t *\fIwch\fB);\fR
+.fi

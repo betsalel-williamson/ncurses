@@ -1,0 +1,21 @@
+.SH DESCRIPTION
+.B \%wmove
+relocates the cursor associated with the
+.I curses
+window
+.I win
+to line
+.I y
+and column
+.IR x .
+The terminal's cursor does not move until \fB\%refresh\fP(3X) is called.
+The position
+.RI ( y ,
+.IR x )
+is relative to the upper left-hand corner of the window,
+which has coordinates
+(0,\ 0).
+.B move
+similarly moves the cursor in the
+.B \%stdscr
+window.

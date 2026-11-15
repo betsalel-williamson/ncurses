@@ -42,7 +42,19 @@ jobs:
           tar -xzf /tmp/pandoc.tar.gz -C /tmp
           echo "/tmp/pandoc-${PANDOC_VERSION}/bin" >> "$GITHUB_PATH"
       - name: Check the stitched man pages match man/
-        run: docs/man/stitch.sh && git diff --exit-code man/
+        # Prints both hashes of every sharded page, so the log shows the comparison.
+        run: |
+          out=$(mktemp -d)
+          docs/man/stitch.sh "$out"
+          status=0
+          for page in "$out"/*; do
+            name=$(basename "$page")
+            want=$(git show "HEAD:man/$name" | sha256sum | cut -c1-64)
+            got=$(sha256sum < "$page" | cut -c1-64)
+            if [ "$want" = "$got" ]; then mark=ok; else mark=DIFFERS; status=1; fi
+            printf '%-24s man/ %s  stitched %s  %s\n' "$name" "$want" "$got" "$mark"
+          done
+          docs/man/stitch.sh && git diff --exit-code man/ && exit "$status"
       - name: Require an errata entry when a pull request changes the docs
         # docs/appendix/errata.csv is the running list of every change this edition makes. A pull
         # request that changes a shard adds its rows there, or carries the no-errata label.
