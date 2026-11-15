@@ -2,7 +2,7 @@
 /**
  * Generate the site's content from the sources:
  * - docs/client-library/** (GFM shards) -> src/content/docs/guides/** (title from the shard's `#` heading),
- *   and docs/contributor/{hackguide,install,ada} -> src/content/docs/contributing/{hackguide,install,ada}
+ *   and docs/contributor/{hackguide,install,ada,announce} -> src/content/docs/contributing/{hackguide,install,ada,announce}
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
@@ -43,6 +43,7 @@ const GUIDES = [
   { src: 'docs/contributor/hackguide', route: 'contributing/hackguide', indexLabel: 'Introduction' },
   { src: 'docs/contributor/install', route: 'contributing/install', indexLabel: 'Introduction' },
   { src: 'docs/contributor/ada', route: 'contributing/ada', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Overview' },
   { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Overview' },
   { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Overview' },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },

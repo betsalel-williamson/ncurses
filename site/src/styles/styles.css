@@ -92,6 +92,11 @@
 .nc-hint[hidden] {
   display: none;
 }
+/* A tap on a linked name in a listing shows its hint, and a second tap follows the link
+   (code-hints.js). Without this, the browser would treat the two taps as a double-tap zoom. */
+.expressive-code a:is(.nc-sym, .nc-def) {
+  touch-action: manipulation;
+}
 .nc-hint code {
   font-family: var(--sl-font-mono);
   font-weight: 700;
