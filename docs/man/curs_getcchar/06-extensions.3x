@@ -1,0 +1,39 @@
+.SH EXTENSIONS
+X/Open Curses documents the
+.I opts
+argument as reserved for future use,
+saying that it must be a null pointer.
+The
+.IR \%ncurses \ 6
+ABI uses it with functions that have a color pair parameter
+to support extended color pairs.
+.bP
+In functions that assign colors,
+such as
+.BR \%setcchar ","
+if
+.I opts
+is not a null pointer,
+.I \%ncurses
+treats it as a pointer to
+.IR int ","
+and interprets it instead of the
+.I short
+.I pair
+parameter as a color pair identifier.
+.bP
+In functions that retrieve colors,
+such as
+.BR \%getcchar ","
+if
+.I opts
+is not a null pointer,
+.I \%ncurses
+treats it as a pointer to
+.IR int ","
+and stores the retrieved color pair identifier there
+as well as in the
+.I short
+.I pair
+parameter
+(which may therefore undergo a narrowing conversion).

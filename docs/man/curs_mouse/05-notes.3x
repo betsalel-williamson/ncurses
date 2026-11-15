@@ -1,0 +1,88 @@
+.SH NOTES
+The order of the
+.B \%MEVENT
+structure members is not guaranteed.
+Additional fields may be added to the structure in the future.
+.PP
+Under
+.IR \%ncurses ,
+these calls are implemented using either
+.IR \%xterm 's
+built-in mouse-tracking API or
+platform-specific drivers including
+.RS 3
+.bP
+Alessandro Rubini's gpm server
+.bP
+FreeBSD sysmouse
+.bP
+OS/2 EMX
+.RE
+.PP
+If you are using an unsupported configuration,
+mouse events are not visible to
+.I \%ncurses
+(and the
+.B \%mousemask
+function always returns
+.BR 0 ")."
+.PP
+If the terminal type possesses the (nonstandard)
+.I \%term\%info
+string capability
+.BR XM ","
+.IR \%ncurses "'s"
+.I \%xterm
+mouse driver uses it when initializing the terminal for mouse operation.
+The default,
+if
+.B XM
+is not found,
+corresponds to private mode 1000 of
+.IR \%xterm "."
+.PP
+.RS 3
+.EX
+\eE[?1000%?%p1%{1}%=%th%el%;
+.EE
+.RE
+.PP
+.I \%ncurses
+also recognizes
+.IR \%xterm 's
+newer private mode 1006.
+.PP
+.RS 3
+.EX
+\eE[?1006;1000%?%p1%{1}%=%th%el%;
+.EE
+.RE
+.PP
+The
+.I id
+member of the mouse event structure is not presently used;
+no terminal type or operating system interface supports reporting events
+from distinguishable pointing devices.
+If you synthesize an
+.IR \%MEVENT ","
+use an
+.I id
+of 0.
+.PP
+The
+.I z
+member of the mouse event structure is not presently used.
+It is intended
+for use with touch screens (which may be pressure-sensitive) or with
+3D-mice/trackballs/power gloves.
+.PP
+The
+.B \%ALL_MOUSE_EVENTS
+class does not include
+.BR \%REPORT_MOUSE_POSITION "."
+They are distinct.
+For example,
+in
+.IR \%xterm ,
+wheel/scrolling mice send position reports as a sequence of
+presses of buttons 4 or 5 without matching button-releases.

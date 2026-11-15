@@ -1,0 +1,37 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint cbreak(void);
+\fBint nocbreak(void);
+.PP
+\fBint echo(void);
+\fBint noecho(void);
+.PP
+\fBint intrflush(WINDOW * \fIwin\fP \fI/* ignored */\fP, bool \fIbf\fP);
+\fBint keypad(WINDOW * \fIwin\fP, bool \fIbf\fP);
+\fBint meta(WINDOW * \fIwin\fP \fI/* ignored */\fP, bool \fIbf\fP);
+\fBint nodelay(WINDOW * \fIwin\fP, bool \fIbf\fP);
+\fBint notimeout(WINDOW * \fIwin\fP, bool \fIbf\fP);
+.PP
+\fBint nl(void);
+\fBint nonl(void);
+.PP
+\fBvoid qiflush(void);
+\fBvoid noqiflush(void);
+.PP
+\fBint raw(void);
+\fBint noraw(void);
+.PP
+\fBint halfdelay(int \fItenths\fP);
+\fBvoid timeout(int \fIdelay\fP);
+\fBvoid wtimeout(WINDOW * \fIwin\fP, int \fIdelay\fP);
+.PP
+\fBint typeahead(int \fIfd\fP);
+.PP
+\fI/* extensions */
+\fBint is_cbreak(void);
+\fBint is_echo(void);
+\fBint is_nl(void);
+\fBint is_raw(void);
+.fi

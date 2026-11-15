@@ -1,0 +1,34 @@
+.SH DESCRIPTION
+The
+.B \%define_key
+.I \%ncurses
+extension permits a
+.I curses
+application to
+.I bind
+a string
+.I definition
+to the function key
+.I key-code
+returned by \fB\%wgetch\fP(3X)
+(wide-character API users:
+\fB\%wget_wch\fP(3X))
+when \fB\%keypad\fP(3X) is enabled in a window and a function key is
+pressed.
+.I \%ncurses
+interprets such a binding as it does those in the
+.I \%term\%info
+database entry for the terminal type.
+.PP
+A
+.I definition
+of
+.I NULL
+removes any existing binding from
+.IR key-code "."
+Similarly,
+a non-positive
+.I key-code
+removes an existing binding for
+.IR definition ","
+if any.

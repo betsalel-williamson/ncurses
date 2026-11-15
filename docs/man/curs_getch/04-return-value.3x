@@ -1,0 +1,73 @@
+.SH RETURN VALUE
+.B \%wgetch
+returns a key code identifying the key event as described above,
+which may include
+.B \%KEY_RESIZE
+or
+.B \%KEY_MOUSE
+indicating non-key events,
+or
+.B ERR
+on failure.
+.B \%wgetch
+fails if
+its timeout expires without any data arriving,
+which cannot happen if \fB\%nodelay\fP(3X) is in effect on the window.
+.PP
+In
+.IR \%ncurses ,
+.B \%wgetch
+also fails if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+.bP
+the terminal input stream is closed,
+in which case
+.I \%errno
+is set to
+.IR \%EBADF ","
+or
+.bP
+execution was interrupted by a signal,
+in which case
+.I \%errno
+is set to
+.IR \%EINTR "."
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x ")"
+is outside the window boundaries.
+.PP
+.B \%ungetch
+returns
+.B OK
+on success and
+.B ERR
+on failure.
+In
+.IR \%ncurses ,
+.B \%ungetch
+fails if
+.bP
+the
+.I curses
+screen has not been initialized,
+or
+.bP
+there is no more room in the input queue.
+.PP
+.B \%has_key
+returns
+.B TRUE
+or
+.BR FALSE "."

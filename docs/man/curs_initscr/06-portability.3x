@@ -1,0 +1,175 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.SS Differences
+X/Open Curses specifies that portable applications must not
+call
+.I \%initscr
+more than once.
+.bP
+The portable way to use
+.I \%initscr
+is once only,
+using
+.I \%refresh
+to restore the screen after
+.IR \%endwin "."
+.bP
+.I \%ncurses
+permits use of
+.I \%initscr
+after
+.IR \%endwin "."
+.PP
+.I \%initscr
+in BSD,
+from its inception (1980) through the Net/2 release (1991) returned
+.I ERR
+cast to a
+.I \%WINDOW
+pointer when detecting an error.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/src/lib/libcurses/initscr.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=Net2/usr/src/lib/libcurses/initscr.c
+4.4BSD (1995)
+instead returned a null pointer.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.4BSD/usr/src/lib/libcurses/initscr.c
+Neither exited the application.
+It is safe but redundant to check the return value of
+.I \%initscr
+in implementations conforming to X/Open Curses.
+.PP
+Calling
+.I \%endwin
+does not dispose of the memory allocated by
+.I \%initscr
+or
+.IR \%newterm "."
+Deleting a
+.I SCREEN
+provides a way to do this.
+.bP
+X/Open Curses does not say what happens to
+.IR \%WINDOW s
+when
+.I \%delscreen
+\*(``frees storage associated with the
+.IR SCREEN "\*(''"
+nor does the SVr4 documentation help,
+adding that it should be called after
+.I \%endwin
+if a
+.I SCREEN
+is no longer needed.
+.bP
+However,
+every
+.I \%WINDOW
+is implicitly associated with a
+.IR SCREEN ","
+so it is reasonable to expect
+.I \%delscreen
+to dispose of them.
+.bP
+SVr4 deletes the standard
+.I \%WINDOW
+structures
+.I \%stdscr
+and
+.I \%curscr
+as well as a work area
+.IR \%newscr "."
+It ignores other windows.
+.bP
+Since version 4.0 (1996),
+.I \%ncurses
+has maintained a list of all windows for each screen,
+using that information to delete those windows when
+.I \%delscreen
+is
+called.
+.bP
+NetBSD copied this feature of
+.I \%ncurses
+in 2001.
+.I \%PDCurses
+follows the SVr4 model,
+deleting only the standard
+.I \%WINDOW
+structures and
+.IR \%newscr "."
+.SS "High-level versus Low-level Functions"
+Implementations disagree
+regarding the level of abstraction applicable to a function or property.
+For example,
+.I SCREEN
+(returned by
+.IR \%newterm ")"
+and
+.I \%TERMINAL
+(returned by \fB\%setupterm\fP(3X)) hold file
+descriptors for the output stream.
+If an application switches screens using
+.IR \%set_term ","
+or switches terminals using \fB\%set_curterm\fP(3X),
+applications
+using the output file descriptor can behave differently
+depending on the structure holding the corresponding descriptor.
+.bP
+NetBSD's
+.I \%baudrate
+function uses the descriptor in
+.IR \%TERMINAL "."
+.I \%ncurses
+and SVr4 use the descriptor in
+.IR SCREEN "."
+.bP
+NetBSD and
+.I \%ncurses
+use the descriptor
+in
+.I \%TERMINAL
+for terminal I/O modes,
+e.g.,
+\fB\%def_shell_mode\fP(3X),
+\fB\%def_prog_mode\fP(3X).
+SVr4 uses the descriptor in
+.IR SCREEN "."
+.SS "Unset \fITERM\fP Environment Variable"
+If the
+.I TERM
+variable is not set in the environment or has an empty value,
+.I \%initscr
+uses the value \*(``unknown\*('',
+which normally corresponds to a terminal entry with the
+.B \%generic
+.RB ( gn )
+capability.
+Generic entries are detected by \fB\%setupterm\fP(3X)
+and cannot be used for full-screen operation.
+Other implementations may handle
+a missing or empty
+.I TERM
+variable differently.
+.SS "Signal Handlers"
+Quoting X/Open Curses Issue\ 7,
+section 3.1.1:
+.RS 5
+.PP
+Curses implementations may provide for special handling of the
+\%SIGINT,
+\%SIGQUIT,
+and \%SIGTSTP signals if their disposition is \%SIG_DFL at the time
+.IR \%initscr ()
+is called.\|.\|.
+.PP
+Any special handling for these signals may remain in effect for the
+life of the process or until the process changes the disposition of
+the signal.
+.PP
+None of the Curses functions are required to be safe
+with respect to signals.\|.\|.
+.RE
+.PP
+Section \*(``NOTES\*('' above discusses
+.IR \%ncurses 's
+signal handlers.

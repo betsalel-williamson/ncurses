@@ -1,0 +1,63 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+Except as noted in section \*(``EXTENSIONS\*('' above,
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 508
+.\" It continues "unless otherwise noted in the preceding routine
+.\" descriptions", but no notes otherwise are present; the man page
+.\" discusses getch()'s return value repeatedly, but never those of the
+.\" functions the page ostensibly documents.
+.PP
+.I \%ncurses
+follows X/Open Curses
+and the historical practice of System\ V
+.IR curses ","
+clearing the terminal driver's \*(``echo\*('' flag when initializing the
+screen.
+BSD
+.I curses
+did not,
+but its
+.I raw
+function turned it off as a side effect.
+.\" SGTTY's sg_flags had a "RAW" symbol; termio in SVr1 for the PDP-11
+.\" did not.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/include/curses.h
+.\" https://github.com/ryanwoodsmall/oldsysv/blob/master/sysv-pdp11_man/a_man/man7/termio.7
+For best portability,
+call
+.I echo
+or
+.I \%noecho
+explicitly just after initialization,
+even if your program retains the terminal's canonical (\*(``cooked\*('')
+line discipline.
+.PP
+X/Open Curses is ambiguous regarding whether
+.I raw
+should disable the carriage return and line feed translation feature
+controlled by
+.I nl
+and
+.IR \%nonl "."
+BSD
+.I curses
+turned off these translations;
+System\ V
+.I curses
+did not.
+.I \%ncurses
+does so,
+on the assumption that a programmer requesting raw input wants a clean
+(ideally,
+8-bit clean)
+connection that the operating system does not alter.

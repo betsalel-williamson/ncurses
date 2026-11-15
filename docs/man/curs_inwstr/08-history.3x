@@ -1,0 +1,22 @@
+.SH HISTORY
+The System\ V Interface Definition,
+Version 4 (1995),
+specified
+.I \%winwstr
+and
+.I \%winnwstr
+(and the usual variants).
+.\" SVID 4, vol 3., p. 516
+These were later additions to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+Their synopses described each function as taking
+an argument of type
+.RI pointer-to- char
+instead of
+.RI pointer-to- wchar_t ,
+despite describing them as \*(``returning the string of
+.I \%wchar_t
+in
+.IR str "\*(''."
+Presumably this was an error in the System\ V Interface Definition.

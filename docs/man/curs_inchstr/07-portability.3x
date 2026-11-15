@@ -1,0 +1,32 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+It characterizes the strings stored by these functions as containing
+\*(``at most
+.I n
+elements\*('' from a window,
+.\" X/Open Issue 4, Version 2, p. 113, PDF p. 133
+.\" Issue 7 doesn't change this wording at all.
+but does not specify whether the string stored by these functions is
+null-terminated.
+.PP
+SVr4 does not document whether it null-terminates the
+.I curses
+character string it stores
+in
+.IR chstr ","
+and does not document whether a trailing null
+.I curses
+character counts
+toward the length limit
+.IR n "."
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 503

@@ -1,0 +1,50 @@
+.SH RETURN VALUE
+On successful operation,
+these functions return the count of wide characters copied from
+.I win
+to
+.I wstr
+(not including the wide null terminator),
+or
+.B ERR
+upon failure.
+.BR \%innwstr ","
+.BR \%winnwstr ","
+.BR \%mvinnwstr ","
+and
+.B \%mvwinnwstr
+return
+.B ERR
+if
+.I n
+is insufficiently large to store a complete wide character string.
+(Recall that a
+.I curses
+complex character can contain multiple wide characters,
+some of which may be non-spacing.)
+.PP
+In
+.IR \%ncurses ","
+these functions return
+.B ERR
+if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+or
+.bP
+.I wstr
+is a null pointer.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

@@ -1,0 +1,18 @@
+.SH DESCRIPTION
+The
+.B \%keyok
+.I \%ncurses
+extension permits a
+.I curses
+application to disable a function key
+.I key-code
+returned by \fB\%wgetch\fP(3X)
+(wide-character API users:
+\fB\%wget_wch\fP(3X)).
+Key codes that have been disabled can be re-enabled.
+.I bf
+selects the desired enablement status.
+This operation is more fine-grained than calling \fB\%keypad\fP(3X),
+which affects
+.I all
+function keys.

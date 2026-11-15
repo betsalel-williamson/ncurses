@@ -1,0 +1,45 @@
+.SH RETURN VALUE
+.BR \%has_mouse ","
+.BR \%wenclose ","
+.BR \%mouse_trafo ","
+and
+.B \%wmouse_trafo
+return
+.B TRUE
+or
+.B FALSE
+as noted above.
+.PP
+.B \%getmouse
+and
+.B \%ungetmouse
+return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+.B \%getmouse
+fails if:
+.bP
+no mouse driver was initialized,
+.bP
+the mask of reportable events is zero,
+.bP
+a mouse event was detected that does not match the mask,
+or
+.bP
+no more events remain in the queue.
+.PP
+.B \%ungetmouse
+returns
+.B ERR
+if the event queue is full.
+.PP
+.B \%mousemask
+returns the mask of reportable events.
+.PP
+.B \%mouseinterval
+returns the previous interval value, unless
+the terminal was not initialized.
+In that case, it returns the maximum interval value (166).

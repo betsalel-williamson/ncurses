@@ -1,0 +1,140 @@
+.SH NOTES
+.BR echo ","
+.BR \%noecho ","
+.BR \%halfdelay ","
+.BR \%intrflush ","
+.BR meta ","
+.BR nl ","
+.BR nonl ","
+.BR \%nodelay ","
+.BR \%notimeout ","
+.BR \%noqiflush ","
+.BR \%qiflush ","
+.BR \%timeout ","
+and
+.B \%wtimeout
+may be implemented as macros.
+.PP
+.B \%noraw
+and
+.B \%nocbreak
+follow historical practice in that they attempt to restore
+the terminal's canonical (\*(``cooked\*('') line discipline
+from raw and cbreak,
+respectively.
+Mixing
+.BR \%raw / noraw
+calls with
+.BR \%cbreak / nocbreak
+calls leads to terminal driver control states that are hard to predict
+or understand;
+doing so is not recommended.
+.PP
+.I curses
+documentation uses the terms \*(``delay\*('' and \*(``timeout\*(''
+freely to describe two related but distinct aspects of input handling,
+at the risk of confusing the user.
+The functions
+.BR \%halfdelay ","
+.BR \%nodelay ","
+.BR \%timeout ","
+and
+.B \%wtimeout
+configure whether the input character reading function
+\%(\fBwgetch\fP(3X) or \fB\%wget_wch\fP(3X))
+waits for keyboard input to begin,
+and for how long.
+.B \%keypad
+configures whether that function waits for further input
+if the first character it reads is an ambiguous prefix
+(like ESC).
+Calling
+.BR \%notimeout ","
+which has nothing to do with
+.B \%timeout
+or
+.BR \%wtimeout ","
+makes this delay in expectation of further characters
+effectively infinite.
+X/Open Curses affords no means of otherwise configuring
+the length of this second delay,
+but an AIX and
+.I \%ncurses
+extension,
+.BR \%ESCDELAY ,
+is available both as an environment variable and a global symbol
+permitting the user and application,
+respectively,
+to do so;
+see \fB\%ncurses\fP(3X) and \fB\%curs_variables\fP(3X).
+.PP
+When
+.B \%keypad
+is first enabled for a window,
+.I \%ncurses
+loads the standard function key string capabilities
+for the terminal type description of its screen;
+see the table entries containing \*(``key_\*('' in \fB\%terminfo\fP(5).
+If that description includes extended string capabilities
+(produced by the
+.B \-x
+option of \fB\%@TIC@\fP(1M),
+for example),
+then for each extended function key
+whose capability code begins with \*(``k\*('',
+.I \%ncurses
+generates a numeric key code.
+These code values are affected
+by previous loads of terminal type descriptions,
+and may differ from one execution of the application to the next.
+In
+.IR \%ncurses ","
+\fB\%keyname\fP(3X) recognizes these generated key codes
+and returns a name beginning with \*(``k\*('' denoting the extended
+.I \%term\%info
+capability code rather than one starting with \*(``KEY_\*('',
+which standard
+.I curses
+key names use.
+Further,
+an application can use \fB\%define_key\fP(3X) to bind any key code
+to a string of the programmer's choice.
+This feature enables an application
+to check for a function key's presence with \fB\%tigetstr\fP(3X),
+and reassign the key code to match its own needs.
+.PP
+Applications employing the lower-level
+.I \%term\%info
+API can use \fB\%tigetstr\fP(3X)
+to obtain the contents of any string capability,
+including extended ones.
+Applications employing the higher-level
+.I curses
+API use an input character reading function
+to obtain key codes from input;
+the result can vary
+depending upon the order in which string capabilities are loaded.
+Multiple key capability strings can have the same value,
+but the input character reading function can report only one key code.
+Most
+.I curses
+implementations
+(including
+.IR \%ncurses )
+load key definitions in the order
+they appear in the
+.B \%strfnames
+array of string capability names;
+see \fB\%term_variables\fP(3X).
+.\" ncurses/tinfo/parse_entry.c:lookup_fullname, I think --GBR
+The
+.I last
+capability read using a particular definition
+determines the key code to be reported.
+.I \%ncurses
+loads extended capabilities after standard ones.
+Thus,
+if an extended string capability's value
+is the same as one previously loaded,
+the input character reading function
+returns the last matching extended one.

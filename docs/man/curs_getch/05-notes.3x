@@ -1,0 +1,122 @@
+.SH NOTES
+.BR \%getch ","
+.BR \%mvgetch ","
+and
+.B \%mvwgetch
+may be implemented as macros.
+.PP
+.I curses
+discourages assignment of the ESC key to a discrete function by the
+programmer because the library requires a delay while it awaits the
+potential remainder of a terminal escape sequence.
+.PP
+Some key strokes are indistinguishable from control characters;
+for example,
+.B \%KEY_ENTER
+may be the same as
+.BR \*^M ","
+.\" as with att630 or pccon+keys
+and
+.B \%KEY_BACKSPACE
+may be the same as
+.B \*^H
+.\" as with att505 or vt52-basic
+or
+.BR \*^? "."
+.\" as with pccon+keys or vt320
+Consult the
+.I \%term\%info
+entry for the terminal type to determine whether this is the case;
+see \fB\%infocmp\fP(1M).
+Some
+.I curses
+implementations,
+including
+.IR \%ncurses ","
+honor the
+.I \%term\%info
+key definitions;
+others treat such control characters specially.
+.PP
+.I curses
+distinguishes the Enter keys in the alphabetic and numeric keypad
+sections of a keyboard because (most) terminals do.
+.B \%KEY_ENTER
+refers to the key on the numeric keypad and,
+like other function keys,
+is reliably recognized only if the window's keypad mode is enabled.
+.bP
+The
+.I \%term\%info
+.B \%key_enter
+.RB ( kent )
+capability describes the character (sequence) sent by the Enter key of
+a terminal's numeric
+(or similar)
+keypad.
+.bP
+\*(``Enter or send\*('' is X/Open Curses's description of this key.
+.PP
+.I curses
+treats the Enter or Return key in the
+.I alphabetic
+section of the keyboard differently.
+.bP
+It usually produces a control code for carriage return
+.RB ( \*^M )
+or line feed
+.RB ( \*^J ).
+.bP
+Depending on the terminal mode
+(raw,
+cbreak,
+or
+canonical),
+and whether \fB\%nl\fP(3X) or \fB\%nonl\fP(3X) has been called,
+.B \%wgetch
+may return either a carriage return or line feed upon an Enter or Return
+key stroke.
+.PP
+Use of
+.B \%wgetch
+with \fB\%echo\fP(3X) and neither \fB\%cbreak\fP(3X) nor \fB\%raw\fP(3X)
+is not well-defined.
+.PP
+Historically,
+the list of key code macros above was influenced by the keyboard of the
+AT&T 7300
+(also known variously as the \*(``3B1\*('', \*(``Safari 4\*('', and
+\*(``UNIX PC\*(''),
+a 1985 machine rich in function keys.
+Today's computer keyboards tend to have fewer.
+A
+.I curses
+application can expect such a keyboard to transmit key codes
+.BR \%KEY_UP ","
+.BR \%KEY_DOWN ","
+.BR \%KEY_LEFT ","
+.BR \%KEY_RIGHT ","
+.BR \%KEY_HOME ","
+.BR \%KEY_END ","
+.B \%KEY_PPAGE
+(Page Up),
+.B \%KEY_NPAGE
+(Page Down),
+.B \%KEY_IC
+(Insert),
+.B \%KEY_DC
+(Delete),
+.BR \%KEY_A1 ","
+.BR \%KEY_A3 ","
+.BR \%KEY_B2 ","
+.BR \%KEY_C1 ","
+.BR \%KEY_C3 ","
+and
+.BI \%KEY_F( n )
+for 1 \(<=
+.I n
+\(<= 12.
+.\" Other numeric keypad keys from the DEC VT220 (specifically, the
+.\" LK-201 commonly used with it) and IBM Model M keyboards -- the comma
+.\" (DEC); plus, star, and slash (IBM); and zero, dot, and minus (both)
+.\" have no standard key capability codes.

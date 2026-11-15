@@ -1,0 +1,75 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+Except as noted in section \*(``EXTENSIONS\*('' above,
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 494
+.PP
+.I \%wgetch
+reads only single-byte characters.
+.PP
+The echo behavior of these functions on input of
+.I KEY_
+or backspace characters is not documented in SVr4
+.IR curses "."
+.PP
+The behavior of
+.I \%wgetch
+in the presence of signal handlers is not documented in SVr4
+.I curses
+and is unspecified by X/Open Curses.
+In historical
+.I curses
+implementations,
+it varied depending on whether the operating system's dispatch of a
+signal to a handler interrupted a \fIread\fP(2) call in progress,
+and also
+(in some implementations)
+whether an input timeout or non-blocking mode had been set.
+A portable
+.I curses
+application prepares for two cases:
+(a) signal receipt does not interrupt
+.IR \%wgetch ";"
+and
+(b) signal receipt interrupts
+.I \%wgetch
+and causes it to return
+.I ERR
+with
+.I \%errno
+set to
+.IR \%EINTR "."
+.PP
+.I \%KEY_MOUSE
+is mentioned in X/Open Curses,
+along with a few related
+.I \%term\%info
+capabilities,
+but no higher-level functions use the feature.
+The implementation in
+.I \%ncurses
+is an extension.
+.PP
+.I \%KEY_RESIZE
+and
+.I \%has_key
+are extensions first implemented for
+.IR \%ncurses "."
+By 2022,
+.I \%PDCurses
+.\" https://web.archive.org/web/20220117232009/https://pdcurses.org/docs/MANUAL.html
+and
+NetBSD
+.I curses
+.\" https://web.archive.org/web/20200923185647/https://man.netbsd.org/curses_input.3
+had added them along with
+.IR \%KEY_MOUSE "."

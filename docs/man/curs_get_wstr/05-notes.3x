@@ -1,0 +1,52 @@
+.SH NOTES
+All of these functions except
+.B \%wgetn_wstr
+may be implemented as macros.
+.PP
+Reading input that overruns the buffer pointed to by
+.I wstr
+causes undefined results.
+Use the
+.BR n -infixed
+functions,
+and allocate sufficient storage for
+.I wstr
+\(em at least
+.IR n +1
+times
+.BR sizeof(wchar_t) "."
+.PP
+These functions cannot store a
+.B KEY_
+value in
+.I wstr
+because there is no way to distinguish it
+from a valid
+.I \%wchar_t
+value.
+.PP
+While these functions conceptually implement
+a series of calls to
+.BR \%wget_wch ","
+they also temporarily change properties of the
+.I curses
+screen to permit simple editing of the input buffer.
+Each function saves the screen's state,
+calls \fBnl\fP(3X),
+and,
+if the screen was in canonical (\*(``cooked\*('') mode,
+\fB\%cbreak\fP(3X).
+Before returning,
+it restores the saved screen state.
+Other implementations differ in detail,
+affecting which control characters they can accept in the buffer;
+see section \*(``PORTABILITY\*('' below.
+.PP
+Unlike \fBgetstr\fP(3X) and related functions of
+.IR \%ncurses 's
+non-wide API,
+these functions do not return
+.B \%KEY_RESIZE
+if a
+.I \%SIGWINCH
+event interrupts the function.

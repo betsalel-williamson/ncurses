@@ -1,0 +1,15 @@
+.SH NOTES
+All of these functions except
+.B \%win_wchnstr
+may be implemented as macros.
+.PP
+Reading a line that overflows the array pointed to by
+.I wchstr
+and its variants causes undefined results.
+Instead,
+use the
+.IR n -infixed
+functions with a positive
+.I n
+argument no larger than the size of the buffer backing
+.IR wchstr "."

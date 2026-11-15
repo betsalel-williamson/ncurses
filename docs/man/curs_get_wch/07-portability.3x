@@ -1,0 +1,14 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+See the \*(``PORTABILITY\*('' section of \fB\%wgetch\fP(3X) regarding
+the interaction of
+.I \%wget_wch
+with signal handlers.

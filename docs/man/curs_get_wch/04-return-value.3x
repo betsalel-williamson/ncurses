@@ -1,0 +1,66 @@
+.SH RETURN VALUE
+.B \%wget_wch
+returns
+.B OK
+when it reads a wide character,
+.B \%KEY_CODE_YES
+when it reads a function key code,
+and
+.B ERR
+on failure.
+.B \%wget_wch
+fails if
+its timeout expires without any data arriving,
+which cannot happen if \fB\%nodelay\fP(3X) is in effect on the window.
+.PP
+In
+.IR \%ncurses ,
+.B \%wget_wch
+also fails if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+.bP
+the terminal input stream is closed,
+in which case
+.I \%errno
+is set to
+.IR \%EBADF ","
+or
+.bP
+execution was interrupted by a signal,
+in which case
+.I \%errno
+is set to
+.IR \%EINTR "."
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x ")"
+is outside the window boundaries.
+.PP
+.B \%unget_wch
+returns
+.B OK
+on success and
+.B ERR
+on failure.
+In
+.IR \%ncurses ,
+.B \%unget_wch
+fails if
+.bP
+the
+.I curses
+screen has not been initialized,
+or
+.bP
+there is no more room in the input queue.

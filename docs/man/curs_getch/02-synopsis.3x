@@ -1,0 +1,15 @@
+.SH SYNOPSIS
+.nf
+.B #include <curses.h>
+.PP
+.B int getch(void);
+.B int wgetch(WINDOW * \fIwin\fP);
+.B int mvgetch(int \fIy\fP, int \fIx\fP);
+.B int mvwgetch(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP);
+.PP
+.B int ungetch(int \fIc\fP);
+.PP
+.\" XXX: Move has_key into its own page like define_key and key_defined?
+\fI/* extension */\fP
+.B int has_key(int \fIc\fP);
+.fi

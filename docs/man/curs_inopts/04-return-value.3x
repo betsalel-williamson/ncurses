@@ -1,0 +1,66 @@
+.SH RETURN VALUE
+.B \%timeout
+and
+.B \%wtimeout
+return no value.
+.PP
+.BR \%cbreak ","
+.BR \%nocbreak ","
+.BR \%echo ","
+.BR \%noecho ","
+.BR \%halfdelay ","
+.BR \%intrflush ","
+.BR \%keypad ","
+.BR \%meta ","
+.BR \%nodelay ","
+.BR \%notimeout ","
+.BR \%nl ","
+.BR \%nonl ","
+.BR \%raw ","
+.BR \%noraw ","
+and
+.B \%typeahead
+return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+the functions in the previous paragraph return
+.B ERR
+if
+.bP
+the library's
+.I \%TERMINAL
+structure for the device has not been initialized with
+\fB\%initscr\fP(3X),
+\fB\%newterm\fP(3X),
+or
+\fB\%setupterm\fP(3X),
+or
+.bP
+.I win
+is a null pointer
+(except with
+.B \%intrflush
+and
+.BR meta ","
+which ignore its value).
+.PP
+Further,
+.B \%halfdelay
+returns
+.B ERR
+if
+.I delay
+is outside the range 1..255.
+.PP
+See section \*(``EXTENSIONS\*('' below for the
+return values of
+.BR is_cbreak ","
+.BR is_echo ","
+.BR is_nl ","
+and
+.BR is_raw "."

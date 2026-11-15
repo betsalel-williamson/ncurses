@@ -1,0 +1,21 @@
+.SH RETURN VALUE
+.B \%keyok
+returns
+.B ERR
+if
+.bP
+.I key-code
+is nonpositive,
+.bP
+.I key-code
+is not a recognized value,
+or
+.bP
+enablement of
+.I key-code
+is already in the desired state.
+.PP
+Otherwise,
+.B \%keyok
+returns
+.BR OK "."

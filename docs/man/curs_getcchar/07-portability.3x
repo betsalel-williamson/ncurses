@@ -1,0 +1,94 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+These functions are described in X/Open Curses Issue\ 4.
+It specifies no error conditions for them.
+.PP
+X/Open Curses does not detail the layout of the
+.I \%cchar_t
+structure,
+describing only its minimal required contents:
+.bP
+a spacing wide character
+.RI \%( wchar_t ),
+.bP
+at least five non-spacing wide characters
+.RI \%( wchar_t ;
+see below),
+.bP
+attributes
+(at least 15 bits' worth,
+inferred from the count of specified
+.I WA_
+constants),
+.\" See X/Open Curses Issue 7, p. 307.
+.bP
+a color pair identifier
+(at least 16 bits,
+inferred from the
+.I short
+type used to encode it).
+.PP
+Non-spacing characters are optional,
+in the sense that zero or more may be stored in a
+.IR \%cchar_t "."
+XOpen/Curses specifies a limit:
+.RS 4
+.PP
+Implementations may limit the number of non-spacing characters that can
+be associated with a spacing character,
+provided any limit is at least 5.
+.RE
+.PP
+Then-contemporary Unix implementations adhered to that limit.
+.bP
+AIX\ 4 and OSF/1\ 4 used the same declaration with
+a single spacing wide character
+.I c
+and an array of 5 non-spacing wide characters
+.IR z "."
+.bP
+HP-UX\ 10 used an opaque structure of 28 bytes,
+large enough for 6
+.I \%wchar_t
+values.
+.bP
+Solaris
+.I xcurses
+uses a single array of 6
+.I \%wchar_t
+values.
+.PP
+.I \%ncurses
+defined its
+.I \%cchar_t
+in 1995 using 5 as the
+.I total
+of spacing and non-spacing characters
+.RB \%( CCHARW_MAX ).
+That was probably due to a misreading of the AIX\ 4 header files,
+because the X/Open Curses document
+was not generally available at that time.
+Later (in 2002),
+this detail was overlooked when work began to implement the functions
+using the structure.
+.PP
+In practice,
+a mere four non-spacing characters may seem adequate.
+X/Open Curses documents possible applications of non-spacing characters,
+including their use as ligatures
+(a feature apparently not supported by any
+.I curses
+implementation).
+Unicode does not limit the (analogous) number of combining characters
+in a grapheme cluster;
+some applications may be affected.
+.I \%ncurses
+can be compiled with a different
+.B CCHARW_MAX
+value;
+doing so alters the library's ABI.

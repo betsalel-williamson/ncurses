@@ -1,0 +1,44 @@
+.SH DESCRIPTION
+These macros obtain the cursor position and bounds information of a
+.I curses
+window
+.IR win "."
+.B \%getyx
+stores
+.IR win "'s"
+cursor position in the variables
+.I y
+and
+.IR x "."
+.B \%getmaxyx
+stores
+.IR win "'s"
+maximum valid line and column dimensions in
+.I y
+and
+.IR x ","
+respectively.
+Those are one more than the corresponding maximum positions.
+.B \%getbegyx
+similarly stores the position of
+.IR win "'s"
+origin relative to that of the screen
+(for
+.BR stdscr ","
+these coordinates are always
+.BR 0 ")."
+.PP
+If
+.I win
+is a subwindow
+(see \fB\%subwin\fP(3X)),
+the
+.B \%getparyx
+macro places the coordinates of its origin relative to its parent window
+into
+.I y
+and
+.IR x ","
+and
+.B \-1
+into both if it is not.

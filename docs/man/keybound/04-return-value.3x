@@ -1,0 +1,16 @@
+.SH RETURN VALUE
+If
+.I key-code
+corresponds to a function key defined
+by the application
+or the terminal type in use,
+.B \%keybound
+allocates and returns a string
+that must be freed by the application.
+.B \%keybound
+returns
+.I NULL
+if
+.I key-code
+is not positive
+or if it does not correspond to a key code definition.

@@ -1,0 +1,23 @@
+.SH NOTES
+.BR \%inch ,
+.BR \%mvinch ,
+and
+.B \%mvwinch
+may be implemented as macros.
+.PP
+These functions do not fail if the window contains cells of
+.I curses
+complex characters;
+that is,
+if they contain characters with codes wider than eight bits
+(or greater than 255 as an unsigned decimal integer).
+The returned value depends upon the locale:
+.bP
+If the locale encoding is UTF-8,
+.I \%ncurses
+extracts only the low-order eight bits of the character code from the cell.
+.bP
+If the locale encoding is not UTF-8,
+.I \%ncurses
+converts the character from Unicode to the locale encoding,
+and extracts the low-order eight bits from the resulting character.

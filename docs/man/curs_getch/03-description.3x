@@ -1,0 +1,401 @@
+.SH DESCRIPTION
+.SS "Reading Characters"
+.B \%wgetch
+gathers a key event from the terminal input stream associated with a
+.I curses
+window
+.IR win "."
+\fB\%ncurses\fP(3X) describes the variants of this function.
+.PP
+When input is pending,
+.B \%wgetch
+returns an integer identifying the key event;
+for alphanumeric and punctuation keys,
+the space bar,
+and (usually) the Backspace,
+Tab,
+Return,
+and Escape keys,
+this value corresponds to the character encoding used by the terminal.
+Use of the control key as a modifier,
+by holding it down while pressing and releasing another key,
+often results in a distinct code.
+The behavior of other keys depends on whether
+.I win
+is in keypad mode;
+see subsection \*(``Keypad Mode\*('' below.
+.PP
+If no input is pending,
+then if the no-delay flag is set in the window
+(see \fB\%nodelay\fP(3X)),
+the function returns
+.BR ERR ";"
+otherwise,
+.I curses
+waits until the terminal has input.
+If \fB\%cbreak\fP(3X) or \fB\%raw\fP(3X)
+has been called,
+this happens after
+.I curses
+reads one key event.
+If \fB\%nocbreak\fP(3X) or \fB\%noraw\fP(3X)
+has been called,
+it occurs when
+.I curses
+reads a newline.
+.\" "newline" because canonical mode normalizes NL/CR
+(Because the terminal's canonical or \*(``cooked\*('' mode
+is line-buffered,
+multiple
+.B \%wgetch
+calls may then be necessary to empty the input queue.)
+If \fB\%halfdelay\fP(3X)
+has been called,
+.I curses
+waits until input is available or the specified delay elapses.
+.PP
+If \fB\%echo\fP(3X) has been called,
+and the window is not a pad,
+.I curses
+writes the returned character
+.I c
+to the window
+(at the cursor position)
+per the following rules.
+.bP
+If
+.I c
+matches the terminal's erase character
+(see \fB\%erasechar\fP(3X)),
+and the cursor is not at the window's leftmost column,
+the cursor moves leftward one position
+and the new position is erased
+as if \fB\%wmove\fP(3X) and then \fB\%wdelch\fP(3X) were called.
+When the window's keypad mode is enabled
+(see below),
+.B \%KEY_LEFT
+and
+.B \%KEY_BACKSPACE
+are handled the same way.
+.bP
+.I curses
+writes any other
+.I c
+to the window,
+as with \fB\%wechochar\fP(3X).
+.bP
+If the window
+.I win
+has been moved or modified since the last call to
+\fB\%wrefresh\fP(3X),
+.I curses
+calls
+.B \%wrefresh
+on it.
+.PP
+If
+.I c
+is a carriage return and \fBnl\fP(3X) has been called,
+.B \%wgetch
+returns the character code for line feed instead.
+.SS "Keypad Mode"
+Call \fB\%keypad\fP(3X) on a window to configure keypad mode
+when reading input from it.
+In
+.IR "keypad mode" ","
+.I curses
+treats key strokes not from the alphabetic section of the keyboard
+(those corresponding to the ECMA-6 character set \(em
+see \fI\%ascii\fP(7) \(em
+optionally modified by either the control or shift keys)
+as
+.I function
+keys.
+(In
+.IR curses ","
+the term \*(``function key\*('' includes but is not limited to keycaps
+engraved with \*(``F1\*('',
+\*(``PF1\*('',
+and so on.)
+If a window is in keypad mode,
+.B \%wgetch
+translates these key strokes to a numeric code corresponding to the
+.B KEY_
+symbols listed in subsection \*(``Key Codes\*('' below.
+If the window is not in keypad mode,
+the input queue populates with
+the characters of the function key's string capability
+(see \fB\%terminfo\fP(5)),
+which the application must collect individually with multiple
+.B \%wgetch
+calls.
+.bP
+The
+.I \%curses.h
+header file declares many function keys whose names begin with
+.BR KEY_ ";"
+these object-like macros
+have integer values outside the range of eight-bit character codes.
+.bP
+In
+.IR \%ncurses ","
+\fB\%define_key\fP(3X)
+configures
+.IR "user-defined function keys" ;
+they have no names,
+but are also expected to
+have integer values outside the range of eight-bit character codes.
+.PP
+A variable intended to hold a function key code must thus be of type
+.I short
+or larger.
+.PP
+Most terminals one encounters follow the ECMA-48 standard insofar as
+their function keys produce character sequences prefixed with the
+escape character ESC.
+This fact implies that
+.I curses
+cannot distinguish a user's press of the escape key
+(or any prefix common to multiple function key definitions)
+from the beginning of a function key's character sequence without
+waiting to see if,
+and how soon,
+further input arrives.
+.bP
+If the escape sequence
+matches a string capability defining a function key
+for the terminal type
+(such as
+.B \%key_home
+.RB \%( khome )
+or
+.B \%key_up
+.RB \%( kuu1 )),
+.B \%wgetch
+returns the function key code corresponding to the unique sequence
+defined by the terminal.
+.bP
+If the escape sequence matches no function keys
+defined for the terminal type,
+call
+.B \%wgetch
+repeatedly to obtain
+the codes of the individual characters of the sequence,
+in the order they occurred in the input.
+.bP
+If
+.B \%wgetch
+cannot decide the validity of the input as a function key
+because it has not read enough characters to disambiguate it,
+the function waits until it has this information or the
+.I "escape delay"
+elapses.
+Configure the escape delay
+with the global variable
+.BR \%ESCDELAY ","
+an extension
+(see section \*(``EXTENSIONS\*('' below),
+or the environment variable of the same name
+(see section \*(``ENVIRONMENT\*('' of \fB\%ncurses\fP(3X)),
+also an extension.
+.PP
+Consequently,
+a user of a
+.I curses
+application that employs keypad mode
+may experience a pause or \*(``hang\*(''
+after pressing the escape key while
+.I curses
+collects sufficient characters to disambiguate the input.
+If the window is in \*(``no time-out\*('' mode,
+the escape delay is effectively infinite;
+see \fB\%notimeout\fP(3X).
+In the event of such a pause,
+further typing \*(``awakens\*(''
+.IR curses "."
+.SS "Ungetting Characters"
+.B \%ungetch
+places
+.I c
+into the input queue to be returned by the next call to
+.BR \%wgetch "."
+A single input queue serves all windows associated with the screen.
+.SS "Key Codes"
+The header file
+.I \%curses.h
+defines the following function key codes.
+.bP
+Except for the special case of
+.BR \%KEY_RESIZE ","
+a window's keypad mode must be enabled for
+.B \%wgetch
+to read these codes from it.
+.bP
+Not all of these are necessarily supported on any particular terminal.
+.bP
+The naming convention may seem obscure,
+with some apparent misspellings
+(such as \*(``RSUME\*('' for \*(``resume\*('');
+the names correspond to the
+.I \%term\%info
+capability names for the keys.
+See subsection \*(``Keypad and Function Keys\*('' of \fB\%terminfo\fP(5)
+for a historical account.
+.PP
+.RS
+.\" XXX: Move this list into ncurses(3X), rather than duplicating it in
+.\" get_wch(3X) or having that page cross reference this one?
+.TS
+Lb Lb
+Lb Lw(36n)x.
+Symbol	Key name
+=
+KEY_BREAK	Break key
+.ne 4
+KEY_DOWN	Arrow keys
+KEY_UP	\^
+KEY_LEFT	\^
+KEY_RIGHT	\^
+KEY_HOME	Home key (upward+left arrow)
+KEY_BACKSPACE	Backspace
+KEY_F0	T{
+Function keys; space for 64 keys is reserved
+T}
+KEY_F(\fIn\fP)	T{
+Function key \fIn\fP where 0 \(<= \fIn\fP \(<= 63
+T}
+KEY_DL	Delete line
+KEY_IL	Insert line
+KEY_DC	Delete character
+KEY_IC	Insert character/Enter insert mode
+KEY_EIC	Exit insert character mode
+KEY_CLEAR	Clear screen
+KEY_EOS	Clear to end of screen
+KEY_EOL	Clear to end of line
+KEY_SF	Scroll one line forward
+KEY_SR	Scroll one line backward (reverse)
+KEY_NPAGE	Next page/Page up
+KEY_PPAGE	Previous page/Page down
+KEY_STAB	Set tab
+KEY_CTAB	Clear tab
+KEY_CATAB	Clear all tabs
+KEY_ENTER	Enter/Send
+KEY_SRESET	Soft (partial) reset
+KEY_RESET	(Hard) reset
+KEY_PRINT	Print/Copy
+KEY_LL	Home down/Bottom (lower left)
+KEY_A1	Upper left of keypad
+KEY_A3	Upper right of keypad
+KEY_B2	Center of keypad
+KEY_C1	Lower left of keypad
+KEY_C3	Lower right of keypad
+KEY_BTAB	Back tab key
+KEY_BEG	Beg(inning) key
+KEY_CANCEL	Cancel key
+KEY_CLOSE	Close key
+KEY_COMMAND	Cmd (command) key
+KEY_COPY	Copy key
+KEY_CREATE	Create key
+KEY_END	End key
+KEY_EXIT	Exit key
+KEY_FIND	Find key
+KEY_HELP	Help key
+KEY_MARK	Mark key
+KEY_MESSAGE	Message key
+KEY_MOUSE	Mouse event occurred
+KEY_MOVE	Move key
+KEY_NEXT	Next object key
+KEY_OPEN	Open key
+KEY_OPTIONS	Options key
+KEY_PREVIOUS	Previous object key
+KEY_REDO	Redo key
+KEY_REFERENCE	Ref(erence) key
+KEY_REFRESH	Refresh key
+KEY_REPLACE	Replace key
+KEY_RESIZE	Screen resized
+KEY_RESTART	Restart key
+KEY_RESUME	Resume key
+KEY_SAVE	Save key
+KEY_SELECT	Select key
+KEY_SUSPEND	Suspend key
+KEY_UNDO	Undo key
+_
+KEY_SBEG	Shifted beginning key
+KEY_SCANCEL	Shifted cancel key
+KEY_SCOMMAND	Shifted command key
+KEY_SCOPY	Shifted copy key
+KEY_SCREATE	Shifted create key
+KEY_SDC	Shifted delete character key
+KEY_SDL	Shifted delete line key
+KEY_SEND	Shifted end key
+KEY_SEOL	Shifted clear line key
+KEY_SEXIT	Shifted exit key
+KEY_SFIND	Shifted find key
+KEY_SHELP	Shifted help key
+KEY_SHOME	Shifted home key
+KEY_SIC	Shifted insert key
+KEY_SLEFT	Shifted left arrow key
+KEY_SMESSAGE	Shifted message key
+KEY_SMOVE	Shifted move key
+KEY_SNEXT	Shifted next object key
+KEY_SOPTIONS	Shifted options key
+KEY_SPREVIOUS	Shifted previous object key
+KEY_SPRINT	Shifted print key
+KEY_SREDO	Shifted redo key
+KEY_SREPLACE	Shifted replace key
+KEY_SRIGHT	Shifted right arrow key
+KEY_SRSUME	Shifted resume key
+KEY_SSAVE	Shifted save key
+KEY_SSUSPEND	Shifted suspend key
+KEY_SUNDO	Shifted undo key
+.TE
+.RE
+.PP
+Many keyboards feature a nine-key directional pad.
+.PP
+.RS
+.TS
+allbox center;
+C C C.
+A1	up	A3
+left	B2	right
+C1	down	C3
+.TE
+.RE
+.sp
+Two of the symbols in the list above do
+.I not
+correspond to a physical key.
+.bP
+.B \%wgetch
+returns
+.BR \%KEY_RESIZE ","
+even if the window's keypad mode is disabled,
+if
+.I \%ncurses
+has handled a
+.I \%SIGWINCH
+signal since
+.B \%wgetch
+was called;
+see \fB\%initscr\fP(3X) and \fB\%resizeterm\fP(3X).
+.bP
+.B \%wgetch
+returns
+.B \%KEY_MOUSE
+to indicate that a mouse event is pending collection;
+see \fB\%curs_mouse\fP(3X).
+Receipt of this code requires a window's keypad mode to be enabled,
+because to interpret mouse input
+(as with \fI\%xterm\fP(1)'s mouse protocol),
+.I \%ncurses
+must read an escape sequence,
+as with a function key.
+.SS "Testing Key Codes"
+In
+.IR \%ncurses ","
+.B \%has_key
+returns a Boolean value indicating whether the terminal type recognizes
+its parameter as a key code value.
+See also
+\fB\%define_key\fP(3X) and \fB\%key_defined\fP(3X).

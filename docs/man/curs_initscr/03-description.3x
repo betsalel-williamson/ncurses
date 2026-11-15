@@ -1,0 +1,217 @@
+.SH DESCRIPTION
+.SS initscr
+.B \%initscr
+determines the terminal type and initializes the library's
+.IR SCREEN ","
+.IR WINDOW ","
+and other data structures.
+It is normally the first
+.I curses
+function call a program performs.
+However,
+an application with unusual needs might employ a few other
+.I curses
+functions beforehand:
+.bP
+\fB\%slk_init\fP(3X) to set up soft-label keys;
+.bP
+\fB\%filter\fP(3X) if the program is designed to operate in a process
+pipeline;
+.bP
+\fB\%ripoffline\fP(3X) to reserve up to five lines at the top and/or
+bottom of the screen from management by
+.BR \%stdscr ","
+the standard
+.I curses
+window;
+and
+.bP
+\fB\%use_env\fP(3X) and/or \fB\%use_tioctl\fP(3X) to configure use of
+the process environment and operating system's terminal driver,
+respectively,
+when determining the dimensions of the terminal display.
+.PP
+Further,
+a
+.I curses
+program might call
+.B \%newterm
+prior to or instead of
+.B \%initscr
+in two specialized cases described in its subsection below.
+.PP
+.B \%initscr
+causes the first \fB\%refresh\fP(3X) call to clear the screen.
+If errors occur,
+.B \%initscr
+writes an appropriate diagnostic message to the standard error stream
+and exits;
+otherwise,
+it returns
+.B \%stdscr
+(see \fB\%curs_variables\fP(3X)).
+.SS newterm
+An application that manages multiple terminals should call
+.B \%newterm
+once for each such device
+.I instead
+of
+.BR \%initscr "."
+.BR \%newterm 's
+arguments are
+.bP
+the
+.I type
+of the associated terminal,
+or a null pointer to use the
+.I TERM
+environment variable;
+.bP
+an output stream
+.I outf
+connected to the terminal;
+and
+.bP
+an input stream
+.I inf
+connected to the terminal.
+.PP
+.B \%newterm
+returns a value of
+.RI pointer-to- SCREEN
+type,
+which should be saved for later use with
+.B \%set_term
+and
+.BR \%delscreen "."
+.PP
+.B \%newterm
+passes the file descriptor of the output stream to the
+.I \%term\%info
+function \fB\%setupterm\fP(3X),
+which returns a pointer to a
+.I \%TERMINAL
+structure that
+.B \%newterm
+stores in the
+.I SCREEN
+it returns to the application.
+.PP
+An application that needs to inspect a terminal type's capabilities,
+so that it can continue to run in a line-oriented mode
+if the terminal type does not support capabilities the application
+demands,
+would also use
+.BR \%newterm "."
+If at most one terminal connection is needed,
+the programmer could perform such a capability test,
+decide the mode in which to operate,
+then call
+.B \%delscreen
+on the pointer returned by
+.BR \%newterm ","
+and proceed with either
+.B \%initscr
+or a
+.RI non- curses
+interface.
+.SS endwin
+The program must also call
+.B \%endwin
+for each terminal being used before exiting from
+.IR curses "."
+If
+.B \%newterm
+is called more than once for the same terminal,
+the first terminal referred to must be the last one for which
+.B \%endwin
+is called.
+.PP
+A program should always call
+.B \%endwin
+before exiting the application
+or temporarily suspending
+.IR curses "'s"
+management of the terminal.
+.BR \%endwin ":"
+.bP
+(if \fB\%start_color\fP(3X) has been called)
+resets the terminal's foreground and background colors
+to correspond with those of color pair 0
+(the default pair),
+.bP
+moves the cursor to the lower left-hand corner of the screen,
+.bP
+(if \fB\%start_color\fP(3X) has been called)
+restores the default color pair,
+.bP
+clears the line,
+.bP
+sets the cursor to normal visibility
+(see \fB\%curs_set\fP(3X)),
+.bP
+if applicable,
+stops cursor-addressing mode using the
+.B \%exit_ca_mode
+.RB \%( rmcup )
+terminal capability,
+and
+.bP
+restores terminal modes (see \fB\%reset_shell_mode\fP(3X)).
+.PP
+Calling \fB\%refresh\fP(3X) or \fB\%doupdate\fP(3X) after a
+temporary suspension causes
+.I curses
+to resume managing the terminal.
+.SS isendwin
+.B \%isendwin
+returns
+.B TRUE
+if \fB\%wrefresh\fP(3X)
+has not been called since the most recent
+.B \%endwin
+call,
+and
+.B FALSE
+otherwise.
+.SS set_term
+.B \%set_term
+re-orients the
+.I curses
+library's operations to another terminal
+when the application has arranged to manage more than one with
+.BR \%newterm "."
+.B \%set_term
+expects a
+.I SCREEN
+pointer previously returned by
+.B \%newterm
+as an argument,
+and returns the previous one.
+.B \%set_term
+is the only standard
+.I curses
+API function that manipulates
+.I SCREEN
+pointers;
+all others affect only the current terminal
+(but see \fBcurs_sp_funcs\fP(3X)).
+.SS delscreen
+.B \%delscreen
+frees the storage backing the supplied
+.I SCREEN
+pointer argument.
+.B \%endwin
+does not,
+so that an application can resume managing a terminal with
+.I curses
+after a
+(possibly conditional or temporary)
+suspension;
+see \fB\%curs_kernel\fP(3X).
+Use
+.B \%delscreen
+after
+.B \%endwin
+when the application has no more need of a terminal device
+but will not soon exit.
