@@ -5,7 +5,7 @@
  */
 
 /** Guide shard directories, relative to the repository root. */
-export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus', 'docs/client-library/panels', 'docs/client-library/getting-started', 'docs/client-library/windows', 'docs/client-library/output', 'docs/client-library/input', 'docs/client-library/attributes', 'docs/client-library/keyboard', 'docs/client-library/mouse', 'docs/client-library/screen', 'docs/client-library/init-and-debugging'];
+export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus', 'docs/client-library/panels', 'docs/client-library/getting-started', 'docs/client-library/windows', 'docs/client-library/output', 'docs/client-library/input', 'docs/client-library/attributes', 'docs/client-library/keyboard', 'docs/client-library/mouse', 'docs/client-library/screen', 'docs/client-library/init-and-debugging', 'docs/client-library/hints'];
 
 const BLOCK = /^```c\n([\s\S]*?)^```$/gm;
 const MAIN = /^(?:int\s+|void\s+)?main\s*\(/m;

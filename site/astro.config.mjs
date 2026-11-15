@@ -48,6 +48,7 @@ export default defineConfig({
         { label: 'Mouse', items: [{ autogenerate: { directory: 'guides/mouse' } }] },
         { label: 'Screen and other features', items: [{ autogenerate: { directory: 'guides/screen' } }] },
         { label: 'Initialization, wrapup and debugging', items: [{ autogenerate: { directory: 'guides/init-and-debugging' } }] },
+        { label: 'Hints, tips and compatibility', items: [{ autogenerate: { directory: 'guides/hints' } }] },
         { label: 'Forms library', items: [{ autogenerate: { directory: 'guides/forms' } }] },
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
