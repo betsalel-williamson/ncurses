@@ -129,7 +129,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     It also checks each review claim: the pull request merged, changed that document, and recorded its corrections in the errata.
     CI runs it on every pull request.
     The token and cost figures are the exception. They come from the agent's session API, and the repository keeps each response's numbers in
-    <a href={`${repoUrl}/tree/master/site/data/session`}><code>site/data/session</code></a>, along with a timeline of the session that the time figures are recomputed from.
+    <a href={`${repoUrl}/tree/master/site/data/session`}><code>site/data/session</code></a>, along with the session's time totalled by day, which the time figures are the sums of.
     <code>node site/scripts/migration-stats.mjs verify</code> checks the figures above against those files.
   </p>
   <details class="nc-history">
