@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Generate the site's content from the sources:
- * - docs/client-library/** (GFM shards) -> src/content/docs/guides/** (title from the shard's `#` heading)
+ * - docs/client-library/** (GFM shards) -> src/content/docs/guides/** (title from the shard's `#` heading),
+ *   and docs/contributor/hackguide -> src/content/docs/contributing/hackguide
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
@@ -39,6 +40,7 @@ const GUIDES = [
   { src: 'docs/client-library/forms', route: 'guides/forms', indexLabel: 'Introduction' },
   { src: 'docs/client-library/menus', route: 'guides/menus', indexLabel: 'Introduction' },
   { src: 'docs/client-library/panels', route: 'guides/panels', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/hackguide', route: 'contributing/hackguide', indexLabel: 'Introduction' },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
 ];
 const base = `/${repoSlug.split('/')[1]}`;

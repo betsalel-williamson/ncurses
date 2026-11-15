@@ -41,6 +41,7 @@
     "client-library/hints/index.md",
     "client-library/more/index.md",
     "client-library/panels/index.md",
+    "contributor/hackguide/index.md",
     "appendix/index.md"
   ],
   "man": {

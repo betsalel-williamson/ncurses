@@ -20,8 +20,8 @@
       "unit": "documents",
       "note": "The hacker's guide, INSTALL, the Ada binding and the announcement.",
       "total": 4,
-      "sharded": 0,
-      "reviewed": 0
+      "sharded": 1,
+      "reviewed": 1
     }
   ],
   "session": {
