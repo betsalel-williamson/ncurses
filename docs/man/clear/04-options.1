@@ -1,0 +1,19 @@
+.SH OPTIONS
+\fB\%@CLEAR@\fP recognizes the following options.
+.TP 9 \" "-T type" + 2n
+.B \-T \fItype\fP
+produces instructions suitable for the terminal \fItype\fP.
+Normally,
+this option is unnecessary,
+because the terminal type is inferred from the environment variable
+\fITERM\fP.
+If this option is specified,
+\fB\%@CLEAR@\fP ignores the environment variables \fILINES\fP and
+\fI\%COLUMNS\fP as well.
+.TP
+.B \-V
+reports the version of \fI\%ncurses\fP associated with this program and
+exits with a successful status.
+.TP
+.B \-x
+prevents \fB\%@CLEAR@\fP from attempting to clear the scrollback buffer.

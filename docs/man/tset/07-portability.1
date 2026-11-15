@@ -1,0 +1,94 @@
+.SH PORTABILITY
+Neither IEEE Std 1003.1/The Open Group Base Specifications Issue\ 7
+(POSIX.1-2008) nor
+X/Open Curses Issue\ 7 documents \fB@TSET@\fP or \fB@RESET@\fP.
+.PP
+The AT&T \fBtput\fP utility (AIX, HP-UX, Solaris)
+incorporated the terminal-mode manipulation as well as termcap-based features
+such as resetting tabstops from \fBtset\fP in BSD (4.1c),
+presumably with the intention of making \fBtset\fP obsolete.
+However, each of those systems still provides \fBtset\fP.
+In fact, the commonly-used \fBreset\fP utility
+is always an alias for \fBtset\fP.
+.PP
+The \fB\%@TSET@\fP utility provides backward compatibility with BSD
+environments;
+under most modern Unices,
+\fI\%/etc/inittab\fP and \fI\%getty\fP(8) can set \fITERM\fP
+appropriately for each dial-up line,
+obviating what was \fB\%@TSET@\fP's most important use.
+This implementation behaves like 4.4BSD \fBtset\fP,
+with a few exceptions we shall consider now.
+.PP
+A few options are different
+because the \fI\%TERMCAP\fP variable
+is no longer supported under terminfo-based \fI\%ncurses\fP:
+.bP
+The \fB\-S\fP option of BSD \fBtset\fP no longer works;
+it prints an error message to the standard error and dies.
+.bP
+The \fB\-s\fP option only sets \fITERM\fP,
+not \fI\%TERMCAP\fP.
+.PP
+There was an undocumented 4.4BSD feature
+that invoking \fBtset\fP via a link named
+\*(``TSET\*('' (or via any other name beginning with an upper-case letter)
+set the terminal to use upper-case only.
+This feature has been omitted.
+.PP
+The \fB\-A\fP, \fB\-E\fP, \fB\-h\fP, \fB\-u\fP and \fB\-v\fP
+options were deleted from the \fB@TSET@\fP
+utility in 4.4BSD.
+None of them were documented in 4.3BSD and all are
+of limited utility at best.
+The \fB\-a\fP, \fB\-d\fP, and \fB\-p\fP options are similarly
+not documented or useful, but were retained as they appear to be in
+widespread use.
+It is strongly recommended that any usage of these
+three options be changed to use the \fB\-m\fP option instead.
+The \fB\-a\fP, \fB\-d\fP, and \fB\-p\fP options
+are therefore omitted from the usage summary above.
+.PP
+Very old systems, e.g., 3BSD, used a different terminal driver which
+was replaced in 4BSD in the early 1980s.
+To accommodate these older systems, the 4BSD \fB@TSET@\fP provided a
+\fB\-n\fP option to specify that the new terminal driver should be used.
+This implementation does not provide that choice.
+.PP
+It is still permissible to specify the \fB\-e\fP, \fB\-i\fP,
+and \fB\-k\fP options without arguments,
+although it is strongly recommended that such usage be fixed to
+explicitly specify the character.
+.PP
+As of 4.4BSD,
+executing \fB@TSET@\fP as \fB@RESET@\fP no longer implies the \fB\-Q\fP option.
+Also, the interaction between the \- option and the \fIterminal\fP
+argument in some historic implementations of \fB@TSET@\fP has been removed.
+.PP
+The \fB\-c\fP and \fB\-w\fP options are not found in earlier implementations.
+However, a different window size-change feature was provided in 4.4BSD.
+.bP
+In 4.4BSD, \fBtset\fP uses the window size from the termcap description
+to set the window size if \fBtset\fP is not able to obtain the window
+size from the operating system.
+.bP
+In \fI\%ncurses\fP, \fB@TSET@\fP obtains the window size using
+\fB\%setupterm\fP(3X), which may be from
+the operating system,
+the \fILINES\fP and \fICOLUMNS\fP environment variables or
+the terminal description.
+.PP
+Obtaining the window size from a terminal's type description is common
+to both implementations,
+but considered obsolescent.
+Its only practical use is for hardware terminals.
+Generally,
+the window size will remain uninitialized only if there were a problem
+obtaining the value from the operating system
+(and \fB\%setupterm\fP would still fail).
+The \fILINES\fP and \fI\%COLUMNS\fP environment variables
+may thus be useful for working around window-size problems,
+but have the drawback that if the window is resized,
+their values must be recomputed and reassigned.
+The \fI\%resize\fP(1) program distributed with
+\fI\%xterm\fP(1) assists this activity.

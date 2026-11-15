@@ -1,0 +1,67 @@
+.SH OPTIONS
+The \fB\-h\fP option can be helpful to observe where \fB\%@TOE@\fP is
+looking for terminal descriptions.
+Other options support maintainers of \fIterminfo\fP terminal
+descriptions.
+.TP 9 \" "-u file" + 2n
+.B \-a
+lists entries from all terminal database directories that \fIterminfo\fP
+would search,
+instead of only the first that it finds.
+.IP
+If
+.B \-s
+is also given,
+\fB\%@TOE@\fP
+additionally reports,
+like \fI\%conflict\fP(1),
+which entries correspond to a given terminal database.
+An \*(``*\*('' marks entries that differ,
+and \*(``+\*('' marks equivalent entries.
+.IP
+Without the \fB\-s\fP option,
+\fB\%@TOE@\fP does not attempt to merge duplicates in its report.
+.TP
+.B \-h
+writes a heading naming each directory as it is accessed.
+.TP
+.B \-s
+sorts the output by the entry names.
+.TP
+.BI \-u\  file
+lists terminal type dependencies in \fIfile\fP,
+a \fIterminfo\fP entry source or \fItermcap\fP database file.
+The report summarizes the \*(``\fBuse\fP\*('' (\fIterminfo\fP) and
+\fBtc\fP (\fItermcap\fP) relations:
+each line comprises the primary name of a terminal type employing
+\fBuse\fP/\fBtc\fP capabilities,
+a colon,
+a space- and tab-separated list of primary names of terminal types thus
+named,
+and a newline.
+.TP
+.BI \-U\  file
+lists terminal type reverse dependencies in \fIfile\fP,
+a \fIterminfo\fP entry source or \fItermcap\fP database file.
+The report summarizes the \*(``\fBuse\fP\*('' (\fIterminfo\fP) and
+\fBtc\fP (\fItermcap\fP) reverse relations:
+each line comprises the primary name of a terminal type occurring in
+\fBuse\fP/\fBtc\fP capabilities,
+a colon,
+a space- and tab-separated list of primary names of terminal types
+naming them thus,
+and a newline.
+.TP
+.BR \-v\  [\c
+.IR n ]
+reports verbose status information to the standard error stream,
+showing \fB\%@TOE@\fP's progress.
+.IP
+The optional parameter \fIn\fP is an integer between 1 and 10 inclusive,
+interpreted as for \fB\%@TIC@\fP(1M).
+If \fI\%ncurses\fP is built without tracing support,
+\fIn\fP is ignored.
+.TP
+\fB\-V\fP
+reports the version of \fI\%ncurses\fP associated
+with this program and exits with a successful status.

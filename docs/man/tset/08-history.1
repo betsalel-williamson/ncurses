@@ -1,0 +1,43 @@
+.SH HISTORY
+A \fB\%reset\fP command written by Kurt Shoens appeared in 1BSD
+(March 1978).
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=1BSD/s6/reset.c
+It set the \fIerase\fP and \fIkill\fP characters
+to \fB\*^H\fP (backspace) and \fB@\fP respectively.
+Mark Horton improved this \fB\%reset\fP in 3BSD
+(October 1979),
+adding \fIintr\fP,
+\fIquit\fP,
+\fIstart\fP/\fIstop\fP,
+and \fIeof\fP
+characters as well as changing the program to avoid modifying any user
+settings.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=3BSD/usr/src/cmd/\
+.\"   reset.c
+That version of \fB\%reset\fP did not use \fI\%termcap\fP.
+.PP
+Eric Allman wrote a distinct \fBtset\fP command for 1BSD,
+using a forerunner of \fI\%termcap\fP called \fI\%ttycap\fP.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=1BSD/s6/tset.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=1BSD/man7/ttycap.7
+Allman's comments in the source code indicate
+that he began work in October 1977,
+continuing development over the next few years.
+By late 1979,
+it had migrated to \fI\%termcap\fP and handled the \fI\%TERMCAP\fP
+variable.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=3BSD/usr/src/cmd/\
+.\"   tset/tset.c
+Later comments indicate that \fBtset\fP was modified in September 1980
+to use logic copied from the 3BSD \*(``reset\*('' program when it was
+invoked as \fB\%reset\fP.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=2.9BSD/usr/src/ucb/\
+.\"   tset/tset.c
+This version appeared in 4.1cBSD, \" and backported to 2.9BSD
+late in 1982.
+Other developers such as Keith Bostic and Jim Bloom continued to modify
+\fBtset\fP until 4.4BSD was released in 1993.
+.PP
+The \fI\%ncurses\fP implementation was lightly adapted from the 4.4BSD
+sources to use the \fI\%terminfo\fP API by Eric S.\& Raymond
+<esr@snark.thyrsus.com>.

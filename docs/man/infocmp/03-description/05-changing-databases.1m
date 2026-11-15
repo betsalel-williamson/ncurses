@@ -1,0 +1,23 @@
+.SS "Changing Databases [\-A \fIdirectory\fP] [\-B \fIdirectory\fP]"
+Like other \fI\%ncurses\fP utilities,
+\fB@INFOCMP@\fP looks for the terminal descriptions in several places.
+You can use the \fI\%TERMINFO\fP and \fI\%TERMINFO_DIRS\fP environment
+variables to override the compiled-in default list of places to search.
+See \fBcurses\fP(3X), as well as
+the \fIFetching Compiled Descriptions\fP section in \fBterminfo\fR(5).
+.PP
+You can also use the options \fB\-A\fP
+and \fB\-B\fP to override the list of places to search
+when comparing terminal descriptions:
+.bP
+The \fB\-A\fP option sets the location for the first \fIterminal-type\fP
+.bP
+The \fB\-B\fP option sets the location for the other
+\fIterminal-types\fP.
+.PP
+Using these options, it is possible to
+compare descriptions for a terminal with the same name located in two different
+databases.
+For instance,
+you can use this feature for comparing descriptions for the same terminal
+created by different people.

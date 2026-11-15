@@ -1,0 +1,124 @@
+.SH DESCRIPTION
+.B \%@TIC@
+translates a collection of
+.I \%term\%info
+terminal type descriptions,
+.IR file ","
+into a database of compiled entries used by the
+\fB\%ncurses\fP(3X)
+library.
+If
+.I file
+is
+.RB \*(`` \- \*('',
+.B \%@TIC@
+reads from its standard input stream.
+.PP
+As described in \fBterm\fP(5),
+the database may be either a directory tree
+(one file per terminal entry)
+or a hashed database
+(one record per entry).
+The
+.B \%@TIC@
+command writes only one type of entry,
+depending on how it was built.
+.bP
+For directory trees,
+the top-level directory,
+such as
+.IR \%/usr/share/terminfo ","
+specifies the location of the database.
+.bP
+For hashed databases, a filename is needed.
+If the given file is not found by that name,
+but can be found by adding the suffix \*(``.db\*('',
+then that is used.
+.IP
+The default name for the hashed database is the same as the
+default directory name (only adding a \*(``.db\*('' suffix).
+.PP
+In either case (directory or hashed database),
+.B \%@TIC@
+will create the container if it does not exist.
+For a directory, this would be the \*(``terminfo\*('' leaf,
+versus a
+.I terminfo.db
+file.
+.PP
+The results are normally placed
+in the system
+.I \%term\%info
+database
+.IR \%@TERMINFO@ "."
+The compiled terminal description can be placed
+in a different
+.I \%term\%info
+database.
+There are two ways to achieve this:
+.bP
+First, you may override the system default either by
+using the \fB\-o\fP option,
+or by setting the variable \fI\%TERMINFO\fP
+in the process environment to a valid database location.
+.bP
+Secondly, if
+.B \%@TIC@
+cannot write in
+.I \%@TERMINFO@
+or the location specified using your
+.I \%TERMINFO
+variable,
+it looks for the directory
+.I \%$HOME/.terminfo
+(or hashed database
+.IR $HOME/.terminfo.db );
+if that location exists, the entry is placed there.
+.PP
+Libraries that read
+.I \%term\%info
+entries are expected to check in succession
+.bP
+a location specified by the
+.I \%TERMINFO
+environment variable,
+.bP
+.IR \%$HOME/.terminfo ","
+.bP
+directories listed in the
+.I \%TERMINFO_DIRS
+environment variable,
+.bP
+a compiled-in list of directories
+.RI \%( @TERMINFO_DIRS@ ),
+and
+.bP
+the system
+.I \%term\%info
+database
+.RI \%( @TERMINFO@ ).
+.PP
+Section \*(``Fetching Compiled Descriptions\*('' in \fBterminfo\fP(5)
+goes into further detail.
+.SS Aliases
+.B \%@TIC@
+is the same program as
+.B \%@INFOTOCAP@
+and
+.BR \%@CAPTOINFO@ ";"
+usually those are linked to,
+or copied from, this program.
+.bP
+When invoked as
+.BR \%@INFOTOCAP@ ","
+.B \%@TIC@
+sets the
+.B \-I
+option.
+.bP
+When invoked as
+.BR \%@CAPTOINFO@ ","
+.B \%@TIC@
+sets the
+.B \-C
+option.

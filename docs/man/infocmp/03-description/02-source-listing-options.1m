@@ -1,0 +1,86 @@
+.SS "Source Listing Options [\-I] [\-L] [\-C] [\-r]"
+The \fB\-I\fP, \fB\-L\fP, and \fB\-C\fP options will produce
+a source listing for each terminal named.
+.PP
+.TS
+center;
+Lb L.
+\-I	use \fIterminfo\fP capability codes
+\-L	use \*(``long\*('' capability names
+\-C	use \fItermcap\fP capability codes
+\-r	with \fB\-C\fP, include nonstandard capabilities
+\-K	with \fB\-C\fP, improve BSD compatibility
+.TE
+.PP
+If no \fIterminal-types\fP are given,
+the environment variable \fITERM\fP will be used for the terminal name.
+.PP
+The source produced by the \fB\-C\fP option may be used directly as a
+\fBtermcap\fP entry, but not all parameterized strings can be changed to
+the \fBtermcap\fP format.
+\fB@INFOCMP@\fP will attempt to convert most of the
+parameterized information, and anything not converted will be plainly marked in
+the output and commented out.
+These should be edited by hand.
+.PP
+For best results when converting to \fBtermcap\fP format,
+you should use both \fB\-C\fP and \fB\-r\fP.
+Normally a termcap description is limited to 1023 bytes.
+\fB@INFOCMP@\fP trims away less essential parts to make it fit.
+If you are converting to one of the (rare) termcap implementations
+which accept an unlimited size of termcap,
+you may want to add the \fB\-T\fP option.
+More often however, you must help the termcap implementation,
+and trim excess whitespace (use the \fB\-0\fP option for that).
+.PP
+All padding information for strings will be collected together and placed
+at the beginning of the string where \fBtermcap\fP expects it.
+Mandatory
+padding (padding information with a trailing \*(``/\*('') will become optional.
+.PP
+All \fBtermcap\fP variables no longer supported by \fBterminfo\fP, but which
+are derivable from other \fBterminfo\fP variables, will be output.
+Not all
+\fBterminfo\fP capabilities will be translated; only those variables which were
+part of \fBtermcap\fP will normally be output.
+Specifying the \fB\-r\fP option
+will take off this restriction, allowing all capabilities to be output in
+\fItermcap\fP form.
+Normally you would use both the \fB\-C\fP and \fB\-r\fP options.
+The actual format used incorporates some improvements for escaped characters
+from terminfo format.
+For a stricter BSD-compatible translation, use the \fB\-K\fP option
+rather than \fB\-C\fP.
+.PP
+Note that because padding is collected to the beginning of the capability, not
+all capabilities are output.
+Mandatory padding is not supported.
+Because
+\fBtermcap\fP strings are not as flexible, it is not always possible to convert
+a \fBterminfo\fP string capability into an equivalent \fBtermcap\fP format.
+A subsequent conversion of the \fBtermcap\fP file
+back into \fBterminfo\fP format
+will not necessarily reproduce the original \fBterminfo\fP source.
+.PP
+Some common \fBterminfo\fP parameter sequences, their \fBtermcap\fP
+equivalents, and some terminal types which commonly have such sequences, are:
+.PP
+.TS
+center;
+Lf(BI) Lf(BI) L
+Lb     Lb     L.
+terminfo	termcap	Terminal Types
+_
+.\" ansi-m cup (adm3a has other stuff in between, more like concept)
+%p1%c	%.	ansi\-m
+.\" ansi cub, vt100 cub
+%p1%d	%d	ansi, vt100
+.\" vt52 cup (via vt52-basic)
+%p1%\*' \*'%+%c	%+x	vt52
+.\" ansi cup, vt100 cup
+%i	%iq	ansi, vt100
+.\" annarbor4080 cup
+%p1%?%\*'x\*'%>%t%p1%\*'y\*'%+%;	%>xy	annarbor4080
+.\" hpgeneric cup
+%p2\fR\|.\|.\|.\|\fP%p1	%r	hpgeneric
+.TE

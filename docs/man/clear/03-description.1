@@ -1,0 +1,13 @@
+.SH DESCRIPTION
+\fB\%@CLEAR@\fP clears your terminal's screen and its scrollback buffer,
+if any.
+\fB\%@CLEAR@\fP retrieves the terminal type from the environment
+variable \fITERM\fP,
+then consults the \fIterminfo\fP terminal capability database entry for
+that type to determine how to perform these actions.
+.PP
+The capabilities to clear the screen and scrollback buffer are named
+\*(``clear\*('' and \*(``E3\*('', respectively.
+The latter is a \fIuser-defined capability\fP,
+applying an extension mechanism introduced in \fI\%ncurses\fP 5.0
+(1999).

@@ -1,0 +1,47 @@
+.SS "Use= Option [\-u]"
+The \fB\-u\fP option produces a \fBterminfo\fP source description of the first
+terminal \fIterminal-type\fP which is relative to the sum of the
+descriptions given by the entries for the other \fIterminal-types\fP.
+It does this by
+analyzing the differences between the first \fIterminal-types\fP and the
+other \fIterminal-types\fP and producing a description with \fBuse=\fP
+fields for the other terminals.
+In this manner, it is possible to retrofit generic terminfo
+entries into a terminal's description.
+Or, if two similar terminals exist, but
+were coded at different times or by different people so that each description
+is a full description, using \fB@INFOCMP@\fP
+will show what can be done to change
+one description to be relative to the other.
+.PP
+A capability will be printed with an at-sign (@) if it no longer exists in the
+first \fIterminal-type\fP,
+but one of the other \fIterminal-type\fP entries contains a value for
+it.
+A capability's value will be printed if the value in the first
+\fIterminal-type\fP is not found in any of the other \fIterminal-type\fP
+entries,
+or if the first of the other \fIterminal-type\fP entries that has this
+capability gives a different value for the capability than that in the
+first \fIterminal-type\fP.
+.PP
+The order of the other \fIterminal-type\fP entries is significant.
+Since the
+terminfo compiler \fB@TIC@\fP does a left-to-right scan of the capabilities,
+specifying two \fBuse=\fP entries that contain differing entries for the same
+capabilities will produce different results depending on the order that the
+entries are given in.
+\fB@INFOCMP@\fP will flag any such inconsistencies between
+the other \fIterminal-type\fP entries as they are found.
+.PP
+Alternatively, specifying a capability \fIafter\fP a \fBuse=\fP entry that
+contains that capability will cause the second specification to be ignored.
+Using \fB@INFOCMP@\fP to recreate a description can be a useful check to make
+sure that everything was specified correctly in the original source
+description.
+.PP
+Another error that does not cause incorrect compiled files, but will slow down
+the compilation time, is specifying extra \fBuse=\fP fields that are
+superfluous.
+\fB@INFOCMP@\fP will flag any other \fIterminal-type use=\fP fields that
+were not needed.

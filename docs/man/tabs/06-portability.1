@@ -1,0 +1,31 @@
+.SH PORTABILITY
+IEEE Std 1003.1/The Open Group Base Specifications Issue\ 7
+(POSIX.1-2008)
+describes a
+.I tabs
+utility.
+However,
+.bP
+this standard describes a
+.B +m
+option to set a terminal's left margin.
+Very few of the entries in the terminal database provide the
+.B \%set_left_margin
+.RB ( smgl )
+or
+.B \%set_left_margin_parm
+.RB \%( smglp )
+capabilities needed to support the feature.
+.bP
+Unlike
+.IR tput ,
+.I tabs
+has no specification in X/Open Curses Issue\ 7.
+.PP
+The
+.B \-d
+(debug) and
+.B \-n
+(no-op) options are
+.I \%ncurses
+extensions not provided by other implementations.

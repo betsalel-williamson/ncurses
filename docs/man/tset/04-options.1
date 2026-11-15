@@ -1,0 +1,55 @@
+.SH OPTIONS
+The options are as follows:
+.TP 5
+.B \-c
+Set control characters and modes.
+.TP 5
+.BI \-e\  ch
+Set the erase character to \fIch\fP.
+.TP
+.B \-I
+Do not send the terminal or tab initialization strings to the terminal.
+.TP
+.BI \-i\  ch
+Set the interrupt character to \fIch\fP.
+.TP
+.BI \-k\  ch
+Set the line kill character to \fIch\fP.
+.TP
+.BI \-m\  mapping
+Specify a mapping from a port type to a terminal;
+see subsection \*(``Terminal Type Mapping\*(''.
+.TP
+.B \-Q
+Do not display any values for the erase, interrupt and line kill characters.
+Normally \fB@TSET@\fP displays the values for control characters which
+differ from the system's default values.
+.TP
+.B \-q
+The terminal type is displayed to the standard output, and the terminal is
+not initialized in any way.
+The option \*(``\-\*('' by itself is equivalent but archaic.
+.TP
+.B \-r
+Print the terminal type to the standard error output.
+.TP
+.B \-s
+Print the sequence of shell commands to initialize the environment variable
+\fITERM\fP to the standard output;
+see subsection \*(``Setting the Environment\*(''.
+.TP
+.B \-V
+reports the version of \fI\%ncurses\fP which was used in this program,
+and exits.
+.TP
+.B \-w
+Resize the window to match the size deduced via \fBsetupterm\fP(3X).
+Normally this has no effect,
+unless \fBsetupterm\fP is not able to detect the window size.
+.PP
+The arguments for the \fB\-e\fP, \fB\-i\fP, and \fB\-k\fP
+options may either be entered as actual characters
+or by using the \*(``hat\*(''
+notation, i.e., control-h may be specified as \*(``\*^H\*('' or \*(``\*^h\*(''.
+.PP
+If neither \fB\-c\fP or \fB\-w\fP is given, both options are assumed.
