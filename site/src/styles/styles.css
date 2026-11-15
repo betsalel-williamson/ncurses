@@ -1146,6 +1146,22 @@
     box-shadow: var(--nc-button-shadow);
     font-family: var(--sl-font);
   }
+  /* The copy button sits over the code, so a style whose buttons are see-through still paints it
+     on the listing's own background. */
+  & .expressive-code .copy button {
+    background:
+      linear-gradient(var(--nc-button-bg), var(--nc-button-bg)),
+      var(--code-background);
+  }
+  /* Draw the icon in the style's button text color. Expressive Code's own icon color and its
+     tinted overlay (the div) were made for its default theme, and left a dark icon on Manual
+     page's black button. */
+  & .expressive-code .copy button::after {
+    background-color: var(--nc-button-fg);
+  }
+  & .expressive-code .copy button div {
+    display: none;
+  }
   & .sl-link-button.primary:hover,
   & button.sl-menu-button:hover,
   & .run-example-bar button:not(:disabled):hover {
