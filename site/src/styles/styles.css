@@ -104,9 +104,9 @@ pre,
 .nc-hint[hidden] {
   display: none;
 }
-/* A tap on a linked name in a listing shows its hint, and a second tap follows the link
-   (code-hints.js). Without this, the browser would treat the two taps as a double-tap zoom. */
-.expressive-code a:is(.nc-sym, .nc-def) {
+/* A tap on a linked name in a listing or the prose shows its hint, and a second tap follows the
+   link (code-hints.js). Without this, the browser would treat the two taps as a double-tap zoom. */
+a:is(.nc-sym, .nc-def) {
   touch-action: manipulation;
 }
 .nc-hint code {
@@ -119,6 +119,11 @@ pre,
 .nc-hint-page {
   font-size: var(--sl-text-xs);
   color: var(--nc-hint-page-fg, var(--sl-color-text-accent));
+}
+/* The release the hint quotes (prose-links.mjs, code-links.mjs). */
+.nc-hint-version {
+  font-size: var(--sl-text-xs);
+  opacity: 0.8;
 }
 
 /* Line numbers on longer C listings (code-line-numbers.mjs picks them; Expressive Code's
