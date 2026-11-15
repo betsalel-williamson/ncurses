@@ -1,7 +1,7 @@
 // Copy to run's rules (code-run-copy.mjs), on shell text written for each case.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { FAILED, feedbackNote, stripComment, toRunnable } from '../code-run-copy.mjs';
+import { FAILED, feedbackNote, releaseChecksum, stripComment, toRunnable } from '../code-run-copy.mjs';
 
 const strip = (line) => stripComment(line, { quote: '' }).text;
 
@@ -68,4 +68,17 @@ test('here-documents, option fragments and control flow get no button', () => {
   assert.match(toRunnable('--with-a=1\n--with-b=2').refuse, /options/);
   assert.match(toRunnable('for f in *; do\n  echo $f\ndone').refuse, /control flow/);
   assert.match(toRunnable('make ||\n  echo failed').refuse, /control flow/);
+});
+
+test('a release checksum is looked up by version, and an unlisted release has none', () => {
+  const table = { '6.6': { sha256: 'abc123' } };
+  assert.equal(releaseChecksum('6.6', table), 'abc123');
+  assert.equal(releaseChecksum('6.7', table), undefined);
+});
+
+test('a checksum step is kept and filled, and an unfilled one refuses the copy', () => {
+  const src = 'echo "<sha256>  ncurses-<version>.tar.gz" | sha256sum -c   # check it\ntar zxvf ncurses-<version>.tar.gz';
+  const filled = toRunnable(src, { '<version>': '6.6', '<sha256>': 'abc123' });
+  assert.match(filled.text, /echo "abc123  ncurses-6\.6\.tar\.gz" \| sha256sum -c &&/);
+  assert.ok(toRunnable(src, { '<version>': '6.6' }).refuse);
 });

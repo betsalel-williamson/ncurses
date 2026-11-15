@@ -1,0 +1,6 @@
+{
+  "6.6": {
+    "sha256": "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
+    "checked": "2026-11-15: the same hash for https://ftp.gnu.org/gnu/ncurses/ncurses-6.6.tar.gz and https://invisible-island.net/archives/ncurses/ncurses-6.6.tar.gz; gpg verifies ncurses-6.6.tar.gz.sig as a good signature by key 19882D92DDA4C400C22C0D56CC2AF4472167BE03 (Thomas E. Dickey)"
+  }
+}
