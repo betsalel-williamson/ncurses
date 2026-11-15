@@ -37,3 +37,26 @@
     );
   }
 }
+
+/* On a short or narrow screen the header and the "On this page" bar slide out of view while the
+   reader scrolls down (chrome-autohide.ts sets data-nc-chrome). Starlight fixes the menu button
+   on its own, over the header, so it goes too. The extra 1rem takes a style's drop shadow along. */
+:root[data-nc-chrome='hidden'] :is(header.header, button.sl-menu-button) {
+  transform: translateY(calc(-100% - 1rem));
+}
+:root[data-nc-chrome='hidden'] mobile-starlight-toc nav {
+  transform: translateY(calc(-1 * (var(--sl-nav-height) + var(--sl-mobile-toc-height)) - 1rem));
+}
+:root[data-nc-chrome='hidden'] .sidebar-pane {
+  inset-block-start: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  header.header,
+  button.sl-menu-button,
+  mobile-starlight-toc nav {
+    transition: transform 0.2s ease;
+  }
+  .sidebar-pane {
+    transition: inset-block-start 0.2s ease;
+  }
+}
