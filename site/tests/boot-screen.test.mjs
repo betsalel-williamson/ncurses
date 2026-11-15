@@ -31,3 +31,25 @@ test('with a byte count the bar never runs ahead of the download, and fills when
   assert.equal(barFill(FIRST_MS * 0.75, FIRST_MS, 1), 0.5);
   assert.equal(barFill(FIRST_MS, FIRST_MS, 1), 1);
 });
+
+test('occasions fall on their local dates', async () => {
+  const { occasionsOn, hanukkahNight, kwanzaaDay } = await import('../src/components/boot-screen.js');
+  const on = (y, m, d) => occasionsOn(new Date(y, m - 1, d));
+  assert.deepEqual(on(2026, 11, 4), ['birthday']);
+  assert.deepEqual(on(2026, 10, 12), ['indigenous']);
+  assert.deepEqual(on(2026, 11, 26), ['thanksgiving']);
+  assert.deepEqual(on(2026, 7, 4), ['independence']);
+  assert.deepEqual(on(2026, 3, 3), []);
+  // Hanukkah's first candle is lit on the eve of 25 Kislev.
+  assert.equal(hanukkahNight(new Date(2025, 11, 14)), 1);
+  assert.equal(hanukkahNight(new Date(2026, 11, 4)), 1);
+  assert.equal(hanukkahNight(new Date(2026, 11, 11)), 8);
+  assert.equal(hanukkahNight(new Date(2026, 11, 12)), 0);
+  assert.deepEqual(on(2027, 12, 25), ['christmas', 'hanukkah']);
+  assert.equal(kwanzaaDay(new Date(2026, 11, 26)), 1);
+  assert.equal(kwanzaaDay(new Date(2027, 0, 1)), 7);
+  assert.deepEqual(on(2027, 1, 1), ['newyear', 'kwanzaa']);
+  // Lunar New Year as published, where the browser's calendar is a day off.
+  assert.ok(on(2027, 2, 6).includes('lunarnewyear'));
+  assert.ok(!on(2027, 2, 7).includes('lunarnewyear'));
+});

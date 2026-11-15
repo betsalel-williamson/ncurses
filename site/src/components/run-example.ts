@@ -194,7 +194,8 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
   fitToggle.setAttribute('aria-pressed', String(fitPreferred()));
   const note = document.createElement('span');
   note.className = 'run-example-note';
-  note.textContent = 'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit.';
+  note.textContent =
+    'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.';
   const keys = keyGroup(wantedKeys, (k) => {
     if (!term || !running) return;
     term.input(keySequence(k, term.modes.applicationCursorKeysMode), true);
@@ -206,9 +207,9 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
   // runs past the edge too, and its scroller lets the reader drag to see the rest.
   const scroller = document.createElement('div');
   scroller.className = 'run-example-scroller not-content';
-  scroller.hidden = true;
   scroller.append(screen);
-  box.append(bar, scroller);
+  // The terminal stands blank under the listing before the first run, with its controls below it.
+  box.append(scroller, bar);
 
   const chosen = () => SIZES[size.selectedIndex];
   let term: Terminal | null = null;
@@ -268,11 +269,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
     if (running) pty?.resize(rows, cols);
   });
 
-  const run = async (example: string, label: string, clicked: HTMLButtonElement, size?: number) => {
-    if (running) return;
-    running = true;
-    for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
-    scroller.hidden = false;
+  const open = () => {
     const [cols, rows] = chosen();
     if (!term) {
       term = new Terminal({
@@ -325,9 +322,20 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
     }
     fit();
     term.reset();
+    return term;
+  };
+  // Blank, with no cursor, until the reader runs it.
+  open().write('\x1b[?25l');
+
+  const run = async (example: string, label: string, clicked: HTMLButtonElement, size?: number, verbose = false) => {
+    if (running) return;
+    running = true;
+    for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
+    const term = open();
     term.focus();
     // A boot screen plays while the program loads; its output waits until it has (boot-screen.js).
-    const boot = bootScreen(term, example);
+    // A key typed during it may start an easter egg (r, Esc); any other key waits for the program.
+    const boot = bootScreen(term, example, { verbose });
     scroller.setAttribute('aria-busy', 'true');
     let shown: Promise<void> | null = null;
     const show = (bytes: Uint8Array) => {
@@ -337,7 +345,10 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
     keys.group.hidden = false;
     const encoder = new TextEncoder();
     pty = null;
-    const input = term.onData((d) => pty?.push(encoder.encode(d)));
+    const input = term.onData((d) => {
+      if (!boot.done && boot.key(d)) return;
+      pty?.push(encoder.encode(d));
+    });
     const done = (message: string) => {
       // A program that ends before it draws (an error while loading) ends the boot screen too.
       if (!shown) {
@@ -398,8 +409,10 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
     }
   };
 
-  main.addEventListener('click', () => run(id, title, main, bytes));
-  for (const { v, b } of extra) b.addEventListener('click', () => run(v.id, `${title} (${v.define} defined)`, b, v.bytes));
+  main.addEventListener('click', (e) => run(id, title, main, bytes, e.shiftKey));
+  for (const { v, b } of extra) {
+    b.addEventListener('click', (e) => run(v.id, `${title} (${v.define} defined)`, b, v.bytes, e.shiftKey));
+  }
 }
 
 // exit() ends a program by throwing ExitStatus out of the resumed Asyncify stack; it is the
