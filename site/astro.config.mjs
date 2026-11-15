@@ -64,6 +64,7 @@ export default defineConfig({
             { label: 'Compatibility with older releases', collapsed: true, items: [{ autogenerate: { directory: 'contributing/compatibility' } }] },
           ],
         },
+        { label: 'Ada95 binding', items: [{ autogenerate: { directory: 'contributing/ada' } }] },
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
     }),
