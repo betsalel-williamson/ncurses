@@ -18,12 +18,31 @@ import Default from '@astrojs/starlight/components/ThemeProvider.astro';
   (() => {
     // Styles drawn for one color scheme only. Modern follows the Auto/Light/Dark picker.
     const modes = { textmode: 'dark', workstation: 'light', terminal: 'dark', manpage: 'light' };
-    let style = null;
-    try {
-      style = localStorage.getItem('ncurses-style');
-    } catch {}
+    const known = (s) => s === 'modern' || Object.hasOwn(modes, s);
+    // A link can name a style (?style=terminal), so whoever follows it sees the page the way
+    // the sender did. It counts as choosing that style from the menu, so it's kept from then on.
+    const url = new URL(location.href);
+    let style = url.searchParams.get('style');
+    if (known(style)) {
+      try {
+        localStorage.setItem('ncurses-style', style === 'modern' ? '' : style);
+      } catch {}
+    } else {
+      style = null;
+      try {
+        style = localStorage.getItem('ncurses-style');
+      } catch {}
+    }
     const root = document.documentElement;
-    root.dataset.style = style && Object.hasOwn(modes, style) ? style : 'modern';
+    root.dataset.style = style && known(style) ? style : 'modern';
+    // Keep the address bar naming the style, so a link copied from it opens in the same one.
+    window.ncursesStyleUrl = (s) => {
+      const u = new URL(location.href);
+      if (s === 'modern') u.searchParams.delete('style');
+      else u.searchParams.set('style', s);
+      if (u.href !== location.href) history.replaceState(history.state, '', u);
+    };
+    window.ncursesStyleUrl(root.dataset.style);
     // Keep the color scheme a fixed style needs, whatever Starlight's picker or the system says.
     const force = () => {
       const mode = modes[root.dataset.style];
