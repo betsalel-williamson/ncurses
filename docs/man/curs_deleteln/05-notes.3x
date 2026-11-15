@@ -1,0 +1,12 @@
+.SH NOTES
+All of these functions except
+.B \%winsdelln
+may be implemented as macros.
+.PP
+These functions do not require the terminal
+to possess hardware line deletion or insertion capabilities.
+Even if available,
+by default
+.I curses
+does not use them;
+see \fB\%idlok\fP(3X).

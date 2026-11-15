@@ -1,0 +1,31 @@
+.SH DESCRIPTION
+.B \%waddwstr
+writes the characters of the (wide-null-terminated) wide-character
+string
+.I wstr
+to the window
+.IR win ,
+as if by
+constructing a
+.I cchar_t
+for each
+.I wchar_t
+in
+.IR wstr ,
+then calling \fB\%wadd_wch\fP(3X) with the resulting
+.IR cchar_t .
+.I curses
+processes spacing and non-spacing characters in
+.I wstr
+one at a time.
+.B \%waddnwstr
+is similar,
+but writes at most
+.I n
+wide characters.
+If
+.I n
+is \-1,
+.B \%waddnwstr
+writes the entire wide string.
+\fB\%ncurses\fP(3X) describes the variants of these functions.

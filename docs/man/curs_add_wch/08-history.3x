@@ -1,0 +1,45 @@
+.SH HISTORY
+X/Open Curses Issue\ 4 (1995) initially specified these functions.
+The System\ V Interface Definition (SVID) Version\ 4
+of the same year
+specified functions named
+.I \%waddwch
+(and the usual variants),
+.IR \%echowchar ","
+and
+.IR \%wechowchar "."
+.\" SVID 4, vol 3., p. 475
+These were later additions to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+They differed from X/Open's later
+.I \%wadd_wch
+and
+.I \%wecho_wchar
+in that they each took an argument of type
+.I \%wchar_t
+instead of
+.IR \%cchar_t "."
+SVID defined no
+.I \% WACS_
+symbols.
+.PP
+X/Open Curses Issue\ 4 also defined many of the
+.I WACS_
+constants,
+excepting
+.IR \%WACS_GEQUAL ","
+.IR \%WACS_LEQUAL ","
+.IR \%WACS_NEQUAL ","
+.IR \%WACS_PI ","
+.IR \%WACS_S3 ","
+.IR \%WACS_S7 ","
+and
+.IR \%WACS_STERLING ";"
+and those for drawing thick and double lines.
+.PP
+.I \%ncurses
+5.3 (2002)
+furnished the remaining
+.I WACS_
+constants.

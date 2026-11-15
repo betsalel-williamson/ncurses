@@ -1,0 +1,21 @@
+.SH DESCRIPTION
+.B \%waddstr
+writes the characters of the (null-terminated) string
+.I str
+to the window
+.IR win ,
+as if by calling \fB\%waddch\fP(3X) for each
+.I char
+in
+.IR str .
+.B \%waddnstr
+is similar,
+but writes at most
+.I n
+characters.
+If
+.I n
+is \-1,
+.B \%waddnstr
+writes the entire string.
+\fB\%ncurses\fP(3X) describes the variants of these functions.

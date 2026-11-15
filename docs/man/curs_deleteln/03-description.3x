@@ -1,0 +1,37 @@
+.SH DESCRIPTION
+.B \%wdeleteln
+deletes the line at the cursor in
+.IR win ;
+all lines below it move up one line.
+.I curses
+then fills the bottom line of
+.I win
+with the background character
+configured by \fB\%wbkgdset\fP(3X)
+(wide-character API users: \fB\%wbkgrndset\fP(3X)).
+The cursor position does not change.
+.PP
+.B \%winsertln
+inserts a new, empty line of characters above the line at the cursor in
+.IR win ,
+shifting the existing lines down by one.
+The content of the window's bottom line is lost;
+.I curses
+fills the new line with the background character.
+The cursor position does not change.
+.PP
+.B \%winsdelln
+inserts or deletes
+.IR n\  lines
+in
+.I win
+as
+.I n
+is positive or negative,
+respectively,
+as if by repeatedly calling
+.B \%winsertln
+or
+.BR \%wdeleteln "."
+.BR \%winsdelln( ".\|.\|." ", 0)"
+performs no operation.

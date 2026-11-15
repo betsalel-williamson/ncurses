@@ -1,0 +1,114 @@
+.SH HISTORY
+4BSD (1980)
+introduced
+.I \%wprintw
+and its variants.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/src/lib/\
+.\"   libcurses/printw.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/src/lib/\
+.\"   libcurses/mvprintw.c
+It implemented all as functions,
+not macros;
+this initial distribution of
+.I curses
+preceded the ANSI C standard of 1989,
+prior to which a variadic macro facility was not widely available
+in the language.
+.I \%printw
+went unused in Berkeley distributions until 4.1cBSD (1983),
+which employed it in games.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.1cBSD/usr/src/\
+.\"   games/canfield.c
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.1cBSD/usr/src/\
+.\"   games/worm.c
+4BSD's
+.I \%wprintw
+did not use
+.IR \%varargs.h ","
+which had been available since Seventh Edition Unix (1979).
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=V7/usr/include/\
+.\"  varargs.h
+In 1991
+(a couple of years after SVr4 was generally available,
+and after the C standard was published),
+other developers updated the library,
+using
+.I \%stdarg.h
+internally in 4.4BSD
+.IR curses .
+Even with this improvement,
+BSD
+.I curses
+did not use function prototypes
+(nor even declare functions)
+in
+.I \%curses.h
+until 1992.
+.PP
+4BSD documented
+.I \%printw
+and
+.I \%wprintw
+tersely as \*(``printf on
+.IR \%stdscr "\*(''"
+and \*(``printf on
+.IR win "\*('',"
+respectively.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=4BSD/usr/man/man3/\
+.\"  curses.3
+.PP
+SVr3 (1987) summarized the functions in three lines,
+asserting that they were analogous to \fI\%printf\fP(3)
+and explaining that the string that \fI\%printf\fP(3) would write to the
+standard output stream would instead be output using
+.I \%waddstr
+to the given window.
+.\" GBR can't find a source to cite for this paraphrase,
+.\" even after checking
+.\" <https://github.com/ryanwoodsmall/oldsysv/tree/master>.
+.\"
+.\" The indicated paraphrase is from page 432:
+.\" Unix System V Programmer's Reference Manual
+.\" Prentice-Hall
+.\" ISBN 0-13-940479-1
+.\" (bitsavers has 3rd printing from 1987)
+.\"
+.\" This lists mvprintw without detail, and printw as "printf on stdscr":
+.\" Unix Programmer's Manual
+.\" System Calls and Library Routines
+.\" CBS College Publishing's UNIX System Library
+.\" Holt, Rinehard and Winston, 1986
+.\" ISBN 0-03-009314-7
+.PP
+SVr3 added
+.IR \%vwprintw ","
+describing its third parameter as a
+.IR \%va_list ","
+defined in
+.IR \%varargs.h ","
+and referred the reader to the manual pages for
+.I \%varargs
+and
+.I \%vprintf
+for detailed descriptions.
+.PP
+SVr4 (1989) introduced no new variations of
+.IR \%printw ","
+but provided for using either
+.I \%varargs.h
+or
+.I \%stdarg.h
+to define the
+.I \%va_list
+type.
+.\" either header declares "va_list", but only one can be used
+.PP
+X/Open Curses Issue\ 4 (1995),
+defined
+.I \%vw_printw
+to replace
+.IR \%vwprintw ","
+stating that its
+.I \%va_list
+type is defined in
+.IR \%stdarg.h "."

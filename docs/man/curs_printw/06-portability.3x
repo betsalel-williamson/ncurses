@@ -1,0 +1,25 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+.I \%ncurses
+defines \fB\%vw_printw\fP and \fB\%vwprintw\fP identically to support
+legacy applications.
+However,
+the latter is obsolete.
+.bP
+X/Open Curses Issue\ 4 Version\ 2 (1996),
+marked \fB\%vwprintw\fP as requiring \fI\%varargs.h\fP and
+\*(``TO BE WITHDRAWN\*('',
+and specified \fB\%vw_printw\fP using the \fI\%stdarg.h\fP interface.
+.bP
+X/Open Curses Issue\ 5, Draft 2
+(December 2007) marked \fBvwprintw\fP (along with
+\fBvwscanw\fP and the \fItermcap\fP interface) as withdrawn.
+After incorporating review comments,
+this became
+X/Open Curses Issue\ 7 (2009).
+.bP
+.I \%ncurses
+provides \fB\%vwprintw\fP,
+but marks it as deprecated.

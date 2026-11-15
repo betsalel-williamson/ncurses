@@ -1,0 +1,34 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+they return
+.B ERR
+if
+.bP
+.I win
+is
+.IR NULL ","
+.bP
+.I wstr
+is
+.IR NULL ","
+.bP
+the first wide character in
+.I wstr
+is a non-spacing character,
+or
+.bP
+an internal \fB\%wins_wch\fP(3X) call returns
+.BR ERR "."
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

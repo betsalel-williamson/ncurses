@@ -1,0 +1,15 @@
+.SH DESCRIPTION
+.B \%wins_wch
+inserts the
+.I curses
+complex character
+.I wch
+at the cursor position in the window
+.IR win "."
+The character previously at the cursor and any to its right move one
+cell to the right;
+the formerly rightmost character on the line is discarded.
+Unlike \fB\%add_wch\fP(3X),
+.B \%wins_wch
+does not advance the cursor.
+\fB\%ncurses\fP(3X) describes the variants of this function.

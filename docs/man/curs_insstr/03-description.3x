@@ -1,0 +1,35 @@
+.SH DESCRIPTION
+.B \%winsstr
+inserts a string
+.I str
+before the character at the cursor in window
+.I win
+as if by calling \fBwinsch\fP(3X) for each
+.I char
+in
+.IR str "."
+No line wrapping is performed.
+Characters to the right of the cursor are shifted right;
+those at the right edge of the window may be lost.
+.B \%winsstr
+stops inserting if it would have to wrap to the next line to write the
+next
+.I \%char
+in
+.IR str "."
+The cursor position does not change
+(after moving to
+.RI ( y ,
+.IR x "),"
+if specified).
+.B \%insnstr
+does the same,
+but inserts at most
+.I n
+characters,
+or as many as possible
+(up to the end of the line)
+if
+.I n
+is negative.
+\fB\%ncurses\fP(3X) describes the variants of these functions.

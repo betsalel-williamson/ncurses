@@ -1,0 +1,14 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint addstr(const char * \fIstr\fP);
+\fBint waddstr(WINDOW * \fIwin\fP, const char * \fIstr\fP);
+\fBint mvaddstr(int \fIy\fP, int \fIx\fP, const char * \fIstr\fP);
+\fBint mvwaddstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, const char * \fIstr\fP);
+.PP
+\fBint addnstr(const char * \fIstr\fP, int \fIn\fP);
+\fBint waddnstr(WINDOW * \fIwin\fP, const char * \fIstr\fP, int \fIn\fP);
+\fBint mvaddnstr(int \fIy\fP, int \fIx\fP, const char * \fIstr\fP, int \fIn\fP);
+\fBint mvwaddnstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, const char * \fIstr\fP, int \fIn\fP);
+.fi
