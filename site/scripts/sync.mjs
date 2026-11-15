@@ -44,11 +44,11 @@ const GUIDES = [
   { src: 'docs/contributor/hackguide', route: 'contributing/hackguide', indexLabel: 'Introduction' },
   { src: 'docs/contributor/install', route: 'contributing/install', indexLabel: 'Introduction' },
   { src: 'docs/contributor/ada', route: 'contributing/ada', indexLabel: 'Introduction' },
-  { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Overview' },
-  { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Overview' },
-  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Overview' },
+  { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Introduction' },
+  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Introduction' },
   // A glossary is looked up, not read in order, so its terms are listed A to Z.
-  { src: 'docs/glossary', route: 'glossary', indexLabel: 'Overview', alphabetical: true },
+  { src: 'docs/glossary', route: 'glossary', indexLabel: 'Introduction', alphabetical: true },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
 ];
 const base = `/${repoSlug.split('/')[1]}`;
