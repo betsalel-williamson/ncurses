@@ -1,11 +1,10 @@
 /**
  * The search field's rotating hint. While the search dialog is open and the field is empty, a
  * hint over the field cycles through things a reader might look up, until they tap the field or
- * type. Each style picks its effect in CSS with --nc-search-hint-effect:
- *
- * - `type`: erase the old term and type the new one behind a blinking cursor. Terminal also sets
- *   --nc-search-hint-strike, so each typed character lights up in that color and fades.
- * - `slide`: the old term rises and fades while the new one rises in.
+ * type. The four period styles erase the old term and type the new one behind a blinking cursor,
+ * each at its own pace (TYPE below); the cursor's shape and blink rate are set in CSS. Terminal
+ * also sets --nc-search-hint-strike, so each typed character lights up in that color and fades.
+ * Modern slides: the old term rises and fades while the new one rises in.
  *
  * The hint is an aria-hidden element, so screen readers hear the field's fixed label, never the
  * rotating text. With reduced motion the hint is one fixed example. The real placeholder stays
@@ -42,10 +41,23 @@ const TOPICS: Topic[] = [
 const STATIC_HINT = "e.g. initscr";
 const LABEL = "Search the docs";
 
-const TYPE_MS = 60;
-const ERASE_MS = 28;
-const BLANK_MS = 250;
-const HOLD_MS = 1800;
+interface Typing {
+  /** Milliseconds per typed character. */
+  type: number;
+  /** How long a finished term holds. */
+  hold: number;
+  /** Milliseconds per erased character. */
+  erase: number;
+  /** The pause between the last erase and the first typed character. */
+  blank: number;
+}
+
+const TYPE: Record<string, Typing> = {
+  textmode: { type: 60, hold: 1800, erase: 28, blank: 250 },
+  workstation: { type: 55, hold: 2000, erase: 30, blank: 250 },
+  manpage: { type: 70, hold: 2400, erase: 35, blank: 300 },
+  terminal: { type: 65, hold: 1800, erase: 28, blank: 250 },
+};
 const SLIDE_DWELL_MS = 2600;
 const SLIDE_MS = 240;
 const STRIKE_MS = 650;
@@ -155,12 +167,9 @@ class SearchHint {
     this.hint.hidden = this.input.value.length > 0;
   }
 
-  private effect(): string {
-    return (
-      getComputedStyle(this.form)
-        .getPropertyValue("--nc-search-hint-effect")
-        .trim() || "slide"
-    );
+  /** The current style's typing pace, or undefined for the styles that slide. */
+  private typing(): Typing | undefined {
+    return TYPE[document.documentElement.dataset.style ?? ""];
   }
 
   private label(i: number): string {
@@ -198,7 +207,8 @@ class SearchHint {
       }
       this.tick();
     };
-    if (this.effect() === "type") this.type(next);
+    const t = this.typing();
+    if (t) this.type(t, next);
     else this.slide(next);
   }
 
@@ -207,7 +217,7 @@ class SearchHint {
     return this.current;
   }
 
-  private type(done: () => void): void {
+  private type(t: Typing, done: () => void): void {
     const w = this.slot.firstElementChild as HTMLSpanElement | null;
     if (!w) return;
     const old = w.textContent ?? "";
@@ -216,15 +226,19 @@ class SearchHint {
     const strike = getComputedStyle(this.form)
       .getPropertyValue("--nc-search-hint-strike")
       .trim();
+    const hint = getComputedStyle(this.hint).color;
 
-    this.wait(HOLD_MS, () => {
+    // The cursor blinks while it rests, during the hold and the blank, and stays lit while it moves.
+    this.wait(t.hold, () => {
       this.cursor.classList.remove("blinking");
       let n = old.length;
       const erase = (): void => {
         n -= 1;
         w.replaceChildren(old.slice(0, Math.max(n, 0)), this.cursor);
-        if (n > 0) return this.wait(ERASE_MS, erase);
-        this.wait(BLANK_MS, () => {
+        if (n > 0) return this.wait(t.erase, erase);
+        this.cursor.classList.add("blinking");
+        this.wait(t.blank, () => {
+          this.cursor.classList.remove("blinking");
           const text = this.nextLabel();
           let k = 0;
           const typeOne = (): void => {
@@ -233,7 +247,13 @@ class SearchHint {
             this.cursor.before(ch);
             if (strike) {
               ch.animate(
-                [{ color: strike, textShadow: `0 0 0.5em ${strike}` }, {}],
+                [
+                  {
+                    color: strike,
+                    textShadow: `0 0 8px ${strike}, 0 0 2px ${strike}`,
+                  },
+                  { color: hint, textShadow: "0 0 0 transparent" },
+                ],
                 {
                   duration: STRIKE_MS,
                   easing: "cubic-bezier(.1,.6,.3,1)",
@@ -241,7 +261,7 @@ class SearchHint {
               );
             }
             k += 1;
-            if (k < text.length) return this.wait(TYPE_MS, typeOne);
+            if (k < text.length) return this.wait(t.type, typeOne);
             this.cursor.classList.add("blinking");
             done();
           };

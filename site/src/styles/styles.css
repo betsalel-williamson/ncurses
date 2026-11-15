@@ -1502,24 +1502,33 @@
    other styles erase and type each term behind a blinking cursor shaped like the era's own:
    an underline for the CGA text screen, a block for the amber terminal, and a bar for the
    workstation and the printed page. Terminal's typed characters strike bright and fade. */
+/* The typing cursor, one per era: a thin I-beam bar like a Motif text field's (Workstation and
+   Manual page, 500 ms on and 500 ms off), the BIOS underline (Text mode, the CGA rate of about
+   1.9 Hz) and a solid amber block (Terminal, 600 ms). */
 :root {
-  --nc-search-hint-effect: slide;
-  --nc-search-hint-cursor-w: 2px;
-  --nc-search-hint-cursor-h: 1em;
-  --nc-search-hint-cursor-y: -0.15em;
-}
-:root[data-style]:not([data-style="modern"]) {
-  --nc-search-hint-effect: type;
+  --nc-search-hint-cursor-w: 1.5px;
+  --nc-search-hint-cursor-h: 1.1em;
+  --nc-search-hint-cursor-y: -0.2em;
+  --nc-search-hint-cursor-gap: 2px;
+  --nc-search-hint-cursor-bg: currentColor;
+  --nc-search-hint-cursor-opacity: 1;
+  --nc-search-hint-blink: 1000ms;
 }
 :root[data-style="textmode"] {
   --nc-search-hint-cursor-w: 0.5em;
   --nc-search-hint-cursor-h: 0.12em;
   --nc-search-hint-cursor-y: -0.1em;
+  --nc-search-hint-cursor-gap: 1px;
+  --nc-search-hint-blink: 534ms;
 }
 :root[data-style="terminal"] {
   --nc-search-hint-strike: #ffc84a;
   --nc-search-hint-cursor-w: 0.55em;
-  --nc-search-hint-cursor-y: -0.2em;
+  --nc-search-hint-cursor-h: 1.05em;
+  --nc-search-hint-cursor-gap: 1px;
+  --nc-search-hint-cursor-bg: #ffb000;
+  --nc-search-hint-cursor-opacity: 0.8;
+  --nc-search-hint-blink: 600ms;
 }
 /* Each style colors the placeholder with a more specific rule, so this one has to insist. */
 #starlight__search
@@ -1560,12 +1569,13 @@
   display: inline-block;
   width: var(--nc-search-hint-cursor-w);
   height: var(--nc-search-hint-cursor-h);
-  margin-inline-start: 1px;
+  margin-inline-start: var(--nc-search-hint-cursor-gap);
   vertical-align: var(--nc-search-hint-cursor-y);
-  background: currentColor;
+  background: var(--nc-search-hint-cursor-bg);
+  opacity: var(--nc-search-hint-cursor-opacity);
 }
 .nc-search-hint-cursor.blinking {
-  animation: nc-search-hint-blink 534ms steps(1) infinite;
+  animation: nc-search-hint-blink var(--nc-search-hint-blink) steps(1) infinite;
 }
 @keyframes nc-search-hint-blink {
   50% {
