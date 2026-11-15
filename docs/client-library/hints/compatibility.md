@@ -8,7 +8,7 @@ Despite the maintainers' best efforts, there are some differences between ncurse
 
 If you define two windows A and B that overlap, and then alternately scribble on and refresh them, what happens to the overlapping region was often not documented precisely in historic curses versions.
 
-To understand why this is a problem, remember that screen updates are calculated between two representations of the entire display. The documentation says that when you refresh a window, it is first copied to the virtual screen, and then changes are calculated to update the physical screen and applied to the terminal. But "copied to" isn't very specific, and subtle differences in how copying works can produce different behaviors when two overlapping windows are each refreshed at unpredictable intervals.
+To understand why this is a problem, remember that screen updates are calculated between two representations of the entire display. The documentation says that when you refresh a window, it is first copied to the [virtual screen](../../glossary/virtual-screen.md), and then changes are calculated to update the physical screen and applied to the terminal. But "copied to" isn't very specific, and subtle differences in how copying works can produce different behaviors when two overlapping windows are each refreshed at unpredictable intervals.
 
 What happens to the overlapping region depends on what `wnoutrefresh()` does with its argument: which parts of the argument window it copies to the virtual screen. Some implementations do a change copy, copying only the locations in the window that have changed, or have been marked changed with `wtouchln()` and friends. Others do an entire copy, copying every window location to the virtual screen whether or not it has changed.
 
@@ -18,7 +18,7 @@ For most commercial curses implementations, it isn't documented, and the ncurses
 
 It might therefore be unwise to rely on either behavior in programs that might be linked with other curses implementations. Instead, call `touchwin()` before `wnoutrefresh()` to guarantee an entire copy anywhere.
 
-The really clean way to handle this is the [panels library](../panels/index.md). When you want a screen update, call `update_panels()`. It makes all the necessary `wnoutrefresh()` calls for whatever panel stacking order you have defined. Then one `doupdate()` makes all your updates in a single burst of physical I/O.
+The really clean way to handle this is the [panels library](../panels/index.md). When you want a screen update, call `update_panels()`. It makes all the necessary `wnoutrefresh()` calls for whatever [panel](../../glossary/panel.md) stacking order you have defined. Then one `doupdate()` makes all your updates in a single burst of physical I/O.
 
 ## Background erase
 

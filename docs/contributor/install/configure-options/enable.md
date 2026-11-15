@@ -14,7 +14,7 @@ NOTE: With ncurses 5.1, this may not be necessary, since we are told that some l
 
 ## `--enable-bsdpad`
 
-Recognize BSD-style prefix padding. Some programs written using the BSD curses API use tputs("50") to implement delays.
+Recognize BSD-style prefix padding. Some programs written using the [BSD curses](../../../glossary/bsd-curses.md) API use tputs("50") to implement delays.
 
 ## `--enable-check-size`
 
@@ -22,7 +22,7 @@ Compile-in feature to detect screensize for terminals which do not advertise the
 
 ## `--enable-colorfgbg`
 
-Compile with experimental `$COLORFGBG` code. That environment variable is set by some terminal emulators as a hint to applications, by advertising the default foreground and background colors. During initialization, ncurses sets color pair 0 to match this.
+Compile with experimental `$COLORFGBG` code. That environment variable is set by some terminal emulators as a hint to applications, by advertising the default foreground and background colors. During initialization, ncurses sets [color pair](../../../glossary/color-pair.md) 0 to match this.
 
 ## `--enable-conpty`
 
@@ -34,7 +34,7 @@ This also turns on `--enable-named-pipes` by default.
 
 The curses interface as documented in XSI is rather old, in fact including features that precede ANSI C. The prototypes generally do not make effective use of "const". When using stricter compilers (or gcc with appropriate warnings), you may see warnings about the mismatch between const and non-const data. We provide a configure option which changes the interfaces to use const - quieting these warnings and reflecting the actual use of the parameters more closely. The ncurses library uses the symbol `NCURSES_CONST` for these instances of const, and if you have asked for compiler warnings, will add gcc's const-qual warning. There will still be warnings due to subtle inconsistencies in the interface, but at a lower level.
 
-NOTE: configuring ncurses with this option may detract from the portability of your applications by encouraging you to use const in places where the XSI curses interface would not allow them. Similar issues arise when porting to SVr4 curses, which uses const in even fewer places.
+NOTE: configuring ncurses with this option may detract from the portability of your applications by encouraging you to use const in places where the XSI curses interface would not allow them. Similar issues arise when porting to [SVr4](../../../glossary/svr4.md) curses, which uses const in even fewer places.
 
 This option is on by default for ABI 6, the default ABI.
 
@@ -48,7 +48,7 @@ This is an obsolete option used for configuring the Windows 10 driver for MinGW.
 
 ## `--enable-ext-colors`
 
-Extend the `cchar_t` structure to allow more than 16 colors to be encoded. This applies only to the wide-character (`--enable-widec`) configuration.
+Extend the [`cchar_t`](../../../glossary/complex-character.md) structure to allow more than 16 colors to be encoded. This applies only to the wide-character (`--enable-widec`) configuration.
 
 NOTE: using this option will make libraries which are not binary-compatible with libncursesw 5.4. None of the interfaces change, but applications which have an array of `cchar_t`'s must be recompiled.
 
@@ -186,7 +186,7 @@ If your system supports symbolic links, make tic use symbolic links rather than 
 
 ## `--enable-tcap-names`
 
-Compile-in support for user-definable terminal capabilities. Use the -x option of tic and infocmp to treat unrecognized terminal capabilities as user-defined strings. This option is the default, unless you have disabled the extended functions.
+Compile-in support for user-definable [terminal capabilities](../../../glossary/terminal-capability.md). Use the -x option of tic and infocmp to treat unrecognized terminal capabilities as user-defined strings. This option is the default, unless you have disabled the extended functions.
 
 ## `--enable-term-driver`
 

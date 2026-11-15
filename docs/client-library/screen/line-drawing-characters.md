@@ -2,7 +2,7 @@
 
 > Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-If you have ever programmed in DOS, you know about the nifty characters in the extended character set. They are printable only on some terminals. ncurses functions like `box()` use these characters. Their names all start with `ACS_`, meaning alternate character set. You might have noticed them in some of the programs in these guides. Here is an example showing all the characters.
+If you have ever programmed in DOS, you know about the nifty characters in the extended character set. They are printable only on some terminals. ncurses functions like `box()` use these characters. Their names all start with `ACS_`, meaning [alternate character set](../../glossary/alternate-character-set.md). You might have noticed them in some of the programs in these guides. Here is an example showing all the characters.
 
 **Example: ACS Variables Example**
 

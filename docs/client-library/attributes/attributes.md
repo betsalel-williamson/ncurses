@@ -4,7 +4,7 @@
 
 The ncurses package supports screen highlights including standout, reverse video, underline and blink. It also supports color, which is treated as another kind of highlight.
 
-Highlights are encoded, internally, as high bits of the pseudo-character type (`chtype`) that `curses.h` uses to represent the contents of a screen cell. See the `curses.h` header file for a complete list of highlight mask values (look for the prefix `A_`).
+Highlights are encoded, internally, as high bits of the pseudo-character type ([`chtype`](../../glossary/chtype.md)) that `curses.h` uses to represent the contents of a screen cell. See the `curses.h` header file for a complete list of highlight mask values (look for the prefix `A_`).
 
 There are two ways to make highlights. One is to logical-OR the value of the highlights you want into the character argument of an `addch()` call, or any other output call that takes a `chtype` argument, as [Output](../output/characters-and-strings.md#the-addch-class-of-functions) shows. The other is to set the current-highlight value, which is logical-ORed with any highlight you specify the first way. You do this with the functions `attron()`, `attroff()` and `attrset()`.
 
@@ -83,7 +83,7 @@ main(int argc, char *argv[])
 
 On the site, the program reads its own listing: the page passes it the file name `example.c`. Press any key at `<-Press Any Key->` to see the next screen.
 
-Don't worry about all that initialization. Concentrate on the while loop. It reads each character in the file and searches for the pattern `/*`. Once it spots the pattern, it switches the bold attribute on with `attron()`. When we get the pattern `*/`, it is switched off by `attroff()`.
+Don't worry about all that initialization. Concentrate on the while loop. It reads each character in the file and searches for the pattern `/*`. Once it spots the pattern, it switches the bold [attribute](../../glossary/attribute.md) on with `attron()`. When we get the pattern `*/`, it is switched off by `attroff()`.
 
 The program also introduces two useful functions, `getyx()` and `move()`. The first gets the coordinates of the present cursor into the variables `y` and `x`. Since `getyx()` is a macro, we don't have to pass pointers to variables. The function `move()` moves the cursor to the coordinates given to it.
 

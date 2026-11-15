@@ -2,7 +2,7 @@
 
 > Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-As you have seen in almost all of the earlier examples, it is very easy to get key input from the user. A simple way of getting key presses is to use the `getch()` function. Enable cbreak mode to read keys when you are interested in individual key hits rather than complete lines of text (which usually end with a carriage return). Enable keypad to get the function keys, arrow keys and so on. [Initialization](../getting-started/initialization.md#keypad) has the details.
+As you have seen in almost all of the earlier examples, it is very easy to get key input from the user. A simple way of getting key presses is to use the `getch()` function. Enable [cbreak mode](../../glossary/cbreak-mode.md) to read keys when you are interested in individual key hits rather than complete lines of text (which usually end with a carriage return). Enable keypad to get the function keys, arrow keys and so on. [Initialization](../getting-started/initialization.md#keypad) has the details.
 
 `getch()` returns an integer corresponding to the key pressed. If it is a normal character, the integer value is equal to the character. Otherwise it returns a number which can be matched with the constants defined in `curses.h`. For example, if the user presses F1, the integer returned is 265. This can be checked using the macro `KEY_F()` defined in `curses.h`. This makes reading keys portable and easy to manage.
 

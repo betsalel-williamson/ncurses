@@ -86,7 +86,7 @@ _nc_freeall()           debug
 
 ### Interface changes
 
-- revert termcap ospeed variable to 'short' (see discussion of the `--with-ospeed` configure option).
+- revert [termcap](../../../glossary/termcap.md) ospeed variable to 'short' (see discussion of the `--with-ospeed` configure option).
 
 ## 5.1 (July 8, 2000)
 
@@ -134,7 +134,7 @@ a) If you use the extended terminfo names (i.e., you used configure `--enable-tc
 
 - the last two capabilities in the obsolete/extended list are memu and meml, which are found in most terminfo descriptions for xterm.
 
-  When trying to read this terminfo entry, the spurious `lseek()` causes the library to attempt to read the final portion of the terminfo data (the text of the string capabilities) 4 characters past its starting point, and reads 4 characters too few. The library rejects the data, and applications are unable to initialize that terminal type.
+  When trying to read this terminfo entry, the spurious `lseek()` causes the library to attempt to read the final portion of the terminfo data (the text of the string capabilities) 4 characters past its starting point, and reads 4 characters too few. The library rejects the data, and applications are unable to initialize that [terminal type](../../../glossary/terminal-type.md).
 
 FIX: remove memu and meml from the xterm description. They are obsolete, not used by ncurses. (It appears that the feature was added to xterm to make it more like hpterm).
 

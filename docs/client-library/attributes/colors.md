@@ -61,7 +61,7 @@ main(void)
 }
 ```
 
-As you can see, to start using color, you should first call the function `start_color()`. After that, you can use the color capabilities of your terminal using various functions. To find out whether a terminal has color capabilities or not, you can use the `has_colors()` function, which returns `FALSE` if the terminal does not support color.
+As you can see, to start using color, you should first call the function `start_color()`. After that, you can use the color [capabilities](../../glossary/terminal-capability.md) of your terminal using various functions. To find out whether a terminal has color capabilities or not, you can use the `has_colors()` function, which returns `FALSE` if the terminal does not support color.
 
 Curses initializes all the colors supported by the terminal when `start_color()` is called. These can be accessed by the defined constants like `COLOR_BLACK`, etc.
 

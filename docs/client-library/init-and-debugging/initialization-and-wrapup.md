@@ -4,7 +4,7 @@
 
 ## `initscr()`
 
-The first function called should almost always be `initscr()`. It determines the terminal type and initializes the curses data structures. `initscr()` also arranges that the first call to `refresh()` clears the screen. If an error occurs, `initscr()` writes a message to standard error and the program exits. Otherwise it returns a pointer to `stdscr`.
+The first function called should almost always be `initscr()`. It determines the [terminal type](../../glossary/terminal-type.md) and initializes the curses data structures. `initscr()` also arranges that the first call to `refresh()` clears the screen. If an error occurs, `initscr()` writes a message to standard error and the program exits. Otherwise it returns a pointer to [`stdscr`](../../glossary/stdscr.md).
 
 A few functions may be called before `initscr()`:
 

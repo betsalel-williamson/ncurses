@@ -10,7 +10,7 @@ A form is a collection of fields; each field may be either a label (explanatory 
 
 To make forms, you create groups of fields and connect them with form frame objects; the form library makes this relatively simple.
 
-Once defined, a form can be *posted*, that is written to an associated window. Actually, each form has two associated windows; a containing window in which the programmer can scribble titles or borders, and a subwindow in which the form fields proper are displayed.
+Once defined, a form can be *posted*, that is written to an associated [window](../../glossary/window.md). Actually, each form has two associated windows; a containing window in which the programmer can scribble titles or borders, and a [subwindow](../../glossary/subwindow.md) in which the form fields proper are displayed.
 
 As the form user fills out the posted form, navigation and editing keys support movement between fields, editing keys support modifying field, and plain text adds to or changes data in a current field. The form library allows you (the forms designer) to bind each navigation and editing key to any keystroke accepted by `curses` Fields may have validation conditions on them, so that they check input data for type and value. The form library supplies a rich set of pre-defined field types, and makes it relatively easy to define new ones.
 

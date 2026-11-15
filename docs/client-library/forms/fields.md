@@ -15,7 +15,7 @@ FIELD *new_field(int height, int width,   /* new field size */
 
 Menu items always occupy a single row, but forms fields may have multiple rows. So `new_field()` requires you to specify a width and height (the first two arguments, which mist both be greater than zero).
 
-You must also specify the location of the field's upper left corner on the screen (the third and fourth arguments, which must be zero or greater). Note that these coordinates are relative to the form subwindow, which will coincide with `stdscr` by default but need not be `stdscr` if you have done an explicit `set_form_win()` call.
+You must also specify the location of the field's upper left corner on the screen (the third and fourth arguments, which must be zero or greater). Note that these coordinates are relative to the form subwindow, which will coincide with [`stdscr`](../../glossary/stdscr.md) by default but need not be `stdscr` if you have done an explicit `set_form_win()` call.
 
 The fifth argument allows you to specify a number of off-screen rows. If this is zero, the entire field will always be displayed. If it is nonzero, the form will be scrollable, with only one screen-full (initially the top part) displayed at any given time. If you make a field dynamic and grow it so it will no longer fit on the screen, the form will become scrollable even if the `offscreen` argument was initially zero.
 
@@ -215,7 +215,7 @@ main(void)
 }
 ```
 
-Play with the color pairs and try to understand the foreground and background attributes. In my programs using color attributes, I usually set only the background with `set_field_back()`. Curses simply doesn't allow defining individual color attributes.
+Play with the [color pairs](../../glossary/color-pair.md) and try to understand the foreground and background attributes. In my programs using color attributes, I usually set only the background with `set_field_back()`. Curses simply doesn't allow defining individual color attributes.
 
 ### Try it: make Backspace and Delete work
 
@@ -225,7 +225,7 @@ The program is doing exactly what it was told. The forms library never reads the
 
 To enable a key, translate it into the request you want, the same way the example already turns `KEY_DOWN` into `REQ_NEXT_FIELD`:
 
-1. Backspace becomes `REQ_DEL_PREV`, which deletes the character before the cursor. At the start of a field there is nothing before the cursor, so `REQ_DEL_PREV` moves to the previous field instead, and leaves the cursor at the start of that field. Follow it with `REQ_END_LINE`, as the `KEY_UP` case does, so the cursor lands after the text and the next Backspace keeps deleting. Terminals disagree on what Backspace sends, so match all three codes: `KEY_BACKSPACE` from `keypad()`, 127 (DEL) and `'\b'` (Ctrl-H).
+1. Backspace becomes `REQ_DEL_PREV`, which deletes the character before the cursor. At the start of a field there is nothing before the cursor, so `REQ_DEL_PREV` moves to the previous field instead, and leaves the cursor at the start of that field. Follow it with `REQ_END_LINE`, as the `KEY_UP` case does, so the cursor lands after the text and the next Backspace keeps deleting. Terminals disagree on what Backspace sends, so match all three codes: `KEY_BACKSPACE` from [`keypad()`](../../glossary/keypad-mode.md), 127 (DEL) and `'\b'` (Ctrl-H).
 2. Delete becomes `REQ_DEL_CHAR`, which deletes the character under the cursor. With `keypad(stdscr, TRUE)`, `getch()` reports it as `KEY_DC`.
 3. The left and right arrows become `REQ_PREV_CHAR` and `REQ_NEXT_CHAR`, so you can move to the character you want to delete.
 

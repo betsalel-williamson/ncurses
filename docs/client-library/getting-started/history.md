@@ -8,7 +8,7 @@ After graduation, one of those students went to work at AT&T Bell Labs, and made
 
 System V Release 3 from Bell Labs featured a rewritten and much-improved `curses` library, along with the `tic` program (late 1986).
 
-To recap, terminfo is based on Berkeley's termcap database, but contains a number of improvements and extensions. Parameterized capabilities strings were introduced, making it possible to describe multiple video attributes, and colors and to handle far more unusual terminals than possible with termcap. In the later AT&T System V releases, `curses` evolved to use more facilities and offer more capabilities, going far beyond BSD curses in power and flexibility.
+To recap, terminfo is based on Berkeley's [termcap](../../glossary/termcap.md) database, but contains a number of improvements and extensions. Parameterized capabilities strings were introduced, making it possible to describe multiple [video attributes](../../glossary/attribute.md), and colors and to handle far more unusual terminals than possible with termcap. In the later AT&T System V releases, `curses` evolved to use more facilities and offer more capabilities, going far beyond [BSD curses](../../glossary/bsd-curses.md) in power and flexibility.
 
 ## What ncurses implements
 
@@ -18,7 +18,7 @@ To recap, terminfo is based on Berkeley's termcap database, but contains a numbe
 - Support for line- and box-drawing using forms characters.
 - Recognition of function keys on input.
 - Color support.
-- Support for pads (windows of larger than screen size on which the screen or a subwindow defines a viewport).
+- Support for [pads](../../glossary/pad.md) (windows of larger than screen size on which the screen or a [subwindow](../../glossary/subwindow.md) defines a viewport).
 
 Also, `ncurses` makes use of the insert and delete line and character features of terminals so equipped, and determines how to optimally use these features with no help from the programmer. It allows arbitrary combinations of video attributes to be displayed, even on terminals that leave "magic cookies" on the screen to mark changes in attributes.
 

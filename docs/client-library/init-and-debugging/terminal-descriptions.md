@@ -4,7 +4,7 @@
 
 ## `setupterm(term, filedes, errret)`
 
-`setupterm()` reads a terminal's description from the terminfo database without setting up the curses screen structures or changing the terminal's modes. A program that needs only the terminal's capabilities, for example to send a few escape sequences, can call it in place of `initscr()`.
+`setupterm()` reads a terminal's description from the [terminfo](../../glossary/terminfo.md) database without setting up the curses screen structures or changing the terminal's modes. A program that needs only the terminal's [capabilities](../../glossary/terminal-capability.md), for example to send a few [escape sequences](../../glossary/escape-sequence.md), can call it in place of `initscr()`.
 
 - `term` is the name of the terminal type. If it's `NULL`, `setupterm()` uses the value of `TERM` in the environment.
 - `filedes` is the file descriptor of the terminal used for output.

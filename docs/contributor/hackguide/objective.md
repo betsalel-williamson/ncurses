@@ -4,8 +4,8 @@
 
 The objective of the ncurses package is to provide a free software API for character-cell terminals and terminal emulators with the following characteristics:
 
-- Source-compatible with historical curses implementations, including the original BSD curses and System V curses.
-- Conformant with the XSI Curses standard issued as part of XPG4 by X/Open.
+- Source-compatible with historical curses implementations, including the original [BSD curses](../../glossary/bsd-curses.md) and System V curses.
+- Conformant with the [XSI Curses](../../glossary/x-open-curses.md) standard issued as part of XPG4 by X/Open.
 - High-quality: stable and reliable code, wide portability, good packaging, superior documentation.
 - Featureful: it should eliminate as much of the drudgery of C interface programming as possible, freeing programmers to think at a higher level of design.
 

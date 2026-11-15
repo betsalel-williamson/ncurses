@@ -22,7 +22,7 @@ Bugs we can reproduce are likely to be fixed very quickly, often within days. Th
 
 In our experience, most of the behaviors people report as library bugs are actually due to subtle problems in terminal descriptions. This is especially likely to be true if you are using a traditional asynchronous terminal or PC-based terminal emulator, rather than xterm or a UNIX console entry.
 
-It is therefore extremely helpful if you can tell us whether or not your problem reproduces on other terminal types. Usually you will have both a console type and xterm available; please tell us whether or not your bug reproduces on both.
+It is therefore extremely helpful if you can tell us whether or not your problem reproduces on other [terminal types](../../glossary/terminal-type.md). Usually you will have both a console type and xterm available; please tell us whether or not your bug reproduces on both.
 
 If you have xterm available, it is also good to collect xterm reports for different window sizes. This is especially true if you normally use an unusual xterm window size: a surprising number of the bugs we have seen are either triggered or masked by these.
 
@@ -30,11 +30,11 @@ If you have xterm available, it is also good to collect xterm reports for differ
 
 Recompile your program with the debugging versions of the libraries. Insert a `curses_trace()` call with the argument set to `TRACE_UPDATE`. (See [Debugging with traces](../../client-library/init-and-debugging/debugging.md) for details on trace levels.) Reproduce your bug, then look at the trace file to see what the library was actually doing.
 
-Another frequent cause of apparent bugs is application coding errors that cause the wrong things to be put on the virtual screen. Looking at the virtual-screen dumps in the trace file will tell you immediately if this is happening, and save you from the possible embarrassment of being told that the bug is in your code and is your problem rather than ours.
+Another frequent cause of apparent bugs is application coding errors that cause the wrong things to be put on the [virtual screen](../../glossary/virtual-screen.md). Looking at the virtual-screen dumps in the trace file will tell you immediately if this is happening, and save you from the possible embarrassment of being told that the bug is in your code and is your problem rather than ours.
 
 If the virtual-screen dumps look correct but the bug persists, it's possible to crank up the trace level to give more and more information about the library's update actions and the control sequences it issues to perform them. The `test` directory of the distribution contains a tool, `tracemunch`, for digesting these logs to make them less tedious to wade through.
 
-Often you will find terminfo problems at this stage by noticing that the escape sequences put out for various capabilities are wrong. If not, you are likely to learn enough to be able to characterize any bug in the screen-update logic quite exactly.
+Often you will find [terminfo](../../glossary/terminfo.md) problems at this stage by noticing that the [escape sequences](../../glossary/escape-sequence.md) put out for various [capabilities](../../glossary/terminal-capability.md) are wrong. If not, you are likely to learn enough to be able to characterize any bug in the screen-update logic quite exactly.
 
 ## 4. Report details and symptoms, not just interpretations
 

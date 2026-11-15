@@ -4,7 +4,7 @@
 
 ## The user pointer
 
-Each item, and each menu, has an associated user pointer on which you can hang application data. See `mitem_userptr(3X)` and `menu_userptr(3X)`. The menu system doesn't touch it. It works the same way as the user pointer in panels. A common use is to store the function to run when an item is chosen, for example when the user presses Enter on it.
+Each item, and each menu, has an associated user pointer on which you can hang application data. See `mitem_userptr(3X)` and `menu_userptr(3X)`. The menu system doesn't touch it. It works the same way as the user pointer in [panels](../../glossary/panel.md). A common use is to store the function to run when an item is chosen, for example when the user presses Enter on it.
 
 The pointer must stay valid for as long as the item can use it. In this example every item points to the same `static` structure.
 

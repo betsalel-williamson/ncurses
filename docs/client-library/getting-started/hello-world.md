@@ -47,7 +47,7 @@ The above program prints "Hello World !!!" to the screen, waits for a key, and e
 
 ## `initscr()`
 
-The function `initscr()` initializes the terminal in curses mode. It determines the terminal type and initializes the library's data structures, including the window for the whole screen, called `stdscr`. In some implementations, it clears the screen and presents a blank screen. To do any screen manipulation using the curses package, this has to be called first. In extreme cases this function might fail because there isn't enough memory to allocate the curses library's data structures.
+The function `initscr()` initializes the terminal in curses mode. It determines the terminal type and initializes the library's data structures, including the window for the whole screen, called [`stdscr`](../../glossary/stdscr.md). In some implementations, it clears the screen and presents a blank screen. To do any screen manipulation using the curses package, this has to be called first. In extreme cases this function might fail because there isn't enough memory to allocate the curses library's data structures.
 
 After this is done, we can do a variety of initializations to customize our curses settings. These details are explained in [Initialization](initialization.md).
 

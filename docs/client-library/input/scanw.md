@@ -2,7 +2,7 @@
 
 > Adapted from *Writing Programs with NCURSES*, by Eric S. Raymond and Zeyd M. Ben-Halim and *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-These functions are similar to `scanf()` with the added capability of getting the input from any location on the screen. They let you do `scanf()`-style multi-field parsing on window input.
+These functions are similar to `scanf()` with the added capability of getting the input from any location on the screen. They let you do `scanf()`-style multi-field parsing on [window](../../glossary/window.md) input.
 
 ## `scanw()` and `mvscanw()`
 

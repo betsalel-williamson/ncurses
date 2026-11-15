@@ -10,7 +10,7 @@ This section applies only if you have configured ncurses with [`--enable-termcap
 
 If you are installing this application privately (either because you have no root access or want to experiment with it before doing a root installation), there are a couple of details you need to be aware of. They have to do with the ncurses library, which uses terminfo rather than termcap for describing terminal characteristics.
 
-Though the ncurses library is terminfo-based, it can interpret your `TERMCAP` variable (if present), any local termcap files you reference through it, and the system termcap file. However, to avoid slowing down your application startup, it does this only once per terminal type.
+Though the ncurses library is terminfo-based, it can interpret your `TERMCAP` variable (if present), any local termcap files you reference through it, and the system termcap file. However, to avoid slowing down your application startup, it does this only once per [terminal type](../../glossary/terminal-type.md).
 
 The first time you load a given terminal type from your termcap database, the library initialization code automatically writes it in terminfo format to a subdirectory under `$HOME/.terminfo`. After that, the initialization code finds it there and does a (much faster) terminfo fetch.
 

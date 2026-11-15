@@ -8,13 +8,13 @@
 
 - add placeholder prototypes for `color_set()`, `erasewchar()`, `term_attrs()`, `wcolor_set()` as per XPG4 version 2.
 
-- add macros getcur[xy] getbeg[xy] getpar[xy], which are defined in SVr4 headers.
+- add macros getcur[xy] getbeg[xy] getpar[xy], which are defined in [SVr4](../../../glossary/svr4.md) headers.
 
 New extensions: `keyok()` and `define_key()`.
 
 ### Terminfo database changes
 
-- corrected definition in curses.h for `ACS_LANTERN`, which was 'I' rather than 'i'.
+- corrected definition in curses.h for [`ACS_LANTERN`](../../../glossary/alternate-character-set.md), which was 'I' rather than 'i'.
 
 ## 4.1 (May 15, 1997)
 

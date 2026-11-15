@@ -6,7 +6,7 @@ Now that curses is initialized, let's interact with the world. The basic functio
 
 There are three classes of functions which you can use to do output on screen:
 
-- the `addch()` class: print a single character with attributes
+- the `addch()` class: print a single character with [attributes](../../glossary/attribute.md)
 - the `printw()` class: print formatted output similar to `printf()`
 - the `addstr()` class: print strings
 
@@ -44,7 +44,7 @@ can be replaced by
 mvaddch(row, col, ch);
 ```
 
-`waddch()` is similar to `addch()`, except that it adds a character into the given window. (Note that `addch()` adds a character into the window `stdscr`.) In a similar fashion, the `mvwaddch()` function is used to add a character into the given window at the given coordinates. These names follow the library's [naming convention](../getting-started/naming-and-variables.md#function-naming-conventions).
+`waddch()` is similar to `addch()`, except that it adds a character into the given window. (Note that `addch()` adds a character into the window [`stdscr`](../../glossary/stdscr.md).) In a similar fashion, the `mvwaddch()` function is used to add a character into the given window at the given coordinates. These names follow the library's [naming convention](../getting-started/naming-and-variables.md#function-naming-conventions).
 
 Now we are familiar with the basic output function `addch()`. But if we want to print a string, it would be very annoying to print it character by character. Fortunately, ncurses provides `printf`-like and `puts`-like functions.
 

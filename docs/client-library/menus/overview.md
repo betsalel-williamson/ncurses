@@ -8,7 +8,7 @@ The `menu` library first appeared in AT&T System V. The version documented here 
 
 The menus created by this library consist of collections of *items* including a name string part and a description string part. To make menus, you create groups of these items and connect them with menu frame objects.
 
-The menu can then be *posted*, that is written to an associated window. Actually, each menu has two associated windows; a containing window in which the programmer can scribble titles or borders, and a subwindow in which the menu items proper are displayed. If this subwindow is too small to display all the items, it will be a scrollable viewport on the collection of items.
+The menu can then be *posted*, that is written to an associated [window](../../glossary/window.md). Actually, each menu has two associated windows; a containing window in which the programmer can scribble titles or borders, and a [subwindow](../../glossary/subwindow.md) in which the menu items proper are displayed. If this subwindow is too small to display all the items, it will be a scrollable viewport on the collection of items.
 
 A menu may also be *unposted* (that is, undisplayed), and finally freed to make the storage associated with it and its items available for re-use.
 

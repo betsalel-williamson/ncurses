@@ -45,6 +45,7 @@
     "contributor/install/index.md",
     "contributor/ada/index.md",
     "contributor/announce/index.md",
+    "glossary/index.md",
     "appendix/index.md"
   ],
   "man": {
