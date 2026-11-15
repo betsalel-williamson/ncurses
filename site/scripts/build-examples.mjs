@@ -30,6 +30,7 @@ try {
 
 const wasmBuild = join(site, '.generated/ncurses-wasm');
 const expected = new Set();
+let unexpected = 0;
 
 /**
  * Messages the ncurses build prints that are expected for this cross-build, each with the
@@ -46,6 +47,9 @@ const EXPECTED = [
   // make_hash reads only as many capability lines as its table holds and exits, so the cat
   // feeding it (MKcaptab.sh, MKuserdefs.sh) can find the pipe closed. The tables are complete.
   [/^cat: write error: Broken pipe$/, 'make_hash pipe'],
+  // MKfallback.sh compiles the xterm-256color fallback entry with the host's tic in a scratch
+  // directory, and says so on stderr. It prints this only where tic is installed.
+  [/^(creating|removing) temporary terminfo directory\.\.\.$/, 'fallback terminfo'],
   // emconfigure and emmake name the command they run.
   [/^em(configure|make): /, null],
 ];
@@ -69,6 +73,7 @@ function buildStep(cmd, args, env = {}) {
     if (known) {
       if (known[1]) expected.add(known[1]);
     } else {
+      unexpected++;
       console.log(line);
       if (process.env.GITHUB_ACTIONS) console.log(`::warning title=ncurses build::${line}`);
     }
@@ -98,7 +103,12 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
     CFLAGS: '-g -O2 -Wno-unknown-warning-option',
   });
   buildStep('emmake', ['make', '-j4', 'libs']);
-  if (expected.size) console.log(`build-examples: ncurses build printed only expected messages (${[...expected].join(', ')})`);
+  const seen = expected.size ? ` (${[...expected].join(', ')})` : '';
+  console.log(
+    unexpected
+      ? `build-examples: ncurses build printed ${unexpected} unexpected message(s), shown above${seen}`
+      : `build-examples: ncurses build printed only expected messages${seen}`,
+  );
 }
 
 const out = join(site, 'public/examples');
