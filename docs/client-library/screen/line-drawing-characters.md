@@ -2,7 +2,7 @@
 
 > Adapted from *NCURSES Programming HOWTO*, by Pradeep Padala.
 
-If you have ever programmed in DOS, you know about the nifty characters in the extended character set. They are printable only on some terminals. ncurses functions like `box()` use these characters. Their names all start with `ACS_`, meaning [alternate character set](../../glossary/alternate-character-set.md). You might have noticed them in some of the programs in these guides. Here is an example showing all the characters.
+If you have ever programmed in DOS, you know about the nifty characters in the extended character set. They are printable only on some terminals. ncurses functions like `box()` use these characters. Their names all start with `ACS_`, meaning [alternate character set](../../glossary/alternate-character-set.md). You might have noticed them in some of the programs in these guides. Here is an example showing all of them.
 
 **Example: ACS Variables Example**
 
@@ -17,13 +17,14 @@ main(void)
 
     initscr();
 
-    /* Two columns of 16, so all 31 fit on a 24-line screen */
+    /* Two columns of 16, so all 32 fit on a 24-line screen */
 #define SHOW(string, acs)                             \
     mvprintw(n % 16, (n / 16) * 30, "%-26s", string); \
     addch(acs);                                       \
     n++
     /* clang-format off */
     SHOW("Upper left corner",        ACS_ULCORNER);
+    SHOW("Upper right corner",       ACS_URCORNER);
     SHOW("Lower left corner",        ACS_LLCORNER);
     SHOW("Lower right corner",       ACS_LRCORNER);
     SHOW("Tee pointing right",       ACS_LTEE);
@@ -64,6 +65,6 @@ main(void)
 }
 ```
 
-There are 31 characters, more than a 24-line screen has lines, so the program shows them in two columns of 16. On a terminal narrower than 57 columns, the second column wraps.
+There are 32 characters, more than a 24-line screen has lines, so the program shows them in two columns of 16. (`curses.h` also defines eleven `ACS_` aliases, such as `ACS_BSSB` for `ACS_ULCORNER`, which name the same characters by which sides of the cell they join.) On a terminal narrower than 57 columns, the second column wraps.
 
 The `/* clang-format off */` and `/* clang-format on */` comments keep the table of names lined up when the code is reformatted.
