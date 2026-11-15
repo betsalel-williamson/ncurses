@@ -124,3 +124,12 @@ Most of a cold CI run went to the runnable examples. The WebAssembly ncurses bui
 - **Emscripten itself and npm**, through `setup-emsdk` and `setup-node`.
 
 A pull request can restore caches saved only on its own branch or on `master`. When a merge deploys the pull request's build, nothing builds on `master`, so the `cache` job in `docs-site.yml` runs the build there, publishes nothing, and saves the caches for the next pull request. The deploy doesn't wait for it. The same caches work locally: a second `npm run build` reuses `.generated/`.
+
+## Migration progress
+
+The front page ends with a Migration progress section, `src/components/MigrationProgress.astro`, for anyone weighing Merlon Docs for their own project.
+
+- **The bar:** each guide chapter, manual page and contributor document counts once, in two steps: sharded, then reviewed against its sources. A document is 50% done once it's sharded and 100% done once it's reviewed. The overall bar adds up every document the same way.
+- **Read from the repository at build time:** the manual-page counts (pages in `man/` against skeletons in `docs/man/`), the pull requests merged (merge commits on `HEAD`), and the errata rows.
+- **Kept in `data/migration.json`:** the guide and contributor-doc counts, the number of manual pages reviewed, and the session block. Update the counts in the pull request that changes them.
+- **The session block:** `node site/scripts/migration-stats.mjs <transcript.jsonl> <usage.json>` refreshes it from the agent's transcript and the session's token counts and cost. Agent working time adds up gaps of 5 minutes or less between transcript events. Maintainer time adds up gaps of 15 minutes or less between the maintainer's own messages, so it undercounts reading time.
