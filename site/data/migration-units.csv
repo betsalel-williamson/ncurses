@@ -15,6 +15,6 @@ Guides,Menus library,docs/client-library/menus,"NCURSES Programming HOWTO ch. 17
 Guides,Panels library,docs/client-library/panels,"NCURSES Programming HOWTO ch. 16; Writing Programs with NCURSES",10
 Guides,References,docs/appendix/references.md,"NCURSES Programming HOWTO ch. 21",34
 Contributor and install docs,Hacker's guide,docs/contributor/hackguide,doc/html/hackguide.html,45
-Contributor and install docs,Installation,docs/contributor/install,"INSTALL, README, README.MinGW, README.emx",
+Contributor and install docs,Installation,docs/contributor/install,"INSTALL, README, README.MinGW, README.emx",49
 Contributor and install docs,Ada binding,docs/contributor/ada,doc/html/Ada95.html,
 Contributor and install docs,Announcement,docs/contributor/announce,doc/html/announce.html,
