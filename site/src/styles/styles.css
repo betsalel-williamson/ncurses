@@ -1587,3 +1587,125 @@
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------------------------
+   The search field's caret (style-caret.ts): the style's own cursor, in place of the browser's
+   I-beam. Text mode draws the BIOS underline, Terminal a solid amber block, Workstation and
+   Manual page a thin bar. Modern keeps the browser's caret. Where the browser has caret-shape,
+   CSS draws it; desktop Firefox and Safari get a drawn underline or block; elsewhere the native
+   bar takes the style's color. The Run this example terminal's default cursor follows too
+   (--nc-term-cursor-style, read by run-example.ts). */
+:root[data-style="textmode"] {
+  --nc-caret-shape: underscore;
+  --nc-caret-drawn: underline;
+  --nc-caret-color: var(--nc-input-fg);
+  --nc-caret-blink: 534ms;
+  --nc-term-cursor-style: underline;
+}
+:root[data-style="workstation"] {
+  --nc-caret-shape: bar;
+  --nc-caret-drawn: bar;
+  --nc-caret-color: #33332f;
+  --nc-caret-blink: 1000ms;
+}
+:root[data-style="manpage"] {
+  --nc-caret-shape: bar;
+  --nc-caret-drawn: bar;
+  --nc-caret-color: #2c2c28;
+  --nc-caret-blink: 1000ms;
+}
+:root[data-style="terminal"] {
+  --nc-caret-shape: block;
+  --nc-caret-drawn: block;
+  --nc-caret-color: var(--nc-amber);
+  --nc-caret-blink: 600ms;
+}
+#starlight__search .pagefind-ui__search-input[data-nc-caret="tint"] {
+  caret-color: var(--nc-caret-color);
+}
+#starlight__search .pagefind-ui__search-input[data-nc-caret="drawn"] {
+  caret-color: transparent;
+}
+/* During IME composition the system's caret comes back, so the candidate window sits where the
+   system expects it. */
+#starlight__search
+  .pagefind-ui__search-input[data-nc-caret="drawn"].nc-caret-ime {
+  caret-color: var(--nc-caret-color);
+}
+@supports (caret-shape: block) {
+  #starlight__search .pagefind-ui__search-input[data-nc-caret="native"] {
+    caret-shape: var(--nc-caret-shape);
+    caret-color: var(--nc-caret-color);
+    caret-animation: manual;
+    animation: nc-caret-blink var(--nc-caret-blink) steps(1) infinite;
+  }
+  #starlight__search
+    .pagefind-ui__search-input[data-nc-caret="native"].nc-caret-typing {
+    animation: none;
+  }
+}
+@keyframes nc-caret-blink {
+  50% {
+    caret-color: transparent;
+  }
+}
+/* One cursor at a time: while the hint types behind its own cursor, the field's caret waits. */
+#starlight__search .pagefind-ui__search-input.nc-hint-owns-caret {
+  caret-color: transparent !important;
+  animation: none;
+}
+.nc-caret {
+  position: absolute;
+  z-index: 2;
+  height: 1.2em;
+  line-height: 1.2em;
+  white-space: pre;
+  text-align: center;
+  pointer-events: none;
+}
+.nc-caret[hidden] {
+  display: none;
+}
+.nc-caret-underline::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.1em;
+  height: 0.12em;
+  background: var(--nc-caret-color);
+}
+.nc-caret-block {
+  background: var(--nc-caret-color);
+  color: var(--nc-dialog-bg);
+  opacity: 0.85;
+}
+.nc-caret-blink {
+  animation: nc-caret-dim var(--nc-caret-blink) steps(1) infinite;
+}
+@keyframes nc-caret-dim {
+  50% {
+    opacity: 0;
+  }
+}
+.nc-caret-mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #starlight__search .pagefind-ui__search-input[data-nc-caret="native"],
+  .nc-caret-blink {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  .nc-caret {
+    display: none;
+  }
+  #starlight__search .pagefind-ui__search-input[data-nc-caret] {
+    caret-color: auto !important;
+  }
+}
