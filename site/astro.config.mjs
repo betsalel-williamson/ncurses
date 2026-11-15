@@ -14,8 +14,24 @@ export default defineConfig({
     starlight({
       title: 'ncurses',
       description: 'Documentation for ncurses, the new curses library: guides and every manual page.',
-      components: { Footer: './src/components/Footer.astro' },
-      customCss: ['./src/styles/layout.css'],
+      components: {
+        Footer: './src/components/Footer.astro',
+        ThemeProvider: './src/components/ThemeProvider.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
+      },
+      customCss: [
+        './src/styles/layout.css',
+        // Fonts for the reader-selectable styles (styles.css), Latin subsets only.
+        '@fontsource/vt323/latin-400.css',
+        '@fontsource/arimo/latin-400.css',
+        '@fontsource/arimo/latin-700.css',
+        '@fontsource/gelasio/latin-400.css',
+        '@fontsource/gelasio/latin-400-italic.css',
+        '@fontsource/gelasio/latin-700.css',
+        '@fontsource/cousine/latin-400.css',
+        '@fontsource/cousine/latin-700.css',
+        './src/styles/styles.css',
+      ],
       // Native scrollbars on listings. Safari adds a styled (::-webkit-scrollbar) horizontal
       // scrollbar to the pre after its wrapper is sized, so the scrollbar spills into whatever
       // follows until something forces a new layout (the Run button jumped on first run).

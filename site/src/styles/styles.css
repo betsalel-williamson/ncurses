@@ -1,0 +1,156 @@
+/* Reader-selectable styles. ThemeProvider.astro sets data-style on <html> from the Style menu
+   (ThemeSelect.astro), and forces the color scheme a style is drawn for. Each style redefines
+   Starlight's color and font tokens; these rules sit outside Starlight's cascade layers, so they
+   win over both of its color schemes. Fonts come from @fontsource packages, so nothing loads
+   from another site, and a browser downloads only the fonts the chosen style uses. */
+
+/* Every style: section headings a step down from Starlight's, so a section break no longer reads
+   as a new page. Starlight makes h2 35px on wide screens against a 42px h1. */
+:root {
+  --sl-text-h2: var(--sl-text-2xl);
+  --sl-text-h3: var(--sl-text-xl);
+  --sl-text-h4: var(--sl-text-lg);
+}
+
+/* Text mode: a blue 16-color screen, as a curses program on a PC console would draw it. */
+:root[data-style='textmode'] {
+  --sl-font: 'VT323', ui-monospace, monospace;
+  --sl-font-mono: 'VT323', ui-monospace, monospace;
+  /* VT323 draws small for its size, so every step of the text scale goes up. */
+  --sl-text-2xs: 1rem;
+  --sl-text-xs: 1.0625rem;
+  --sl-text-sm: 1.1875rem;
+  --sl-text-base: 1.3125rem;
+  --sl-text-lg: 1.4375rem;
+  --sl-text-xl: 1.625rem;
+  --sl-text-body: 1.3125rem;
+  --sl-text-body-sm: 1.0625rem;
+  --sl-text-code: 1.0625rem;
+  --sl-text-code-sm: 1.0625rem;
+  --ec-codeFontSize: 1.25rem;
+  --sl-line-height: 1.45;
+  --sl-text-h1: 2.75rem;
+  --sl-text-h2: 2rem;
+  --sl-text-h3: 1.625rem;
+  --sl-text-h4: 1.375rem;
+
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #ececec;
+  --sl-color-gray-2: #d2d2e4;
+  --sl-color-gray-3: #a8a8dc;
+  --sl-color-gray-4: #7070c8;
+  --sl-color-gray-5: #2b2bb4;
+  --sl-color-gray-6: #000088;
+  --sl-color-black: #0000a8;
+  --sl-color-accent-low: #005a6e;
+  --sl-color-accent: #00a8a8;
+  --sl-color-accent-high: #55ffff;
+  --sl-color-text-invert: #000000;
+  --sl-color-bg-inline-code: #000080;
+  --sl-color-hairline: #5555ff;
+  --sl-color-hairline-light: #5555ff;
+  --sl-color-hairline-shade: #000060;
+}
+:root[data-style='textmode'] body {
+  font-size: var(--sl-text-body);
+}
+:root[data-style='textmode'] .sl-markdown-content h1,
+:root[data-style='textmode'] h1#_top {
+  color: #ffff55;
+  font-weight: 400;
+}
+:root[data-style='textmode'] .sl-markdown-content :is(h2, h3, h4, h5, h6) {
+  font-weight: 400;
+}
+:root[data-style='textmode'] .sl-markdown-content h3 {
+  color: var(--sl-color-accent-high);
+}
+:root[data-style='textmode'] .sl-markdown-content code:not(pre code) {
+  color: #55ffff;
+}
+
+/* Workstation: a Motif-era X11 desktop. Charter text, Helvetica-style headings, beveled gray
+   chrome around a white reading pane. Charter ships with macOS and iOS; elsewhere Gelasio. */
+:root[data-style='workstation'] {
+  --sl-font: Charter, 'Bitstream Charter', 'Gelasio', Georgia, serif;
+  --sl-font-mono: 'Cousine', 'Courier New', monospace;
+  --ncurses-heading-font: 'Arimo', Helvetica, Arial, sans-serif;
+  --sl-text-body: 1.0625rem;
+  --sl-line-height: 1.6;
+
+  --sl-color-white: #161616;
+  --sl-color-gray-1: #222222;
+  --sl-color-gray-2: #33332f;
+  --sl-color-gray-3: #4a4a46;
+  --sl-color-gray-4: #7d7d78;
+  --sl-color-gray-5: #b5b5b0;
+  --sl-color-gray-6: #d6d6d1;
+  --sl-color-gray-7: #e4e4df;
+  --sl-color-black: #ffffff;
+  --sl-color-accent-low: #d3e3ee;
+  --sl-color-accent: #22577a;
+  --sl-color-accent-high: #123a54;
+  --sl-color-text-invert: #ffffff;
+  --sl-color-bg-nav: #c9c9c4;
+  --sl-color-bg-sidebar: #d6d6d1;
+  --sl-color-bg-inline-code: #ecece7;
+  --sl-color-hairline: #b5b5b0;
+  --sl-color-hairline-light: #d6d6d1;
+  --sl-color-hairline-shade: #7d7d78;
+}
+:root[data-style='workstation'] body {
+  font-size: var(--sl-text-body);
+}
+:root[data-style='workstation'] :is(h1, h2, h3, h4, h5, h6, .site-title, .sidebar-content, .right-sidebar-panel) {
+  font-family: var(--ncurses-heading-font);
+}
+:root[data-style='workstation'] header.header {
+  box-shadow:
+    inset 0 2px #f2f2ee,
+    inset 0 -2px #7d7d78;
+}
+:root[data-style='workstation'] .sidebar-pane {
+  box-shadow:
+    inset 2px 0 #f2f2ee,
+    inset -2px 0 #7d7d78;
+}
+:root[data-style='workstation'] .sl-markdown-content .level-h2 {
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+/* Terminal: amber phosphor on near black, with VT323 for headings and navigation. */
+:root[data-style='terminal'] {
+  --sl-font: 'Arimo', Helvetica, Arial, sans-serif;
+  --sl-font-mono: 'Cousine', 'Courier New', monospace;
+
+  --sl-color-white: #ffb000;
+  --sl-color-gray-1: #ece8dc;
+  --sl-color-gray-2: #dcd8cc;
+  --sl-color-gray-3: #b3ae9f;
+  --sl-color-gray-4: #7a7567;
+  --sl-color-gray-5: #3a372e;
+  --sl-color-gray-6: #1c1a15;
+  --sl-color-black: #12110e;
+  --sl-color-accent-low: #4a3500;
+  --sl-color-accent: #ffb000;
+  --sl-color-accent-high: #ffc84a;
+  --sl-color-text-invert: #12110e;
+  --sl-color-bg-inline-code: #2a2720;
+  --sl-color-hairline: #3a372e;
+  --sl-color-hairline-light: #3a372e;
+  --sl-color-hairline-shade: #000000;
+}
+:root[data-style='terminal'] :is(.sl-markdown-content :is(h1, h2, h3, h4, h5, h6), h1#_top, .site-title) {
+  font-family: 'VT323', ui-monospace, monospace;
+  font-weight: 400;
+}
+:root[data-style='terminal'] {
+  --sl-text-h1: 2.875rem;
+  --sl-text-h2: 2rem;
+  --sl-text-h3: 1.625rem;
+  --sl-text-h4: 1.375rem;
+}
+:root[data-style='terminal'] .sl-markdown-content code:not(pre code) {
+  color: #ffd27a;
+}

@@ -13,6 +13,18 @@ npx astro preview  # serves dist/ at http://localhost:4321/ncurses/
 
 The runnable examples need Emscripten (`emcc` on `PATH`). Without it, `build-examples.mjs` skips them and the rest of the site still builds.
 
+## Reader styles
+
+A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose how the site looks. The choice is saved in their browser.
+
+| File | What it does |
+| --- | --- |
+| `src/components/ThemeProvider.astro` | Runs at the top of `<body>`, before anything paints. It sets `data-style` on `<html>` from `localStorage` and forces the color scheme a style is drawn for. |
+| `src/components/ThemeSelect.astro` | The Style menu. Starlight's color-scheme picker hides while a style with only one scheme is chosen. |
+| `src/styles/styles.css` | Each style's color, font and size tokens, plus the smaller section headings every style shares. |
+
+The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323), Workstation (Motif-era gray chrome, Charter text and Helvetica-style headings) and Terminal (amber on near black with VT323 headings). The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site. To add a style, add its tokens to `styles.css`, its option to `ThemeSelect.astro`, and its color scheme to `modes` in `ThemeProvider.astro`.
+
 ## Runnable examples
 
 Every complete C program in the guides (a listing with a `main()`) gets a "Run this example" button. The program runs in the reader's browser, compiled to WebAssembly and drawn in an xterm.js terminal.
