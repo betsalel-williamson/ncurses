@@ -5,6 +5,7 @@ import { defineEcConfig, ExpressiveCodeTheme } from '@astrojs/starlight/expressi
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import { codeLinks } from './code-links.mjs';
 import { codeLineNumbers } from './code-line-numbers.mjs';
+import { codeRunCopy } from './code-run-copy.mjs';
 
 // One syntax theme per reader style (src/styles/styles.css). Starlight's UI colors still apply,
 // so frames and backgrounds come from each style's tokens; these set the token colors.
@@ -32,6 +33,6 @@ export default defineEcConfig({
   defaultProps: { showLineNumbers: false },
   // Curses calls in C listings link to their man pages, with a hint on hover (code-links.mjs).
   // Longer C listings get line numbers (code-line-numbers.mjs, before the plugin that draws
-  // them).
-  plugins: [codeLinks(), codeLineNumbers(), pluginLineNumbers()],
+  // them). Shell listings get a Copy to run row (code-run-copy.mjs).
+  plugins: [codeLinks(), codeLineNumbers(), pluginLineNumbers(), codeRunCopy()],
 });

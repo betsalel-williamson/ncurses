@@ -43,6 +43,11 @@ In C listings, each call of a curses library function links to its man page, and
 - A name the listing defines for itself links to its definition instead: its functions, macros, types and file-scope variables, and each function's parameters and locals. The hint shows the defining line and what the name is, such as "Parameter of print_in_middle(), line 26", and the definition is outlined when the link is followed. `code-defs.mjs` finds the definitions from the text, because most listings are fragments that don't compile alone. It reads comments and strings as blank, follows braces to scope parameters and locals to their function, and takes the innermost definition in scope. Names after `.` or `->` stay plain. A name it misses stays plain too. These links show only on hover or focus, since they are on almost every line.
 - `src/components/code-hints.js` draws the hint, and `src/styles/styles.css` styles it from the `--nc-hint-*` tokens of each reader style.
 
+## Line numbers and Copy to run
+
+- C listings of 6 lines or more get line numbers in a left gutter. `code-line-numbers.mjs` picks them, and Expressive Code's line-numbers plugin, pinned at the core's version, draws them. A fence can still say `showLineNumbers`, `showLineNumbers=false` or `startLineNumber=40`. The gutter stays pinned while the code scrolls sideways, and each style colors it from its `--nc-ln-*` tokens in `styles.css`. Neither a copy nor a screen reader gets the numbers.
+- Shell listings (`sh`, `bash`, `shell`) get a Copy to run row when a paste-ready copy differs from the plain one and still runs. `code-run-copy.mjs` works out the text at build time: comments dropped, steps joined with `&&`, then a failure message. It fills `<version>` from `dist.mk`, and it stops before an interactive step such as `su root`. `src/components/run-copy.js` adds the row. Its icons are Starlight-style lines in Modern and Manual page, and `src/icons/pixel/` in the others.
+
 ## Runnable examples
 
 Every complete C program in the guides (a listing with a `main()`) gets a "Run this example" button. The program runs in the reader's browser, compiled to WebAssembly and drawn in an xterm.js terminal. A program whose `main()` takes arguments is run with its own source as its one argument, unless its fence gives others, as ` ```c args="5" ` does.

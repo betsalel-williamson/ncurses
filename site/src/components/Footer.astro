@@ -97,6 +97,45 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     content: '✓ ';
     white-space: pre;
   }
+  /* Copy to run (run-copy.js): the row under a shell listing, with its icon in the key cap's
+     color. Modern draws Starlight's round line icons, Manual page thin square-ended lines, and the
+     other styles pixel icons. */
+  .run-copy-bar {
+    margin-top: 0.75rem;
+  }
+  .run-copy-icon {
+    display: contents;
+  }
+  .run-copy-svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+    overflow: visible;
+    color: var(--nc-key-icon-fg, var(--nc-key-cap-fg, var(--sl-color-text-accent)));
+    filter: var(--nc-key-icon-filter, none);
+  }
+  .run-copy-svg:not(.is-round) {
+    display: none;
+  }
+  :root[data-style='manpage'] .run-copy-svg.is-round,
+  :root[data-style]:not([data-style='modern'], [data-style='manpage']) .run-copy-svg.is-round {
+    display: none;
+  }
+  :root[data-style='manpage'] .run-copy-svg.is-square,
+  :root[data-style]:not([data-style='modern'], [data-style='manpage']) .run-copy-svg.is-pixel {
+    display: block;
+  }
+  .nc-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .run-example-bar button:disabled {
     opacity: 0.6;
     cursor: default;
