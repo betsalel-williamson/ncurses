@@ -54,6 +54,7 @@ export default defineConfig({
         { label: 'Menus library', items: [{ autogenerate: { directory: 'guides/menus' } }] },
         { label: 'Panels library', items: [{ autogenerate: { directory: 'guides/panels' } }] },
         ...manSidebar,
+        { label: "Hacker's guide", items: [{ autogenerate: { directory: 'contributing/hackguide' } }] },
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
     }),
