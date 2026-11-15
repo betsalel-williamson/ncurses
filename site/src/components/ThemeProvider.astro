@@ -6,6 +6,14 @@ import Default from '@astrojs/starlight/components/ThemeProvider.astro';
 
 <Default />
 
+{/* A status bar of keys that work on every page, shown only by styles that draw one. */}
+<div class="nc-statusbar" aria-hidden="true">
+  <span><b>Ctrl+K</b> Search</span>
+  <span><b>Tab</b> Next link</span>
+  <span><b>Shift+Tab</b> Previous link</span>
+  <span><b>Enter</b> Follow link</span>
+</div>
+
 <script is:inline>
   (() => {
     // Styles drawn for one color scheme only. Modern follows the Auto/Light/Dark picker.

@@ -6,6 +6,8 @@
    once the window is wide enough. Pages without a sidebar keep Starlight's 67.5rem. */
 :root {
   --toc-width: 14rem;
+  /* The right column's width, written with 100vw for use inside the fixed column. */
+  --toc-column: max(var(--toc-width), var(--toc-width) + (100vw - var(--sl-sidebar-width) - var(--sl-content-width) - var(--toc-width)) / 2);
 }
 :root[data-has-sidebar] {
   --sl-content-width: 47rem;
@@ -25,13 +27,13 @@
 /* Starlight sizes the column's contents from --sl-sidebar-width too (PageSidebar.astro), so in a
    14rem column they ran past the window's right edge and were cut off. Size them from the
    column's own width instead, capped at Starlight's. The column is position: fixed, so 100%
-   inside it is the window: this repeats the column's width formula above in terms of 100vw. */
+   inside it is the window, so this uses --toc-column. */
 @media (min-width: 72rem) {
   .right-sidebar-panel .sl-container {
     max-width: none;
     width: min(
       calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x)),
-      calc(max(var(--toc-width), var(--toc-width) + (100vw - var(--sl-sidebar-width) - var(--sl-content-width) - var(--toc-width)) / 2) - 2 * var(--sl-sidebar-pad-x))
+      calc(var(--toc-column) - 2 * var(--sl-sidebar-pad-x))
     );
   }
 }

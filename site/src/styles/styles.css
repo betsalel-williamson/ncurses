@@ -1,18 +1,39 @@
-/* Reader-selectable styles. ThemeProvider.astro sets data-style on <html> from the Style menu
-   (ThemeSelect.astro), and forces the color scheme a style is drawn for. Each style redefines
-   Starlight's color and font tokens; these rules sit outside Starlight's cascade layers, so they
-   win over both of its color schemes. Fonts come from @fontsource packages, so nothing loads
-   from another site, and a browser downloads only the fonts the chosen style uses. */
+/* Reader-selectable styles.
+   ThemeProvider.astro sets data-style on <html> from the Style menu (ThemeSelect.astro), and
+   forces the color scheme a style is drawn for. This file has three parts:
+   1. What every style shares.
+   2. Each style's tokens: Starlight's own (--sl-*) and this site's (--nc-*), which name every
+      part of the page a style draws: the menu bar, the status bar, the three panels, headings,
+      code, buttons and the terminal demos, down to the 16 terminal colors.
+   3. The components, written once against the --nc-* tokens. Modern sets none of them, so
+      these rules apply only to the other styles and Modern stays Starlight's own look.
+   The rules sit outside Starlight's cascade layers, so they win over both of its color schemes.
+   Fonts come from @fontsource packages, so nothing loads from another site, and a browser
+   downloads only the fonts the chosen style uses. Code syntax colors are in src/code-themes/. */
 
-/* Every style: section headings a step down from Starlight's, so a section break no longer reads
-   as a new page. Starlight makes h2 35px on wide screens against a 42px h1. */
+/* ---------------------------------------------------------------------------------------------
+   1. Every style
+   --------------------------------------------------------------------------------------------- */
+
+/* Section headings a step down from Starlight's, so a section break no longer reads as a new
+   page. Starlight makes h2 35px on wide screens against a 42px h1. */
 :root {
   --sl-text-h2: var(--sl-text-2xl);
   --sl-text-h3: var(--sl-text-xl);
   --sl-text-h4: var(--sl-text-lg);
 }
 
-/* Text mode: a blue 16-color screen, as a curses program on a PC console would draw it. */
+/* The status bar (ThemeProvider.astro) is hidden unless a style turns it on. */
+.nc-statusbar {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   2. Tokens
+   --------------------------------------------------------------------------------------------- */
+
+/* Text mode: a blue 16-color screen, as a curses program on a PC console would draw it. A gray
+   menu bar and function-key bar, boxes with double-line borders and solid drop shadows. */
 :root[data-style='textmode'] {
   --sl-font: 'VT323', ui-monospace, monospace;
   --sl-font-mono: 'VT323', ui-monospace, monospace;
@@ -25,8 +46,8 @@
   --sl-text-xl: 1.625rem;
   --sl-text-body: 1.3125rem;
   --sl-text-body-sm: 1.0625rem;
-  --sl-text-code: 1.0625rem;
-  --sl-text-code-sm: 1.0625rem;
+  --sl-text-code: 1.3125rem;
+  --sl-text-code-sm: 1.3125rem;
   --ec-codeFontSize: 1.25rem;
   --sl-line-height: 1.45;
   --sl-text-h1: 2.75rem;
@@ -34,49 +55,162 @@
   --sl-text-h3: 1.625rem;
   --sl-text-h4: 1.375rem;
 
-  --sl-color-white: #ffffff;
+  /* The CGA palette. */
+  --nc-cga-black: #000000;
+  --nc-cga-blue: #0000aa;
+  --nc-cga-green: #00aa00;
+  --nc-cga-cyan: #00aaaa;
+  --nc-cga-red: #aa0000;
+  --nc-cga-magenta: #aa00aa;
+  --nc-cga-brown: #aa5500;
+  --nc-cga-gray: #aaaaaa;
+  --nc-cga-dark-gray: #555555;
+  --nc-cga-light-blue: #5555ff;
+  --nc-cga-light-green: #55ff55;
+  --nc-cga-light-cyan: #55ffff;
+  --nc-cga-light-red: #ff5555;
+  --nc-cga-light-magenta: #ff55ff;
+  --nc-cga-yellow: #ffff55;
+  --nc-cga-white: #ffffff;
+
+  --sl-color-white: var(--nc-cga-white);
   --sl-color-gray-1: #ececec;
-  --sl-color-gray-2: #d2d2e4;
+  --sl-color-gray-2: #d4d4e6;
   --sl-color-gray-3: #a8a8dc;
   --sl-color-gray-4: #7070c8;
   --sl-color-gray-5: #2b2bb4;
-  --sl-color-gray-6: #000088;
-  --sl-color-black: #0000a8;
+  --sl-color-gray-6: #00008c;
+  --sl-color-black: var(--nc-cga-blue);
   --sl-color-accent-low: #005a6e;
-  --sl-color-accent: #00a8a8;
-  --sl-color-accent-high: #55ffff;
-  --sl-color-text-invert: #000000;
-  --sl-color-bg-inline-code: #000080;
-  --sl-color-hairline: #5555ff;
-  --sl-color-hairline-light: #5555ff;
-  --sl-color-hairline-shade: #000060;
-}
-:root[data-style='textmode'] body {
-  font-size: var(--sl-text-body);
-}
-:root[data-style='textmode'] .sl-markdown-content h1,
-:root[data-style='textmode'] h1#_top {
-  color: #ffff55;
-  font-weight: 400;
-}
-:root[data-style='textmode'] .sl-markdown-content :is(h2, h3, h4, h5, h6) {
-  font-weight: 400;
-}
-:root[data-style='textmode'] .sl-markdown-content h3 {
-  color: var(--sl-color-accent-high);
-}
-:root[data-style='textmode'] .sl-markdown-content code:not(pre code) {
-  color: #55ffff;
+  --sl-color-accent: var(--nc-cga-cyan);
+  --sl-color-accent-high: var(--nc-cga-light-cyan);
+  --sl-color-text-invert: var(--nc-cga-black);
+  --sl-color-hairline: var(--nc-cga-white);
+  --sl-color-hairline-light: var(--nc-cga-light-blue);
+  --sl-color-hairline-shade: var(--nc-cga-black);
+
+  --nc-heading-font: var(--sl-font);
+  --nc-heading-weight: 400;
+  --nc-nav-font: var(--sl-font);
+  --nc-h1-fg: var(--nc-cga-yellow);
+  --nc-h2-fg: var(--nc-cga-white);
+  --nc-h3-fg: var(--nc-cga-light-cyan);
+  --nc-h2-before: '── ';
+  --nc-h2-after: ' ──';
+  --nc-h2-rule: none;
+  --nc-link-fg: var(--nc-cga-light-cyan);
+  --nc-hotkey-fg: var(--nc-cga-red);
+
+  --nc-header-bg: var(--nc-cga-gray);
+  --nc-header-fg: var(--nc-cga-black);
+  --nc-header-border: none;
+  --nc-header-shadow: none;
+  --nc-input-bg: var(--nc-cga-blue);
+  --nc-input-fg: var(--nc-cga-white);
+  --nc-input-border: 0;
+  --nc-input-radius: 0;
+
+  --nc-statusbar-display: flex;
+  --nc-statusbar-height: 1.75rem;
+  --nc-statusbar-bg: var(--nc-cga-gray);
+  --nc-statusbar-fg: var(--nc-cga-black);
+
+  --nc-panel-gap: 0.75rem;
+  --nc-panel-radius: 0;
+  --nc-panel-shadow-offset: 0.625rem;
+
+  --nc-nav-bg: var(--nc-cga-cyan);
+  --nc-nav-fg: var(--nc-cga-black);
+  --nc-nav-group-fg: var(--nc-cga-black);
+  --nc-nav-muted: #004a4a;
+  --nc-nav-current-bg: var(--nc-cga-black);
+  --nc-nav-current-fg: var(--nc-cga-yellow);
+  --nc-nav-border: 4px double;
+  --nc-nav-border-color: var(--nc-cga-white);
+  --nc-nav-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
+  --nc-nav-title: '[ Contents ]';
+  --nc-nav-title-fg: var(--nc-cga-white);
+
+  --nc-toc-bg: var(--nc-cga-gray);
+  --nc-toc-fg: var(--nc-cga-black);
+  --nc-toc-heading-fg: var(--nc-cga-black);
+  --nc-toc-current-fg: var(--nc-cga-red);
+  --nc-toc-border: 4px double;
+  --nc-toc-border-color: var(--nc-cga-black);
+  --nc-toc-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
+  --nc-toc-title: '[ On this page ]';
+  --nc-toc-title-fg: var(--nc-cga-black);
+  --nc-toc-heading-clip: inset(50%);
+  --nc-toc-heading-position: absolute;
+
+  --nc-content-bg: var(--nc-cga-blue);
+  --nc-content-border: 4px double;
+  --nc-content-border-color: var(--nc-cga-white);
+  --nc-content-shadow: none;
+  --nc-content-title: '[■]';
+  --nc-content-title-fg: var(--nc-cga-white);
+
+  --nc-code-bg: var(--nc-cga-black);
+  --nc-code-titlebar-bg: var(--nc-cga-gray);
+  --nc-code-titlebar-fg: var(--nc-cga-black);
+  --nc-code-border: 0;
+  --nc-code-border-color: transparent;
+  --nc-code-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 #000044;
+  --nc-code-radius: 0;
+  --nc-inline-code-bg: transparent;
+  --nc-inline-code-fg: var(--nc-cga-light-cyan);
+
+  --nc-button-bg: var(--nc-cga-green);
+  --nc-button-fg: var(--nc-cga-black);
+  --nc-button-hover-bg: var(--nc-cga-light-green);
+  --nc-button-hover-fg: var(--nc-cga-black);
+  --nc-button-border: 0;
+  --nc-button-border-color: transparent;
+  --nc-button-shadow: 0.375rem 0.375rem 0 var(--nc-cga-black);
+  --nc-button-radius: 0;
+  --nc-card-bg: var(--nc-cga-gray);
+  --nc-card-fg: var(--nc-cga-black);
+  --nc-card-title-fg: var(--nc-cga-black);
+
+  --nc-term-frame-bg: var(--nc-cga-black);
+  --nc-term-frame-border: 4px double;
+  --nc-term-frame-border-color: var(--nc-cga-gray);
+  --nc-term-frame-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 #000044;
+  --nc-term-frame-radius: 0;
+  --nc-term-bg: var(--nc-cga-black);
+  --nc-term-fg: var(--nc-cga-gray);
+  --nc-term-cursor: var(--nc-cga-gray);
+  --nc-ansi-0: var(--nc-cga-black);
+  --nc-ansi-1: var(--nc-cga-red);
+  --nc-ansi-2: var(--nc-cga-green);
+  --nc-ansi-3: var(--nc-cga-brown);
+  --nc-ansi-4: var(--nc-cga-blue);
+  --nc-ansi-5: var(--nc-cga-magenta);
+  --nc-ansi-6: var(--nc-cga-cyan);
+  --nc-ansi-7: var(--nc-cga-gray);
+  --nc-ansi-8: var(--nc-cga-dark-gray);
+  --nc-ansi-9: var(--nc-cga-light-red);
+  --nc-ansi-10: var(--nc-cga-light-green);
+  --nc-ansi-11: var(--nc-cga-yellow);
+  --nc-ansi-12: var(--nc-cga-light-blue);
+  --nc-ansi-13: var(--nc-cga-light-magenta);
+  --nc-ansi-14: var(--nc-cga-light-cyan);
+  --nc-ansi-15: var(--nc-cga-white);
 }
 
 /* Workstation: a Motif-era X11 desktop. Charter text, Helvetica-style headings, beveled gray
-   chrome around a white reading pane. Charter ships with macOS and iOS; elsewhere Gelasio. */
+   panels around a white reading pane, and xterm's own black-on-white terminal. Charter ships with
+   macOS and iOS; elsewhere Gelasio stands in. */
 :root[data-style='workstation'] {
   --sl-font: Charter, 'Bitstream Charter', 'Gelasio', Georgia, serif;
   --sl-font-mono: 'Cousine', 'Courier New', monospace;
-  --ncurses-heading-font: 'Arimo', Helvetica, Arial, sans-serif;
   --sl-text-body: 1.0625rem;
   --sl-line-height: 1.6;
+
+  --nc-bevel-light: #f2f2ee;
+  --nc-bevel-dark: #7d7d78;
+  --nc-raised: var(--nc-bevel-light) var(--nc-bevel-dark) var(--nc-bevel-dark) var(--nc-bevel-light);
+  --nc-sunken: var(--nc-bevel-dark) var(--nc-bevel-light) var(--nc-bevel-light) var(--nc-bevel-dark);
 
   --sl-color-white: #161616;
   --sl-color-gray-1: #222222;
@@ -92,65 +226,545 @@
   --sl-color-accent-high: #123a54;
   --sl-color-text-invert: #ffffff;
   --sl-color-bg-nav: #c9c9c4;
-  --sl-color-bg-sidebar: #d6d6d1;
-  --sl-color-bg-inline-code: #ecece7;
+  --sl-color-bg-sidebar: #c9c9c4;
   --sl-color-hairline: #b5b5b0;
   --sl-color-hairline-light: #d6d6d1;
-  --sl-color-hairline-shade: #7d7d78;
-}
-:root[data-style='workstation'] body {
-  font-size: var(--sl-text-body);
-}
-:root[data-style='workstation'] :is(h1, h2, h3, h4, h5, h6, .site-title, .sidebar-content, .right-sidebar-panel) {
-  font-family: var(--ncurses-heading-font);
-}
-:root[data-style='workstation'] header.header {
-  box-shadow:
-    inset 0 2px #f2f2ee,
-    inset 0 -2px #7d7d78;
-}
-:root[data-style='workstation'] .sidebar-pane {
-  box-shadow:
-    inset 2px 0 #f2f2ee,
-    inset -2px 0 #7d7d78;
-}
-:root[data-style='workstation'] .sl-markdown-content .level-h2 {
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid var(--sl-color-gray-5);
+  --sl-color-hairline-shade: var(--nc-bevel-dark);
+
+  --nc-heading-font: 'Arimo', Helvetica, Arial, sans-serif;
+  --nc-heading-weight: 700;
+  --nc-nav-font: 'Arimo', Helvetica, Arial, sans-serif;
+  --nc-h1-fg: #161616;
+  --nc-h2-fg: #161616;
+  --nc-h3-fg: #161616;
+  --nc-h2-before: none;
+  --nc-h2-after: none;
+  --nc-h2-rule: 1px solid #b5b5b0;
+  --nc-link-fg: #22577a;
+  --nc-hotkey-fg: inherit;
+
+  --nc-page-bg: #c9c9c4;
+  --nc-header-bg: #c9c9c4;
+  --nc-header-fg: #161616;
+  --nc-header-border: none;
+  --nc-header-shadow: inset 0 2px var(--nc-bevel-light), inset 0 -2px var(--nc-bevel-dark);
+  --nc-input-bg: #ffffff;
+  --nc-input-fg: #33332f;
+  --nc-input-border: 2px solid;
+  --nc-input-border-color: var(--nc-sunken);
+  --nc-input-radius: 0;
+
+  --nc-statusbar-display: none;
+  --nc-statusbar-height: 0rem;
+
+  --nc-panel-gap: 0.5rem;
+  --nc-panel-radius: 0;
+
+  --nc-nav-bg: #d6d6d1;
+  --nc-nav-fg: #33332f;
+  --nc-nav-group-fg: #161616;
+  --nc-nav-muted: #4a4a46;
+  --nc-nav-current-bg: #22577a;
+  --nc-nav-current-fg: #ffffff;
+  --nc-nav-border: 2px solid;
+  --nc-nav-border-color: var(--nc-raised);
+  --nc-nav-shadow: none;
+  --nc-nav-title: none;
+
+  --nc-toc-bg: #d6d6d1;
+  --nc-toc-fg: #33332f;
+  --nc-toc-heading-fg: #161616;
+  --nc-toc-current-fg: #22577a;
+  --nc-toc-border: 2px solid;
+  --nc-toc-border-color: var(--nc-raised);
+  --nc-toc-shadow: none;
+  --nc-toc-title: none;
+
+  --nc-content-bg: #ffffff;
+  --nc-content-border: 2px solid;
+  --nc-content-border-color: var(--nc-sunken);
+  --nc-content-shadow: none;
+  --nc-content-title: none;
+
+  --nc-code-bg: #f4f4ef;
+  --nc-code-titlebar-bg: #d6d6d1;
+  --nc-code-titlebar-fg: #161616;
+  --nc-code-border: 2px solid;
+  --nc-code-border-color: var(--nc-sunken);
+  --nc-code-shadow: none;
+  --nc-code-radius: 0;
+  --nc-inline-code-bg: #ecece7;
+  --nc-inline-code-fg: #161616;
+
+  --nc-button-bg: #d6d6d1;
+  --nc-button-fg: #161616;
+  --nc-button-hover-bg: #e4e4df;
+  --nc-button-hover-fg: #161616;
+  --nc-button-border: 2px solid;
+  --nc-button-border-color: var(--nc-raised);
+  --nc-button-shadow: none;
+  --nc-button-radius: 0;
+  --nc-card-bg: #d6d6d1;
+  --nc-card-fg: #33332f;
+  --nc-card-title-fg: #161616;
+
+  --nc-term-frame-bg: #d6d6d1;
+  --nc-term-frame-border: 2px solid;
+  --nc-term-frame-border-color: var(--nc-raised);
+  --nc-term-frame-shadow: none;
+  --nc-term-frame-radius: 0;
+  /* xterm's defaults. */
+  --nc-term-bg: #ffffff;
+  --nc-term-fg: #000000;
+  --nc-term-cursor: #000000;
+  --nc-ansi-0: #000000;
+  --nc-ansi-1: #cd0000;
+  --nc-ansi-2: #00cd00;
+  --nc-ansi-3: #cdcd00;
+  --nc-ansi-4: #0000ee;
+  --nc-ansi-5: #cd00cd;
+  --nc-ansi-6: #00cdcd;
+  --nc-ansi-7: #e5e5e5;
+  --nc-ansi-8: #7f7f7f;
+  --nc-ansi-9: #ff0000;
+  --nc-ansi-10: #00ff00;
+  --nc-ansi-11: #ffff00;
+  --nc-ansi-12: #5c5cff;
+  --nc-ansi-13: #ff00ff;
+  --nc-ansi-14: #00ffff;
+  --nc-ansi-15: #ffffff;
 }
 
-/* Terminal: amber phosphor on near black, with VT323 for headings and navigation. */
+/* Terminal: amber phosphor on near black, VT323 for headings and navigation, thin rules. */
 :root[data-style='terminal'] {
   --sl-font: 'Arimo', Helvetica, Arial, sans-serif;
   --sl-font-mono: 'Cousine', 'Courier New', monospace;
-
-  --sl-color-white: #ffb000;
-  --sl-color-gray-1: #ece8dc;
-  --sl-color-gray-2: #dcd8cc;
-  --sl-color-gray-3: #b3ae9f;
-  --sl-color-gray-4: #7a7567;
-  --sl-color-gray-5: #3a372e;
-  --sl-color-gray-6: #1c1a15;
-  --sl-color-black: #12110e;
-  --sl-color-accent-low: #4a3500;
-  --sl-color-accent: #ffb000;
-  --sl-color-accent-high: #ffc84a;
-  --sl-color-text-invert: #12110e;
-  --sl-color-bg-inline-code: #2a2720;
-  --sl-color-hairline: #3a372e;
-  --sl-color-hairline-light: #3a372e;
-  --sl-color-hairline-shade: #000000;
-}
-:root[data-style='terminal'] :is(.sl-markdown-content :is(h1, h2, h3, h4, h5, h6), h1#_top, .site-title) {
-  font-family: 'VT323', ui-monospace, monospace;
-  font-weight: 400;
-}
-:root[data-style='terminal'] {
   --sl-text-h1: 2.875rem;
   --sl-text-h2: 2rem;
   --sl-text-h3: 1.625rem;
   --sl-text-h4: 1.375rem;
+
+  --nc-amber: #ffb000;
+  --nc-amber-light: #ffc84a;
+  --nc-amber-pale: #ffd27a;
+  --nc-rule: #3a372e;
+
+  --sl-color-white: var(--nc-amber);
+  --sl-color-gray-1: #ece8dc;
+  --sl-color-gray-2: #dcd8cc;
+  --sl-color-gray-3: #b3ae9f;
+  --sl-color-gray-4: #7a7567;
+  --sl-color-gray-5: var(--nc-rule);
+  --sl-color-gray-6: #1c1a15;
+  --sl-color-black: #12110e;
+  --sl-color-accent-low: #4a3500;
+  --sl-color-accent: var(--nc-amber);
+  --sl-color-accent-high: var(--nc-amber-light);
+  --sl-color-text-invert: #12110e;
+  --sl-color-hairline: var(--nc-rule);
+  --sl-color-hairline-light: var(--nc-rule);
+  --sl-color-hairline-shade: var(--nc-rule);
+
+  --nc-heading-font: 'VT323', ui-monospace, monospace;
+  --nc-heading-weight: 400;
+  --nc-nav-font: 'VT323', ui-monospace, monospace;
+  --nc-nav-font-size: 1.3125rem;
+  --nc-h1-fg: var(--nc-amber);
+  --nc-h2-fg: var(--nc-amber);
+  --nc-h3-fg: #e0c58a;
+  --nc-h2-before: '> ';
+  --nc-h2-after: none;
+  --nc-h2-rule: none;
+  --nc-link-fg: var(--nc-amber-light);
+  --nc-hotkey-fg: inherit;
+
+  --nc-page-bg: #12110e;
+  --nc-header-bg: #12110e;
+  --nc-header-fg: var(--nc-amber);
+  --nc-header-border: 1px solid var(--nc-rule);
+  --nc-header-shadow: none;
+  --nc-input-bg: transparent;
+  --nc-input-fg: #b3ae9f;
+  --nc-input-border: 1px solid;
+  --nc-input-border-color: #5a564a;
+  --nc-input-radius: 0;
+
+  --nc-statusbar-display: none;
+  --nc-statusbar-height: 0rem;
+
+  --nc-panel-gap: 0rem;
+  --nc-panel-radius: 0;
+
+  --nc-nav-bg: transparent;
+  --nc-nav-fg: #b3ae9f;
+  --nc-nav-group-fg: var(--nc-amber);
+  --nc-nav-muted: #7a7567;
+  --nc-nav-current-bg: var(--nc-amber);
+  --nc-nav-current-fg: #12110e;
+  --nc-nav-border: 0;
+  --nc-nav-border-color: transparent;
+  --nc-nav-shadow: none;
+  --nc-nav-title: none;
+
+  --nc-toc-bg: transparent;
+  --nc-toc-fg: #b3ae9f;
+  --nc-toc-heading-fg: var(--nc-amber);
+  --nc-toc-current-fg: var(--nc-amber);
+  --nc-toc-border: 0;
+  --nc-toc-border-color: transparent;
+  --nc-toc-shadow: none;
+  --nc-toc-title: none;
+
+  --nc-content-bg: transparent;
+  --nc-content-border: 0;
+  --nc-content-border-color: transparent;
+  --nc-content-shadow: none;
+  --nc-content-title: none;
+
+  --nc-code-bg: #050504;
+  --nc-code-titlebar-bg: #1c1a15;
+  --nc-code-titlebar-fg: var(--nc-amber);
+  --nc-code-border: 1px solid;
+  --nc-code-border-color: var(--nc-rule);
+  --nc-code-shadow: none;
+  --nc-code-radius: 0;
+  --nc-inline-code-bg: #2a2720;
+  --nc-inline-code-fg: var(--nc-amber-pale);
+
+  --nc-button-bg: transparent;
+  --nc-button-fg: var(--nc-amber);
+  --nc-button-hover-bg: var(--nc-amber);
+  --nc-button-hover-fg: #12110e;
+  --nc-button-border: 1px solid;
+  --nc-button-border-color: var(--nc-amber);
+  --nc-button-shadow: none;
+  --nc-button-radius: 0;
+  --nc-card-bg: transparent;
+  --nc-card-fg: #b3ae9f;
+  --nc-card-title-fg: var(--nc-amber);
+
+  --nc-term-frame-bg: #050504;
+  --nc-term-frame-border: 1px solid;
+  --nc-term-frame-border-color: var(--nc-rule);
+  --nc-term-frame-shadow: 0 0 1.5rem rgba(255, 176, 0, 0.08);
+  --nc-term-frame-radius: 0;
+  --nc-term-bg: #050504;
+  --nc-term-fg: var(--nc-amber);
+  --nc-term-cursor: var(--nc-amber);
+  --nc-ansi-0: #050504;
+  --nc-ansi-1: #e0503a;
+  --nc-ansi-2: #9fc23a;
+  --nc-ansi-3: var(--nc-amber);
+  --nc-ansi-4: #5f86c8;
+  --nc-ansi-5: #c86fa8;
+  --nc-ansi-6: #5fb8a8;
+  --nc-ansi-7: #e8d9b0;
+  --nc-ansi-8: #6e6450;
+  --nc-ansi-9: #ff7a5c;
+  --nc-ansi-10: #c4e86a;
+  --nc-ansi-11: var(--nc-amber-pale);
+  --nc-ansi-12: #8fb0ec;
+  --nc-ansi-13: #ec9ccc;
+  --nc-ansi-14: #8ee0d0;
+  --nc-ansi-15: #fff4d8;
 }
-:root[data-style='terminal'] .sl-markdown-content code:not(pre code) {
-  color: #ffd27a;
+
+/* ---------------------------------------------------------------------------------------------
+   3. Components. Every rule is scoped to the styles that define the --nc-* tokens.
+   --------------------------------------------------------------------------------------------- */
+
+:root[data-style]:not([data-style='modern']) {
+  /* The page behind the panels. */
+  & body {
+    font-size: var(--sl-text-body);
+    background: var(--nc-page-bg, var(--sl-color-black));
+  }
+
+  /* Menu bar. */
+  & header.header {
+    background: var(--nc-header-bg);
+    color: var(--nc-header-fg);
+    border-bottom: var(--nc-header-border);
+    box-shadow: var(--nc-header-shadow);
+    --sl-color-white: var(--nc-header-fg);
+    --sl-color-gray-2: var(--nc-header-fg);
+    --sl-color-gray-5: var(--nc-header-fg);
+    --sl-color-text-accent: var(--nc-header-fg);
+  }
+  & header.header .site-title {
+    color: var(--nc-header-fg);
+    font-family: var(--nc-heading-font);
+  }
+  & header.header .site-title::first-letter {
+    color: var(--nc-hotkey-fg);
+  }
+  & header.header site-search button[data-open-modal] {
+    background: var(--nc-input-bg);
+    color: var(--nc-input-fg);
+    border: var(--nc-input-border);
+    border-color: var(--nc-input-border-color, transparent);
+    border-radius: var(--nc-input-radius);
+  }
+  & header.header site-search kbd {
+    background: transparent;
+    color: inherit;
+  }
+
+  /* Status bar, along the bottom of the window. */
+  & .nc-statusbar {
+    display: var(--nc-statusbar-display);
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: var(--sl-z-index-navbar);
+    height: var(--nc-statusbar-height);
+    align-items: center;
+    gap: 2ch;
+    padding-inline: 2ch;
+    background: var(--nc-statusbar-bg);
+    color: var(--nc-statusbar-fg);
+    font-family: var(--sl-font);
+    font-size: var(--sl-text-sm);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  & .nc-statusbar b {
+    font-weight: inherit;
+    color: var(--nc-hotkey-fg);
+  }
+  & .main-frame {
+    padding-bottom: var(--nc-statusbar-height);
+  }
+  & .sidebar-pane {
+    bottom: var(--nc-statusbar-height);
+    border-inline-end: 0;
+    background: var(--nc-page-bg, var(--sl-color-black));
+  }
+
+  /* Left panel: the contents. Starlight's own color tokens are redefined inside it. */
+  & .sidebar-content {
+    position: relative;
+    height: auto;
+    min-height: calc(100% - 2 * var(--nc-panel-gap));
+    margin: var(--nc-panel-gap);
+    margin-inline-end: calc(var(--nc-panel-gap) + var(--nc-panel-shadow-offset, 0rem));
+    padding-top: 1.25rem;
+    padding-inline: calc(var(--sl-sidebar-pad-x) - var(--nc-panel-gap));
+    background: var(--nc-nav-bg);
+    border: var(--nc-nav-border);
+    border-color: var(--nc-nav-border-color);
+    border-radius: var(--nc-panel-radius);
+    box-shadow: var(--nc-nav-shadow);
+    font-family: var(--nc-nav-font, inherit);
+    --sl-color-white: var(--nc-nav-group-fg);
+    --sl-color-gray-2: var(--nc-nav-fg);
+    --sl-color-gray-3: var(--nc-nav-muted);
+    --sl-color-hairline-light: var(--nc-nav-muted);
+    --sl-color-text-accent: var(--nc-nav-current-bg);
+    --sl-color-text-invert: var(--nc-nav-current-fg);
+  }
+  & .sidebar-content [aria-current='page'] {
+    border-radius: var(--nc-panel-radius);
+  }
+
+  /* Right panel: on this page. */
+  & .right-sidebar {
+    background: var(--nc-page-bg, var(--sl-color-black));
+    border-inline-start: 0;
+    padding-bottom: var(--nc-statusbar-height);
+  }
+  & .right-sidebar-panel {
+    position: relative;
+    box-sizing: border-box;
+    margin: var(--nc-panel-gap);
+    margin-inline-end: calc(var(--nc-panel-gap) + var(--nc-panel-shadow-offset, 0rem));
+    padding-top: 1.25rem;
+    background: var(--nc-toc-bg);
+    border: var(--nc-toc-border);
+    border-color: var(--nc-toc-border-color);
+    border-radius: var(--nc-panel-radius);
+    box-shadow: var(--nc-toc-shadow);
+    font-family: var(--nc-nav-font, inherit);
+    --sl-color-white: var(--nc-toc-heading-fg);
+    --sl-color-gray-3: var(--nc-toc-fg);
+    --sl-color-text-accent: var(--nc-toc-current-fg);
+  }
+
+  /* Box titles, centred on the top border. */
+  & :is(.sidebar-content, .right-sidebar-panel, .main-pane > main)::before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    padding-inline: 1ch;
+    font-family: var(--sl-font);
+    font-size: var(--sl-text-sm);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  & .sidebar-content::before {
+    content: var(--nc-nav-title);
+    color: var(--nc-nav-title-fg);
+    background: var(--nc-nav-bg);
+  }
+  & .right-sidebar-panel .sl-container {
+    width: auto;
+    max-width: none;
+  }
+  /* A style that titles the box hides the heading, keeping it for screen readers. */
+  & .right-sidebar-panel h2 {
+    clip-path: var(--nc-toc-heading-clip, none);
+    position: var(--nc-toc-heading-position, static);
+  }
+  & .right-sidebar-panel::before {
+    content: var(--nc-toc-title);
+    color: var(--nc-toc-title-fg);
+    background: var(--nc-toc-bg);
+  }
+
+  /* Middle panel: the page. */
+  & .main-pane > main {
+    position: relative;
+    margin: var(--nc-panel-gap);
+    background: var(--nc-content-bg);
+    border: var(--nc-content-border);
+    border-color: var(--nc-content-border-color);
+    border-radius: var(--nc-panel-radius);
+    box-shadow: var(--nc-content-shadow);
+  }
+  & .main-pane > main::before {
+    content: var(--nc-content-title);
+    color: var(--nc-content-title-fg);
+    background: var(--nc-content-bg);
+  }
+
+  /* Headings and links. */
+  & :is(.sl-markdown-content :is(h1, h2, h3, h4, h5, h6), h1#_top) {
+    font-family: var(--nc-heading-font);
+    font-weight: var(--nc-heading-weight);
+  }
+  & h1#_top,
+  & .sl-markdown-content h1 {
+    color: var(--nc-h1-fg);
+  }
+  & .sl-markdown-content h2 {
+    color: var(--nc-h2-fg);
+  }
+  & .sl-markdown-content h2::before {
+    content: var(--nc-h2-before);
+  }
+  & .sl-markdown-content h2::after {
+    content: var(--nc-h2-after);
+  }
+  & .sl-markdown-content .level-h2 {
+    padding-bottom: 0.25rem;
+    border-bottom: var(--nc-h2-rule);
+  }
+  & .sl-markdown-content h3 {
+    color: var(--nc-h3-fg);
+  }
+  & .sl-markdown-content a:not(.sl-anchor-link) {
+    color: var(--nc-link-fg);
+  }
+
+  /* Code. */
+  & .sl-markdown-content code:not(pre code) {
+    background: var(--nc-inline-code-bg);
+    color: var(--nc-inline-code-fg);
+  }
+  & .expressive-code {
+    --ec-frm-edBg: var(--nc-code-bg);
+    --ec-frm-trmBg: var(--nc-code-bg);
+    --ec-frm-edTabBarBg: var(--nc-code-titlebar-bg);
+    --ec-frm-edActTabBg: var(--nc-code-titlebar-bg);
+    --ec-frm-edActTabFg: var(--nc-code-titlebar-fg);
+    --ec-frm-trmTtbBg: var(--nc-code-titlebar-bg);
+    --ec-frm-trmTtbFg: var(--nc-code-titlebar-fg);
+    --ec-frm-trmTtbDotsFg: var(--nc-code-titlebar-fg);
+    --ec-brdCol: var(--nc-code-border-color);
+    --ec-brdRad: var(--nc-code-radius);
+  }
+  & .expressive-code .frame {
+    border: var(--nc-code-border);
+    border-color: var(--nc-code-border-color);
+    border-radius: var(--nc-code-radius);
+    box-shadow: var(--nc-code-shadow);
+  }
+  & .expressive-code .frame pre {
+    border: 0;
+  }
+
+  /* Buttons: Run this example, and the previous and next page links. */
+  & .run-example-bar button,
+  & .run-example-size select {
+    background: var(--nc-button-bg);
+    color: var(--nc-button-fg);
+    border: var(--nc-button-border);
+    border-color: var(--nc-button-border-color);
+    border-radius: var(--nc-button-radius);
+    box-shadow: var(--nc-button-shadow);
+    font-family: var(--sl-font);
+  }
+  & .run-example-bar button:not(:disabled):hover {
+    background: var(--nc-button-hover-bg);
+    color: var(--nc-button-hover-fg);
+  }
+  & .run-example-bar button:not(:disabled):active {
+    box-shadow: none;
+    transform: translate(0.125rem, 0.125rem);
+  }
+  & .pagination-links a {
+    background: var(--nc-card-bg);
+    color: var(--nc-card-fg);
+    border: var(--nc-button-border);
+    border-color: var(--nc-button-border-color);
+    border-radius: var(--nc-button-radius);
+    box-shadow: var(--nc-button-shadow);
+    --sl-color-white: var(--nc-card-title-fg);
+    --sl-color-gray-2: var(--nc-card-fg);
+  }
+  & .pagination-links a:hover {
+    background: var(--nc-button-hover-bg);
+    color: var(--nc-button-hover-fg);
+    --sl-color-white: var(--nc-button-hover-fg);
+  }
+
+  /* Terminal demos. The terminal's own colors come from --nc-term-* and --nc-ansi-* through
+     run-example.ts. */
+  & .run-example-screen {
+    background: var(--nc-term-frame-bg);
+    border: var(--nc-term-frame-border);
+    border-color: var(--nc-term-frame-border-color);
+    border-radius: var(--nc-term-frame-radius);
+    box-shadow: var(--nc-term-frame-shadow);
+  }
+}
+
+@media (min-width: 72rem) {
+  :root[data-style]:not([data-style='modern']) .right-sidebar-panel {
+    width: calc(var(--toc-column) - 2 * var(--nc-panel-gap) - var(--nc-panel-shadow-offset, 0rem));
+  }
+}
+
+/* Terminal's VT323 navigation draws small, so it goes up a size. */
+:root[data-style='terminal'] :is(.sidebar-content :is(a, .large), .right-sidebar-panel :is(a, h2)) {
+  font-size: var(--nc-nav-font-size);
+}
+
+/* On a phone the contents panel is a full-screen menu, so it loses its box. */
+@media (max-width: 50rem) {
+  :root[data-style]:not([data-style='modern']) .sidebar-content {
+    margin: 0;
+    min-height: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+  :root[data-style]:not([data-style='modern']) .sidebar-content::before {
+    content: none;
+  }
+  /* Its keys are for a keyboard. */
+  :root[data-style]:not([data-style='modern']) {
+    --nc-statusbar-display: none;
+    --nc-statusbar-height: 0rem;
+  }
 }
