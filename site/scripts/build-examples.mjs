@@ -126,6 +126,10 @@ for (const dir of GUIDE_DIRS) {
     for (const ex of findPrograms(readFileSync(join(repo, shard), 'utf8'), shard)) {
       const entry = { id: ex.id, title: ex.title, shard };
       status.push(entry);
+      if (ex.shell) {
+        entry.status = 'needs-shell';
+        continue;
+      }
       Object.assign(entry, buildExample(ex, ex.id, []));
       if (entry.status !== 'runs') continue;
       // A listing that tests a macro of its own (#ifdef _DEBUG) gets a second build with the

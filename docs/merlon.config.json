@@ -36,6 +36,7 @@
     "client-library/attributes/index.md",
     "client-library/keyboard/index.md",
     "client-library/mouse/index.md",
+    "client-library/screen/index.md",
     "client-library/panels/index.md",
     "appendix/index.md"
   ],
