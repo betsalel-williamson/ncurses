@@ -12,7 +12,7 @@
  * (gitignored). Requires emcc on PATH; without it
  * this prints a note and exits 0, and the site shows the listings without a Run button.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,6 @@ import { GUIDE_DIRS, findPrograms } from './examples.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
-const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { stdio: 'inherit', ...opts });
 
 try {
   execFileSync('emcc', ['--version'], { stdio: 'ignore' });
@@ -30,9 +29,54 @@ try {
 }
 
 const wasmBuild = join(site, '.generated/ncurses-wasm');
+const expected = new Set();
+
+/**
+ * Messages the ncurses build prints that are expected for this cross-build, each with the
+ * reason it is safe. They are counted, not printed; anything else on stderr is printed, and in
+ * CI it becomes a warning annotation. site/README.md explains each one.
+ */
+const EXPECTED = [
+  // A cross-build can't run the test, and Emscripten's libc (musl) takes setvbuf's arguments
+  // in the standard order, which is what configure assumes.
+  [/^configure: WARNING: cross compiling: assume setvbuf params not reversed$/, 'setvbuf'],
+  // musl's MB_LEN_MAX is 4, the longest UTF-8 sequence. configure wants at least 6, so
+  // ncurses uses its own value, 16 (term.priv.h): larger buffers, never smaller.
+  [/^configure: WARNING: MB_LEN_MAX is missing\/inconsistent in system headers$/, 'MB_LEN_MAX'],
+  // make_hash reads only as many capability lines as its table holds and exits, so the cat
+  // feeding it (MKcaptab.sh, MKuserdefs.sh) can find the pipe closed. The tables are complete.
+  [/^cat: write error: Broken pipe$/, 'make_hash pipe'],
+  // emconfigure and emmake name the command they run.
+  [/^em(configure|make): /, null],
+];
+
+/** Runs one step of the ncurses build, sorting its stderr into expected and new messages. */
+function buildStep(cmd, args, env = {}) {
+  const r = spawnSync(cmd, args, {
+    cwd: wasmBuild,
+    env: { ...process.env, ...env },
+    stdio: ['ignore', 'ignore', 'pipe'],
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  const stderr = r.stderr ?? '';
+  if (r.status !== 0) {
+    process.stderr.write(stderr);
+    throw new Error(`${cmd} failed (${r.status ?? r.signal ?? r.error})`);
+  }
+  for (const line of String(stderr).split('\n').filter(Boolean)) {
+    const known = EXPECTED.find(([re]) => re.test(line));
+    if (known) {
+      if (known[1]) expected.add(known[1]);
+    } else {
+      console.log(line);
+      if (process.env.GITHUB_ACTIONS) console.log(`::warning title=ncurses build::${line}`);
+    }
+  }
+}
 if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
   mkdirSync(wasmBuild, { recursive: true });
-  run('emconfigure', [
+  buildStep('emconfigure', [
     join(repo, 'configure'),
     '--host=wasm32-unknown-emscripten',
     '--build=x86_64-pc-linux-gnu',
@@ -41,11 +85,20 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
     '--without-progs', '--without-tests', '--without-manpages', '--without-debug',
     '--disable-database', '--with-fallbacks=xterm-256color',
     '--disable-stripping', '--enable-widec', '--without-pthread',
+  ], {
     // configure can't run its poll() test when cross-compiling, and without it ncurses waits
     // with select(), which Emscripten answers at once. examples/pty.js gives poll() a real wait,
     // which mouse click resolution and ESCDELAY need.
-  ], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'], env: { ...process.env, cf_cv_working_poll: 'yes' } });
-  run('emmake', ['make', '-j4', 'libs'], { cwd: wasmBuild, stdio: ['ignore', 'ignore', 'inherit'] });
+    cf_cv_working_poll: 'yes',
+    // musl shows the X/Open interfaces without a feature macro, so configure's probe finds no
+    // need for one and the wide-character build falls back to guessing. Naming the level
+    // ncurses asks for on other systems settles both checks.
+    CPPFLAGS: '-D_XOPEN_SOURCE=600',
+    // ncurses silences a GCC analyzer warning with a pragma that clang doesn't know.
+    CFLAGS: '-g -O2 -Wno-unknown-warning-option',
+  });
+  buildStep('emmake', ['make', '-j4', 'libs']);
+  if (expected.size) console.log(`build-examples: ncurses build printed only expected messages (${[...expected].join(', ')})`);
 }
 
 const out = join(site, 'public/examples');
