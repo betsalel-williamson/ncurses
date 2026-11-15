@@ -1096,6 +1096,19 @@
     --sl-color-text-accent: var(--nc-dialog-accent);
     --sl-color-accent: var(--nc-dialog-accent);
   }
+  /* Below 50rem Starlight makes the dialog fill the screen, which pushes the title on its top
+     edge, and the frame and shadow at its sides, off the screen. Inset it instead, clear of the
+     notch, with room for the shadow on the right and below. */
+  @media (max-width: 49.99rem) {
+    & site-search dialog {
+      --nc-dialog-inset-top: calc(env(safe-area-inset-top, 0px) + 1.25rem);
+      --nc-dialog-inset-end: calc(0.5rem + var(--nc-panel-shadow-offset, 0.5rem));
+      margin: var(--nc-dialog-inset-top) var(--nc-dialog-inset-end) 0 0.5rem;
+      width: calc(100% - 0.5rem - var(--nc-dialog-inset-end));
+      height: calc(100% - var(--nc-dialog-inset-top) - var(--nc-dialog-inset-end));
+      max-height: none;
+    }
+  }
   &[data-style='workstation'] site-search dialog {
     border-color: var(--nc-raised);
   }

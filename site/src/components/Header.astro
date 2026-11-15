@@ -51,7 +51,8 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
     padding-inline-start: var(--sl-inline-padding);
   }
   /* On the narrowest phones the menu keeps only its icon and caret, so the site title fits. The
-     select still opens the full list, and its label stays for screen readers. */
+     select still opens the full list, and its label stays for screen readers. Text mode's wide
+     pixel font needs that from a wider screen, or it clips the title on a 375px phone. */
   @media (max-width: 23rem) {
     .nc-header-mobile :global(ncurses-style-select label) {
       --sl-select-width: 0.5em !important;
@@ -64,14 +65,27 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
       padding-inline-start: calc(var(--sl-label-icon-size) + var(--sl-inline-padding) + 0.25rem);
     }
   }
+  @media (max-width: 24.5rem) {
+    :global(:root[data-style='textmode']) .nc-header-mobile :global(ncurses-style-select label) {
+      --sl-select-width: 0.5em !important;
+    }
+    :global(:root[data-style='textmode']) .nc-header-mobile :global(ncurses-style-select .label-icon) {
+      display: block;
+    }
+    :global(:root[data-style='textmode']) .nc-header-mobile :global(ncurses-style-select select) {
+      color: transparent;
+      padding-inline-start: calc(var(--sl-label-icon-size) + var(--sl-inline-padding) + 0.25rem);
+    }
+  }
   /* On narrow screens Starlight's own header row dissolves into this one, so the search button can
      come last, at the top right, after the GitHub link and the Style menu. */
   @media (max-width: 49.99rem) {
     .nc-header > :global(.header) {
       display: contents;
     }
+    /* Grows to push the rest right, but never shrinks below the title's own width. */
     .nc-header :global(.title-wrapper) {
-      flex: 1;
+      flex: 1 0 auto;
     }
     .nc-header > :global(.header > :nth-child(2)) {
       order: 1;
