@@ -1,0 +1,17 @@
+.SH DESCRIPTION
+The function \fBset_menu_format\fP sets the maximum display size of the given
+menu.
+If this size is too small to display all menu items, the menu will be
+made scrollable.
+If this size is larger than the menus subwindow and the
+subwindow is too small to display all menu items, \fBpost_menu\fP will fail.
+.PP
+The default format is 16 rows, 1 column.
+Calling \fBset_menu_format\fP with a
+null menu pointer will change this default.
+A zero row or column argument to
+\fBset_menu_format\fP is interpreted as a request not to change the current
+value.
+.PP
+The function \fBmenu_format\fP returns the maximum-size constraints for the
+given menu into the storage addressed by \fBrows\fP and \fBcols\fP.

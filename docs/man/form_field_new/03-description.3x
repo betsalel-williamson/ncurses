@@ -1,0 +1,18 @@
+.SH DESCRIPTION
+The function \fBnew_field\fP allocates a new field and initializes it from the
+parameters given: height, width, row of upper-left corner, column of upper-left
+corner, number off-screen rows, and number of additional working buffers.
+.PP
+The function \fBdup_field\fP duplicates a field at a new location.
+Most
+attributes (including current contents, size, validation type, buffer count,
+growth threshold, justification, foreground, background, pad character,
+options, and user pointer) are copied.
+Field status and the field page bit are
+not copied.
+.PP
+The function \fBlink_field\fP acts like \fBdup_field\fP, but the new field
+shares buffers with its parent.
+Attribute data is separate.
+.PP
+The function \fBfree_field\fP de-allocates storage associated with a field.

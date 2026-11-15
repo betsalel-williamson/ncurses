@@ -1,0 +1,24 @@
+.SH DESCRIPTION
+Panels are \fBcurses\fP(3X) windows with the added property of
+depth.
+Panel functions allow the use of stacked windows and ensure that the
+proper portions of each window and the \fIcurses\fP \fB\%stdscr\fP
+window are hidden or displayed when panels are added,
+moved,
+modified,
+or removed.
+The set of currently visible panels is the stack of panels.
+The
+\fB\%stdscr\fP window is beneath all panels,
+and is not considered part of the stack.
+.PP
+A window is associated with each panel.
+The panel routines enable you to create,
+move,
+hide,
+and show panels.
+You can relocate a panel to any desired position in the stack.
+.PP
+Panel routines are a functional layer added to \fIcurses\fP,
+make only high-level \fIcurses\fP calls,
+and work anywhere \fIcurses\fP does.

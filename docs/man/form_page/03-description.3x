@@ -1,0 +1,19 @@
+.SH DESCRIPTION
+The function \fBset_current_field\fP sets the current field of the given
+form; \fBcurrent_field\fP returns the current field of the given form.
+.PP
+The function \fBunfocus_current_field\fP removes the focus from the current
+field of the form.
+In such state, inquiries via \fBcurrent_field\fP shall return a
+.I NULL
+pointer.
+.PP
+The function \fBset_form_page\fP sets the form's page number (goes to page
+\fIn\fP of the form).
+.PP
+The function \fBform_page\fP returns the form's current page number.
+.PP
+The function \fBfield_index\fP returns the index of the field in the
+field array of the form it is connected to.
+It returns \fBERR\fP if
+the argument is the null pointer or the field is not connected.

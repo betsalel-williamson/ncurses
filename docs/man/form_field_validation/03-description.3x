@@ -1,0 +1,17 @@
+.SH DESCRIPTION
+By default, no validation is done on form fields.
+You can associate a form with a \fIfield type\fP,
+making the form library validate input.
+.SS field_arg
+Returns a pointer to the field's argument block.
+The \fIargument block\fP is an opaque structure containing
+a copy of the arguments provided in a \fBset_field_type\fP call.
+.SS field_type
+Returns a pointer to the \fIfield type\fP associated with the form field,
+i.e., by calling \fBset_field_type\fP.
+.SS set_field_type
+The function \fBset_field_type\fP associates
+a field type with a given form field.
+This is the type checked by validation functions.
+Most field types are configurable,
+via arguments which the caller provides when calling \fBset_field_type\fP.

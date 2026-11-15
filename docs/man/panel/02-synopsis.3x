@@ -1,0 +1,29 @@
+.SH SYNOPSIS
+.nf
+\fB#include <panel.h>
+.PP
+\fBPANEL *new_panel(WINDOW *\fIwin\fP);
+.PP
+\fBint bottom_panel(PANEL *\fIpan\fP);
+\fBint top_panel(PANEL *\fIpan\fP);
+\fBint show_panel(PANEL *\fIpan\fP);
+\fBvoid update_panels(void);
+\fBint hide_panel(PANEL *\fIpan\fP);
+.PP
+\fBWINDOW *panel_window(const PANEL *\fIpan\fP);
+\fBint replace_panel(PANEL *\fIpan\fP, WINDOW *\fIwindow\fP);
+\fBint move_panel(PANEL *\fIpan\fP, int \fIstarty\fP, int \fIstartx\fP);
+\fBint panel_hidden(const PANEL *\fIpan\fP);
+.PP
+\fBPANEL *panel_above(const PANEL *\fIpan\fP);
+\fBPANEL *panel_below(const PANEL *\fIpan\fP);
+.PP
+\fBint set_panel_userptr(PANEL *\fIpan\fP, const void *\fIptr\fP);
+\fBconst void *panel_userptr(const PANEL *\fIpan\fP);
+.PP
+\fBint del_panel(PANEL *\fIpan\fP);
+.PP
+\fI/* ncurses extensions */\fP
+\fBPANEL *ground_panel(SCREEN *\fIsp\fP);
+\fBPANEL *ceiling_panel(SCREEN *\fIsp\fP);
+.fi

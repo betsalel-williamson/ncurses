@@ -1,0 +1,6 @@
+.SH NOTES
+When configured for wide characters, \fBfield_buffer\fP returns a pointer
+to temporary storage (allocated and freed by the library).
+The application should not attempt to modify the data.
+It will be freed on the next call to \fBfield_buffer\fP to return the
+same buffer.

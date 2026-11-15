@@ -1,0 +1,30 @@
+.SH DESCRIPTION
+The function \fBset_menu_spacing\fP sets the spacing information for the menu.
+Its parameters provide the description and the size (in rows and columns).
+.TP
+\fIspc_description\fP
+controls the number of spaces
+between an item name and an item description.
+It must not be larger than \fBTABSIZE\fP.
+The menu system puts in the
+middle of this spacing area the pad character.
+The remaining parts are filled with
+spaces.
+.TP
+\fIspc_rows\fP
+controls the number of rows
+that are used for an item.
+It must not be larger than 3.
+The menu system inserts the blank lines between item rows, these lines
+will contain the pad character in the appropriate positions.
+.TP
+\fIspc_columns\fP
+controls the number of blanks between columns of items.
+It must not be larger than \fBTABSIZE\fP.
+A value of 0 for all the spacing values resets them to the default,
+which is 1 for all of them.
+.PP
+The function \fBmenu_spacing\fP returns the spacing information for the menu.
+If a pointer is
+.IR NULL ","
+the corresponding information is simply not returned.

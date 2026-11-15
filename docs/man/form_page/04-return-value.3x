@@ -1,0 +1,20 @@
+.SH RETURN VALUE
+Except for \fBform_page\fP, each routine returns one of the following:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_BAD_STATE
+Routine was called from an initialization or termination function.
+.TP 5
+.B E_INVALID_FIELD
+Contents of a field are not valid.
+.TP 5
+.B E_REQUEST_DENIED
+The form driver could not process the request.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred (see \fBerrno\fP(3)).

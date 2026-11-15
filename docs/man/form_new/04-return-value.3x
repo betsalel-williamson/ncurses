@@ -1,0 +1,28 @@
+.SH RETURN VALUE
+The function \fBnew_form\fP returns
+.I NULL
+on error.
+It sets \fBerrno\fP according to the function's success:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_CONNECTED
+The field is already connected to a form.
+.TP 5
+.B E_SYSTEM_ERROR
+System error occurred, e.g., malloc failure.
+.PP
+The function \fBfree_form\fP returns one of the following:
+.TP 5
+.B E_OK
+The routine succeeded.
+.TP 5
+.B E_BAD_ARGUMENT
+Routine detected an incorrect or out-of-range argument.
+.TP 5
+.B E_POSTED
+The form has already been posted.

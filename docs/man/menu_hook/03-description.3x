@@ -1,0 +1,30 @@
+.SH DESCRIPTION
+These functions make it possible to set hook functions to be called at various
+points in the automatic processing of input event codes by \fBmenu_driver\fP.
+.PP
+The function \fBset_item_init\fP sets a hook to be called at menu-post time and
+each time the selected item changes (after the change).
+\fBitem_init\fP
+returns the current item init hook, if any
+.RI ( NULL
+if there is no such hook).
+.PP
+The function \fBset_item_term\fP sets a hook to be called at menu-unpost time
+and each time the selected item changes (before the change).
+\fBitem_term\fP
+returns the current item term hook, if any
+.RI ( NULL
+if there is no such hook).
+.PP
+The function \fBset_menu_init\fP sets a hook to be called at menu-post time and
+just after the top row on the menu changes once it is posted.
+\fBmenu_init\fP
+returns the current menu init hook, if any
+.RI ( NULL
+if there is no such hook).
+.PP
+The function \fBset_menu_term\fP sets a hook to be called at menu-unpost time
+and just before the top row on the menu changes once it is posted.
+\fBmenu_term\fP returns the current menu term hook, if any
+.RI ( NULL
+if there is no such hook).

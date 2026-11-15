@@ -1,0 +1,18 @@
+.SH PORTABILITY
+Reasonable care has been taken to ensure compatibility
+with the native panel facility introduced in System\ V;
+inspection of the SVr4 manual pages suggests the programming interface
+never changed.
+The \fI\%PANEL\fP data structures are merely similar.
+The programmer is cautioned not to directly use \fI\%PANEL\fP fields.
+.PP
+The functions \fB\%show_panel\fP and \fB\%top_panel\fP are identical
+in this implementation,
+and work equally well with displayed or hidden panels.
+In the System\ V implementation,
+\fB\%show_panel\fP is intended for making a hidden panel visible
+(at the top of the stack)
+and \fB\%top_panel\fP is intended for making an already-visible panel
+move to the top of the stack.
+You are cautioned to use the correct
+function to ensure compatibility with System\ V panel libraries.

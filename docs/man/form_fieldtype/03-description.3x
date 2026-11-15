@@ -1,0 +1,64 @@
+.SH DESCRIPTION
+.SS new_fieldtype
+The function \fBnew_fieldtype\fP creates a new field type usable for data
+validation.
+Its parameters are function pointers:
+.TP 5
+\fIfield_check\fP
+This function checks the
+validity of an entered data string whenever the user attempts to leave a field.
+It has two arguments:
+.RS
+.bP
+The (FIELD *) argument is passed in so the validation predicate can see the
+field's buffer, sizes and other attributes.
+.bP
+The second argument is an
+argument-block structure, about which more below.
+.RE
+.TP 5
+\fIchar_check\fP
+This function validates input characters as they are entered.
+The form library passes it the character to be checked
+and a pointer to an argument-block structure.
+.SS free_fieldtype
+The \fBfree_fieldtype\fP function
+frees the space allocated for a given validation type by \fBnew_fieldtype\fP.
+.SS set_fieldtype_arg
+The function \fBset_fieldtype_arg\fP associates
+three storage-management functions with a field type:
+.TP 5
+\fImake_arg\fP
+This function is automatically applied to the
+list of arguments you give \fBset_field_type\fP when attaching validation
+to a field.
+It stores the arguments in an allocated argument-block
+object which is used when validating input.
+.TP 5
+\fIcopy_arg\fP
+This function may be used by applications to copy argument-blocks.
+.TP 5
+\fIfree_arg\fP
+Frees an argument-block structure.
+.PP
+You must supply the \fImake_arg\fP function.
+The other two are optional: you may supply
+.I NULL
+for them.
+In this case, the form library assumes
+that \fImake_arg\fP does not allocate memory but simply loads the
+argument into a single scalar value.
+.SS set_fieldtype_choice
+The form driver requests \fBREQ_NEXT_CHOICE\fP and \fBREQ_PREV_CHOICE\fP assume
+that the possible values of a field form an ordered set, and provide the forms
+user with a way to move through the set.
+.PP
+The \fBset_fieldtype_choice\fP
+function allows forms programmers to define successor and predecessor functions
+for the field type.
+These functions take the field pointer and an
+argument-block structure as arguments.
+.SS link_fieldtype
+The function \fBlink_fieldtype\fP creates
+a new field type from the two given types.
+They are connected by a logical \*(``or\*(''.

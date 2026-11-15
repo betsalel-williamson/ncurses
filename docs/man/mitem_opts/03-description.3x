@@ -1,0 +1,16 @@
+.SH DESCRIPTION
+The function \fBset_item_opts\fP sets all the given item's option bits
+(menu option bits may be logically \*(``or\*(''-ed together).
+.PP
+The function \fBitem_opts_on\fP turns on the given option bits, and leaves
+others alone.
+.PP
+The function \fBitem_opts_off\fP turns off the given option bits, and leaves
+others alone.
+.PP
+The function \fBitem_opts\fP returns the item's current option bits.
+.PP
+There is only one defined option bit mask, \fBO_SELECTABLE\fP.  When this is
+on, the item may be selected during menu processing.
+This option defaults
+to on.
