@@ -2,11 +2,7 @@
 
 > Adapted from *A Hacker's Guide to NCURSES*, by Eric S. Raymond.
 
-The reporting address for bugs is <bug-ncurses@gnu.org>. It is a GNU mailing list; to join, use its [subscription page](https://lists.gnu.org/mailman/listinfo/bug-ncurses), or write to `bug-ncurses-request@gnu.org` with a message containing the line:
-
-```text
-subscribe <name>@<host.domain>
-```
+The reporting address for bugs is <bug-ncurses@gnu.org>. It is a GNU Mailman list; join it from its [subscription page](https://lists.gnu.org/mailman/listinfo/bug-ncurses).
 
 The [list archive](https://lists.gnu.org/archive/html/bug-ncurses) holds past reports and their answers.
 

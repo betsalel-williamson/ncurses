@@ -61,8 +61,8 @@ dialog was designed for shell scripts. To use it from a C program, use its libra
 
 ## Perl modules: Curses and Curses::Widgets
 
-The Perl modules Curses, Curses::Forms and Curses::Widgets give Perl access to curses. With curses and Perl installed, get them from CPAN: [Curses](https://metacpan.org/dist/Curses), [Curses::Forms](https://metacpan.org/dist/CursesForms) and [Curses::Widgets](https://metacpan.org/dist/Curses-Widgets). Once installed, use them from Perl scripts like any other module. The `perlmod` manual page explains Perl modules. These modules come with good documentation and demonstration scripts. The widgets are basic, but the modules give Perl good access to the curses library.
+The Perl modules Curses, Curses::Form and Curses::Widgets give Perl access to curses. With curses and Perl installed, get them from CPAN: [Curses](https://metacpan.org/dist/Curses), [Curses::Form](https://metacpan.org/pod/Curses::Form) and [Curses::Widgets](https://metacpan.org/dist/Curses-Widgets). Once installed, use them from Perl scripts like any other module. The `perlmod` manual page explains Perl modules. These modules come with good documentation and demonstration scripts. The widgets are basic, but the modules give Perl good access to the curses library.
 
 Anuradha Ratnaweera converted some of the HOWTO's examples to Perl. They're in the `perl` directory of the HOWTO's [example archive](https://invisible-island.net/ncurses/howto/ncurses_programs.tar.gz).
 
-The manual pages `Curses(3)`, `Curses::Forms(3)` and `Curses::Widgets(3)` have more. They're installed with the modules.
+The manual pages `Curses(3)`, `Curses::Form(3)` and `Curses::Widgets(3)` have more. They're installed with the modules.
