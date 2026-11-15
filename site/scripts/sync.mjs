@@ -50,6 +50,11 @@ const GUIDES = [
   // A glossary is looked up, not read in order, so its terms are listed A to Z.
   { src: 'docs/glossary', route: 'glossary', indexLabel: 'Introduction', alphabetical: true },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
+  // The landing page of each top-level area of the sidebar, as MDN has.
+  { src: 'docs/areas/tutorials', route: 'learn', indexLabel: 'Overview' },
+  { src: 'docs/areas/guides', route: 'topics', indexLabel: 'Overview' },
+  { src: 'docs/areas/reference', route: 'reference', indexLabel: 'Overview' },
+  { src: 'docs/areas/about', route: 'about', indexLabel: 'Overview' },
 ];
 const base = `/${repoSlug.split('/')[1]}`;
 for (const g of GUIDES) rmSync(join(content, g.route.split('/')[0]), { recursive: true, force: true });
