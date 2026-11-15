@@ -2,6 +2,7 @@
 // because themeCssSelector is a function, which astro.config.mjs can't pass to Expressive Code.
 import { readFileSync } from 'node:fs';
 import { defineEcConfig, ExpressiveCodeTheme } from '@astrojs/starlight/expressive-code';
+import { codeLinks } from './code-links.mjs';
 
 // One syntax theme per reader style (src/styles/styles.css). Starlight's UI colors still apply,
 // so frames and backgrounds come from each style's tokens; these set the token colors.
@@ -23,4 +24,6 @@ export default defineEcConfig({
   // 13px code fits a 77-column listing in the content column at 1280px; check-listings.mjs holds
   // listings to that. Text mode sets --ec-codeFontSize itself in styles.css.
   styleOverrides: { codeFontSize: '0.8125rem' },
+  // Curses calls in C listings link to their man pages, with a hint on hover (code-links.mjs).
+  plugins: [codeLinks()],
 });

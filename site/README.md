@@ -31,6 +31,14 @@ Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's 
 
 Astro caches the code-block stylesheet's name between local builds. After changing `ec.config.mjs`, delete `node_modules/.astro` before building, or the pages link a stylesheet that no longer exists.
 
+## Code hints
+
+In C listings, each call of a curses library function links to its man page, and hovering or focusing the name shows the page's NAME summary.
+
+- `scripts/sync.mjs` writes `.generated/symbols.json` from the NAME line of every 3X page: each name, its page and the summary.
+- `code-links.mjs` is an Expressive Code plugin, loaded from `ec.config.mjs`. It links a name only when a `(` follows it, so a variable called `box` or `move` stays plain.
+- `src/components/code-hints.js` draws the hint, and `src/styles/styles.css` styles it from the `--nc-hint-*` tokens of each reader style.
+
 ## Runnable examples
 
 Every complete C program in the guides (a listing with a `main()`) gets a "Run this example" button. The program runs in the reader's browser, compiled to WebAssembly and drawn in an xterm.js terminal.

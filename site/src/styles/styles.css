@@ -23,6 +23,54 @@
   --sl-text-h4: var(--sl-text-lg);
 }
 
+/* Code hints. code-links.mjs links each curses call in a C listing to its man page, and
+   code-hints.js shows the page's NAME summary in this box on hover or focus. Modern draws it
+   from Starlight's colors; each other style sets the --nc-hint-* tokens. */
+.expressive-code a.nc-sym {
+  color: inherit;
+  text-decoration: var(--nc-sym-decoration, underline dotted);
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  text-underline-offset: 0.2em;
+}
+.expressive-code a.nc-sym:is(:hover, :focus-visible) {
+  text-decoration-style: solid;
+  text-decoration-color: currentColor;
+}
+.nc-hint {
+  position: fixed;
+  z-index: 100;
+  max-width: min(28rem, calc(100vw - 1rem));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--nc-hint-bg, var(--sl-color-gray-6));
+  color: var(--nc-hint-fg, var(--sl-color-gray-2));
+  border: var(--nc-hint-border, 1px solid var(--sl-color-gray-5));
+  border-radius: var(--nc-hint-radius, 0.375rem);
+  box-shadow: var(--nc-hint-shadow, var(--sl-shadow-md));
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-sm);
+  line-height: 1.4;
+  pointer-events: none;
+}
+:root[data-style='workstation'] .nc-hint {
+  border-color: var(--nc-raised);
+}
+.nc-hint[hidden] {
+  display: none;
+}
+.nc-hint code {
+  font-family: var(--sl-font-mono);
+  font-weight: 700;
+  color: var(--nc-hint-name-fg, var(--sl-color-white));
+}
+.nc-hint-page {
+  font-size: var(--sl-text-xs);
+  color: var(--nc-hint-page-fg, var(--sl-color-text-accent));
+}
+
 /* The status bar (ThemeProvider.astro) is hidden unless a style turns it on. */
 .nc-statusbar {
   display: none;
@@ -139,6 +187,15 @@
   --nc-toc-border-color: var(--nc-cga-black);
   --nc-toc-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
   --nc-toc-title: '[ On this page ]';
+  /* Code hints (code-hints.js): a gray dialog box like the On this page panel. */
+  --nc-hint-bg: var(--nc-cga-gray);
+  --nc-hint-fg: var(--nc-cga-black);
+  --nc-hint-name-fg: var(--nc-cga-blue);
+  --nc-hint-page-fg: var(--nc-cga-red);
+  --nc-hint-border: 4px double var(--nc-cga-black);
+  --nc-hint-shadow: 0.5rem 0.5rem 0 var(--nc-cga-black);
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
   --nc-toc-title-fg: var(--nc-cga-black);
   --nc-toc-heading-clip: inset(50%);
   --nc-toc-heading-position: absolute;
@@ -279,6 +336,15 @@
   --nc-toc-border-color: var(--nc-raised);
   --nc-toc-shadow: none;
   --nc-toc-title: none;
+  /* Code hints (code-hints.js): a raised panel. */
+  --nc-hint-bg: #d6d6d1;
+  --nc-hint-fg: #33332f;
+  --nc-hint-name-fg: #161616;
+  --nc-hint-page-fg: #22577a;
+  --nc-hint-border: 2px solid;
+  --nc-hint-shadow: none;
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
 
   --nc-content-bg: #ffffff;
   --nc-content-border: 2px solid;
@@ -414,6 +480,15 @@
   --nc-toc-border-color: transparent;
   --nc-toc-shadow: none;
   --nc-toc-title: none;
+  /* Code hints (code-hints.js): amber in a thin amber rule, like a terminal's own window. */
+  --nc-hint-bg: #050504;
+  --nc-hint-fg: #b3ae9f;
+  --nc-hint-name-fg: var(--nc-amber-light);
+  --nc-hint-page-fg: var(--nc-amber);
+  --nc-hint-border: 1px solid var(--nc-amber);
+  --nc-hint-shadow: 0 0 0.5rem rgb(255 176 0 / 0.35);
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
 
   --nc-content-bg: transparent;
   --nc-content-border: 0;

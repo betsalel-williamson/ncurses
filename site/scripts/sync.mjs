@@ -5,6 +5,7 @@
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
+ * - .generated/symbols.json: library names and their man pages, for links in code listings
  * - a Run placeholder after each complete program in a guide (examples.mjs)
  * - the errata tables in the appendix, from docs/appendix/errata.csv
  * Requires pandoc on PATH. Output is gitignored.
@@ -221,5 +222,17 @@ const sidebar = GROUPS.map((g) => ({
     .map((p) => ({ label: `${p.name}(${p.section})`, link: `/${route(p)}/` })),
 }));
 writeFileSync(join(tmp, 'sidebar.json'), JSON.stringify(sidebar, null, 2));
+// .generated/symbols.json: each library name (3X) -> its man page, for links in code listings
+// (code-links.mjs). A name documented on more than one page keeps the first, as byName does.
+const symbols = {};
+for (const p of pages) {
+  if (p.section !== '3x') continue;
+  for (const n of [p.name, ...p.aliases]) {
+    if (/^[A-Za-z_]\w*$/.test(n) && !(n in symbols)) {
+      symbols[n] = { href: `${base}/${route(p)}/`, page: `${p.name}(3X)`, summary: p.summary };
+    }
+  }
+}
+writeFileSync(join(tmp, 'symbols.json'), JSON.stringify(symbols, null, 2));
 const failed = pages.filter((p) => p.failed).map((p) => p.file);
 console.log(`synced ${pages.length} man pages${failed.length ? ` (${failed.join(', ')} shown as source)` : ''}`);
