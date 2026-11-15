@@ -22,4 +22,6 @@ The list lives in [errata.csv](errata.csv), one row per change, and the site sho
 
 Every row that claims an error (`original-error`, `edition-error`, `open`, `rejected`) carries the five-step check in the last five columns, and the site shows it under each table. An error row's verdict is `matches`; a claim the evidence doesn't bear out moves to `rejected` with its verdict, so a finding is never dropped silently.
 
+This edition's own fixes can be wrong. When a later check shows that the original was right after all, a type I error (an error reported that wasn't there), the row moves to `rejected` with the new evidence, so the record of the mistake stays. If the wrong fix also changed the text, the original wording is restored in its own commit, and a new `edition-error` row names that commit. The [adjudication](meta-verification/adjudication.md#rows-changed) of the first outside pass lists the nine rows this happened to, and [Lessons learned](lessons-learned.md#our-own-fixes-can-be-wrong) says why the first check got them wrong.
+
 A row names the commit that made its change, so add the rows in a later commit than the change itself, in the same pull request. Pull requests here are merged with merge commits, which keep those SHAs.
