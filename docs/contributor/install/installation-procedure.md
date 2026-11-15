@@ -87,7 +87,7 @@ If you have libtool installed, you can type this to generate the appropriate sta
 ./configure --with-libtool
 ```
 
-You can make curses and terminfo fall back to an existing file of termcap definitions by configuring with `--enable-termcap`. If you do this, the library searches `/etc/termcap` before the terminfo database, and also interprets the contents of the `$TERMCAP` environment variable. See [BSD conversion notes](bsd-conversion.md).
+You can make curses and terminfo fall back to an existing file of termcap definitions by configuring with `--enable-termcap`. If you do this, the library searches `/etc/termcap` after the terminfo database, when no terminfo entry is found, and also interprets the contents of the `$TERMCAP` environment variable. See [BSD conversion notes](bsd-conversion.md).
 
 ## Step 3: build
 
