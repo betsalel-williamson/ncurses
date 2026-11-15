@@ -17,13 +17,14 @@ export default defineConfig({
       components: {
         Footer: './src/components/Footer.astro',
         Header: './src/components/Header.astro',
+        SkipLink: './src/components/SkipLink.astro',
         ThemeProvider: './src/components/ThemeProvider.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
       },
       customCss: [
         './src/styles/layout.css',
-        // Fonts for the reader-selectable styles (styles.css), Latin subsets only.
-        '@fontsource/vt323/latin-400.css',
+        // Fonts for the reader-selectable styles (styles.css), Latin subsets only. VT323 is
+        // declared in styles.css.
         '@fontsource/arimo/latin-400.css',
         '@fontsource/arimo/latin-700.css',
         '@fontsource/gelasio/latin-400.css',
