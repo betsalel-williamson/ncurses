@@ -43,6 +43,7 @@
     "client-library/panels/index.md",
     "contributor/hackguide/index.md",
     "contributor/install/index.md",
+    "contributor/ada/index.md",
     "appendix/index.md"
   ],
   "man": {
