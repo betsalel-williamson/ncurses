@@ -4,10 +4,10 @@
  "counts": {
   "errata_findings": {
    "misaligned": {
-    "true positive": 75,
+    "true positive": 76,
     "true negative": 3,
-    "unsettled": 10,
-    "false positive (type I)": 9
+    "unsettled": 8,
+    "false positive (type I)": 10
    },
    "split": {
     "true positive": 5
@@ -2025,11 +2025,11 @@
    "claim_as_printed": "Curses::Form, from the CPAN All Modules page",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:7380-7392; MetaCPAN API for Curses::Form and Curses::Forms (fetched 2026-11-15)",
    "it_says": "HOWTO: \"The perl module Curses, Curses::Form and Curses::Widgets ... Get the three zipped modules in the Curses category.\" MetaCPAN: Curses::Form is a package inside the Curses distribution; Curses::Forms is its own distribution (CursesForms).",
-   "verdict": "can't tell",
+   "verdict": "matches",
    "confidence": "low",
    "one_step_earlier": "With the web check, Curses::Form turns out to exist, so the name is not simply wrong; 'three zipped modules' favours CursesForms.",
-   "classification": "c",
-   "action": "row left as it is; repo can't settle it",
+   "classification": "b",
+   "action": "row moves to rejected; Curses::Form restored, with an edition-error row",
    "bo3_votes": [
     "can't tell",
     "can't tell",
@@ -2042,11 +2042,11 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Owner decision: the HOWTO's module is ambiguous. Row left as it is.",
+   "note": "Settled by the owner's rule: assume the original is right unless the evidence against it is strong. Curses::Form exists, as a package in Curses.pm (MetaCPAN, 2026-11-15), so the evidence isn't strong.",
    "claim_states_error": false,
-   "error_real": null,
-   "errata_finding": "unsettled",
-   "finding_valid": null,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
    "bo3_finding": "no call"
   },
   {
@@ -2933,11 +2933,11 @@
    "claim_as_printed": "Slide the tiles with the arrow keys until they're in order",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:7512-7519; ncurses_programs.tar.gz JustForFun/shuffle.c:89-110 (scratchpad copy)",
    "it_says": "HOWTO: \"A fun game, if you have time to kill.\" shuffle.c: \"k = rand() % (n * n);\" with no parity check.",
-   "verdict": "can't tell",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The 'was' text is the edition's own sentence, not the HOWTO's.",
-   "classification": "c",
-   "action": "row left as it is; repo can't settle it",
+   "classification": "a",
+   "action": "keep the row",
    "bo3_votes": [
     "can't tell",
     "can't tell",
@@ -2946,11 +2946,11 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "The defect is in the example program, outside the repo; the row's 'was' quotes the edition. Owner may want the 'was' reworded.",
+   "note": "Settled from the repository: git show bec4c6d:docs/client-library/more/shuffle.md has the sentence as first written, and init_board() in the shard deals with rand() and no parity check.",
    "claim_states_error": false,
-   "error_real": null,
-   "errata_finding": "unsettled",
-   "finding_valid": null,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
    "bo3_finding": "no call"
   },
   {

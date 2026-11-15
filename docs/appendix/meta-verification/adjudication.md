@@ -19,12 +19,12 @@ An errata row that isn't `rejected` reports an error, and a `rejected` row repor
 
 | Group | True positive | True negative | Type I (false positive) | Type II (false negative) | Unsettled |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 97 misaligned rows | 75 | 3 | 9 | 0 | 10 |
+| 97 misaligned rows | 76 | 3 | 10 | 0 | 8 |
 | 5 splits | 5 | 0 | 0 | 0 | 0 |
 | 10 aligned rows, spot-checked | 10 | 0 | 0 | 0 | 0 |
-| **All 112** | **90** | **3** | **9** | **0** | **10** |
+| **All 112** | **91** | **3** | **10** | **0** | **8** |
 
-Of the 102 settled rows, 93 are valid findings and 9 are type I errors: rows that reported an error in text the original had right. The 3 true negatives are the `rejected` rows `L28`, `L29` and `L34`, whose rejection stands. No type II error turned up, but this sample was drawn from rows the pass flagged, so it can't measure how many real errors the errata missed.
+Of the 104 settled rows, 94 are valid findings and 10 are type I errors: rows that reported an error in text the original had right. `L179` and `L286` were settled after the first count; see below. The 3 true negatives are the `rejected` rows `L28`, `L29` and `L34`, whose rejection stands. No type II error turned up, but this sample was drawn from rows the pass flagged, so it can't measure how many real errors the errata missed.
 
 ### The checkers' Bo3 majority
 
@@ -55,6 +55,7 @@ Moved to `rejected`, with the edition's "fix" reverted or corrected in the conte
 - `L272` Input guide: `curs_getch(3X)` says getch() "with echo and neither cbreak nor raw is not well-defined", so the original warning is restored.
 - `L295` Hacker's guide: `parse_entry.c` does translate `box1` (`box_chars_1`) to `acsc` ("acsc string synthesized from AIX capabilities"), so the original example is restored, with `get` corrected to `gets` (a `formatting` row).
 - `L301` Glossary: `ncurses(3X)` gives `_w` as the rule and `addwstr` and `inwstr` as the exceptions, so the rule is restored with its exception.
+- `L179` Widget libraries: the HOWTO names `Curses::Form`, and the edition changed it to `Curses::Forms`, a separate distribution. `Curses::Form` exists too, as a package in `Curses.pm` (MetaCPAN). The rule is to assume the original is right unless the evidence against it is strong, and here it isn't, so `Curses::Form` is restored.
 
 ## Splits
 
@@ -71,8 +72,13 @@ All five are confirmed. None of the splits came from conflicting evidence. The r
 
 - `L55`, `L178`: dead links. A fetch on 2026-11-15 agrees with the rows.
 - `L199`, `L241`, `L259`: the list is on GNU Mailman. A fetch on 2026-11-15 agrees with the rows.
-- `L174`, `L175`, `L176`, `L286`: the defects are in the HOWTO's example archive, which isn't in the repo. A copy of the archive read for this check agrees. `L286`'s `was` quotes this edition's sentence, not the HOWTO's.
-- `L179`: `Curses::Form` exists as a package in the Curses distribution, and `Curses::Forms` is a separate one. The HOWTO's "three zipped modules" favors the row's reading, but the evidence is ambiguous, so the owner decides.
+- `L55`'s sentence is back, with the URL as plain text marked as a dead link. The Wayback Machine lists a 2003 snapshot, but this environment couldn't open it to check that it shows the games.
+- `L174`, `L175`, `L176`: the original programs are in the HOWTO's example archive, which isn't in the repo, and its download now returns 403. A copy of the archive read for this check agrees. The rows now cite the programs as this edition runs them (`hanoi.md`, `shuffle.md`, `typing-tutor.md`) as well.
+
+Settled since the first count:
+
+- `L286`: settled from the repository, so the row stands. Its `was` quotes this edition's sentence as first written (`git show bec4c6d:docs/client-library/more/shuffle.md`), and `init_board()` in the shard deals with `rand()` and no parity check.
+- `L179`: see [Rows changed](#rows-changed).
 
 ## Checker error patterns
 
@@ -96,6 +102,6 @@ The checkers' errors were almost all type II: a `matches` on text that was wrong
 - Cards mixed two kinds of claim. Some `was` fields are the printed text, and others describe an error ("frees only items 0 and 1"), so `matches` meant opposite things on different cards.
 - `man/` pages are fixed in place, so a checker reading the current file sees this edition's correction. Cards for those rows need the upstream base commit.
 - Edition rows can't be checked without the edition's own history, which the allowed paths excluded.
-- Where the pass was useful, it was useful through its quotes. The 9 wrong rows were found by runs that read the code further than the original check did: `box_chars_1` rather than the literal `box1`, the whole `waddnstr()`, and the manual's caveat on cooked mode.
+- Where the pass was useful, it was useful through its quotes. The wrong rows were found by runs that read the code further than the original check did: `box_chars_1` rather than the literal `box1`, the whole `waddnstr()`, and the manual's caveat on cooked mode.
 
 A future pass would gain from one fixed question per card ("Is the printed text correct?"), from giving `man/` cards the upstream text, from allowing `git show` of this edition's history for `edition-error` rows, and from tallying a vote only after checking that its quote supports its label.
