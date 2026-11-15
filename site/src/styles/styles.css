@@ -214,6 +214,27 @@
   --nc-code-border-color: transparent;
   --nc-code-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 #000044;
   --nc-code-radius: 0;
+  /* A shell listing's title bar is a curses window's top edge: a double rule with the close
+     box at the left, where a Mac shows its three dots. */
+  --nc-frame-close: '[■]';
+  --nc-frame-close-fg: var(--nc-cga-light-green);
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: var(--nc-cga-black);
+  --nc-frame-titlebar-fg: var(--nc-cga-white);
+  --nc-frame-titlebar-rule: 4px double var(--nc-cga-white);
+  /* The search dialog: a gray dialog box with a double frame and a title on its top edge. */
+  --nc-dialog-bg: var(--nc-cga-gray);
+  --nc-dialog-fg: var(--nc-cga-black);
+  --nc-dialog-border: 4px double var(--nc-cga-white);
+  --nc-dialog-shadow: var(--nc-panel-shadow-offset) var(--nc-panel-shadow-offset) 0 var(--nc-cga-black);
+  --nc-dialog-title: '[ Search ]';
+  --nc-dialog-title-fg: var(--nc-cga-white);
+  --nc-dialog-input-border: 0;
+  --nc-dialog-result-bg: var(--nc-cga-cyan);
+  --nc-dialog-result-fg: var(--nc-cga-black);
+  --nc-dialog-result-title-fg: var(--nc-cga-black);
+  --nc-dialog-accent: var(--nc-cga-blue);
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.35);
   --nc-inline-code-bg: transparent;
   --nc-inline-code-fg: var(--nc-cga-light-cyan);
 
@@ -359,6 +380,27 @@
   --nc-code-border-color: var(--nc-sunken);
   --nc-code-shadow: none;
   --nc-code-radius: 0;
+  /* A shell listing's title bar is a Motif window's: a raised bar with the window-menu
+     button at the left, where a Mac shows its three dots. */
+  --nc-frame-close: '';
+  --nc-frame-close-fg: #161616;
+  --nc-frame-close-box: 2px solid;
+  --nc-frame-titlebar-bg: #c8c8c3;
+  --nc-frame-titlebar-fg: #161616;
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: a raised panel. */
+  --nc-dialog-bg: #d6d6d1;
+  --nc-dialog-fg: #33332f;
+  --nc-dialog-border: 2px solid;
+  --nc-dialog-shadow: 0.25rem 0.25rem 0 rgb(0 0 0 / 0.35);
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: #161616;
+  --nc-dialog-input-border: 2px solid;
+  --nc-dialog-result-bg: #f4f4ef;
+  --nc-dialog-result-fg: #33332f;
+  --nc-dialog-result-title-fg: #161616;
+  --nc-dialog-accent: #22577a;
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.25);
   --nc-inline-code-bg: #ecece7;
   --nc-inline-code-fg: #161616;
 
@@ -504,6 +546,26 @@
   --nc-code-border-color: var(--nc-rule);
   --nc-code-shadow: none;
   --nc-code-radius: 0;
+  /* A shell listing on a terminal has no window chrome: a thin amber rule under the title. */
+  --nc-frame-close: none;
+  --nc-frame-close-fg: var(--nc-amber);
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: transparent;
+  --nc-frame-titlebar-fg: var(--nc-amber);
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: amber text in a thin amber frame on black. */
+  --nc-dialog-bg: #050504;
+  --nc-dialog-fg: #b3ae9f;
+  --nc-dialog-border: 1px solid var(--nc-amber);
+  --nc-dialog-shadow: 0 0 1rem rgb(255 176 0 / 0.25);
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: var(--nc-amber);
+  --nc-dialog-input-border: 1px solid;
+  --nc-dialog-result-bg: transparent;
+  --nc-dialog-result-fg: #b3ae9f;
+  --nc-dialog-result-title-fg: var(--nc-amber);
+  --nc-dialog-accent: var(--nc-amber);
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.6);
   --nc-inline-code-bg: #2a2720;
   --nc-inline-code-fg: var(--nc-amber-pale);
 
@@ -768,6 +830,111 @@
   }
   & .expressive-code .frame pre {
     border: 0;
+  }
+  & .expressive-code .frame.is-terminal .header {
+    background: var(--nc-frame-titlebar-bg);
+    color: var(--nc-frame-titlebar-fg);
+    border-top: var(--nc-frame-titlebar-rule);
+  }
+  & .expressive-code .frame.is-terminal .header::before {
+    content: var(--nc-frame-close);
+    -webkit-mask-image: none;
+    mask-image: none;
+    background: var(--nc-frame-titlebar-bg);
+    opacity: 1;
+    width: auto;
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 0.125rem;
+    line-height: 1;
+    color: var(--nc-frame-close-fg);
+    font-family: var(--sl-font-mono);
+  }
+  /* Workstation draws the window-menu button: a raised square holding a short bar. */
+  &[data-style='workstation'] .expressive-code .frame.is-terminal .header::before {
+    width: 1rem;
+    height: 0.75rem;
+    padding: 0;
+    box-sizing: border-box;
+    border: var(--nc-frame-close-box);
+    border-color: var(--nc-raised);
+    background: linear-gradient(currentColor, currentColor) center / 0.5rem 2px no-repeat var(--nc-frame-titlebar-bg);
+  }
+  &[data-style='workstation'] .expressive-code .frame.is-terminal .header {
+    border: 2px solid;
+    border-color: var(--nc-raised);
+  }
+
+  /* The search dialog (Ctrl+K). */
+  & site-search dialog {
+    overflow: visible;
+    background: var(--nc-dialog-bg);
+    color: var(--nc-dialog-fg);
+    border: var(--nc-dialog-border);
+    border-radius: 0;
+    box-shadow: var(--nc-dialog-shadow);
+    --sl-color-black: var(--nc-dialog-result-bg);
+    --sl-color-white: var(--nc-dialog-result-title-fg);
+    --sl-color-gray-1: var(--nc-dialog-result-fg);
+    --sl-color-gray-2: var(--nc-dialog-result-fg);
+    --sl-color-gray-3: var(--nc-dialog-fg);
+    --sl-color-text: var(--nc-dialog-fg);
+    --sl-color-text-accent: var(--nc-dialog-accent);
+    --sl-color-accent: var(--nc-dialog-accent);
+  }
+  &[data-style='workstation'] site-search dialog {
+    border-color: var(--nc-raised);
+  }
+  & site-search dialog::backdrop {
+    background: var(--nc-dialog-backdrop);
+    backdrop-filter: none;
+  }
+  & site-search dialog::before {
+    content: var(--nc-dialog-title);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    padding: 0 0.5rem;
+    background: var(--nc-dialog-bg);
+    color: var(--nc-dialog-title-fg);
+    font-family: var(--sl-font);
+    white-space: nowrap;
+  }
+  & #starlight__search {
+    --pagefind-ui-font: var(--sl-font);
+    --pagefind-ui-background: var(--nc-input-bg);
+    --pagefind-ui-text: var(--nc-dialog-fg);
+    --pagefind-ui-primary: var(--nc-dialog-fg);
+    --pagefind-ui-border: var(--nc-dialog-fg);
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-tag: var(--nc-dialog-result-bg);
+    --sl-search-corners: 0;
+  }
+  & #starlight__search input:focus {
+    --pagefind-ui-border: var(--nc-dialog-accent);
+  }
+  & #starlight__search .pagefind-ui__search-input {
+    color: var(--nc-input-fg);
+    border: var(--nc-dialog-input-border);
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+  }
+  &[data-style='workstation'] #starlight__search .pagefind-ui__search-input {
+    border-color: var(--nc-sunken);
+  }
+  & #starlight__search .pagefind-ui__search-input::placeholder {
+    color: var(--nc-input-fg);
+    opacity: 0.75;
+  }
+  & #starlight__search .pagefind-ui__form::before {
+    background-color: var(--nc-input-fg);
+  }
+  & #starlight__search mark {
+    background: var(--nc-dialog-accent);
+    color: var(--nc-dialog-bg);
   }
 
   /* Buttons: the home page's primary action, Run this example, the mobile menu button and the
