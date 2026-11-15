@@ -3,12 +3,33 @@
  * example's WebAssembly build (public/examples/<id>.mjs, from scripts/build-examples.mjs) and
  * runs it in an xterm.js terminal: keys go to the program's stdin, its output to the screen.
  */
-import { Terminal } from '@xterm/xterm';
+import { Terminal, type ITheme } from '@xterm/xterm';
 import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const FONT_SIZE = 16;
+
+// The terminal's colors follow the reader's style: styles.css defines --nc-term-* and the 16
+// --nc-ansi-* colors for each style but Modern, which keeps xterm.js's own palette.
+const ANSI = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white'] as const;
+const terminalTheme = (): ITheme => {
+  const css = getComputedStyle(document.documentElement);
+  const v = (name: string) => css.getPropertyValue(name).trim() || undefined;
+  const background = v('--nc-term-bg');
+  if (!background) return { background: '#1e1e1e', black: '#1e1e1e' };
+  const theme: Record<string, string | undefined> = {
+    background,
+    foreground: v('--nc-term-fg'),
+    cursor: v('--nc-term-cursor'),
+    cursorAccent: background,
+  };
+  ANSI.forEach((name, i) => {
+    theme[name] = v(`--nc-ansi-${i}`);
+    theme[`bright${name[0].toUpperCase()}${name.slice(1)}`] = v(`--nc-ansi-${i + 8}`);
+  });
+  return theme as ITheme;
+};
 /** Terminal sizes a reader can pick, columns by rows. The first is the default. */
 const SIZES: [number, number][] = [[80, 24], [100, 30], [60, 20]];
 
@@ -131,9 +152,13 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
         rows,
         cursorBlink: true,
         fontSize: FONT_SIZE,
-        theme: { background: '#1e1e1e', black: '#1e1e1e' },
+        theme: terminalTheme(),
       });
       term.open(screen);
+      const restyle = term;
+      new MutationObserver(() => {
+        restyle.options.theme = terminalTheme();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-style'] });
       // On the alternate screen xterm.js turns the wheel into arrow keys, which a curses program
       // reads as input (getstr() echoed them as ^[[A) while the page scrolls too. Leave the wheel
       // to the page, unless the program turned on mouse tracking and asked for wheel reports

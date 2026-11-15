@@ -19,11 +19,17 @@ A Style menu beside Starlight's Auto/Light/Dark picker lets each reader choose h
 
 | File | What it does |
 | --- | --- |
-| `src/components/ThemeProvider.astro` | Runs at the top of `<body>`, before anything paints. It sets `data-style` on `<html>` from `localStorage` and forces the color scheme a style is drawn for. |
+| `src/components/ThemeProvider.astro` | Runs at the top of `<body>`, before anything paints. It sets `data-style` on `<html>` from `localStorage`, forces the color scheme a style is drawn for, and holds the status bar that Text mode shows. |
 | `src/components/ThemeSelect.astro` | The Style menu. Starlight's color-scheme picker hides while a style with only one scheme is chosen. |
-| `src/styles/styles.css` | Each style's color, font and size tokens, plus the smaller section headings every style shares. |
+| `src/styles/styles.css` | Each style's tokens, then the components written once against them. |
+| `src/code-themes/*.json` | Each style's syntax colors for code blocks, used by `ec.config.mjs`. |
+| `src/components/run-example.ts` | Reads the terminal demo's colors from the style's tokens. |
 
-The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323), Workstation (Motif-era gray chrome, Charter text and Helvetica-style headings) and Terminal (amber on near black with VT323 headings). The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site. To add a style, add its tokens to `styles.css`, its option to `ThemeSelect.astro`, and its color scheme to `modes` in `ThemeProvider.astro`.
+The styles are Modern (Starlight's own, following Auto/Light/Dark), Text mode (a blue 16-color console in VT323, with a menu bar, a function-key bar and boxed panels), Workstation (Motif-era beveled gray panels, Charter text, Helvetica-style headings and an xterm terminal) and Terminal (amber on near black with VT323 headings).
+
+Each style but Modern defines Starlight's own tokens (`--sl-*`) and this site's (`--nc-*`). The `--nc-*` tokens name every part a style draws: the menu bar and status bar, the contents, page and "On this page" panels (background, border, shadow, title), headings, links, inline code, code blocks, buttons, the terminal frame, and the terminal's 16 colors (`--nc-ansi-0` to `--nc-ansi-15`). To add a style, copy one style's token block in `styles.css`, add its option to `ThemeSelect.astro`, its color scheme to `modes` in `ThemeProvider.astro`, and a syntax theme to `src/code-themes/` and `ec.config.mjs`. The fonts come from `@fontsource` packages, Latin subsets only, so nothing loads from another site.
+
+Astro caches the code-block stylesheet's name between local builds. After changing `ec.config.mjs`, delete `node_modules/.astro` before building, or the pages link a stylesheet that no longer exists.
 
 ## Runnable examples
 

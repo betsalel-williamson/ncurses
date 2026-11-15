@@ -62,3 +62,13 @@ The manual pages and ncurses itself are under the same license, with the copyrig
 ## This edition
 
 Edited by [betsalel-williamson](https://github.com/betsalel-williamson) with [Merlon Docs](https://github.com/Merlon-Docs/merlon). The guide text is merged so each fact appears once, with every page crediting its sources. The manual pages are generated from the troff sources in `man/`. Mistakes in the reorganization are ours, not the authors'.
+
+Every change to the original text is listed in [Errata and changes](../appendix/): errors corrected in the original, each with the evidence checked, errors this edition introduced and then fixed, formatting and structure changes, new material, and errors found but not yet fixed, so they can be reported upstream. [Lessons learned](../appendix/lessons-learned/) records what went wrong in the migration itself and what now catches it.
+
+### Why this edition exists
+
+This edition is an example of using AI agent skills to review documentation, so that people and AI models alike can understand a software project more easily. Merlon Docs organizes the text into shards, small source files that each cover one topic, and compiles the shards into guides. Organizing it this way:
+
+- removes duplicates, so each fact is stated once and corrected in one place
+- gives each shard a single responsibility
+- lets a review focus on one detail at a time, and still cover a large body of text efficiently
