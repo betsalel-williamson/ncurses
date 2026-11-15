@@ -1,0 +1,42 @@
+.SH NOTES
+While these functions are intended to be used to support a signal handler
+(i.e., for
+.IR \%SIGWINCH "),"
+care should be taken to avoid invoking them in a
+context where \fB\%malloc\fP or \fB\%realloc\fP may have been interrupted,
+since it uses those functions.
+.PP
+If \fI\%ncurses\fP is configured to supply its own
+.I \%SIGWINCH
+handler,
+.bP
+on receipt of a
+.IR \%SIGWINCH ","
+the handler sets a flag
+.bP
+which is tested in
+\fB\%wgetch\fP(3X),
+\fB\%doupdate\fP(3X) and
+\fB\%restartterm\fP(3X),
+.bP
+in turn, calling the \fB\%resizeterm\fP function,
+.bP
+which \fB\%ungetch\fP's a \fB\%KEY_RESIZE\fP which
+will be read on the next call to \fB\%wgetch\fP.
+.IP
+The \fB\%KEY_RESIZE\fP alerts an application that the screen size has changed,
+and that it should repaint special features such as pads that cannot
+be done automatically.
+.IP
+Calling \fB\%resizeterm\fP or \fB\%resize_term\fP
+directly from a signal handler is unsafe.
+This indirect method is used to provide a safe way to resize the
+\fI\%ncurses\fP data structures.
+.PP
+If the environment variables \fILINES\fP or \fI\%COLUMNS\fP are set,
+this overrides the library's use of the window size obtained from
+the operating system.
+Thus, even if a
+.I \%SIGWINCH
+is received,
+no screen size change may be recorded.

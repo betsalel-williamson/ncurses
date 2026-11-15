@@ -1,0 +1,17 @@
+.SH PORTABILITY
+It is possible to resize the screen with SVr4 \fIcurses\fP,
+by
+.bP
+exiting \fIcurses\fP with \fB\%endwin\fP(3X) and
+.bP
+resuming using \fB\%refresh\fP(3X).
+.PP
+Doing that clears the screen and is visually distracting.
+.PP
+.I \%ncurses
+introduced this extension in mid-1995.
+NetBSD
+.I curses
+adopted it in 2001 and
+.I \%PDCurses
+in 2003.

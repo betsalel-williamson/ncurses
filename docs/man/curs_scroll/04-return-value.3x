@@ -1,0 +1,26 @@
+.SH "RETURN VALUE"
+These functions return
+.B ERR
+upon failure and
+.B OK
+upon success.
+.PP
+In
+.IR \%ncurses ","
+they return
+.B ERR
+if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+or
+.bP
+scrolling is not enabled in the window
+(as by \fB\%scrollok\fP(3X)).

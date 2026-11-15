@@ -1,0 +1,13 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value
+except where \*(``otherwise noted\*(''
+as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 540
+.PP
+SVr4 does not check
+.I win
+to ensure that it is not a null pointer.

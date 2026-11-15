@@ -1,0 +1,83 @@
+.SH DESCRIPTION
+This is an extension to the \fIcurses\fP library.
+It provides callers with a hook into the \fI\%ncurses\fP data to resize
+windows,
+primarily for use by programs running in an X Window terminal (e.g., xterm)
+when the terminal's screen size is changed by the user:
+.bP
+\fIcurses\fP windows cannot extend outside the screen.
+If the terminal is shrunk, \fIcurses\fP windows must be shrunk to fit.
+.bP
+If the terminal is stretched,
+rows and/or columns can be added to existing windows.
+The added cells should match the current attributes of the windows.
+.PP
+If the application has not set up a handler for
+.I \%SIGWINCH
+when it initializes
+.I \%ncurses
+(by calling \fB\%initscr\fP(3X) or \fB\%newterm\fP(3X)),
+then
+.I \%ncurses
+establishes a
+.I \%SIGWINCH
+handler that notifies the library
+when a window-resizing event has occurred.
+The library checks for this notification
+.bP
+when reading input data,
+.bP
+when implicitly resuming program mode
+(e.g., between \fB\%endwin\fP(3X) and \fB\%wrefresh\fP(3X)),
+and
+.bP
+when explicitly resuming program mode in \fB\%restartterm\fP(3X).
+.PP
+When the library has found that the terminal's window-size has
+changed, it calls \fB\%resizeterm\fP to update its data structures.
+.PP
+An application which establishes its own
+.I \%SIGWINCH
+handler
+can call \fB\%resizeterm\fP, but in that case, the library will not
+see
+.IR \%SIGWINCH ","
+and proper layout will rely upon the application.
+.SS resizeterm
+The function \fB\%resizeterm\fP resizes the standard and current windows
+(i.e., \fB\%stdscr\fP and \fB\%curscr\fP)
+to the specified dimensions, and adjusts other bookkeeping data used by
+the \fI\%ncurses\fP library that record the window dimensions
+such as the \fB\%LINES\fP and \fB\%COLS\fP variables.
+.SS resize_term
+Most of the work for \fB\%resizeterm\fP is
+done by the inner function \fB\%resize_term\fP.
+The outer function \fB\%resizeterm\fP adds bookkeeping
+for the
+.I \%SIGWINCH
+handler,
+as well as repainting the soft-key area (see \fB\%slk_touch\fP(3X)).
+.PP
+The \fB\%resize_term\fP function attempts to resize all windows.
+This helps with simple applications.
+However:
+.bP
+It is not possible to automatically resize pads.
+.bP
+Applications which have complicated layouts should check for
+\fB\%KEY_RESIZE\fP returned from \fB\%wgetch\fP,
+and adjust their layout, e.g., using \fB\%wresize\fP and \fB\%mvwin\fP,
+or by recreating the windows.
+.PP
+When resizing windows, \fB\%resize_term\fP recursively adjusts subwindows,
+keeping them within the updated parent window's limits.
+If a top-level window happens to extend to the screen's limits,
+then on resizing the window, \fB\%resize_term\fP will keep the window
+extending to the corresponding limit, regardless of whether the
+screen has shrunk or grown.
+.SS is_term_resized
+A support function \fB\%is_term_resized\fP is provided so that applications
+can check if the \fB\%resize_term\fP function would modify
+the window structures.
+It returns \fBTRUE\fP if the windows would be modified,
+and \fBFALSE\fP otherwise.

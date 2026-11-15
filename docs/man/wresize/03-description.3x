@@ -1,0 +1,19 @@
+.SH DESCRIPTION
+.BR \%wresize ","
+an
+.I \%ncurses
+extension to the
+.I curses
+library,
+reallocates storage for
+.IR win ,
+adjusting its dimensions to
+.I lines
+and
+.IR columns "."
+If either dimension is larger than its current value,
+.I \%ncurses
+fills the expanded part of the window
+with the window's background character as configured by
+\fB\%wbkgdset\fP(3X)
+(wide-character API: \fB\%wbkgrndset\fP(3X)).

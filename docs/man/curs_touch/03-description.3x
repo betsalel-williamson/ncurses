@@ -1,0 +1,25 @@
+.SH DESCRIPTION
+The \fB\%touchwin\fP and \fB\%touchline\fP routines throw away all
+optimization information about which parts of the window have been
+touched, by pretending that the entire window has been drawn on.
+This
+is sometimes necessary when using overlapping windows, since a change
+to one window affects the other window, but the records of which lines
+have been changed in the other window do not reflect the change.
+The
+routine \fB\%touchline\fP only pretends that \fIcount\fP lines have been
+changed, beginning with line \fIstart\fP.
+.PP
+The \fB\%untouchwin\fP routine marks all lines in the window as unchanged since
+the last call to \fB\%wrefresh\fP.
+.PP
+The \fB\%wtouchln\fP routine makes \fIn\fP lines in the window, starting
+at line \fIy\fR, look as if they have (\fIchanged\fB=1\fR) or have
+not (\fIchanged\fB=0\fR) been changed since the last call to
+\fB\%wrefresh\fP.
+.PP
+The \fB\%is_linetouched\fP and \fB\%is_wintouched\fP routines return
+\fBTRUE\fP if the specified line/window was modified since the last
+call to \fB\%wrefresh\fP; otherwise they return \fBFALSE\fP.  In
+addition, \fB\%is_linetouched\fP returns \fBERR\fP if \fIline\fP is not
+valid for the given window.

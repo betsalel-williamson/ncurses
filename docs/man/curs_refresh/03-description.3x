@@ -1,0 +1,63 @@
+.SH DESCRIPTION
+.SS "refresh, wrefresh"
+The \fBrefresh\fP and \fBwrefresh\fP routines (or \fBwnoutrefresh\fP and
+\fBdoupdate\fP) must be called to get actual output to the terminal,
+as other routines merely manipulate data structures.
+The routine \fBwrefresh\fP copies
+the named window to the \fIphysical screen\fP,
+taking into account what is already there to do optimizations.
+The \fBrefresh\fP routine is the
+same, using \fBstdscr\fP as the default window.
+Unless \fBleaveok\fP(3X) has been
+enabled, the physical cursor of the terminal is left at the location of the
+cursor for that window.
+.SS "wnoutrefresh, doupdate"
+The \fBwnoutrefresh\fP and \fBdoupdate\fP routines allow multiple updates with
+more efficiency than \fBwrefresh\fP alone.
+In addition to all the window
+structures, \fBcurses\fP keeps two data structures representing the terminal
+screen:
+.bP
+a \fIphysical screen\fP,
+describing what is actually on the screen, and
+.bP
+a \fIvirtual screen\fP,
+describing what the programmer wants to have on the screen.
+.PP
+The routine \fBwrefresh\fP works by
+.bP
+first calling \fBwnoutrefresh\fP,
+which copies the named window to the \fIvirtual screen\fP, and
+.bP
+then calling \fBdoupdate\fP, which compares
+the \fIvirtual screen\fP to the \fIphysical screen\fP
+and does the actual update.
+.PP
+If the programmer wishes to output several windows at once, a series
+of calls to \fBwrefresh\fP results in alternating calls to \fBwnoutrefresh\fP
+and \fBdoupdate\fP, causing several bursts of output to the screen.
+By first
+calling \fBwnoutrefresh\fP for each window, it is then possible to call
+\fBdoupdate\fP once, resulting in only one burst of output, with fewer total
+characters transmitted and less CPU time used.
+.PP
+If the \fIwin\fP argument to
+\fBwrefresh\fP is the \fIphysical screen\fP
+(i.e., the global variable \fBcurscr\fP),
+the screen is immediately cleared and repainted from scratch.
+.PP
+The phrase \*(``copies the named window
+to the virtual screen\*('' above is ambiguous.
+What actually happens is that all \fItouched\fP (changed) lines in the window
+are copied to the virtual screen.
+This affects programs that use overlapping
+windows; it means that if two windows overlap, you can refresh them in either
+order and the overlap region will be modified only when it is explicitly
+changed.
+(But see the section on \fBPORTABILITY\fP below for a warning about
+exploiting this behavior.)
+.SS "wredrawln, redrawwin"
+The \fBwredrawln\fP routine indicates to \fBcurses\fP that some screen lines
+are corrupted and should be thrown away before anything is written over them.
+It touches the indicated lines (marking them changed).
+The routine \fBredrawwin\fP touches the entire window.

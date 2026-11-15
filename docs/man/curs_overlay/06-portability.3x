@@ -1,0 +1,14 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+It adds
+.I \%const
+qualifiers to the arguments.
+. \" TODO: migrate to HISTORY section
+It further specifies their behavior in the presence of characters
+with multibyte renditions (not yet supported in this implementation).
+.\" XXX: stale?  ncurses is fine with multibyte characters now, no?
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 522

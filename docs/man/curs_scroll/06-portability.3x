@@ -1,0 +1,23 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+SVr4 describes a successful return value only as
+\*(``an integer value other than
+.IR ERR \*(''. \" Courier roman in source; SVID 4, vol. 3, p. 531
+.PP
+SVr4 indicates that the optimization of physically scrolling immediately
+if the scroll region is the entire screen \*(``is\*('' performed,
+not \*(``may be\*('' performed.
+.I \%ncurses
+deliberately does not guarantee that this occurs,
+to leave open the possibility of better optimization of multiple scroll
+actions on the next update.
+.PP
+Neither SVr4
+.I curses
+nor X/Open Curses specify whether these functions zero the attributes or
+color pair identifier of the background character.
+In
+.IR \%ncurses ","
+they do not.

@@ -1,0 +1,31 @@
+.SH HISTORY
+SVr2 (1984) introduced
+.IR \%newpad ","
+.IR \%prefresh ","
+and
+.IR \%pnoutrefresh ","
+documenting them in a single line each.
+.PP
+SVr3 (1987) added
+.I \%subpad
+and
+.IR \%pechochar ","
+and provided more extensive documentation.
+.PP
+The System\ V Interface Definition,
+Version 4 (1995),
+specified a function named
+.IR \%pechowchar "."
+This was a later addition to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+It differs from X/Open's later
+.I \%pecho_wchar
+in that its
+.I wstr
+parameter was a
+.I \%chtype
+instead of a
+.IR \%wchar_t ","
+and was not
+.IR const "-qualified."

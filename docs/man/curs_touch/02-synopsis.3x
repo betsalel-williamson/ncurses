@@ -1,0 +1,14 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint touchline(WINDOW *\fIwin\fP, int \fIstart\fP, int \fIcount\fP);
+.PP
+\fBint touchwin(WINDOW *\fIwin\fP);
+\fBint wtouchln(WINDOW *\fIwin\fP, int \fIy\fP, int \fIn\fP, int \fIchanged\fP);
+.PP
+\fBint untouchwin(WINDOW *\fIwin\fP);
+.PP
+\fBbool is_linetouched(WINDOW *\fIwin\fP, int \fIline\fP);
+\fBbool is_wintouched(WINDOW *\fIwin\fP);
+.fi

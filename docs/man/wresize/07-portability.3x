@@ -1,0 +1,18 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+NetBSD
+.I curses
+adopted
+.I \%wresize
+in 2001 (release 1.5.3),
+and
+.I \%PDCurses
+in 2004 (version 2.7).
+.PP
+It is not possible to resize windows with SVr4
+.IR curses "."
