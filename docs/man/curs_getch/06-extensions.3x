@@ -1,0 +1,27 @@
+.SH EXTENSIONS
+In
+.IR \%ncurses ","
+when a window's \*(``no time-out\*('' mode is
+.I not
+set,
+the
+.B \%ESCDELAY
+variable configures the duration of the timer used to disambiguate a
+function key character sequence from a series of key strokes beginning
+with their common prefix
+(such as ESC)
+when typed by the user;
+see
+\fB\%curs_variables\fP(3X).
+.PP
+.B \%has_key
+is an
+.I \%ncurses
+extension,
+and is not found in SVr4
+.IR curses ","
+4.4BSD
+.IR curses ","
+or any other previous
+.I curses
+implementation.

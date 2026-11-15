@@ -1,0 +1,24 @@
+.SH PORTABILITY
+Applications employing the
+.I \%ncurses
+mouse extension should condition its use on the visibility of the
+.B \%NCURSES_MOUSE_VERSION
+preprocessor macro.
+When the interface changes,
+the macro's value increments.
+Multiple versions are available when
+.I \%ncurses
+is configured;
+see section \*(``ALTERNATE CONFIGURATIONS\*('' of \fB\%ncurses\fP(3X).
+The following values may be specified.
+.RS 3
+.TP 3
+.B 1
+has definitions for reserved events.
+The mask uses 28 bits.
+.TP 3
+.B 2
+adds definitions for button 5,
+removes the definitions for reserved events.
+The mask uses 29 bits.
+.RE

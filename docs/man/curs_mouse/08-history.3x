@@ -1,0 +1,90 @@
+.SH HISTORY
+SVr4 (1989) added mouse support to its variant of \fI\%xterm\fP(1).
+It is mentioned in a few places,
+with little supporting documentation.
+.bP
+Its \*(``libcurses\*('' manual page lists functions for this feature
+prototyped in
+.IR \%curses.h "."
+.PP
+.RS 8
+.EX
+.nf
+extern int mouse_set(long int);
+extern int mouse_on(long int);
+extern int mouse_off(long int);
+extern int request_mouse_pos(void);
+extern int map_button(unsigned long);
+extern void wmouse_position(WINDOW *, int *, int *);
+extern unsigned long getmouse(void), getbmap(void);
+.fi
+.EE
+.RE
+.bP
+Its \*(``terminfo\*('' manual page lists capabilities for the feature.
+.PP
+.\" These don't appear in the SVID 4th edition, Volume 3,
+.\" terminfo(TI_ENV) man page.  They can be found in, e.g., the "z/OS
+.\" V1R1.0 C Curses" book, Chapter 17, pp. 179-186 (PDF 213-220).
+.RS 8
+.TS
+Lb Lb Lb Lw(23n)x.
+buttons	btns	BT	T{
+Number of buttons on the mouse
+T}
+get_mouse	getm	Gm	T{
+Curses should get button events
+T}
+key_mouse	kmous	Km	T{
+0631, Mouse event has occurred
+T}
+mouse_info	minfo	Mi	T{
+Mouse status information
+T}
+req_mouse_pos	reqmp	RQ	T{
+Request mouse position report
+T}
+.TE
+.RE
+.bP
+The interface made assumptions
+(as does
+.IR \%ncurses )
+about the escape sequences sent to and received from the terminal.
+.IP
+For instance,
+the SVr4
+.I curses
+library used the
+.B \%get_mouse
+.RB ( getm )
+capability to tell the terminal which
+mouse button events it should send,
+passing the mouse-button bit mask to the terminal.
+Also, it could ask the terminal
+where the mouse was using the
+.B \%req_mouse_pos
+.RB ( reqmp )
+capability.
+.IP
+Those features required a terminal program that had been modified
+to work with SVr4
+.IR curses .
+They were not part of the X Consortium's
+.IR \%xterm .
+.PP
+When developing the
+.I \%xterm
+mouse support for
+.I \%ncurses
+in September 1995,
+Eric Raymond was uninterested in using the same interface due to its
+lack of documentation.
+Later, in 1998, Mark Hesseling provided support in
+.I \%PDCurses
+2.3 using the SVr4 interface.
+.IR \%PDCurses ,
+however,
+does not use video terminals,
+making it unnecessary to be concerned about compatibility with the
+escape sequences.

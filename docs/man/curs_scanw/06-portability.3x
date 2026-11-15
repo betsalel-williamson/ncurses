@@ -1,0 +1,59 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+.I \%ncurses
+defines \fB\%vw_scanw\fP and \fB\%vwscanw\fP identically to support
+legacy applications.
+However,
+the latter is obsolete.
+.bP
+X/Open Curses Issue\ 4 Version\ 2 (1996),
+marked \fB\%vwscanw\fP as requiring \fI\%varargs.h\fP and
+\*(``TO BE WITHDRAWN\*('',
+and specified \fB\%vw_scanw\fP using the \fI\%stdarg.h\fP interface.
+.bP
+X/Open Curses Issue\ 5,
+Draft 2 (December 2007) marked \fB\%vwscanw\fP (along with
+\fB\%vwscanw\fP and the \fItermcap\fP interface) as withdrawn.
+After incorporating review comments,
+this became
+X/Open Curses Issue\ 7 (2009).
+.bP
+.I \%ncurses
+provides \fB\%vwscanw\fP,
+but marks it as deprecated.
+.PP
+X/Open Curses Issues 4 and 7 both state that these functions return
+\fBERR\fP or \fBOK\fP.
+This is likely an erratum.
+.bP
+Since the underlying \fI\%scanf\fP(3) returns the number of successful
+conversions,
+and SVr4
+.I curses
+was documented to use this feature,
+this may have been an editorial solecism introduced by X/Open,
+rather than an intentional change.
+.bP
+This implementation retains compatibility with SVr4
+.IR curses .
+As of 2018,
+NetBSD
+.I curses
+also returns the number of successful conversions.
+Both
+.I \%ncurses\fP
+and NetBSD
+.I curses
+call \fI\%vsscanf\fP(3) to scan the string,
+which returns \fBEOF\fP on error.
+.bP
+Portable applications should test only if the return value is \fBERR\fP,
+and not compare it to \fBOK\fP,
+since that value (zero) might be misleading.
+.IP
+One portable way to get useful results would be to use a \*(``%n\*(''
+conversion at the end of the format string,
+and check the value of the corresponding variable to determine how many
+conversions succeeded.

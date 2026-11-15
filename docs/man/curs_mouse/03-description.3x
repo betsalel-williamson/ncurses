@@ -1,0 +1,343 @@
+.SH DESCRIPTION
+.I \%ncurses
+provides an interface to the mouse or other pointing device.
+An application can register its interest in such events;
+the library then exposes the availability of a mouse event via an
+.IR "input character reading function" ":"
+this is \fB\%wgetch\fP(3X) in the non-wide character
+.I curses
+API and \fB\%wget_wch\fP(3X) in the wide character API.
+A queue distinct from that used for keyboard events
+accumulates the details of mouse events.
+The input character reading function
+reports the
+.B \%KEY_MOUSE
+key code when a mouse event is available for collection.
+A single mouse event queue serves all windows
+associated with the screen.
+.PP
+The
+.I \%MEVENT
+structure describes a mouse event.
+Its
+.I y
+and
+.I x
+coordinates are screen-,
+not window-,
+relative.
+The
+.I \%bstate
+member
+has exactly one bit set indicating the event type,
+and up to 3 additional bits indicating the use of modifier keys.
+.PP
+.I \%ncurses
+ignores mouse events when input is in canonical (\*(``cooked\*('') mode,
+and produces an error beep when they occur
+while the library simulates canonical mode in a window,
+as with \fB\%getstr\fP(3X)
+(wide-character API users: \fB\%get_wstr\fP(3X)),
+which expects a line feed to terminate its input loop.
+.SS has_mouse
+The terminal type or operating system interface
+must support the encoding of mouse events.
+.B \%has_mouse
+returns
+.B TRUE
+if
+.IR \%ncurses 's
+mouse driver initialized successfully,
+and
+.B FALSE
+otherwise.
+.SS mousemask
+Use
+.B \%mousemask
+to select the varieties of mouse event your application wishes to
+receive.
+By default,
+.I \%ncurses
+reports no mouse events.
+.bP
+The function returns an updated copy of
+.I new-mask
+indicating which event types of interest
+are reportable by the terminal's mouse protocol.
+.IP
+If the screen is not initialized,
+or the terminal interface does not report mouse events,
+.B \%mousemask
+returns 0.
+.bP
+If
+.I old-mask
+is not a null pointer,
+.B \%mousemask
+stores the previous value
+of the screen's mouse event mask there.
+.PP
+As a side effect,
+setting a zero mouse mask may turn off the mouse cursor;
+setting a nonzero mask may turn it on.
+Whether this happens is device-dependent.
+.SS mouse_mask
+Use
+.B \%mouse_mask
+to set or query only the part of the mouse mask for a single button.
+The mask returned in the \fIold-mask\fP will be encoded for button 1.
+.SS "Mouse Events"
+Several mouse event types may be selected;
+construct a mask by logically \*(``or\*(''-ing their values.
+.PP
+.TS
+Lb Lb
+Lb Lw(33n)x.
+Name	Description
+=
+BUTTON1_PRESSED	mouse button 1 down
+BUTTON1_RELEASED	mouse button 1 up
+BUTTON1_CLICKED	mouse button 1 clicked
+BUTTON1_DOUBLE_CLICKED	mouse button 1 double clicked
+BUTTON1_TRIPLE_CLICKED	mouse button 1 triple clicked
+_
+BUTTON2_PRESSED	mouse button 2 down
+BUTTON2_RELEASED	mouse button 2 up
+BUTTON2_CLICKED	mouse button 2 clicked
+BUTTON2_DOUBLE_CLICKED	mouse button 2 double clicked
+BUTTON2_TRIPLE_CLICKED	mouse button 2 triple clicked
+_
+BUTTON3_PRESSED	mouse button 3 down
+BUTTON3_RELEASED	mouse button 3 up
+BUTTON3_CLICKED	mouse button 3 clicked
+BUTTON3_DOUBLE_CLICKED	mouse button 3 double clicked
+BUTTON3_TRIPLE_CLICKED	mouse button 3 triple clicked
+_
+BUTTON4_PRESSED	mouse button 4 down
+BUTTON4_RELEASED	mouse button 4 up
+BUTTON4_CLICKED	mouse button 4 clicked
+BUTTON4_DOUBLE_CLICKED	mouse button 4 double clicked
+BUTTON4_TRIPLE_CLICKED	mouse button 4 triple clicked
+_
+BUTTON5_PRESSED	mouse button 5 down
+BUTTON5_RELEASED	mouse button 5 up
+BUTTON5_CLICKED	mouse button 5 clicked
+BUTTON5_DOUBLE_CLICKED	mouse button 5 double clicked
+BUTTON5_TRIPLE_CLICKED	mouse button 5 triple clicked
+_
+BUTTON_SHIFT	T{
+a shift key was down during button state change
+T}
+BUTTON_CTRL	T{
+a control key was down during button state change
+T}
+BUTTON_ALT	T{
+an alt key was down during button state change
+T}
+_
+ALL_MOUSE_EVENTS	report all button state changes
+REPORT_MOUSE_POSITION	report mouse movement
+_
+.TE
+.SS getmouse
+When a window is configured to report a non-empty set of event types,
+calling the input character reading function on that window may return
+.B \%KEY_MOUSE
+to indicate availability of an enqueued mouse event.
+To read the event data and remove it from the queue,
+call
+.BR \%getmouse ","
+which returns
+.B OK
+if a mouse event is visible in the given window
+and
+.B ERR
+otherwise.
+When
+.B \%getmouse
+returns
+.BR OK ","
+it deposits data describing the mouse event in the
+.I event
+pointer you supply.
+A subsequent
+.B \%getmouse
+call retrieves the next older event from the queue.
+.SS mouse_get
+Use
+.B \%mouse_get
+to consume the current mouse event,
+returning
+.B OK
+if it was activated by the specified button.
+The button state returned in the \fIevent\fP will be encoded for button 1.
+.SS mouse_test
+Use
+.B \%mouse_test
+to check the current mouse event,
+returning
+.B OK
+if it was activated by the specified button.
+The button state returned in the \fIevent\fP will be encoded for button 1.
+.SS ungetmouse
+.B \%ungetmouse
+behaves analogously to \fB\%ungetch\fP(3X).
+It pushes a
+.B \%KEY_MOUSE
+event onto the screen's input queue,
+and
+.I event
+onto the mouse event queue.
+.SS wenclose
+.B \%wenclose
+returns
+.B TRUE
+if the pair of screen-relative coordinates
+.RI ( y ,
+.IR x ")"
+is enclosed by the given window
+.IR win ","
+and
+.B FALSE
+otherwise.
+If
+.I win
+is a pad,
+.B \%wenclose
+uses its most recent screen coordinates as specified in
+a \fB\%prefresh\fP(3X) or \fB\%pnoutrefresh\fP(3X) call.
+.PP
+.B \%wenclose
+is useful for determining what subset of the screen's windows
+encloses the location of a mouse event;
+it is otherwise independent of the
+.I \%ncurses
+mouse API.
+.SS wmouse_trafo
+.B \%wmouse_trafo
+transforms the given pair of coordinate pointers
+.RI ( pY ,
+.IR pX ")"
+from a
+.IR win -relative
+basis to a screen-relative one or
+.IR "vice versa" ","
+as
+.I to-screen
+is
+.B TRUE
+or
+.BR FALSE ","
+respectively.
+.BR \%stdscr -relative
+coordinates are not always identical to screen coordinates:
+.I curses
+supports reservation of screen lines at the top and/or bottom
+for other purposes;
+see \fB\%ripoffline\fP(3X) and \fB\%slk_init\fP(3X).
+.PP
+If
+.I to-screen is
+.B TRUE
+and the pointers
+.RI ( pY ,
+.IR pX ")"
+reference coordinates inside
+.IR win ","
+.I \%ncurses
+updates their values to
+.BR \%stdscr -relative
+coordinates and returns
+.BR TRUE "."
+If either
+.I pY
+or
+.I pX
+is a null pointer,
+or
+.RI ( pY ,
+.IR pX ")"
+is not inside
+.IR win ","
+.B \%wmouse_trafo
+returns
+.BR FALSE "."
+.PP
+If
+.I to-screen is
+.B FALSE
+and the pointers
+.RI ( pY ,
+.IR pX ")"
+reference coordinates inside
+.BR stdscr ","
+.I \%ncurses
+updates their values to
+.IR win -relative
+coordinates and returns
+.BR TRUE "."
+If either
+.I pY
+or
+.I pX
+is a null pointer,
+or
+.RI ( pY ,
+.IR pX ")"
+is not inside
+.BR stdscr ","
+.B \%wmouse_trafo
+returns
+.BR FALSE "."
+.PP
+.B \%wmouse_trafo
+is useful for performing coordinate transforms between windows;
+it is otherwise independent of the
+.I \%ncurses
+mouse API.
+.SS mouse_trafo
+.B \%mouse_trafo
+applies the
+.B \%wmouse_trafo
+translation to
+.BR \%stdscr "."
+If no screen lines are reserved by \fB\%ripoffline\fP(3X) or
+\fB\%slk_init\fP(3X),
+this is the identity transformation.
+.SS mouseinterval
+.B \%mouseinterval
+sets the maximum time
+(in thousandths of a second)
+that can elapse between press and release events for them to
+be
+.I resolved
+as
+(combined into) a
+.IR click .
+An application might interpret button press and release events separated
+by more than the mouse interval as a \*(``long press\*('',
+or,
+with motion,
+as a \*(``drag\*(''.
+.PP
+When
+.I \%ncurses
+detects a mouse event,
+it awaits further input activity up to this interval,
+and then checks for a subsequent mouse event that is combinable
+with the first event.
+If the timeout expires without input activity,
+then no click resolution occurs.
+Calling
+.B \%mouseinterval(0)
+disables click resolution.
+.PP
+.B \%mouseinterval
+returns the previous interval value.
+Use
+.B \%mouseinterval(\-1)
+to obtain the interval without altering it.
+.PP
+The mouse interval is set to one sixth of a second
+when the corresponding screen is initialized,
+e.g., in \fBinitscr\fP(3X) or \fBsetupterm\fP(3X).

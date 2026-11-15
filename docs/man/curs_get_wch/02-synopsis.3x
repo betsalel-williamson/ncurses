@@ -1,0 +1,11 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint get_wch(wint_t * \fIwch\fP);
+\fBint wget_wch(WINDOW * \fIwin\fP, wint_t * \fIwch\fP);
+\fBint mvget_wch(int \fIy\fP, int \fIx\fP, wint_t * \fIwch\fP);
+\fBint mvwget_wch(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, wint_t * \fIwch\fP);
+.PP
+\fBint unget_wch(const wchar_t \fIwc\fP);
+.fi

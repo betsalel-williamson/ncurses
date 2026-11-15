@@ -1,0 +1,23 @@
+.SH RETURN VALUE
+.B \%define_key
+returns
+.B ERR
+if
+.bP
+.I definition
+is
+.I NULL
+and
+.I key-code
+is nonpositive,
+or
+.bP
+insufficient memory is available to bind
+.I definition
+to
+.IR key-code "."
+.PP
+Otherwise,
+.B \%define_key
+returns
+.BR OK "."

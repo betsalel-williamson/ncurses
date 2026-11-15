@@ -1,0 +1,84 @@
+.SH DESCRIPTION
+The
+.I curses
+complex character data type
+.I \%cchar_t
+is a structure type comprising
+a wide-character string,
+a set of attributes,
+and
+a color pair identifier.
+The
+.I \%cchar_t
+structure is opaque;
+do not attempt to access its members directly.
+The library provides functions to manipulate this type.
+.SS getcchar
+.B \%getcchar
+destructures a
+.I \%cchar_t
+into its components.
+.PP
+If
+.I wc
+is not a null pointer,
+.BR \%getcchar :
+.bP
+stores the wide-character string in the
+.I curses
+complex character
+.I wch
+into
+.IR wc ;
+.bP
+stores the attributes in
+.IR attrs ;
+and
+.bP
+stores the color pair identifier in
+.IR pair .
+.PP
+If
+.I wc
+is a null pointer,
+.B \%getcchar
+counts the
+.I \%wchar_t
+wide characters in
+.IR wch ,
+returns that value,
+and leaves
+.I attrs
+and
+.I pair
+unchanged.
+.SS setcchar
+.B \%setcchar
+constructs a
+.I curses
+complex character
+.I wch
+from the components
+.IR wc ,
+.IR attrs ,
+and
+.IR pair .
+The wide-character string
+.I wch
+must be terminated with a null wide character
+.B L\*'\e0\*'
+and must contain at most one spacing character,
+which,
+if present,
+must be the first wide character in the string.
+.PP
+Up to
+.BR \%CCHARW_MAX\  \-\ 1
+non-spacing characters may follow
+(see \fB\%curs_variables\fP(3X)).
+.I \%ncurses
+ignores any additional non-spacing characters.
+.PP
+The string may contain a single control character instead.
+In that case,
+no non-spacing characters are allowed.

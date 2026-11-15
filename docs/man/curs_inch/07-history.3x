@@ -1,0 +1,47 @@
+.SH HISTORY
+The original
+.I curses
+in 4BSD (1980) defined
+.I \%winch
+as a macro accessing the
+.I \%WINDOW
+structure member representing character cell data,
+at that time a
+.IR char ","
+containing only a 7-bit ASCII character code
+and a \*(``standout\*(`` attribute bit,
+the only one the library supported.
+.PP
+SVr2
+.I curses
+(1984)
+extended this approach,
+widening the character code to eight bits
+and permitting several attributes to be combined with it
+by storing them together in a
+.IR \%chtype ","
+an alias of
+.IR "unsigned short" "."
+.\" ...indirectly through a preprocessor macro named CHTYPE, encouraging
+.\" builders to change the typedef to `char` or `long` as desired.  More
+.\" innocent times with respect to ABI compatibility concerns... --GBR
+Because a macro was used,
+its value was not type-checked
+as a function return value could have been.
+Goodheart documented SVr3 (1987)
+.I \%winch
+as returning an
+.IR int "."
+.\" ...but the implementation remained unchanged.
+SVr3.1's (1987)
+.I \%chtype
+became an alias of
+.IR "unsigned long" ","
+using 16 bits for the character code and
+widening the type in practical terms to 32 bits,
+as 64-bit Unix systems were not yet in wide use,
+and fixed-width integral types would not be standard until ISO C99.
+.\" Cray's UNICOS was 1985 (how many shops had Crays?).  DEC OSF/1 for
+.\" the Alpha arrived in 1993.  --GBR
+SVr3.2 (1988)
+added a 6-bit color pair identifier alongside the attributes.

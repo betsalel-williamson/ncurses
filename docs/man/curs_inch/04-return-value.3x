@@ -1,0 +1,18 @@
+.SH RETURN VALUE
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail, returning
+.B ERR
+if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.
+.PP
+If
+.I win
+is
+.IR NULL ","
+.I \%ncurses
+returns
+.BR 0 ,
+which is not
+.BR OK .

@@ -1,0 +1,59 @@
+.SH RETURN VALUE
+If
+.B \%getcchar
+is passed a null pointer as its
+.I wc
+argument,
+it returns the number of wide characters for a given
+.I wch
+that it would store in
+.IR wc ","
+counting a trailing null wide character.
+If
+.B \%getcchar
+is not passed a null pointer as its
+.I wc
+argument,
+it returns
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ,
+.B \%getcchar
+returns
+.B ERR
+if either
+.I attrs
+or
+.I pair
+is a null pointer and
+.I wc
+is not.
+.PP
+.B \%setcchar
+returns
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ,
+.B \%setcchar
+returns
+.B ERR
+if
+.bP
+.I wch
+is a null pointer,
+.bP
+.I wc
+starts with a (wide) control character
+and contains any other wide characters,
+or
+.bP
+.I pair
+has a negative value.

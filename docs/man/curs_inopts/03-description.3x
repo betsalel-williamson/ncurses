@@ -1,0 +1,413 @@
+.SH DESCRIPTION
+.I curses
+offers configurable parameters permitting an application to control the
+handling of input from the terminal.
+Some,
+such as those affecting the terminal's
+.I mode
+or line discipline,
+are global,
+applying to all windows;
+others apply only to a specific window.
+The library does not automatically apply such parameters to new or
+derived windows;
+an application must configure each window for the desired behavior.
+.PP
+Some descriptions below make reference to an
+.IR "input character reading function" ":"
+this is \fB\%wgetch\fP(3X) in the non-wide character
+.I curses
+API and \fB\%wget_wch\fP(3X) in the wide character API.
+In addition to the variant forms of these described in
+\fB\%ncurses\fP(3X),
+the
+.I curses
+functions \fB\%wgetstr\fP(3X) and \fB\%wget_wstr\fP(3X) and their own
+variants call the appropriate input character reading function.
+.\"
+.SS "cbreak, nocbreak"
+Normally,
+the terminal driver buffers typed characters,
+not delivering them to an application
+until a line feed or carriage return is typed.
+This canonical (\*(``cooked\*('') line discipline also supports
+software flow control,
+simple line editing functions
+(character and word erase,
+and whole-line erasure or \*(``kill\*(''),
+and job control.
+.B \%cbreak
+configures the terminal in
+.IR "cbreak mode" ","
+which disables line buffering
+and erase and kill character processing \(em
+the interrupt,
+quit,
+suspend,
+and flow control characters are unaffected \(em
+and makes characters typed by the user immediately available to the
+program.
+.B \%nocbreak
+restores canonical (\*(``cooked\*('') mode.
+.PP
+The state of the terminal is unknown to a
+.I curses
+application when it starts;
+therefore,
+a program should call
+.B \%cbreak
+or
+.B \%nocbreak
+explicitly.
+Most interactive programs using
+.I curses
+set \%cbreak
+mode.
+Calling
+.B \%cbreak
+overrides
+.BR raw "."
+The man page for the input character reading function
+discusses how
+.B \%cbreak
+and
+.B \%nocbreak
+interact with
+.B echo
+and
+.BR \%noecho "."
+.\"
+.SS "echo, noecho"
+.B echo
+and
+.B \%noecho
+determine whether characters typed by the user are written to the
+.I curses
+window by the input character reading function as they are typed.
+.I curses
+always disables the terminal driver's own echoing.
+By default,
+a
+.I curses
+screen's echo option is set.
+Authors of most interactive programs prefer
+to do their own echoing in a controlled area of the screen,
+or not to echo at all,
+so they call
+.BR \%noecho "."
+The man page for the input character reading function
+discusses how
+.B echo
+and
+.B \%noecho
+interact with
+.B \%cbreak
+and
+.BR \%nocbreak "."
+.\"
+.SS halfdelay
+.B \%halfdelay
+configures
+.IR "half-delay mode" ","
+which is similar to \%cbreak mode in that characters typed by the user
+are immediately available to the program.
+However,
+after blocking for
+.I tenths
+tenth-seconds,
+an input character reading function returns
+.B ERR
+if no input is pending.
+The value of
+.I tenths
+must be between 1 and 255.
+Use
+.B \%nocbreak
+to leave half-delay mode.
+.\"
+.SS intrflush
+.B \%intrflush
+calls
+.B \%qiflush
+(see below)
+if
+.I bf
+is
+.BR TRUE ","
+and
+.B \%noqiflush
+if
+.I bf
+is
+.BR FALSE "."
+It ignores its
+.I win
+argument.
+.\"
+.SS keypad
+.B keypad
+enables recognition of a terminal's function keys.
+If
+enabled
+.RI ( bf
+is
+.BR TRUE ")"
+then when an input character reading function reads
+a character that is a common prefix to multiple
+key-defining string capabilities
+(typically ESC),
+it waits for further input corresponding to an escape sequence
+defined by the terminal type description.
+If a valid sequence populates the input stream,
+the input character reading function
+returns a value representing the function key,
+such as
+.BR KEY_LEFT "."
+(Wide-character API users:
+\fB\%wget_wch\fP(3X) returns
+.B \%KEY_CODE_YES
+to indicate the availability of a function key code in its
+.I wch
+parameter.)
+If the sequence is invalid,
+the input character reading function returns only its last character.
+If disabled
+.RI ( bf
+is
+.BR FALSE ),
+.I curses
+does not treat function keys specially;
+the application must itself
+interpret any character sequences they transmit.
+If the terminal type description defines the
+.B \%keypad_local
+.RB ( rmkx )
+and
+.B \%keypad_xmit
+.RB ( smkx )
+capabilities,
+enabling a window's keypad mode
+sets the terminal's keypad to transmit,
+and disabling keypad mode
+sets the terminal's keypad to work locally.
+By default,
+a window's keypad mode is off.
+.\"
+.SS meta
+Initially,
+whether the terminal returns 7- or 8-bit character codes on input
+depends on the configuration of the terminal driver;
+on POSIX systems,
+see \fI\%termios\fP(3).
+To force 8 bits to be returned,
+call
+.BR meta( .\|.\|. ,
+.BR TRUE) ;
+this is equivalent,
+on POSIX systems,
+to setting the CS8 flag on the terminal.
+To force 7 bits to be returned,
+call
+.BR meta( .\|.\|. ,
+.BR FALSE) ;
+this is equivalent,
+on POSIX systems,
+to setting the CS7 flag on the terminal.
+.I curses
+ignores the window argument
+.IR win "."
+If the
+.I \%term\%info
+string capabilities
+.B \%meta_on
+.RB ( smm )
+and
+.B \%meta_off
+.RB ( rmm )
+are defined for the terminal type,
+enabling meta mode sends
+.BR smm 's
+value to the terminal and disabling it sends that of
+.B rmm
+to the terminal.
+.\"
+.SS "nl, nonl"
+Initially,
+whether the terminal reports a carriage return
+using the character code for a line feed
+in cbreak or raw modes
+depends on the configuration of the terminal driver;
+on POSIX systems,
+see \fI\%termios\fP(3).
+.B nl
+configures the terminal to perform this translation.
+.B nonl
+disables it.
+Under its canonical (\*(``cooked\*('') line discipline,
+the terminal driver always translates carriage returns to line feeds.
+.\"
+.SS nodelay
+.B \%nodelay
+configures the input character reading function to be non-blocking for
+window
+.IR "win" .
+If no input is ready,
+the reading function returns
+.BR ERR "."
+If disabled
+.RI ( bf
+is
+.BR FALSE ),
+the reading function does not return until it has input.
+.SS notimeout
+When
+.B \%keypad
+has been called on a window
+and the input character reading function reads
+an ambiguous prefix character
+(typically ESC)
+from it,
+.I curses
+sets a timer while waiting for the next character.
+If the timer elapses,
+.I curses
+interprets the prefix as an explicit press
+of the key corresponding thereto,
+such as Escape for ESC.
+.\" or some equivalent, like Control+[
+.BI \%notimeout( win ,
+.B TRUE)
+disables this timer.
+The purpose of the timeout is to distinguish sequences produced by a
+function key from those typed by a user.
+If this timer is disabled,
+.I curses
+waits forever for subsequent keystrokes
+until it determines the escape sequence to be valid or invalid.
+.\"
+.SS "qiflush, noqiflush"
+.\"
+.B \%qiflush
+and
+.B \%noqiflush
+configure the terminal driver's treatment of its input and output queues
+when it handles the interrupt,
+suspend,
+or quit characters under the canonical (\*(``cooked\*('')
+or cbreak line disciplines on POSIX systems;
+see \fI\%termios\fP(3).
+The default behavior is inherited from the terminal driver settings.
+Calling
+.B \%qiflush
+configures the terminal to
+.I flush
+the queues
+(discarding their contents)
+when any of these events occurs,
+giving the impression of faster response to user input,
+but making the library's model of the screen contents incorrect.
+Calling
+.B \%noqiflush
+prevents such flushing,
+but might frustrate impatient users on slow connections if a
+.I curses
+update of the screen is in progress when the event occurs;
+see
+.B \%typeahead
+below for a mitigation of this problem.
+You may want to call
+.B \%noqiflush
+in a signal handler if,
+after the handler exits,
+you want output to continue
+as though the signal had not occurred.
+.\"
+.SS "raw, noraw"
+.B raw
+configures the terminal to read input in
+.IR "raw mode" ,
+which is similar to cbreak mode
+(see
+.B \%cbreak
+above)
+except that it furthermore passes through the terminal's configured
+interrupt,
+quit,
+suspend,
+and flow control characters
+uninterpreted to the application,
+instead of generating a signal or acting on I/O flow.
+The behavior of the terminal's \*(``Break\*('' key
+(if any)
+depends on terminal driver configuration parameters that
+.I curses
+does not handle.
+.B \%noraw
+restores the terminal's canonical (\*(``cooked\*('') line discipline.
+.\"
+.SS "timeout, wtimeout"
+.B \%wtimeout
+configures whether a
+.I curses
+input character reading function called on window
+.I win
+uses blocking or non-blocking reads.
+If
+.I delay
+is negative,
+.I curses
+uses a blocking read,
+waiting indefinitely for input.
+If
+.I delay
+is zero,
+the read is non-blocking;
+an input character reading function returns
+.B ERR
+if no input is pending.
+If
+.I delay
+is positive,
+an input character reading function
+blocks for
+.I delay
+milliseconds,
+and returns
+.B ERR
+if the delay elapses and there is still no input pending.
+.B \%timeout
+calls
+.B \%wtimeout
+on
+.BR stdscr "."
+.\"
+.SS typeahead
+Normally,
+a
+.I curses
+library checks the terminal's input file descriptor for activity
+with \fIpoll\fP(2) or \fI\%select\fP(2)
+while updating the screen;
+if it finds any,
+it postpones output
+until the next \fB\%wrefresh\fP(3X) or \fB\%doupdate\fP(3X) call,
+allowing faster response to user key strokes.
+The library tests the file descriptor corresponding to the
+.I FILE
+stream pointer passed to \fB\%newterm\fP(3X)
+(or
+.I stdin
+if \fB\%initscr\fP(3X) was called),
+for pending input.
+.B \%typeahead
+instructs
+.I curses
+to test file descriptor
+.I fd
+instead.
+An
+.I fd
+of
+.B \-1
+disables the check.
+.\"

@@ -1,0 +1,14 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint getstr(char * \fIstr\fP);
+\fBint wgetstr(WINDOW * \fIwin\fP, char * \fIstr\fP);
+\fBint mvgetstr(int \fIy\fP, int \fIx\fP, char * \fIstr\fP);
+\fBint mvwgetstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, char * \fIstr\fP);
+.PP
+\fBint getnstr(char * \fIstr\fP, int \fIn\fP);
+\fBint wgetnstr(WINDOW * \fIwin\fP, char * \fIstr\fP, int \fIn\fP);
+\fBint mvgetnstr(int \fIy\fP, int \fIx\fP, char * \fIstr\fP, int \fIn\fP);
+\fBint mvwgetnstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, char * \fIstr\fP, int \fIn\fP);
+.fi

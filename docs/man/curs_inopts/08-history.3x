@@ -1,0 +1,80 @@
+.SH HISTORY
+4BSD (1980)
+introduced
+.IR echo ","
+.IR \%noecho ","
+.IR nl ","
+.IR \%nonl ","
+.IR raw ","
+and
+.IR \%noraw "." \" also crmod and nocrmod, never standardized
+.PP
+SVr2 (1984)
+featured a new terminal driver,
+extending the
+.I curses
+API to support it with
+.IR \%cbreak ","
+.IR \%nocbreak ","
+.IR \%intrflush ","
+.IR \%keypad ","
+.IR \%meta ","
+.IR \%nodelay ","
+and
+.IR \%typeahead "."
+.PP
+SVr3 (1987)
+added
+.IR \%halfdelay ","
+.IR \%notimeout ","
+and
+.IR \%wtimeout "."
+.I \%qiflush
+and
+.I \%noqiflush
+appeared in SVr3.1 (1987),
+at which point
+.I \%intrflush
+became a wrapper for either of these functions,
+depending on the value of its Boolean argument.
+SVr3.1 also added
+.IR \%timeout "."
+.PP
+.I \%ncurses
+6.5 (2024) introduced
+.IR is_cbreak ","
+.IR is_echo ","
+.IR is_nl ","
+and
+.IR is_raw "."
+.PP
+Formerly,
+.I \%ncurses
+used
+.I \%nl
+and
+.I \%nonl
+to control the conversion of newlines to carriage return/line feed
+on output as well as input.
+X/Open Curses documents the use of these functions only for input.
+This difference arose from converting the
+.I \%pcurses
+source (1986),
+which used
+\fI\%ioctl\fP(2) calls and the
+.I \%sgttyb
+structure,
+to
+.I \%termios
+(the POSIX terminal API).
+In the former,
+both input and output conversions were controlled via a single option
+\%\*(``CRMOD\*('',
+while the latter separates these features.
+Because that conversion interferes with output optimization,
+.I \%ncurses
+6.2 (2020) amended
+.I \%nl
+and
+.I \%nonl
+to eliminate their effect on output.

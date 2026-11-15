@@ -1,0 +1,28 @@
+.SH DESCRIPTION
+.B \%win_wchstr
+extracts a
+.I curses
+complex character string from a
+.I curses
+window
+.IR win ","
+starting at the cursor and stopping at the end of the line,
+and stores it in
+.IR wchstr ","
+terminating it with a wide null
+.I curses
+character.
+.B \%win_wchnstr
+does the same,
+but copies at most
+.I n
+.I curses
+complex characters from
+.IR win "."
+A negative
+.I n
+implies no limit;
+.B \%win_wchnstr
+then works like
+.BR \%win_wchstr "."
+\fB\%ncurses\fP(3X) describes the variants of these functions.

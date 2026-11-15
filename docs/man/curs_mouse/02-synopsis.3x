@@ -1,0 +1,33 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fI/* data types */
+\fBtypedef unsigned long mmask_t;
+.PP
+\fBtypedef struct {
+\fB    short id;       \fI/* ID to distinguish multiple devices */
+\fB    int x, y, z;    \fI/* event coordinates */
+\fB    mmask_t bstate; \fI/* button state bits */
+\fB} MEVENT;
+.PP
+\fI/* functions */
+\fBbool has_mouse(void);
+.PP
+\fBmmask_t mousemask(mmask_t \fInew-mask\fP, mmask_t * \fIold-mask\fP);
+.PP
+\fBint getmouse(MEVENT * \fIevent\fP);
+\fBint ungetmouse(MEVENT * \fIevent\fP);
+.PP
+\fBmmask_t mouse_mask(int \fIbutton\fP, mmask_t \fInew-mask\fP, mmask_t * \fIold-mask\fP);
+\fBint mouse_get(int \fIbutton\fP, MEVENT * \fIevent\fP);
+\fBint mouse_test(int \fIbutton\fP, MEVENT * \fIevent\fP);
+.PP
+\fBbool wenclose(const WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP);
+.PP
+\fBbool mouse_trafo(int * \fIpY\fP, int * \fIpX\fP, bool \fIto-screen\fP);
+\fBbool wmouse_trafo(const WINDOW * \fIwin\fP,
+      \fBint * \fIpY\fB, int * \fIpX\fB, bool \fIto-screen\fB);
+.PP
+\fBint mouseinterval(int \fIerval\fB);\fR
+.fi

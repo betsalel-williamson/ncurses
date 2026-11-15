@@ -1,0 +1,57 @@
+.SH BUGS
+Mouse events from
+.I \%xterm
+are
+.I not
+ignored in canonical (\*(``cooked\*('') mode
+if they have been enabled by
+.BR \%mousemask "."
+Instead,
+the
+.I \%xterm
+mouse report sequence appears in the string read.
+.PP
+An
+.I \%ncurses
+window must enable \fB\%keypad\fP(3X) to correctly receive mouse event
+reports from
+.I \%xterm
+since they are encoded like function keys.
+Set the terminal's
+.I \%term\%info
+capability
+.B \%key_mouse
+.RB ( \%kmous )
+to \*(``\eE[M\*(''
+(the beginning of the response from
+.I \%xterm
+for mouse clicks).
+Other values of
+.B \%key_mouse
+are permitted under the same assumption \(em
+that is,
+a mouse report begins with the value of the
+.B \%key_mouse
+.RB ( \%kmous )
+string capability.
+.PP
+Because there are no standard response sequences that serve to identify
+terminals supporting the
+.I \%xterm
+mouse protocol,
+.I \%ncurses
+assumes that if
+.B \%key_mouse
+.RB ( \%kmous )
+is defined in the terminal description,
+or if the terminal type's primary name or aliases contain the string
+\%\*(``xterm\*('',
+then the terminal may send mouse events.
+.I \%ncurses
+checks the
+.B \%kmous
+cap-code first,
+allowing use of newer
+.I \%xterm
+mouse protocols,
+such as its private mode 1006.

@@ -1,0 +1,34 @@
+.SH NOTES
+All of these functions except
+.B \%wgetnstr
+may be implemented as macros.
+.PP
+Reading input that overruns the buffer pointed to by
+.I str
+causes undefined results.
+Use the
+.BR n -infixed
+functions,
+and allocate sufficient storage for
+.I str
+\(em at least
+.IR n +1
+times
+.BR sizeof(char) "."
+.PP
+While these functions conceptually implement
+a series of calls to
+.BR \%wgetch ","
+they also temporarily change properties of the
+.I curses
+screen to permit simple editing of the input buffer.
+Each function saves the screen's state,
+calls \fBnl\fP(3X),
+and,
+if the screen was in canonical (\*(``cooked\*('') mode,
+\fB\%cbreak\fP(3X).
+Before returning,
+it restores the saved screen state.
+Other implementations differ in detail,
+affecting which control characters they can accept in the buffer;
+see section \*(``PORTABILITY\*('' below.

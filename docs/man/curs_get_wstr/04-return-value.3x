@@ -1,0 +1,32 @@
+.SH RETURN VALUE
+These functions return
+.B OK
+on success and
+.B ERR
+on failure.
+.PP
+In
+.IR \%ncurses ","
+these functions fail if
+.bP
+the
+.I curses
+screen has not been initialized,
+.bP
+(for functions taking a
+.I \%WINDOW
+pointer argument)
+.I win
+is a null pointer,
+.bP
+.I wstr
+is a null pointer,
+or
+.bP
+an internal \fB\%wget_wch\fP(3X) call fails.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

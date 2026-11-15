@@ -1,0 +1,27 @@
+.SH DESCRIPTION
+The
+.B \%keybound
+.I \%ncurses
+extension permits a
+.I curses
+application to obtain the value of the string
+.I bound
+to the function key
+.IR key-code ";"
+see \fB\%wgetch\fP(3X)
+(wide-character API users: \fB\%wget_wch\fP(3X)).
+By default,
+such bindings are string capabilities from the
+.I \%term\%info
+database entry corresponding to the terminal type.
+The application can non-destructively and repeatedly
+override such definitions with
+\fB\%define_key\fP(3X),
+as if by pushing new definitions onto a stack.
+The
+.I count
+parameter accesses the
+.IR n th
+most recently defined binding;
+.B 0
+selects the binding that is used on input.

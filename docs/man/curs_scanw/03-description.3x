@@ -1,0 +1,24 @@
+.SH DESCRIPTION
+\fB\%scanw\fP,
+\fB\%wscanw\fP,
+\fB\%mvscanw\fP,
+and
+\fB\%mvwscanw\fP
+are analogous to \fI\%scanf\fP(3).
+In effect,
+they call \fB\%wgetstr\fP(3X) with
+.I win
+(or
+.BR \%stdscr )
+as its first argument,
+then attempt conversion of the resulting string with \fI\%vsscanf\fP(3).
+Fields in the string that do not map to a variable in the \fIfmt\fP
+parameter are discarded.
+.PP
+\fB\%vwscanw\fP
+and
+\fB\%vw_scanw\fP are analogous to \fI\%vscanf\fP(3),
+and perform a \fB\%wscanw\fP using a variable argument list.
+The third argument is a \fI\%va_list\fP,
+a pointer to a list of arguments,
+as defined in \fI\%stdarg.h\fP.

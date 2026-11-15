@@ -1,0 +1,47 @@
+.SH PORTABILITY
+These macros are described in X/Open Curses Issue\ 4.
+.PP
+.I \%ncurses
+also provides functions
+.IR \%getbegy ","
+.IR \%getbegx ","
+.IR \%getcury ","
+.IR \%getcurx ","
+.IR \%getmaxy ","
+.IR \%getmaxx ","
+.IR \%getpary ","
+and
+.I \%getparx
+for compatibility with System\ V
+.I curses
+that were not standardized;
+.\" even by SVID 4
+see \fB\%curs_legacy\fP(3X).
+.PP
+Although X/Open Curses does not address the issue,
+many implementations expose members of the
+.I \%WINDOW
+structure containing values corresponding to these macros.
+Do not rely on their availability;
+some implementations make
+.I \%WINDOW
+opaque
+(that is,
+they do not allow direct access to its members).
+.PP
+Besides the problem of opaque structures,
+the data stored in like-named members may not have values of the same
+meaning across different implementations.
+For example,
+the values of
+.I \%WINDOW._maxx
+and
+.I \%WINDOW._maxy
+in
+.I \%ncurses
+have long
+.\" (at least since its initial release, 1.8.1)
+differed by one from some other implementations.
+The
+.I \%getmaxyx
+macro hides this difference.

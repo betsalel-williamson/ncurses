@@ -1,0 +1,63 @@
+.SH RETURN VALUE
+.B \%initscr
+returns
+.BR \%stdscr ","
+or does not return at all
+(but see section \*(``PORTABILITY\*('' below regarding BSD
+.IR curses ")."
+.B \%delscreen
+returns no value.
+.B \%endwin
+returns
+.B OK
+on success and
+.B ERR
+on failure.
+.B \%isendwin
+returns
+.B TRUE
+or
+.B FALSE
+as described above.
+.PP
+In
+.IR \%ncurses ","
+.bP
+.B \%endwin
+returns
+.B ERR
+if
+.RS
+.bP
+the terminal was not initialized,
+.bP
+it is called more than once without updating the screen,
+or
+.bP
+its call of \fB\%reset_shell_mode\fP(3X) returns
+.BR ERR ";"
+and
+.RE
+.bP
+.B \%newterm
+returns
+.B ERR
+if it cannot allocate storage for the
+.I SCREEN
+structure
+or the
+.I WINDOW
+structures automatically associated with it:
+.BR \%curscr ","
+.BR \%newscr ","
+and
+.BR \%stdscr "."
+.PP
+Functions that return pointers return null pointers on error.
+In
+.IR \%ncurses ","
+.B \%set_term
+does not fail,
+and
+.B \%initscr
+exits the application if it does not operate successfully.

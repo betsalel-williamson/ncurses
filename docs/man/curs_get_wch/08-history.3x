@@ -1,0 +1,31 @@
+.SH HISTORY
+X/Open Curses Issue\ 4 (1995) initially specified these functions.
+The System\ V Interface Definition Version\ 4
+of the same year
+specified functions named
+.I \%wgetwch
+(with its variants)
+.IR \%ungetwch "."
+.\" SVID 4, vol 3., pp. 496-499
+These were later additions to
+.RI SVr4. x ,
+not appearing in the first SVr4 (1989).
+They differ from X/Open's later
+.I \%wget_wch
+and
+.I \%unget_wch
+in that
+.I \%wgetwch
+takes no
+.I wch
+argument,
+but returns the (wide) key code as an
+.I int
+(with no provision for distinguishing a character code
+from a function key code);
+and
+.I \%ungetwch
+takes a
+.RI non- const
+.I int
+argument.

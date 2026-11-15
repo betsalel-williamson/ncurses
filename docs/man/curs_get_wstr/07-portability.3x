@@ -1,0 +1,116 @@
+.SH PORTABILITY
+Applications employing
+.I \%ncurses
+extensions should condition their use on the visibility of the
+.B \%NCURSES_VERSION
+preprocessor macro.
+.PP
+X/Open Curses Issue\ 4 describes these functions.
+It specifies no error conditions for them.
+.PP
+Issue\ 4 documented these functions as passing an array of
+.IR wchar_t ","
+but that was an error,
+conflicting with the following language in the standard.
+.RS
+.PP
+The effect of
+.IR \%get_wstr "()"
+is as though a series of calls to
+.IR \%get_wch "()"
+were made,
+until a newline character,
+end-of-line character,
+or end-of-file character is processed.
+.\" X/Open Curses Issue 4, Version 2, p. 96.
+.RE
+.PP
+.I \%get_wch
+can return a negative value
+.RI ( WEOF ),
+but
+.I \%wchar_t
+is a unsigned type.
+All of the vendors implement these functions using
+.IR \%wint_t ","
+following the Issue\ 7 standard.
+.PP
+X/Open Curses Issue\ 7 is unclear whether the terminating null wide character
+counts toward the length parameter
+.IR n "."
+A similar issue affected
+.I \%wgetnstr
+in Issue\ 4,
+Version\ 2;
+Issue\ 7 revised that function's description to address the issue,
+but not that of
+.IR \%wget_nwstr ","
+leaving it ambiguous.
+.I \%ncurses
+counts the terminator in the length.
+.PP
+X/Open Curses does not specify what happens if the length
+.I n
+is negative.
+.bP
+For consistency with
+.IR \%wgetnstr ","
+.I \%ncurses
+6.2 uses a limit based on
+.IR LINE_MAX "."
+.bP
+Some other implementations
+(such as Solaris
+.IR xcurses )
+do the same,
+while others
+.RI \%( PDCurses )
+do not permit a negative
+.IR n "."
+.bP
+NetBSD\ 7
+.I curses
+imitates
+.I \%ncurses
+6.1 and earlier,
+treating a negative
+.I n
+as an unbounded count of wide characters.
+.PP
+Implementations vary in their handling of input control characters.
+.bP
+While they may enable the screen's echo option,
+some do not take it out of raw mode,
+and may take cbreak mode into account
+when deciding whether to handle echoing within
+.I \%wgetn_wstr
+or to rely on it as a side effect of calling
+.IR \%wget_wch "."
+.IP
+Since 1995,
+.I \%ncurses
+has provided handlers for
+.I SIGINTR
+and
+.I SIGQUIT
+events,
+which are typically generated at the keyboard with
+.B \*^C
+and
+.B \*^\e
+respectively.
+In cbreak mode,
+those handlers catch a signal and stop the program,
+whereas other implementations write those characters into the buffer.
+.bP
+Starting with
+.I \%ncurses
+6.3 (2021),
+.I \%wgetn_wstr
+preserves raw mode if the screen was already in that state,
+allowing one to enter the characters the terminal interprets
+as interrupt and quit events
+into the buffer,
+for consistency with SVr4
+.IR curses 's
+.IR \%wgetnstr .

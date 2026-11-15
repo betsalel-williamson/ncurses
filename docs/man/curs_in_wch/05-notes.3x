@@ -1,0 +1,13 @@
+.SH NOTES
+.BR \%in_wch ","
+.BR mvin_wch ","
+and
+.B mvwin_wch
+may be implemented as macros.
+.PP
+Unlike \fB\%winch\fP(3X),
+.B \%win_wch
+and its variants store the value of the retrieved character in an
+additional
+.I wch
+parameter instead of the return value.

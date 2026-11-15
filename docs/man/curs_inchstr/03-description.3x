@@ -1,0 +1,28 @@
+.SH DESCRIPTION
+.B \%winchstr
+extracts a
+.I curses
+character string from a
+.I curses
+window
+.IR win ","
+starting at the cursor and stopping at the end of the line,
+and stores it in
+.IR chstr ","
+terminating it with a null
+.I curses
+character.
+.B \%winchnstr
+does the same,
+but copies at most
+.I n
+.I curses
+characters from
+.IR win "."
+A negative
+.I n
+implies no limit;
+.B \%winchnstr
+then works like
+.BR \%winchstr "."
+\fB\%ncurses\fP(3X) describes the variants of these functions.

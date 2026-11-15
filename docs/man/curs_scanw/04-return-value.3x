@@ -1,0 +1,19 @@
+.SH RETURN VALUE
+These functions return
+.B ERR
+upon failure and otherwise a count of successful conversions;
+this quantity may be zero.
+.PP
+In
+.IR \%ncurses ,
+failure occurs if \fI\%vsscanf\fP(3) returns
+\fBEOF\fP,
+or if the window pointer
+.I win
+is null.
+.PP
+Functions prefixed with \*(``mv\*('' first perform cursor movement and
+fail if the position
+.RI ( y ,
+.IR x )
+is outside the window boundaries.

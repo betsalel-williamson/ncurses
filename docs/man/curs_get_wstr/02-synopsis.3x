@@ -1,0 +1,14 @@
+.SH SYNOPSIS
+.nf
+\fB#include <curses.h>
+.PP
+\fBint get_wstr(wint_t * \fIwstr\fP);
+\fBint wget_wstr(WINDOW * \fIwin\fP, wint_t * \fIwstr\fP);
+\fBint mvget_wstr(int \fIy\fP, int \fIx\fP, wint_t * \fIwstr\fP);
+\fBint mvwget_wstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, wint_t * \fIwstr\fP);
+.PP
+\fBint getn_wstr(wint_t * \fIwstr\fP, int \fIn\fP);
+\fBint wgetn_wstr(WINDOW * \fIwin\fP, wint_t * \fIwstr\fP, int \fIn\fP);
+\fBint mvgetn_wstr(int \fIy\fP, int \fIx\fP, wint_t * \fIwstr\fP, int \fIn\fP);
+\fBint mvwgetn_wstr(WINDOW * \fIwin\fP, int \fIy\fP, int \fIx\fP, wint_t * \fIwstr\fP, int \fIn\fP);
+.fi

@@ -1,0 +1,16 @@
+.SH NOTES
+No wide character counterpart functions are defined by the
+\*(``wide\*(''
+.I \%ncurses
+configuration nor by any standard.
+They are unnecessary:
+to retrieve and convert a wide-character string from a
+.I curses
+terminal keyboard,
+use these functions with the \fI\%scanf\fP(3) conversions \*(``%lc\*(''
+and \*(``%ls\*('' for wide characters and strings,
+respectively.
+.PP
+.I \%ncurses
+implements \fI\%vsscanf\fP(3) internally if it is unavailable when the
+library is configured.

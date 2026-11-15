@@ -1,0 +1,36 @@
+.SH EXTENSIONS
+.I \%ncurses
+provides four \*(``is_\*('' functions corresponding to
+.BR \%cbreak ","
+.BR echo ","
+.BR nl ","
+and
+.BR raw ","
+permitting their states to be queried by the application.
+.PP
+.TS
+center;
+Lb Lb Lb
+L  L  L .
+Query	Set	Reset
+_
+is_cbreak	cbreak	nocbreak
+is_echo	echo	noecho
+is_nl	nl	nonl
+is_raw	raw	noraw
+.TE
+.PP
+In each case,
+the function returns
+.TP 5 \" "-1" + 2n tag separation + 1n fudge for typesetters like grops
+.B 1
+if the option is set,
+.TP
+.B 0
+if the option is unset,
+or
+.TP
+.B \-1
+if the library's
+.I \%TERMINAL
+structure for the device has not been initialized.
