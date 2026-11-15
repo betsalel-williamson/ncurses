@@ -1,0 +1,22 @@
+# Proposes updates to the docs site's GitHub Actions and npm packages. The cooldown waits until
+# a release is 7 days old, so a bad or compromised release has time to be noticed and pulled.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ['*']
+  - package-ecosystem: npm
+    directory: /site
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      site:
+        patterns: ['*']
