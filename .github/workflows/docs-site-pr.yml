@@ -1,0 +1,19 @@
+name: Docs site (pull request)
+
+# Builds and checks the site for a pull request, without deploying. The build is kept as
+# site-<tree> so the merge can deploy it without building again (see docs-site.yml).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/docs-site-build.yml

@@ -1,23 +1,23 @@
 name: Docs site
 
-# Builds the documentation site (site/) from docs/ and man/, and deploys it to GitHub Pages.
-# Pull requests build it without deploying. One-time setup: Settings > Pages > Source: GitHub Actions.
+# Deploys the documentation site to GitHub Pages after a push to master. The build and its
+# checks live in docs-site-build.yml; docs-site-pr.yml runs them for pull requests, which never
+# deploy. One-time setup: Settings > Pages > Source: GitHub Actions.
 # Every action is pinned to a full commit SHA, with its release in a comment; Dependabot
 # (.github/dependabot.yml) proposes updates once a release is 7 days old.
 #
 # A merge deploys the site its pull request already built and checked, when that build is of
-# exactly the same source. A pull request's run checks out the merge of the pull request into
-# master and uploads its site as site-<tree>, named by that merge's git tree hash. After a push
-# to master, the reuse job looks for site-<tree of master>: from this workflow, run on a pull
-# request from this repository (not a fork), that passed. If one exists, its files are what
-# deploys, and the build job is skipped. If not (master moved after the pull request's last
-# run, or the artifact expired), the build job builds and checks master as before.
+# exactly the same source. A pull request's run (docs-site-pr.yml) checks out the merge of the
+# pull request into master and uploads its site as site-<tree>, named by that merge's git tree
+# hash. After a push to master, the reuse job looks for site-<tree of master>: from
+# docs-site-pr.yml, run on a pull request from this repository (not a fork), that passed. If
+# one exists, its files are what deploys, and the build job is skipped. If not (master moved
+# after the pull request's last run, or the artifact expired), the build job builds and checks
+# master as before.
 
 on:
   push:
     branches: [master]
-  pull_request:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
   workflow_dispatch:
 
 permissions:
@@ -29,7 +29,6 @@ concurrency:
 
 jobs:
   reuse:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -50,7 +49,7 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=site-$tree&per_page=20" \
             --jq '.artifacts[] | select(.expired | not)
                   | [.id, .workflow_run.id, .workflow_run.head_repository_id] | @tsv' > found.tsv
-          want=$(printf '%s\t%s\t%s' .github/workflows/docs-site.yml pull_request success)
+          want=$(printf '%s\t%s\t%s' .github/workflows/docs-site-pr.yml pull_request success)
           while IFS=$'\t' read -r id run repo_id; do
             [ "$repo_id" = "$GITHUB_REPOSITORY_ID" ] || continue
             got=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run" --jq '[.path, .event, .conclusion] | @tsv')
@@ -76,86 +75,12 @@ jobs:
   build:
     needs: reuse
     if: ${{ !cancelled() && needs.reuse.outputs.reused != 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0 # the errata check looks up each row's commit
-          persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-      - name: Check the stitched man pages match man/
-        run: docs/man/stitch.sh && git diff --exit-code man/
-      - name: Require an errata entry when a pull request changes the docs
-        # docs/appendix/errata.csv is the running list of every change this edition makes. A pull
-        # request that changes a shard adds its rows there, or carries the no-errata label.
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'no-errata')
-        env:
-          BASE: ${{ github.event.pull_request.base.sha }}
-        run: |
-          changed=$(git diff --name-only "$BASE" HEAD)
-          if echo "$changed" | grep -qE '^docs/(client-library|man)/' && ! echo "$changed" | grep -qx 'docs/appendix/errata.csv'; then
-            echo "::error file=docs/appendix/errata.csv::This pull request changes the docs; add its changes to docs/appendix/errata.csv, or label the pull request no-errata if no reader sees the change."
-            exit 1
-          fi
-      - name: Check the errata list
-        run: node site/scripts/errata.mjs
-      - name: Lint the guides with Vale
-        env:
-          VALE_VERSION: 3.26.0
-          VALE_SHA256: 22aa69a556558e4a9dfc63c17030777383d8d3c48dcdfad655fa98e839d666ed
-        run: |
-          curl -sSLo /tmp/vale.tar.gz "https://github.com/vale-cli/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
-          echo "${VALE_SHA256}  /tmp/vale.tar.gz" | sha256sum -c -
-          tar -xzf /tmp/vale.tar.gz -C /tmp vale
-          /tmp/vale --config docs/.vale.ini docs/client-library docs/appendix
-      - name: Check the C listings' style
-        env:
-          # The x86_64 Linux wheel of clang-format 18.1.3 on PyPI; pip refuses any other file.
-          CLANG_FORMAT_REQ: clang-format==18.1.3 --hash=sha256:059f2c2e7166f97cf06f78d9bd31d83a9c0416527845cb397296daa43bd2c6e2
-        run: |
-          python3 -m venv /tmp/clang-format
-          echo "$CLANG_FORMAT_REQ" > /tmp/clang-format.txt
-          /tmp/clang-format/bin/pip install --quiet --disable-pip-version-check --require-hashes -r /tmp/clang-format.txt
-          PATH="/tmp/clang-format/bin:$PATH" node site/scripts/check-listings.mjs
-      - name: Install Emscripten, for the runnable examples
-        uses: mymindstorm/setup-emsdk@4528d102f7230f0e7b276855c01ea1159be0e984 # v16
-        with:
-          version: 7.0.0
-          actions-cache-folder: emsdk-cache
-      - name: Build the site
-        working-directory: site
-        run: |
-          npm ci --no-audit --no-fund
-          npm run build
-      - name: Check the built pages for Markdown shown as text
-        run: node site/scripts/check-rendered.mjs
-      - name: Name the build by its source tree
-        if: github.event_name == 'pull_request'
-        id: tree
-        run: echo "tree=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_OUTPUT"
-      - name: Keep the build, for the deploy when this pull request merges
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: site-${{ steps.tree.outputs.tree }}
-          path: site/dist
-          retention-days: 30
-          if-no-files-found: error
-      - if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: site/dist
+    uses: ./.github/workflows/docs-site-build.yml
 
   deploy:
     needs: [reuse, build]
     if: >-
-      ${{ !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      ${{ !cancelled() && github.ref == 'refs/heads/master'
       && (needs.reuse.outputs.reused == 'true' || needs.build.result == 'success') }}
     runs-on: ubuntu-24.04
     permissions:

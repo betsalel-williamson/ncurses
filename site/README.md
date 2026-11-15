@@ -77,10 +77,10 @@ Two warnings are fixed rather than hidden. Configure gets `CPPFLAGS=-D_XOPEN_SOU
 
 ### Deploying a merge without rebuilding
 
-A pull request's run builds the site from the merge ref and uploads it as the artifact `site-<tree>`, where `<tree>` is the git tree hash of what it built. When the pull request merges and `master` has the same tree, the `reuse` job deploys that artifact instead of building again. It uses the artifact only if all of these hold:
+A pull request's run (`.github/workflows/docs-site-pr.yml`) builds the site from the merge ref and uploads it as the artifact `site-<tree>`, where `<tree>` is the git tree hash of what it built. When the pull request merges and `master` has the same tree, the `reuse` job in `docs-site.yml` deploys that artifact instead of building again. Both workflows run the same build and checks from `docs-site-build.yml`, so a pull request shows one job and `master` shows reuse, build, deploy and IndexNow. The reuse job takes the artifact only if all of these hold:
 
 - It was uploaded by this repository, not a fork.
-- It came from this workflow, run on a `pull_request` event.
+- It came from `docs-site-pr.yml`, run on a `pull_request` event.
 - That run succeeded.
 
 If no artifact matches, because `master` moved on after the pull request's last run, the `build` job builds and deploys as before. Requiring branches to be up to date before merging makes the trees match every time.
