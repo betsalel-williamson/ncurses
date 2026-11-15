@@ -111,3 +111,11 @@ The [adjudication](meta-verification/adjudication.md) of the first outside pass 
 **Lesson:** assume the original is right unless the evidence against it is strong. Before calling it wrong, read the whole function, search for the concept as well as the literal name, and open the manual page that defines the behavior. A new claim the edition adds, such as who wrote what, needs the same five-step check as a correction.
 
 **Guard:** none is automatic. The [meta-verification](meta-verification.md) pass reruns the checks from another system, and its findings are adjudicated against primary evidence before any row changes. A wrong fix moves its row to `rejected`, and a restored text gets an `edition-error` row, as the [errata introduction](index.md) describes.
+
+## An agent can't settle what it can't open
+
+The adjudication left rows unsettled for one reason more than any other: the evidence was outside what the agent could reach. The checkers were limited to the repository, so they couldn't judge dead links, the mailing list or the HOWTO's example archive. The adjudicating agent could fetch most web pages but not the Wayback Machine, which this environment refuses, so it couldn't say whether the 2003 snapshot of the DOS games page (`L55`) shows the games. The archive's download now returns 403 as well.
+
+**Lesson:** when a row's evidence is a page the agent can't open, the row stays unsettled, and the agent says so and hands the link to a person. It doesn't infer the page's content from its address, its status code or a search listing.
+
+**Guard:** the five-step check's second line asks for what was actually opened. A row whose evidence couldn't be opened gets the verdict `can't tell`, and the [adjudication](meta-verification/adjudication.md) lists it with the link a person needs to check.
