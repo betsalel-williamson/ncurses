@@ -24,6 +24,8 @@ import Default from '@astrojs/starlight/components/Footer.astro';
   /* Starlight puts a top margin between siblings in page content; in this row it lifted the
      second button and the size menu off the first button's line. */
   .run-example-bar > *,
+  .run-example-keys > *,
+  .run-example-bar button *,
   .run-example-size > select {
     margin: 0;
   }
@@ -36,6 +38,103 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     background: var(--sl-color-accent);
     color: var(--sl-color-black);
     cursor: pointer;
+  }
+  /* One control size on the row: Run, the keys, the Fit toggle, the size menu and Copy to run
+     share height, padding, font size and line height. Run is the filled primary; the others
+     (.nc-key) are the secondary of the same family, drawn from the --nc-key-* tokens. */
+  .run-example-bar button,
+  .run-example-size select {
+    box-sizing: border-box;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    padding-block: 0;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .run-example-size select {
+    display: inline-block;
+  }
+  .run-example-bar button.nc-key {
+    background: var(--nc-key-bg, transparent);
+    color: var(--nc-key-fg, var(--sl-color-white));
+    border: var(--nc-key-border, 1px solid);
+    border-color: var(--nc-key-border-color, var(--sl-color-gray-3));
+    box-shadow: var(--nc-key-shadow, none);
+  }
+  :root[data-theme='light'] .run-example-bar button.nc-key {
+    border-color: var(--nc-key-border-color, var(--sl-color-gray-4));
+  }
+  .run-example-bar .nc-key kbd {
+    font: inherit;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0;
+    color: var(--nc-key-cap-fg, var(--sl-color-text-accent));
+    background: var(--nc-key-cap-bg, transparent);
+    font-variant: var(--nc-key-cap-variant, normal);
+  }
+  .run-example-keys {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .run-example-keys[hidden],
+  .run-example-bar [hidden] {
+    display: none;
+  }
+  .run-example-keys .is-arrow {
+    min-width: 2.5rem;
+    padding-inline: 0.5rem;
+  }
+  .run-example-bar .run-example-fit {
+    padding-inline: 0.6rem;
+  }
+  .run-example-bar .run-example-fit[aria-pressed='true']::before {
+    content: '✓ ';
+    white-space: pre;
+  }
+  /* Copy to run (run-copy.js): the row under a shell listing, with its icon in the key cap's
+     color. Modern draws Starlight's round line icons, Manual page thin square-ended lines, and the
+     other styles pixel icons. */
+  .run-copy-bar {
+    margin-top: 0.75rem;
+  }
+  .run-copy-icon {
+    display: contents;
+  }
+  .run-copy-svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+    overflow: visible;
+    color: var(--nc-key-icon-fg, var(--nc-key-cap-fg, var(--sl-color-text-accent)));
+    filter: var(--nc-key-icon-filter, none);
+  }
+  .run-copy-svg:not(.is-round) {
+    display: none;
+  }
+  :root[data-style='manpage'] .run-copy-svg.is-round,
+  :root[data-style]:not([data-style='modern'], [data-style='manpage']) .run-copy-svg.is-round {
+    display: none;
+  }
+  :root[data-style='manpage'] .run-copy-svg.is-square,
+  :root[data-style]:not([data-style='modern'], [data-style='manpage']) .run-copy-svg.is-pixel {
+    display: block;
+  }
+  .nc-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
   .run-example-bar button:disabled {
     opacity: 0.6;
@@ -54,6 +153,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     color: var(--sl-color-text);
   }
   .run-example-note {
+    flex-basis: 100%;
     font-size: var(--sl-text-xs);
     color: var(--sl-color-gray-3);
   }
@@ -75,5 +175,14 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     background: #1e1e1e;
     border-radius: 0.4rem;
     width: fit-content;
+  }
+  /* On a phone every pixel of width is text size for a fitted terminal. */
+  @media (max-width: 30rem) {
+    .run-example-screen {
+      padding: 4px;
+    }
+    :root[data-style='textmode'] .run-example-screen {
+      padding: 8px;
+    }
   }
 </style>

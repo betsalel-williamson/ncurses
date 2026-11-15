@@ -121,6 +121,45 @@ pre,
   color: var(--nc-hint-page-fg, var(--sl-color-text-accent));
 }
 
+/* Line numbers on longer C listings (code-line-numbers.mjs picks them; Expressive Code's
+   line-numbers plugin draws them). Right-aligned figures as wide as the last line's number, one
+   character of space each side, a rule, then one character before the code. The gutter is pinned
+   on its own background, so on a phone the numbers stay put while the code scrolls under the
+   rule. Modern draws Starlight's theme colors; each other style sets the --nc-ln-* tokens.
+   The numbers are aria-hidden and unselectable, so neither a copy nor a screen reader gets them. */
+.expressive-code .ec-line .gutter {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--nc-ln-bg, var(--code-background));
+  border-inline-end: var(--nc-ln-rule, 1.5px solid var(--nc-ln-rule-color));
+  box-shadow: var(--nc-ln-rule-shadow, none);
+  --nc-ln-rule-color: color-mix(in srgb, var(--nc-ln-fg-modern) 28%, transparent);
+}
+.expressive-code .ec-line .gutter .ln {
+  padding-inline: 1ch;
+  color: var(--nc-ln-fg, var(--nc-ln-fg-modern));
+  font-variant-numeric: tabular-nums;
+}
+.expressive-code .ec-line .gutter ~ .code {
+  --ecGtrBrdWd: 0px;
+  padding-inline-start: calc(var(--ecIndent, 0ch) + 1ch);
+  padding-inline-end: 1ch;
+}
+/* The gutter makes a numbered listing wider, so its lines end 1ch after the code, which keeps 77
+   columns inside the code box at 1280px in every style (check-listings.mjs). Only the first two
+   lines, which the copy button covers, keep the room to clear it. */
+.expressive-code :nth-child(-n + 2 of .ec-line) .gutter ~ .code {
+  padding-inline-end: calc(2rem + var(--ec-codePadInl));
+}
+/* Modern's figures: the theme's line-number gray, darkened or lightened to 4.6:1. */
+:root {
+  --nc-ln-fg-modern: #8b909b;
+}
+:root[data-theme='light'] {
+  --nc-ln-fg-modern: #6c717c;
+}
+
 /* The status bar (SkipLink.astro) is hidden unless a style turns it on. */
 .nc-statusbar {
   display: none;
@@ -299,6 +338,21 @@ pre,
   --nc-card-bg: var(--nc-cga-gray);
   --nc-card-fg: var(--nc-cga-black);
   --nc-card-title-fg: var(--nc-cga-black);
+  /* The Run row's secondary buttons (F1 Quit, the arrows, Fit to width, Copy to run): gray
+     keys with the hotkey red on their caps, as the function-key bar draws them. */
+  --nc-key-bg: var(--nc-cga-gray);
+  --nc-key-fg: var(--nc-cga-black);
+  --nc-key-border: 0;
+  --nc-key-border-color: transparent;
+  --nc-key-shadow: 0.375rem 0.375rem 0 var(--nc-cga-black);
+  --nc-key-cap-fg: var(--nc-cga-red);
+  --nc-key-cap-bg: transparent;
+  --nc-key-hover-bg: var(--nc-cga-white);
+  /* Listing line numbers: a DOS editor's line column, dark cyan on black, a dark gray rule. */
+  --nc-ln-fg: var(--nc-cga-cyan);
+  --nc-ln-bg: var(--nc-cga-black);
+  --nc-ln-rule: 2px solid var(--nc-cga-dark-gray);
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: var(--nc-cga-black);
   --nc-term-frame-border: 4px double;
@@ -466,6 +520,19 @@ pre,
   --nc-card-bg: #d6d6d1;
   --nc-card-fg: #33332f;
   --nc-card-title-fg: #161616;
+  --nc-key-bg: #d6d6d1;
+  --nc-key-fg: #161616;
+  --nc-key-border: 2px solid;
+  --nc-key-border-color: var(--nc-raised);
+  --nc-key-shadow: none;
+  --nc-key-cap-fg: #22577a;
+  --nc-key-cap-bg: transparent;
+  --nc-key-icon-filter: drop-shadow(1px 1px 0 #f2f2ee);
+  /* A Motif editor's line-number pane: a shade darker than the text, an etched rule. */
+  --nc-ln-fg: #62625d;
+  --nc-ln-bg: #e4e4de;
+  --nc-ln-rule: 1px solid #7d7d78;
+  --nc-ln-rule-shadow: 1px 0 0 #ffffff;
 
   --nc-term-frame-bg: #d6d6d1;
   --nc-term-frame-border: 2px solid;
@@ -634,6 +701,19 @@ pre,
   --nc-card-bg: #fdfdf8;
   --nc-card-fg: #2c2c28;
   --nc-card-title-fg: #1b1b1b;
+  --nc-key-bg: #fdfdf8;
+  --nc-key-fg: #1b1b1b;
+  --nc-key-border: 1px solid;
+  --nc-key-border-color: #1b1b1b;
+  --nc-key-shadow: none;
+  --nc-key-cap-fg: #1b1b1b;
+  --nc-key-cap-bg: transparent;
+  --nc-key-cap-variant: small-caps;
+  /* A printed listing: gray figures and a hairline in the frame's color, on the code's paper. */
+  --nc-ln-fg: #6b6b62;
+  --nc-ln-bg: #f1f1e8;
+  --nc-ln-rule: 1px solid #d8d8cc;
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: #f1f1e8;
   --nc-term-frame-border: 1px solid;
@@ -798,6 +878,20 @@ pre,
   --nc-card-bg: transparent;
   --nc-card-fg: #b3ae9f;
   --nc-card-title-fg: var(--nc-amber);
+  --nc-key-bg: transparent;
+  --nc-key-fg: var(--nc-amber);
+  --nc-key-border: 1px solid;
+  --nc-key-border-color: var(--nc-amber);
+  --nc-key-shadow: none;
+  --nc-key-cap-fg: #050504;
+  --nc-key-cap-bg: var(--nc-amber);
+  --nc-key-icon-fg: var(--nc-amber);
+  --nc-key-icon-filter: drop-shadow(0 0 1.5px rgba(255, 176, 0, 0.75));
+  /* An amber screen at half intensity: dim amber figures, the frame's dark rule. */
+  --nc-ln-fg: #8f7d4f;
+  --nc-ln-bg: #050504;
+  --nc-ln-rule: 1px solid var(--nc-rule);
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: #050504;
   --nc-term-frame-border: 1px solid;
@@ -1208,7 +1302,7 @@ pre,
   }
   & .sl-link-button.primary:hover,
   & button.sl-menu-button:hover,
-  & .run-example-bar button:not(:disabled):hover {
+  & .run-example-bar button:not(:disabled, .nc-key):hover {
     background: var(--nc-button-hover-bg);
     color: var(--nc-button-hover-fg);
   }
@@ -1217,6 +1311,28 @@ pre,
   & .run-example-bar button:not(:disabled):active {
     box-shadow: none;
     transform: translate(0.125rem, 0.125rem);
+  }
+  /* The Run row's secondary buttons: the keys for a running program, Fit to width and Copy to
+     run, drawn from the --nc-key-* tokens beside the style's filled Run button. */
+  & .run-example-bar button.nc-key {
+    background: var(--nc-key-bg);
+    color: var(--nc-key-fg);
+    border: var(--nc-key-border);
+    border-color: var(--nc-key-border-color);
+    box-shadow: var(--nc-key-shadow);
+  }
+  /* Only with a mouse: on a touch screen the hover state stays on a key after a tap. */
+  @media (hover: hover) {
+    & .run-example-bar button.nc-key:not(:disabled):hover {
+      background: var(--nc-key-hover-bg, var(--nc-button-hover-bg));
+      color: var(--nc-key-hover-fg, var(--nc-button-hover-fg));
+    }
+    /* A filled hover (Terminal's amber, Manual page's blue) takes the cap and icon with it. */
+    &:not([data-style='textmode']) .run-example-bar button.nc-key:not(:disabled):hover :is(kbd, .run-copy-svg) {
+      background: transparent;
+      color: inherit;
+      filter: none;
+    }
   }
   & .sl-link-button {
     font-family: var(--sl-font);
