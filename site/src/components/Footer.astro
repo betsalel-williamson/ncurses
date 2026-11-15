@@ -1,5 +1,6 @@
 ---
-// Starlight's footer, plus the script that makes guide examples runnable (run-example.ts).
+// Starlight's footer, plus the page scripts: runnable guide examples (run-example.ts), the
+// header that hides on scroll (chrome-autohide.ts) and the search field's hint (search-hint.ts).
 import Default from '@astrojs/starlight/components/Footer.astro';
 ---
 
@@ -8,6 +9,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
 <script>
   import './run-example.ts';
   import './chrome-autohide.ts';
+  import './search-hint.ts';
 </script>
 
 <style is:global>

@@ -1496,3 +1496,94 @@
     scrollbar-color: var(--nc-sb-ff-thumb) var(--nc-sb-ff-track);
   }
 }
+
+/* ---------------------------------------------------------------------------------------------
+   The search field's rotating hint (search-hint.ts). Modern slides one term into the next. The
+   other styles erase and type each term behind a blinking cursor shaped like the era's own:
+   an underline for the CGA text screen, a block for the amber terminal, and a bar for the
+   workstation and the printed page. Terminal's typed characters strike bright and fade. */
+/* The typing cursor, one per era: a thin I-beam bar like a Motif text field's (Workstation and
+   Manual page, 500 ms on and 500 ms off), the BIOS underline (Text mode, the CGA rate of about
+   1.9 Hz) and a solid amber block (Terminal, 600 ms). */
+:root {
+  --nc-search-hint-cursor-w: 1.5px;
+  --nc-search-hint-cursor-h: 1.1em;
+  --nc-search-hint-cursor-y: -0.2em;
+  --nc-search-hint-cursor-gap: 2px;
+  --nc-search-hint-cursor-bg: currentColor;
+  --nc-search-hint-cursor-opacity: 1;
+  --nc-search-hint-blink: 1000ms;
+}
+:root[data-style="textmode"] {
+  --nc-search-hint-cursor-w: 0.5em;
+  --nc-search-hint-cursor-h: 0.12em;
+  --nc-search-hint-cursor-y: -0.1em;
+  --nc-search-hint-cursor-gap: 1px;
+  --nc-search-hint-blink: 534ms;
+}
+:root[data-style="terminal"] {
+  --nc-search-hint-strike: #ffc84a;
+  --nc-search-hint-cursor-w: 0.55em;
+  --nc-search-hint-cursor-h: 1.05em;
+  --nc-search-hint-cursor-gap: 1px;
+  --nc-search-hint-cursor-bg: #ffb000;
+  --nc-search-hint-cursor-opacity: 0.8;
+  --nc-search-hint-blink: 600ms;
+}
+/* Each style colors the placeholder with a more specific rule, so this one has to insist. */
+#starlight__search
+  .pagefind-ui__form.nc-search-hinting
+  .pagefind-ui__search-input::placeholder {
+  color: transparent !important;
+}
+.nc-search-hint {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: pre;
+  pointer-events: none;
+  user-select: none;
+  color: var(--sl-color-gray-3);
+}
+:root[data-style]:not([data-style="modern"]) .nc-search-hint {
+  color: color-mix(in srgb, var(--nc-input-fg) 75%, transparent);
+}
+.nc-search-hint[hidden] {
+  display: none;
+}
+.nc-search-hint-slot {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 1.4em;
+}
+.nc-search-hint-word {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  line-height: 1.4em;
+}
+.nc-search-hint-cursor {
+  display: inline-block;
+  width: var(--nc-search-hint-cursor-w);
+  height: var(--nc-search-hint-cursor-h);
+  margin-inline-start: var(--nc-search-hint-cursor-gap);
+  vertical-align: var(--nc-search-hint-cursor-y);
+  background: var(--nc-search-hint-cursor-bg);
+  opacity: var(--nc-search-hint-cursor-opacity);
+}
+.nc-search-hint-cursor.blinking {
+  animation: nc-search-hint-blink var(--nc-search-hint-blink) steps(1) infinite;
+}
+@keyframes nc-search-hint-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nc-search-hint-cursor.blinking {
+    animation: none;
+  }
+}
