@@ -1,0 +1,20 @@
+track,unit,path,source,reviewed_pr
+Guides,Getting started,docs/client-library/getting-started,"NCURSES Programming HOWTO ch. 1-4",11
+Guides,Windows and screen updates,docs/client-library/windows,"NCURSES Programming HOWTO ch. 5 and 9; Writing Programs with NCURSES",12
+Guides,Output,docs/client-library/output,"NCURSES Programming HOWTO ch. 6; Writing Programs with NCURSES",13
+Guides,Input,docs/client-library/input,"NCURSES Programming HOWTO ch. 7; Writing Programs with NCURSES",15
+Guides,Attributes and colors,docs/client-library/attributes,"NCURSES Programming HOWTO ch. 8 and 10",16
+Guides,Keyboard,docs/client-library/keyboard,"NCURSES Programming HOWTO ch. 11",17
+Guides,Mouse,docs/client-library/mouse,"NCURSES Programming HOWTO ch. 12; Writing Programs with NCURSES",19
+Guides,Screen and other features,docs/client-library/screen,"NCURSES Programming HOWTO ch. 13 and 14; Writing Programs with NCURSES",24
+Guides,"Initialization, wrapup and debugging",docs/client-library/init-and-debugging,"Writing Programs with NCURSES, Function Descriptions",26
+Guides,"Hints, tips and compatibility",docs/client-library/hints,"Writing Programs with NCURSES, Hints, Tips, and Tricks",32
+Guides,"Other libraries, tools and programs",docs/client-library/more,"NCURSES Programming HOWTO ch. 15, 19 and 20",33
+Guides,Forms library,docs/client-library/forms,"NCURSES Programming HOWTO ch. 18; Writing Programs with NCURSES",1
+Guides,Menus library,docs/client-library/menus,"NCURSES Programming HOWTO ch. 17; Writing Programs with NCURSES",9
+Guides,Panels library,docs/client-library/panels,"NCURSES Programming HOWTO ch. 16; Writing Programs with NCURSES",10
+Guides,References,docs/appendix/references.md,"NCURSES Programming HOWTO ch. 21",34
+Contributor and install docs,Hacker's guide,docs/contributor/hackguide,doc/html/hackguide.html,45
+Contributor and install docs,Installation,docs/contributor/install,"INSTALL, README, README.MinGW, README.emx",
+Contributor and install docs,Ada binding,docs/contributor/ada,doc/html/Ada95.html,
+Contributor and install docs,Announcement,docs/contributor/announce,doc/html/announce.html,

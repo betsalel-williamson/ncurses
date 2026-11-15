@@ -69,6 +69,11 @@ jobs:
           fi
       - name: Check the errata list
         run: node site/scripts/errata.mjs
+      # The front page's progress figures, one row per merged pull request: recount each from git.
+      - name: Check the migration history
+        run: node site/scripts/migration-history.mjs verify
+      - name: Check the session figures against their recorded sources
+        run: node site/scripts/migration-stats.mjs verify
       - name: Lint the guides with Vale
         env:
           VALE_VERSION: 3.26.0
