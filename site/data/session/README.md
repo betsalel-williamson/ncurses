@@ -10,7 +10,7 @@ The agent refreshes all of them as the last commit of each pull request, before 
 node site/scripts/migration-stats.mjs refresh get_session.json transcript.jsonl
 ```
 
-That runs the `usage`, `timeline` and `session` steps below, then `verify`. The pull request template has a box for it.
+That runs the `usage`, `daily` and `session` steps below, then `verify`. The pull request template has a box for it.
 
 ## `usage.json`
 
@@ -32,16 +32,21 @@ The script copies five numbers from the response's `external_metadata.usage`, an
 
 Nothing else from the response is kept: no session or account IDs, no environment details, no message text. These numbers can't be checked beyond the API's word, but every refresh is a commit, so their history is in git.
 
-## `timeline.csv`
+## `daily.csv`
 
-Each line is one event in the agent's transcript: its time, and whether the maintainer wrote it (`maintainer`) or anything else did (`agent`, which also covers tool results and CI notices). It holds no message text. The agent writes it from its transcript with:
+One line per UTC day of the session, totalled from the agent's transcript, so the file grows by a line a day rather than a line an event. It holds no message text. The agent writes it from its transcript with:
 
 ```sh
-node site/scripts/migration-stats.mjs timeline transcript.jsonl
+node site/scripts/migration-stats.mjs daily transcript.jsonl
 ```
 
-The time figures are recomputed from it:
+| Column | What it holds |
+|---|---|
+| `date` | The UTC day |
+| `first`, `last` | The day's first and last event |
+| `events` | How many events the transcript has that day: messages, the agent's steps, tool results and CI notices |
+| `agentSeconds` | **Agent working time:** the gaps of 5 minutes or less between consecutive events, so waits for CI or the maintainer aren't counted |
+| `maintainerSeconds` | **Maintainer time:** the gaps of 15 minutes or less between the maintainer's own messages |
+| `maintainerMessages` | The maintainer's messages |
 
-- **Agent working time** adds the gaps of 5 minutes or less between consecutive events, so waits for CI or the maintainer aren't counted.
-- **Maintainer time** adds the gaps of 15 minutes or less between the maintainer's own messages.
-- **Wall time** runs from the first event to the last.
+A gap belongs to the day of the event that ends it. The front page's time figures are the sums of the columns, and **wall time** runs from the first day's `first` to the last day's `last`.
