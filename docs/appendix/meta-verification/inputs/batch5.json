@@ -1,0 +1,212 @@
+[
+  {
+    "id": "L206",
+    "claim_as_printed": "See `include/curses.h.in` for mask values",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L207",
+    "claim_as_printed": "The `lib_mouse()` code",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "mouse-events",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L208",
+    "claim_as_printed": "will settle for BSD regexps",
+    "appears_in": "docs/contributor/hackguide/forms-and-menus.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L209",
+    "claim_as_printed": "`ncurses/dump_entry.c`",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L210",
+    "claim_as_printed": "`ncurses/MKlib_gen.sh`",
+    "appears_in": "docs/contributor/hackguide/style-tips.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L211",
+    "claim_as_printed": "The fifth field (flags) of `include/Caps`",
+    "appears_in": "docs/contributor/hackguide/style-tips.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L212",
+    "claim_as_printed": "`lib_getstr.c` is pure curses, but calls `outstr()`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L213",
+    "claim_as_printed": "`lib_insstr.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L214",
+    "claim_as_printed": "`lib_unctrl.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L215",
+    "claim_as_printed": "`comp_main.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L223",
+    "claim_as_printed": "The configure script attempts to locate previous installation of ncurses, and will set the default prefix according to where it finds the ncurses headers",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-1-choose-where-to-install",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L224",
+    "claim_as_printed": "Typing 'configure' with no arguments is equivalent to: ./configure --with-normal --with-debug --enable-overwrite",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L225",
+    "claim_as_printed": "read the PORTABILITY section in the file ncurses/README",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L227",
+    "claim_as_printed": "tic(1), captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1)",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-3-build",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L228",
+    "claim_as_printed": "If the option is not given, this defaults to \"long\".",
+    "appears_in": "docs/contributor/install/configure-options/with-m-z.md",
+    "section": "--with-tparm-argxxx",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L229",
+    "claim_as_printed": "--with-weak-symbols",
+    "appears_in": "docs/contributor/install/configure-options/with-m-z.md",
+    "section": "--with-versioned-symsxxx",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L232",
+    "claim_as_printed": "FreeBSD, NetBSD, OpenBSD, Cygwin, MinGW",
+    "appears_in": "docs/contributor/install/system-integrators.md",
+    "section": "configuration-and-installation",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L233",
+    "claim_as_printed": "listed in the misc/terminfo file",
+    "appears_in": "docs/contributor/install/system-integrators.md",
+    "section": "naming-the-console-terminal",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L235",
+    "claim_as_printed": "$HOME/terminfo (twice)",
+    "appears_in": "docs/contributor/install/bsd-conversion.md",
+    "section": "private-installations-with-termcap",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L241",
+    "claim_as_printed": "To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>",
+    "appears_in": "docs/contributor/install/bug-reports.md",
+    "section": "",
+    "original_source": "INSTALL"
+  },
+  {
+    "id": "L243",
+    "claim_as_printed": "assuming environment variable MINGW_ROOT holds the root directory name of your MinGW build",
+    "appears_in": "docs/contributor/install/mingw.md",
+    "section": "configuring",
+    "original_source": "README.MinGW"
+  },
+  {
+    "id": "L247",
+    "claim_as_printed": "I provide no functions to switch on/off curses tracing options.",
+    "appears_in": "docs/contributor/ada/limitations.md",
+    "section": "",
+    "original_source": "Ada95 Binding for ncurses"
+  },
+  {
+    "id": "L248",
+    "claim_as_printed": "Just make the boolean member bold of the record true.",
+    "appears_in": "docs/contributor/ada/index.md",
+    "section": "general-remarks",
+    "original_source": "Ada95 Binding for ncurses"
+  },
+  {
+    "id": "L249",
+    "claim_as_printed": "Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.",
+    "appears_in": "docs/contributor/ada/index.md",
+    "section": "general-remarks",
+    "original_source": "Ada95 Binding for ncurses"
+  },
+  {
+    "id": "L250",
+    "claim_as_printed": "The (n)curses documentation says, that the String arrays to be passed to an TYPE_ENUM fieldtype must not be automatic variables.",
+    "appears_in": "docs/contributor/ada/implementation-details.md",
+    "section": "enumeration-fields",
+    "original_source": "Ada95 Binding for ncurses"
+  },
+  {
+    "id": "L256",
+    "claim_as_printed": "The most important bug-fixes/improvements (a link to \"Interesting bug-fixes\", a section with no content)",
+    "appears_in": "docs/contributor/announce/release-notes.md",
+    "section": "",
+    "original_source": "announce.html.in"
+  },
+  {
+    "id": "L257",
+    "claim_as_printed": "https://invisible-island.net/ncurses/man/tput.1m.html",
+    "appears_in": "docs/contributor/announce/program-improvements.md",
+    "section": "utilities",
+    "original_source": "announce.html.in"
+  },
+  {
+    "id": "L258",
+    "claim_as_printed": "Patches to the current release are made available at https://invisible-island.net/archives/ncurses/6.5/",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "original_source": "announce.html.in"
+  },
+  {
+    "id": "L259",
+    "claim_as_printed": "To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.org containing the line: subscribe <name>@<host.domain>",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "original_source": "announce.html.in"
+  },
+  {
+    "id": "L260",
+    "claim_as_printed": "modify MKlib_gen.c to allow for Solaris's definition of NULL as 0L",
+    "appears_in": "docs/contributor/announce/portability.md",
+    "section": "",
+    "original_source": "announce.html.in"
+  }
+]

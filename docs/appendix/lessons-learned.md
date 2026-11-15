@@ -88,3 +88,13 @@ A configuration change also seemed to do nothing until Astro's content cache in 
 **Lesson:** when a measurement disagrees with what you see, check what it measures. When a configuration change seems to do nothing, clear the build cache before concluding it doesn't work.
 
 **Guard:** `site/scripts/check-listings.mjs` fails on a listing line longer than 77 columns.
+
+## Meta-verification belongs in another system
+
+The first attempt to re-check every errata error claim ran inside the Claude docs session that had written many of those rows. It launched 33 runs (18 on Sonnet, 10 Sonnet retries, 5 on Haiku). Sonnet's safety filter (`reasoning_extraction`) stopped 27; one more Sonnet run was cut off while writing cards; the Haiku retries were stopped after the permission system blocked a reworded prompt. One run finished (batch 5) and was discarded. That attempt counts as a **failed pass** for budget and lessons, not as evidence.
+
+A second attempt ran as an outside Cursor Cloud Agent pass with the Merlon Docs evidence-check skill installed first, six batches × three isolated runs, and no access to `docs/appendix/` for the checkers. Its report and run outputs live under [meta-verification](meta-verification.md). Hand that package to a separate agent only after the pull request that adds it has merged.
+
+**Lesson:** audit the errata list from a different product than the one that recorded the claims, load the evidence-check skill before launching runs, and keep the meta-verification artifacts in the appendix so the next agent can act from `master`.
+
+**Guard:** the appendix's [meta-verification](meta-verification.md) page names the process, the verdict framing, and where the current pass's files are.

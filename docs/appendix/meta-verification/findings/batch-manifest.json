@@ -1,0 +1,14 @@
+{
+  "commit": "568319e5809ad365ba195ebbd100946c53b42cb4",
+  "claimCount": 178,
+  "batchSizes": [
+    30,
+    30,
+    30,
+    30,
+    29,
+    29
+  ],
+  "idScheme": "L{csv_line_number} where csv_line_number is 1-based data line in docs/appendix/errata.csv (header is line 1)",
+  "note": "Batch files omit checked/quote/verdict/confidence/earlier/now/pr/commit so runs cannot see recorded answers."
+}

@@ -1,0 +1,53 @@
+{
+  "batch": 1,
+  "run": 2,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": null,
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T18:54:08Z",
+  "finished": "2026-11-15T19:16:30Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 61,
+  "tools": [
+    { "name": "Shell", "calls": 13 },
+    { "name": "Glob", "calls": 5 },
+    { "name": "Read", "calls": 16 },
+    { "name": "Grep", "calls": 19 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "CallDynamicTool", "calls": 1 },
+    { "name": "Write", "calls": 2 },
+    { "name": "StrReplace", "calls": 3 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 1 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 1 },
+    { "name": "cursor", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts taken from this session's tool invocations (sum to toolCalls). Token/cost/model/effort/speed unreported by the system (run-info originalModelName null). merlon-docs loaded via SKILL.md + evidence-check.md and applied to every claim. No subagents. No PR; read-only evidence check."
+}

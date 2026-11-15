@@ -1,0 +1,309 @@
+{
+  "completedAt": "2026-11-15T19:19:13Z",
+  "orchestratorStartedUtc": "2026-11-15T18:51:36Z",
+  "orchestratorFinishedUtc": "2026-11-15T19:19:13Z",
+  "orchestratorZoneNote": "America/Los_Angeles = UTC-8",
+  "officialDir": "/opt/cursor/artifacts/errata-meta/out",
+  "problems": [],
+  "runCount": 18,
+  "totalCards": 534,
+  "earliestRunStart": "2026-11-15T18:53:53Z",
+  "latestRunFinish": "2026-11-15T19:18:47Z",
+  "perRun": [
+    {
+      "batch": 1,
+      "run": 1,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 15,
+        "can't tell": 6,
+        "matches": 9
+      },
+      "started": "2026-11-15T19:11:46Z",
+      "finished": "2026-11-15T19:18:47Z",
+      "model": null,
+      "toolCalls": 38,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 1,
+      "run": 2,
+      "claims": 30,
+      "verdicts": {
+        "matches": 25,
+        "can't tell": 5
+      },
+      "started": "2026-11-15T18:54:08Z",
+      "finished": "2026-11-15T19:16:30Z",
+      "model": null,
+      "toolCalls": 61,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 1,
+      "run": 3,
+      "claims": 30,
+      "verdicts": {
+        "matches": 14,
+        "can't tell": 5,
+        "superseded": 8,
+        "disagrees": 3
+      },
+      "started": "2026-11-15T19:11:20Z",
+      "finished": "2026-11-15T19:15:10Z",
+      "model": null,
+      "toolCalls": 76,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 2,
+      "run": 1,
+      "claims": 30,
+      "verdicts": {
+        "matches": 30
+      },
+      "started": "2026-11-15T18:53:53Z",
+      "finished": "2026-11-15T19:17:10Z",
+      "model": null,
+      "toolCalls": 88,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 2,
+      "run": 2,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 21,
+        "matches": 8,
+        "can't tell": 1
+      },
+      "started": "2026-11-15T19:10:30Z",
+      "finished": "2026-11-15T19:17:28Z",
+      "model": "Composer",
+      "toolCalls": 94,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 2,
+      "run": 3,
+      "claims": 30,
+      "verdicts": {
+        "matches": 14,
+        "disagrees": 14,
+        "superseded": 2
+      },
+      "started": "2026-11-15T19:11:05Z",
+      "finished": "2026-11-15T19:17:50Z",
+      "model": "Composer",
+      "toolCalls": 89,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 3,
+      "run": 1,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 26,
+        "matches": 4
+      },
+      "started": "2026-11-15T19:11:17Z",
+      "finished": "2026-11-15T19:17:35Z",
+      "model": "Composer",
+      "toolCalls": 77,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 3,
+      "run": 2,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 26,
+        "matches": 4
+      },
+      "started": "2026-11-15T19:11:29Z",
+      "finished": "2026-11-15T19:15:48Z",
+      "model": "Composer",
+      "toolCalls": 82,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 3,
+      "run": 3,
+      "claims": 30,
+      "verdicts": {
+        "matches": 29,
+        "disagrees": 1
+      },
+      "started": "2026-11-15T19:11:00Z",
+      "finished": "2026-11-15T19:16:30Z",
+      "model": null,
+      "toolCalls": 103,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 4,
+      "run": 1,
+      "claims": 30,
+      "verdicts": {
+        "matches": 10,
+        "disagrees": 9,
+        "superseded": 4,
+        "can't tell": 7
+      },
+      "started": "2026-11-15T19:11:10Z",
+      "finished": "2026-11-15T19:15:42Z",
+      "model": "Composer",
+      "toolCalls": 95,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 4,
+      "run": 2,
+      "claims": 30,
+      "verdicts": {
+        "matches": 10,
+        "disagrees": 10,
+        "can't tell": 7,
+        "superseded": 3
+      },
+      "started": "2026-11-15T18:54:13Z",
+      "finished": "2026-11-15T19:15:10Z",
+      "model": null,
+      "toolCalls": 98,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 4,
+      "run": 3,
+      "claims": 30,
+      "verdicts": {
+        "matches": 12,
+        "disagrees": 11,
+        "superseded": 2,
+        "can't tell": 3,
+        "missing": 2
+      },
+      "started": "2026-11-15T19:11:52Z",
+      "finished": "2026-11-15T19:17:26Z",
+      "model": "Composer",
+      "toolCalls": 92,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 5,
+      "run": 1,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 7,
+        "matches": 9,
+        "missing": 5,
+        "superseded": 5,
+        "can't tell": 4
+      },
+      "started": "2026-11-15T19:10:49Z",
+      "finished": "2026-11-15T19:17:00Z",
+      "model": null,
+      "toolCalls": 98,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 5,
+      "run": 2,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 17,
+        "matches": 4,
+        "superseded": 5,
+        "missing": 1,
+        "can't tell": 3
+      },
+      "started": "2026-11-15T18:54:08Z",
+      "finished": "2026-11-15T19:13:10Z",
+      "model": null,
+      "toolCalls": 33,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 5,
+      "run": 3,
+      "claims": 30,
+      "verdicts": {
+        "disagrees": 23,
+        "matches": 3,
+        "can't tell": 3,
+        "superseded": 1
+      },
+      "started": "2026-11-15T19:11:37Z",
+      "finished": "2026-11-15T19:14:00Z",
+      "model": "Composer",
+      "toolCalls": 33,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 6,
+      "run": 1,
+      "claims": 28,
+      "verdicts": {
+        "matches": 15,
+        "disagrees": 10,
+        "superseded": 1,
+        "can't tell": 2
+      },
+      "started": "2026-11-15T19:10:50Z",
+      "finished": "2026-11-15T19:16:13Z",
+      "model": "Composer",
+      "toolCalls": 79,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 6,
+      "run": 2,
+      "claims": 28,
+      "verdicts": {
+        "disagrees": 7,
+        "matches": 19,
+        "superseded": 1,
+        "can't tell": 1
+      },
+      "started": "2026-11-15T19:11:18Z",
+      "finished": "2026-11-15T19:15:27Z",
+      "model": "Composer",
+      "toolCalls": 72,
+      "costUsd": null,
+      "status": "completed"
+    },
+    {
+      "batch": 6,
+      "run": 3,
+      "claims": 28,
+      "verdicts": {
+        "disagrees": 12,
+        "matches": 14,
+        "superseded": 1,
+        "can't tell": 1
+      },
+      "started": "2026-11-15T19:11:26Z",
+      "finished": "2026-11-15T19:17:20Z",
+      "model": "Composer",
+      "toolCalls": 126,
+      "costUsd": null,
+      "status": "completed"
+    }
+  ]
+}

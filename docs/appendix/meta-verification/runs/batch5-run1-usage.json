@@ -1,0 +1,52 @@
+{
+  "batch": 5,
+  "run": 1,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": null,
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:10:49Z",
+  "finished": "2026-11-15T19:17:00Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 98,
+  "tools": [
+    { "name": "Shell", "calls": 23 },
+    { "name": "Read", "calls": 38 },
+    { "name": "Grep", "calls": 30 },
+    { "name": "Glob", "calls": 2 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "CallDynamicTool", "calls": 1 },
+    { "name": "Write", "calls": 2 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 2 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 1 },
+    { "name": "cursor", "version": null, "calls": 0 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts manually tallied from this session's tool invocations; the system shows no per-tool usage log and no token/cost figures (left null). run-info returned originalModelName null, so model/effort/speed are null. merlon-docs uses=2 for SKILL.md and references/review/evidence-check.md. cursor-cloud calls=1 for run-info."
+}

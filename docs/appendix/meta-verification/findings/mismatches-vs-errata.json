@@ -1,0 +1,2478 @@
+[
+  {
+    "id": "L2",
+    "batch": 1,
+    "claim": "Post the form with `form_post()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L3",
+    "batch": 1,
+    "claim": "Unpost the menu with `form_unpost()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L4",
+    "batch": 1,
+    "claim": "Free the memory allocated to menu by `free_form()`",
+    "appears_in": "docs/client-library/forms/overview.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L5",
+    "batch": 1,
+    "claim": "Successor and predecessor hooks set with `set_fieldtype_arg()`",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "order-functions-for-custom-types",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L6",
+    "batch": 1,
+    "claim": "`new_fieldtype()` prototype without its closing semicolon",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L7",
+    "batch": 1,
+    "claim": "The library routines will that call them will return error indication",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "validation-function-arguments",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L8",
+    "batch": 1,
+    "claim": "should never see a NULL file pointer",
+    "appears_in": "docs/client-library/forms/custom-field-types.md",
+    "section": "validation-function-arguments",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L9",
+    "batch": 1,
+    "claim": "Example comment: This filed is like a password field",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L10",
+    "batch": 1,
+    "claim": "Merging the guides split the `field_pad()` comment out of its code block; the stray fence turned the next paragraph and ",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "field-display-attributes",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L11",
+    "batch": 1,
+    "claim": "Backspace at the start of a field moved to the previous field but left the cursor at its start",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "try-it-make-backspace-and-delete-work",
+    "votes": [
+      "can't tell",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L20",
+    "batch": 1,
+    "claim": "see `infocmp(1)` (line 579)",
+    "appears_in": "man/curs_getch.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L21",
+    "batch": 1,
+    "claim": "`tic(1)` (line 207)",
+    "appears_in": "man/curs_trace.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L22",
+    "batch": 1,
+    "claim": "`@TIC@(1)` (line 77)",
+    "appears_in": "man/curs_extend.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L23",
+    "batch": 1,
+    "claim": "`@TIC@(1)` (line 669)",
+    "appears_in": "man/curs_inopts.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L24",
+    "batch": 1,
+    "claim": "`@TIC@(1)` (line 63)",
+    "appears_in": "docs/man/term/02-description.5",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L25",
+    "batch": 1,
+    "claim": "`@TIC@(1)` and `@INFOCMP@(1)` (line 142)",
+    "appears_in": "man/term_variables.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L26",
+    "batch": 1,
+    "claim": "The background character's set of attributes becomes a property of the character cell and move with it (line 101)",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L27",
+    "batch": 1,
+    "claim": "The background character's set of attributes becomes a property of the character cell and move with it (line 92)",
+    "appears_in": "man/curs_bkgrnd.3x",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "superseded": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L28",
+    "batch": 1,
+    "claim": "The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one copy is an error",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "rejected",
+    "recorded_verdict": "disagrees",
+    "expected_meta": "matches"
+  },
+  {
+    "id": "L29",
+    "batch": 1,
+    "claim": "The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so one copy is an error",
+    "appears_in": "man/curs_border.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "rejected",
+    "recorded_verdict": "disagrees",
+    "expected_meta": "matches"
+  },
+  {
+    "id": "L34",
+    "batch": 1,
+    "claim": "The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the terminal does not support color \u2026), so one copy",
+    "appears_in": "man/curs_bkgd.3x",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "disagrees": 2,
+      "matches": 1
+    },
+    "majority": "disagrees",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "rejected",
+    "recorded_verdict": "disagrees",
+    "expected_meta": "matches"
+  },
+  {
+    "id": "L35",
+    "batch": 1,
+    "claim": "The site's man pages showed literal `**` around page references and after italic words, e.g. `**curs_getch(3X),** **curs",
+    "appears_in": "man/resizeterm.3x",
+    "section": "SEE ALSO",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L36",
+    "batch": 1,
+    "claim": "The site showed the page as troff source because pandoc stopped at the table format `Lf(BI)`",
+    "appears_in": "man/infocmp.1m",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L37",
+    "batch": 1,
+    "claim": "The site showed the page as troff source because pandoc stopped at a table cell continued with a trailing backslash, and",
+    "appears_in": "man/curs_terminfo.3x",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L38",
+    "batch": 1,
+    "claim": "In the runnable examples the cursor blinked white and black inside a blue form field",
+    "appears_in": "site/src/components/run-example.ts",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L41",
+    "batch": 1,
+    "claim": "Post the menu with `menu_post()`; Unpost the menu with `menu_unpost()`",
+    "appears_in": "docs/client-library/menus/overview.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L42",
+    "batch": 1,
+    "claim": "The menu can then by posted",
+    "appears_in": "docs/client-library/menus/overview.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L43",
+    "batch": 1,
+    "claim": "When you call `unpost_menu()`, you erase the subwindow, However, neither of these\u2026",
+    "appears_in": "docs/client-library/menus/menu-windows.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L44",
+    "batch": 1,
+    "claim": "see the `menu_attribs(3x)` manual page. (no closing parenthesis)",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L46",
+    "batch": 2,
+    "claim": "menu_driver() accepts an ascii character (HOWTO); it accumulates printable ASCII characters (Writing Programs)",
+    "appears_in": "docs/client-library/menus/menu-driver.md",
+    "section": "pattern-matching",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L48",
+    "batch": 2,
+    "claim": "The Menu Basics listing frees only items 0 and 1 of five, and calls free_menu() on a menu that is still posted",
+    "appears_in": "docs/client-library/menus/compiling.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L49",
+    "batch": 2,
+    "claim": "The Multi Valued Menus listing frees only items 0 and 1 of eight, and calls free_menu() on a menu that is still posted",
+    "appears_in": "docs/client-library/menus/selecting-items.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L50",
+    "batch": 2,
+    "claim": "The Menu Options listing frees the items before the menu",
+    "appears_in": "docs/client-library/menus/attributes.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L51",
+    "batch": 2,
+    "claim": "The Menu User Pointer listing frees the items before the menu",
+    "appears_in": "docs/client-library/menus/user-pointer-and-hooks.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L52",
+    "batch": 2,
+    "claim": "The Menu User Pointer listing stores the address of `MY_DATA data`, a variable local to the loop body, as each item's us",
+    "appears_in": "docs/client-library/menus/user-pointer-and-hooks.md",
+    "section": "the-user-pointer",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L53",
+    "batch": 2,
+    "claim": "The list of menu options ends at O_NONCYCLIC",
+    "appears_in": "docs/client-library/menus/menu-display.md",
+    "section": "menu-options",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L54",
+    "batch": 2,
+    "claim": "The mouse requests are quoted from an older menu_driver(3X), with its line breaks and soft hyphens (decora\u00adtion), and wi",
+    "appears_in": "docs/client-library/menus/menu-driver.md",
+    "section": "mouse-requests",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L55",
+    "batch": 2,
+    "claim": "A link to text mode dos games at http://www.jersey.net/~debinjoe/games/",
+    "appears_in": "docs/client-library/menus/attributes.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "can't tell",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "can't tell": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L69",
+    "batch": 2,
+    "claim": "Note that `wgetch` automatically calls `wrefresh`",
+    "appears_in": "docs/client-library/panels/input-and-stdscr.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L72",
+    "batch": 2,
+    "claim": "The program reads a panel's position and size from its PANEL_DATA when it comes to the top, but never writes them back, ",
+    "appears_in": "docs/client-library/panels/moving-and-resizing.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L73",
+    "batch": 2,
+    "claim": "\"Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Window)\", 83 characters on an 80-column scr",
+    "appears_in": "docs/client-library/panels/hiding.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L84",
+    "batch": 2,
+    "claim": "In linking with `curses` you need to have `-lncurses` ... There is no need for any other libraries",
+    "appears_in": "docs/client-library/getting-started/hello-world.md",
+    "section": "compiling-with-the-ncurses-library",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L87",
+    "batch": 2,
+    "claim": "`OK`: error flag returned by routines when things go right",
+    "appears_in": "docs/client-library/getting-started/naming-and-variables.md",
+    "section": "variables",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L97",
+    "batch": 3,
+    "claim": "printw(string); mvprintw(y, x, string); ...",
+    "appears_in": "docs/client-library/windows/windows-and-refresh.md",
+    "section": "functions-for-stdscr-and-for-other-windows",
+    "votes": [
+      "matches",
+      "disagrees",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L103",
+    "batch": 3,
+    "claim": "If n is negative, then the entire string will be added",
+    "appears_in": "docs/client-library/output/characters-and-strings.md",
+    "section": "the-addstr-class-of-functions",
+    "votes": [
+      "matches",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L104",
+    "batch": 3,
+    "claim": "It gives the number of columns and the number of rows in a given window",
+    "appears_in": "docs/client-library/output/printw.md",
+    "section": "a-simple-printw-example",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L114",
+    "batch": 3,
+    "claim": "char str[80]; ... getstr(str);",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L136",
+    "batch": 3,
+    "claim": "if (event.bstate & BUTTON1_PRESSED) with mousemask(ALL_MOUSE_EVENTS, NULL)",
+    "appears_in": "docs/client-library/mouse/mouse-menu-example.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L148",
+    "batch": 4,
+    "claim": "copywin() can be used to copy a window completely onto another window",
+    "appears_in": "docs/client-library/screen/saving-and-copying.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L156",
+    "batch": 4,
+    "claim": "By calling setupterm() for each terminal, and saving and restoring cur_term, a program can use two or more terminals",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L157",
+    "batch": 4,
+    "claim": "trace() sets the trace level; _tracef() is available only if you link with -lncurses_g",
+    "appears_in": "docs/client-library/init-and-debugging/debugging.md",
+    "section": "curses_trace",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L162",
+    "batch": 4,
+    "claim": "Setupterm() also stores",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L169",
+    "batch": 4,
+    "claim": "Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While most terminals which provide color allow o",
+    "appears_in": "docs/client-library/hints/extensions.md",
+    "section": "number-of-colors",
+    "votes": [
+      "superseded",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L170",
+    "batch": 4,
+    "claim": "the attribute of erased blanks is normal unless and until it is modified by the functions bkgdset() or wbkgdset()",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "background-erase",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L171",
+    "batch": 4,
+    "claim": "every macro entry point have a corresponding function which may be linked",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "xopen-curses-conformance",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "medium",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L174",
+    "batch": 4,
+    "claim": "mvprintw(24, 0, \"Press F1 to Exit\")",
+    "appears_in": "docs/client-library/more/hanoi.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L175",
+    "batch": 4,
+    "claim": "mvprintw(24, 0, ...) for \"Press F1 to Exit\" and \"You Win !!!\"",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L176",
+    "batch": 4,
+    "claim": "#define STATUSY 25",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L177",
+    "batch": 4,
+    "claim": "#define KEY_F1 265",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "matches"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "matches": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L178",
+    "batch": 4,
+    "claim": "http://www2.linuxjournal.com/lj-issues/issue5/2807.html",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "dialog",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L179",
+    "batch": 4,
+    "claim": "Curses::Form, from the CPAN All Modules page",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "perl-modules-curses-and-curseswidgets",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L195",
+    "batch": 4,
+    "claim": "Thomas E. Dickey wrote or revised most of the manual pages",
+    "appears_in": "site/src/content/docs/index.mdx",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "medium",
+      "high"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L199",
+    "batch": 4,
+    "claim": "This is a majordomo list",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L200",
+    "batch": 4,
+    "claim": "`trace()`",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "3-generate-and-examine-a-trace-file-for-the-broken-behavior",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L202",
+    "batch": 4,
+    "claim": "If the entire sequence takes less than 1 second",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "keyboard-input",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L204",
+    "batch": 4,
+    "claim": "`lib_doupdate.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L205",
+    "batch": 4,
+    "claim": "`_nc_mvcur_scrolln()` in `lib_mvcur.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "votes": [
+      "superseded",
+      "superseded",
+      "missing"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "missing": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L208",
+    "batch": 5,
+    "claim": "will settle for BSD regexps",
+    "appears_in": "docs/contributor/hackguide/forms-and-menus.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L213",
+    "batch": 5,
+    "claim": "`lib_insstr.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L214",
+    "batch": 5,
+    "claim": "`lib_unctrl.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L225",
+    "batch": 5,
+    "claim": "read the PORTABILITY section in the file ncurses/README",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "votes": [
+      "missing",
+      "missing",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 2,
+      "disagrees": 1
+    },
+    "majority": "missing",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L227",
+    "batch": 5,
+    "claim": "tic(1), captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1)",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-3-build",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L228",
+    "batch": 5,
+    "claim": "If the option is not given, this defaults to \"long\".",
+    "appears_in": "docs/contributor/install/configure-options/with-m-z.md",
+    "section": "--with-tparm-argxxx",
+    "votes": [
+      "matches",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L241",
+    "batch": 5,
+    "claim": "To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>",
+    "appears_in": "docs/contributor/install/bug-reports.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "can't tell": 2
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L247",
+    "batch": 5,
+    "claim": "I provide no functions to switch on/off curses tracing options.",
+    "appears_in": "docs/contributor/ada/limitations.md",
+    "section": "",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L249",
+    "batch": 5,
+    "claim": "Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.",
+    "appears_in": "docs/contributor/ada/index.md",
+    "section": "general-remarks",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L256",
+    "batch": 5,
+    "claim": "The most important bug-fixes/improvements (a link to \"Interesting bug-fixes\", a section with no content)",
+    "appears_in": "docs/contributor/announce/release-notes.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L258",
+    "batch": 5,
+    "claim": "Patches to the current release are made available at https://invisible-island.net/archives/ncurses/6.5/",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L259",
+    "batch": 5,
+    "claim": "To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.org containing the line: subscribe <name",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "can't tell": 2
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L268",
+    "batch": 6,
+    "claim": "control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C)",
+    "appears_in": "docs/client-library/getting-started/initialization.md",
+    "section": "raw-and-cbreak",
+    "votes": [
+      "matches",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L271",
+    "batch": 6,
+    "claim": "Other border functions draws lines with them (the forms-drawing characters)",
+    "appears_in": "docs/client-library/output/forms-characters.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "medium",
+      "medium"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L272",
+    "batch": 6,
+    "claim": "Initially the terminal has echoing enabled and is in ordinary cooked mode, so one or the other has to be changed before ",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "the-getch-class-of-functions",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L273",
+    "batch": 6,
+    "claim": "While getnstr() is reading the line, F1 is ignored, like the other function keys",
+    "appears_in": "docs/client-library/input/characters-and-strings.md",
+    "section": "a-simple-getstr-example",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L275",
+    "batch": 6,
+    "claim": "Do this before the next wgetch(); otherwise another mouse event might come in and make the first one inaccessible",
+    "appears_in": "docs/client-library/mouse/mouse-events.md",
+    "section": "getting-the-events",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L276",
+    "batch": 6,
+    "claim": "An example showing all the characters, with 31 SHOW() lines and no ACS_URCORNER",
+    "appears_in": "docs/client-library/screen/line-drawing-characters.md",
+    "section": "",
+    "votes": [
+      "disagrees",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "matches": 2
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L278",
+    "batch": 6,
+    "claim": "By default, all options are on.",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "field-option-bits",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L279",
+    "batch": 6,
+    "claim": "Each field structure contains one character pointer slot ... The (char *) type is retained for System V compatibility",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "field-user-pointer",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L285",
+    "batch": 6,
+    "claim": "ncurses is intended to be base-level conformant with the X/Open Curses standard ... almost all the features not directly",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "xopen-curses-conformance",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L286",
+    "batch": 6,
+    "claim": "Slide the tiles with the arrow keys until they're in order",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L293",
+    "batch": 6,
+    "claim": "ncurses also uses the parameter's absolute value as the number of lines to take, and the binding's Rip_Off_Lines routine",
+    "appears_in": "docs/contributor/ada/implementation-details.md",
+    "section": "extended-ripoffline-usage",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L295",
+    "batch": 6,
+    "claim": "This, for example, is where the AIX box1 capability gets translated to an acsc string.",
+    "appears_in": "docs/contributor/hackguide/terminfo-compiler.md",
+    "section": "source-form-translation",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L296",
+    "batch": 6,
+    "claim": "The tput and clear utilities just do an entry load followed by a tputs() of a selected capability.",
+    "appears_in": "docs/contributor/hackguide/other-utilities.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "medium",
+      "high",
+      "medium"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L297",
+    "batch": 6,
+    "claim": "and also interprets the contents of the $TERM environment variable",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "votes": [
+      "matches",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L298",
+    "batch": 6,
+    "claim": "$(prefix)/man: the manual pages",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-1-choose-where-to-install",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L300",
+    "batch": 6,
+    "claim": "The color pair is stored with the attributes, and the wide-character functions use the attr_t type and names such as att",
+    "appears_in": "docs/glossary/attribute.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "medium",
+      "medium"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L301",
+    "batch": 6,
+    "claim": "most are named by adding _w to the 8-bit name, so waddch() becomes wadd_wch()",
+    "appears_in": "docs/glossary/wide-character-library.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "matches",
+      "matches"
+    ],
+    "vote_counts": {
+      "matches": 3
+    },
+    "majority": "matches",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "edition-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  },
+  {
+    "id": "L302",
+    "batch": 6,
+    "claim": "the library searches /etc/termcap before the terminfo database",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "votes": [
+      "matches",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "matches": 2,
+      "disagrees": 1
+    },
+    "majority": "matches",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ],
+    "recorded_category": "original-error",
+    "recorded_verdict": "matches",
+    "expected_meta": "disagrees"
+  }
+]

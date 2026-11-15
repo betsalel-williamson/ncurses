@@ -1,0 +1,684 @@
+[
+  {
+    "id": "L10",
+    "batch": 1,
+    "claim": "Merging the guides split the `field_pad()` comment out of its code block; the stray fence turned the next paragraph and ",
+    "appears_in": "docs/client-library/forms/fields.md",
+    "section": "field-display-attributes",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ]
+  },
+  {
+    "id": "L35",
+    "batch": 1,
+    "claim": "The site's man pages showed literal `**` around page references and after italic words, e.g. `**curs_getch(3X),** **curs",
+    "appears_in": "man/resizeterm.3x",
+    "section": "SEE ALSO",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ]
+  },
+  {
+    "id": "L36",
+    "batch": 1,
+    "claim": "The site showed the page as troff source because pandoc stopped at the table format `Lf(BI)`",
+    "appears_in": "man/infocmp.1m",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ]
+  },
+  {
+    "id": "L37",
+    "batch": 1,
+    "claim": "The site showed the page as troff source because pandoc stopped at a table cell continued with a trailing backslash, and",
+    "appears_in": "man/curs_terminfo.3x",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ]
+  },
+  {
+    "id": "L38",
+    "batch": 1,
+    "claim": "In the runnable examples the cursor blinked white and black inside a blue form field",
+    "appears_in": "site/src/components/run-example.ts",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "low",
+      "low",
+      "low"
+    ]
+  },
+  {
+    "id": "L56",
+    "batch": 2,
+    "claim": "the drive assumes it is an application-specific command",
+    "appears_in": "man/menu_driver.3x",
+    "section": "APPLICATION-DEFINED COMMANDS",
+    "votes": [
+      "matches",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 1,
+      "superseded": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L57",
+    "batch": 2,
+    "claim": "menu_driver return one of the following error codes",
+    "appears_in": "man/menu_driver.3x",
+    "section": "RETURN VALUE",
+    "votes": [
+      "matches",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "disagrees": 1,
+      "superseded": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L169",
+    "batch": 4,
+    "claim": "Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While most terminals which provide color allow o",
+    "appears_in": "docs/client-library/hints/extensions.md",
+    "section": "number-of-colors",
+    "votes": [
+      "superseded",
+      "disagrees",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L174",
+    "batch": 4,
+    "claim": "mvprintw(24, 0, \"Press F1 to Exit\")",
+    "appears_in": "docs/client-library/more/hanoi.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L175",
+    "batch": 4,
+    "claim": "mvprintw(24, 0, ...) for \"Press F1 to Exit\" and \"You Win !!!\"",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L176",
+    "batch": 4,
+    "claim": "#define STATUSY 25",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "disagrees": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "medium"
+    ]
+  },
+  {
+    "id": "L177",
+    "batch": 4,
+    "claim": "#define KEY_F1 265",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "matches"
+    ],
+    "vote_counts": {
+      "can't tell": 2,
+      "matches": 1
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L178",
+    "batch": 4,
+    "claim": "http://www2.linuxjournal.com/lj-issues/issue5/2807.html",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "dialog",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ]
+  },
+  {
+    "id": "L179",
+    "batch": 4,
+    "claim": "Curses::Form, from the CPAN All Modules page",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "perl-modules-curses-and-curseswidgets",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ]
+  },
+  {
+    "id": "L199",
+    "batch": 4,
+    "claim": "This is a majordomo list",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "low"
+    ]
+  },
+  {
+    "id": "L203",
+    "batch": 4,
+    "claim": "`timed_wait()`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "keyboard-input",
+    "votes": [
+      "disagrees",
+      "superseded",
+      "missing"
+    ],
+    "vote_counts": {
+      "disagrees": 1,
+      "superseded": 1,
+      "missing": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L204",
+    "batch": 4,
+    "claim": "`lib_doupdate.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L205",
+    "batch": 4,
+    "claim": "`_nc_mvcur_scrolln()` in `lib_mvcur.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "votes": [
+      "superseded",
+      "superseded",
+      "missing"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "missing": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L213",
+    "batch": 5,
+    "claim": "`lib_insstr.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L214",
+    "batch": 5,
+    "claim": "`lib_unctrl.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "library-overview",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L215",
+    "batch": 5,
+    "claim": "`comp_main.c`",
+    "appears_in": "docs/contributor/hackguide/porting-hints.md",
+    "section": "",
+    "votes": [
+      "missing",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 1,
+      "superseded": 1,
+      "disagrees": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L225",
+    "batch": 5,
+    "claim": "read the PORTABILITY section in the file ncurses/README",
+    "appears_in": "docs/contributor/install/installation-procedure.md",
+    "section": "step-2-run-configure",
+    "votes": [
+      "missing",
+      "missing",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "missing": 2,
+      "disagrees": 1
+    },
+    "majority": "missing",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L241",
+    "batch": 5,
+    "claim": "To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>",
+    "appears_in": "docs/contributor/install/bug-reports.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "can't tell": 2
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ]
+  },
+  {
+    "id": "L247",
+    "batch": 5,
+    "claim": "I provide no functions to switch on/off curses tracing options.",
+    "appears_in": "docs/contributor/ada/limitations.md",
+    "section": "",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L249",
+    "batch": 5,
+    "claim": "Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.",
+    "appears_in": "docs/contributor/ada/index.md",
+    "section": "general-remarks",
+    "votes": [
+      "superseded",
+      "superseded",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "superseded": 2,
+      "disagrees": 1
+    },
+    "majority": "superseded",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L258",
+    "batch": 5,
+    "claim": "Patches to the current release are made available at https://invisible-island.net/archives/ncurses/6.5/",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ]
+  },
+  {
+    "id": "L259",
+    "batch": 5,
+    "claim": "To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.org containing the line: subscribe <name",
+    "appears_in": "docs/contributor/announce/development.md",
+    "section": "",
+    "votes": [
+      "matches",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "matches": 1,
+      "can't tell": 2
+    },
+    "majority": "can't tell",
+    "kind": "majority",
+    "confidences": [
+      "high",
+      "low",
+      "medium"
+    ]
+  },
+  {
+    "id": "L279",
+    "batch": 6,
+    "claim": "Each field structure contains one character pointer slot ... The (char *) type is retained for System V compatibility",
+    "appears_in": "docs/client-library/forms/field-options.md",
+    "section": "field-user-pointer",
+    "votes": [
+      "superseded",
+      "superseded",
+      "superseded"
+    ],
+    "vote_counts": {
+      "superseded": 3
+    },
+    "majority": "superseded",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L286",
+    "batch": 6,
+    "claim": "Slide the tiles with the arrow keys until they're in order",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "votes": [
+      "can't tell",
+      "can't tell",
+      "can't tell"
+    ],
+    "vote_counts": {
+      "can't tell": 3
+    },
+    "majority": "can't tell",
+    "kind": "unanimous",
+    "confidences": [
+      "high",
+      "high",
+      "high"
+    ]
+  },
+  {
+    "id": "L287",
+    "batch": 6,
+    "claim": "[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "key_resize",
+    "votes": [
+      "can't tell",
+      "matches",
+      "disagrees"
+    ],
+    "vote_counts": {
+      "can't tell": 1,
+      "matches": 1,
+      "disagrees": 1
+    },
+    "majority": null,
+    "kind": "split",
+    "confidences": [
+      "medium",
+      "high",
+      "high"
+    ]
+  }
+]

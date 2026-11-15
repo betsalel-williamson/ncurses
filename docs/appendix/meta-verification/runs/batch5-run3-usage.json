@@ -1,0 +1,52 @@
+{
+  "batch": 5,
+  "run": 3,
+  "system": "Cursor Cloud Agent (Task best-of-n-runner)",
+  "model": "Composer",
+  "effort": null,
+  "speed": null,
+  "started": "2026-11-15T19:11:37Z",
+  "finished": "2026-11-15T19:14:00Z",
+  "inputTokens": null,
+  "outputTokens": null,
+  "cacheReadTokens": null,
+  "cacheWriteTokens": null,
+  "costUsd": null,
+  "toolCalls": 33,
+  "tools": [
+    { "name": "Shell", "calls": 16 },
+    { "name": "Read", "calls": 7 },
+    { "name": "CallDynamicTool", "calls": 4 },
+    { "name": "GetDynamicTools", "calls": 2 },
+    { "name": "Write", "calls": 2 },
+    { "name": "Grep", "calls": 1 },
+    { "name": "Glob", "calls": 1 }
+  ],
+  "skills": [
+    { "name": "merlon-docs", "uses": 2 }
+  ],
+  "plugins": [
+    { "name": "cursor-cloud", "version": null, "calls": 1 },
+    { "name": "cursor", "version": null, "calls": 3 },
+    { "name": "Firebase", "version": null, "calls": 0 },
+    { "name": "Semgrep", "version": null, "calls": 0 },
+    { "name": "Slack", "version": null, "calls": 0 },
+    { "name": "Google-calendar", "version": null, "calls": 0 },
+    { "name": "Linear", "version": null, "calls": 0 },
+    { "name": "Huggingface-skills", "version": null, "calls": 0 },
+    { "name": "Vercel", "version": null, "calls": 0 },
+    { "name": "Stripe", "version": null, "calls": 0 },
+    { "name": "Context7", "version": null, "calls": 0 },
+    { "name": "Neon", "version": null, "calls": 0 },
+    { "name": "Granola", "version": null, "calls": 0 },
+    { "name": "Agent Factory", "version": null, "calls": 0 },
+    { "name": "Github", "version": null, "calls": 0 },
+    { "name": "Figma", "version": null, "calls": 0 },
+    { "name": "cursor-github", "version": null, "calls": 0 },
+    { "name": "cursor-origin", "version": null, "calls": 0 },
+    { "name": "cursor-subscriptions", "version": null, "calls": 0 }
+  ],
+  "subagents": [],
+  "status": "completed",
+  "notes": "Tool counts from this subagent's own call log (Shell/Read/Grep/Glob/Write/GetDynamicTools/CallDynamicTool). Token/cost/effort/speed unreported by the system (null). merlon-docs uses=2 for SKILL.md + references/review/evidence-check.md. cursor-cloud calls=1 (run-info); cursor calls=3 (TodoWrite). No helper subagents."
+}

@@ -1,0 +1,101 @@
+{
+  "wave": "with-merlon-docs",
+  "launchedAt": "2026-11-15T19:11:14Z",
+  "outDir": "/opt/cursor/artifacts/errata-meta/out-merlon",
+  "quarantinedWithoutMerlon": "/opt/cursor/artifacts/errata-meta/out-without-merlon",
+  "skillPath": "/opt/cursor/artifacts/errata-meta/skills/merlon-docs",
+  "projectInstall": ".agents/skills/merlon-docs",
+  "merlonCli": "not installed (global EACCES; local npm hung and was killed; evidence-check does not require CLI)",
+  "agents": [
+    {
+      "batch": 1,
+      "run": 1,
+      "id": "bc-4f27abc4-b355-50e3-95ef-8caaf7570dfd"
+    },
+    {
+      "batch": 2,
+      "run": 1,
+      "id": "bc-4383cff7-9186-5aa0-91ab-999ab4677a8a"
+    },
+    {
+      "batch": 3,
+      "run": 1,
+      "id": "bc-c6a35819-4911-5b29-b3cb-61ef524d7227"
+    },
+    {
+      "batch": 4,
+      "run": 1,
+      "id": "bc-31e061e7-1428-5c4f-a80b-4531e5e31739"
+    },
+    {
+      "batch": 5,
+      "run": 1,
+      "id": "bc-4d744070-4413-5d77-b29c-10e72f37fc85"
+    },
+    {
+      "batch": 6,
+      "run": 1,
+      "id": "bc-2df97d19-95d3-5b38-9fac-f7694aacd833"
+    },
+    {
+      "batch": 1,
+      "run": 2,
+      "id": "bc-c04a7dc9-5b10-5911-b6d7-97e7fa800a12"
+    },
+    {
+      "batch": 2,
+      "run": 2,
+      "id": "bc-0721a958-bbd0-54a5-9726-9c65a34aea08"
+    },
+    {
+      "batch": 3,
+      "run": 2,
+      "id": "bc-0da373b8-821f-56b1-a5fd-c617bbcbf459"
+    },
+    {
+      "batch": 4,
+      "run": 2,
+      "id": "bc-002cd5c3-d97e-5109-8a11-469c88fe6be2"
+    },
+    {
+      "batch": 5,
+      "run": 2,
+      "id": "bc-1b34c410-33ac-5283-9111-96f45a89c0c6"
+    },
+    {
+      "batch": 6,
+      "run": 2,
+      "id": "bc-840e05ea-1e95-5528-b5c1-22ea6ed4c57c"
+    },
+    {
+      "batch": 1,
+      "run": 3,
+      "id": "bc-efa38040-ac19-595e-84ab-67ebae4cfb6e"
+    },
+    {
+      "batch": 2,
+      "run": 3,
+      "id": "bc-8abc9eea-5e68-50e1-83d9-50f0201edc9d"
+    },
+    {
+      "batch": 3,
+      "run": 3,
+      "id": "bc-60e25228-823b-5e6f-b996-830594b245ef"
+    },
+    {
+      "batch": 4,
+      "run": 3,
+      "id": "bc-45e4de1a-54cc-51ec-9099-7614ed3bd52f"
+    },
+    {
+      "batch": 5,
+      "run": 3,
+      "id": "bc-66caad3c-d028-5a05-ac03-5d0b0e0ac0d5"
+    },
+    {
+      "batch": 6,
+      "run": 3,
+      "id": "bc-dfd2881b-001b-595e-91e4-393eaf3729b0"
+    }
+  ]
+}

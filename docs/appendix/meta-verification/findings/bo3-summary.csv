@@ -1,0 +1,179 @@
+id,batch,majority,kind,votes,appears_in,section,claim_preview,recorded_category,recorded_verdict,aligned_with_errata
+L2,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/overview.md,,Post the form with `form_post()`,original-error,matches,no
+L3,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/overview.md,,Unpost the menu with `form_unpost()`,original-error,matches,no
+L4,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/overview.md,,Free the memory allocated to menu by `free_form()`,original-error,matches,no
+L5,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/custom-field-types.md,order-functions-for-custom-types,Successor and predecessor hooks set with `set_fieldtype_arg()`,original-error,matches,no
+L6,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/custom-field-types.md,,`new_fieldtype()` prototype without its closing semicolon,original-error,matches,no
+L7,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/custom-field-types.md,validation-function-arguments,The library routines will that call them will return error indication,original-error,matches,no
+L8,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/custom-field-types.md,validation-function-arguments,should never see a NULL file pointer,original-error,matches,no
+L9,1,matches,majority,disagrees|matches|matches,docs/client-library/forms/field-options.md,,Example comment: This filed is like a password field,original-error,matches,no
+L10,1,can't tell,unanimous,can't tell|can't tell|can't tell,docs/client-library/forms/fields.md,field-display-attributes,Merging the guides split the `field_pad()` comment out of its code block; the st,edition-error,matches,no
+L11,1,matches,majority,can't tell|matches|matches,docs/client-library/forms/fields.md,try-it-make-backspace-and-delete-work,Backspace at the start of a field moved to the previous field but left the curso,edition-error,matches,no
+L20,1,matches,majority,matches|matches|superseded,man/curs_getch.3x,,see `infocmp(1)` (line 579),original-error,matches,no
+L21,1,matches,majority,matches|matches|superseded,man/curs_trace.3x,,`tic(1)` (line 207),original-error,matches,no
+L22,1,matches,majority,matches|matches|superseded,man/curs_extend.3x,,`@TIC@(1)` (line 77),original-error,matches,no
+L23,1,matches,majority,matches|matches|superseded,man/curs_inopts.3x,,`@TIC@(1)` (line 669),original-error,matches,no
+L24,1,matches,majority,matches|matches|superseded,docs/man/term/02-description.5,,`@TIC@(1)` (line 63),original-error,matches,no
+L25,1,matches,majority,matches|matches|superseded,man/term_variables.3x,,`@TIC@(1)` and `@INFOCMP@(1)` (line 142),original-error,matches,no
+L26,1,matches,majority,matches|matches|superseded,man/curs_bkgd.3x,,The background character's set of attributes becomes a property of the character,original-error,matches,no
+L27,1,matches,majority,matches|matches|superseded,man/curs_bkgrnd.3x,,The background character's set of attributes becomes a property of the character,original-error,matches,no
+L28,1,disagrees,majority,disagrees|matches|disagrees,man/curs_bkgd.3x,,"The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one ",rejected,disagrees,no
+L29,1,disagrees,majority,disagrees|matches|disagrees,man/curs_border.3x,,"The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so on",rejected,disagrees,no
+L30,1,matches,unanimous,matches|matches|matches,man/term.5,,"term.5 and term.7 share the title ""term""",rejected,superseded,yes
+L34,1,disagrees,majority,disagrees|matches|disagrees,man/curs_bkgd.3x,,The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the termina,rejected,disagrees,no
+L35,1,can't tell,unanimous,can't tell|can't tell|can't tell,man/resizeterm.3x,SEE ALSO,The site's man pages showed literal `**` around page references and after italic,edition-error,matches,no
+L36,1,can't tell,unanimous,can't tell|can't tell|can't tell,man/infocmp.1m,,The site showed the page as troff source because pandoc stopped at the table for,edition-error,matches,no
+L37,1,can't tell,unanimous,can't tell|can't tell|can't tell,man/curs_terminfo.3x,,The site showed the page as troff source because pandoc stopped at a table cell ,edition-error,matches,no
+L38,1,can't tell,unanimous,can't tell|can't tell|can't tell,site/src/components/run-example.ts,,In the runnable examples the cursor blinked white and black inside a blue form f,edition-error,matches,no
+L41,1,matches,majority,disagrees|matches|matches,docs/client-library/menus/overview.md,,Post the menu with `menu_post()`; Unpost the menu with `menu_unpost()`,original-error,matches,no
+L42,1,matches,majority,disagrees|matches|matches,docs/client-library/menus/overview.md,,The menu can then by posted,original-error,matches,no
+L43,1,matches,majority,disagrees|matches|matches,docs/client-library/menus/menu-windows.md,,"When you call `unpost_menu()`, you erase the subwindow, However, neither of thes",original-error,matches,no
+L44,1,matches,majority,disagrees|matches|matches,docs/client-library/menus/menu-display.md,,see the `menu_attribs(3x)` manual page. (no closing parenthesis),original-error,matches,no
+L46,2,matches,majority,matches|disagrees|matches,docs/client-library/menus/menu-driver.md,pattern-matching,menu_driver() accepts an ascii character (HOWTO); it accumulates printable ASCII,original-error,matches,no
+L47,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/menus/menu-display.md,multi-column-menus,Example 21. Milt Columnar Menus Example,original-error,matches,yes
+L48,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/compiling.md,,"The Menu Basics listing frees only items 0 and 1 of five, and calls free_menu() ",original-error,matches,no
+L49,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/selecting-items.md,,"The Multi Valued Menus listing frees only items 0 and 1 of eight, and calls free",original-error,matches,no
+L50,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/attributes.md,,The Menu Options listing frees the items before the menu,original-error,matches,no
+L51,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/user-pointer-and-hooks.md,,The Menu User Pointer listing frees the items before the menu,original-error,matches,no
+L52,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/user-pointer-and-hooks.md,the-user-pointer,"The Menu User Pointer listing stores the address of `MY_DATA data`, a variable l",original-error,matches,no
+L53,2,matches,majority,matches|disagrees|matches,docs/client-library/menus/menu-display.md,menu-options,The list of menu options ends at O_NONCYCLIC,original-error,matches,no
+L54,2,matches,unanimous,matches|matches|matches,docs/client-library/menus/menu-driver.md,mouse-requests,"The mouse requests are quoted from an older menu_driver(3X), with its line break",original-error,matches,no
+L55,2,matches,majority,matches|can't tell|matches,docs/client-library/menus/attributes.md,,A link to text mode dos games at http://www.jersey.net/~debinjoe/games/,original-error,matches,no
+L56,2,,split,matches|disagrees|superseded,man/menu_driver.3x,APPLICATION-DEFINED COMMANDS,the drive assumes it is an application-specific command,original-error,matches,
+L57,2,,split,matches|disagrees|superseded,man/menu_driver.3x,RETURN VALUE,menu_driver return one of the following error codes,original-error,matches,
+L65,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/overview.md,panel-functions,replace a panel's window with a different window by calling `replace_window`,original-error,matches,yes
+L66,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/input-and-stdscr.md,,The `stsdcr` window is a special case,original-error,matches,yes
+L67,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/hiding.md,,The `panel_update` code ignores hidden panels,original-error,matches,yes
+L68,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/hiding.md,,You cannot do `top_panel()` or `bottom_panel` on a hidden panel(),original-error,matches,yes
+L69,2,matches,majority,matches|disagrees|matches,docs/client-library/panels/input-and-stdscr.md,,Note that `wgetch` automatically calls `wrefresh`,original-error,matches,no
+L70,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/hiding.md,,For some reason the function `panel_hidden()` which tells whether a panel is hid,original-error,matches,yes
+L71,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/browsing.md,,/* Update the stacking order. 2nd panel will be on top */ (also in the moving an,original-error,matches,yes
+L72,2,matches,unanimous,matches|matches|matches,docs/client-library/panels/moving-and-resizing.md,,The program reads a panel's position and size from its PANEL_DATA when it comes ,original-error,matches,no
+L73,2,matches,unanimous,matches|matches|matches,docs/client-library/panels/hiding.md,,"""Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Win",original-error,matches,no
+L74,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/overview.md,,Mainpulate; is used to created panels; removes it form the stack; Entered Resizi,original-error,matches,yes
+L75,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/panels/hiding.md,,`bottom_panel` on a hidden panel(),original-error,matches,yes
+L81,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/initialization.md,raw-and-cbreak,In the `cbreak()` mode these control characters are interpreted as any other cha,original-error,matches,yes
+L82,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/hello-world.md,endwin,`endwin()` frees the memory taken by curses sub-system and its data structures a,original-error,matches,yes
+L83,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/hello-world.md,compiling-with-the-ncurses-library,"`<curses.h>` also includes `<termios.h>`, `<termio.h>`, or `<sgtty.h>` depending",original-error,matches,yes
+L84,2,matches,majority,matches|disagrees|matches,docs/client-library/getting-started/hello-world.md,compiling-with-the-ncurses-library,In linking with `curses` you need to have `-lncurses` ... There is no need for a,original-error,matches,no
+L85,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/hello-world.md,compiling-with-the-ncurses-library,"To use ncurses library functions, you have to include ncurses.h in your programs",original-error,matches,yes
+L86,2,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/naming-and-variables.md,variables,"`bool`: boolean type, actually a ""char""",original-error,matches,yes
+L87,2,matches,majority,matches|disagrees|matches,docs/client-library/getting-started/naming-and-variables.md,variables,`OK`: error flag returned by routines when things go right,original-error,matches,no
+L88,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/getting-started/naming-and-variables.md,standard-windows,Changes should be made to through the API; To write to a different window. use t,original-error,matches,yes
+L89,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/getting-started/initialization.md,halfdelay,rearing to get started; halfdelay()is called; if he doesn't respond with in cert,original-error,matches,yes
+L90,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/getting-started/history.md,who-wrote-it,"Mail links to zmbenhal@netcom.com and esr@snark.thyrsus.com, and a link to adaho",original-error,matches,yes
+L96,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/windows/border-functions.md,,"create_box() puts the corners at x + w and y + h, so a box of width 10 and heigh",original-error,matches,yes
+L97,3,matches,majority,matches|disagrees|matches,docs/client-library/windows/windows-and-refresh.md,functions-for-stdscr-and-for-other-windows,"printw(string); mvprintw(y, x, string); ...",original-error,matches,no
+L98,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/windows/creating-windows.md,explanation,let me clear few things; It doesn't create any thing; as user press a key; Let's,original-error,matches,yes
+L102,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/output/forms-characters.md,,"If the terminal does not have such characters, curses.h will map them to a recog",original-error,matches,yes
+L103,3,matches,majority,matches|matches|disagrees,docs/client-library/output/characters-and-strings.md,the-addstr-class-of-functions,"If n is negative, then the entire string will be added",original-error,matches,no
+L104,3,matches,unanimous,matches|matches|matches,docs/client-library/output/printw.md,a-simple-printw-example,It gives the number of columns and the number of rows in a given window,original-error,matches,no
+L105,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/output/,,let's interact with world; message to be appeared on the screen; Try resizing yo,original-error,matches,yes
+L111,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/windows/border-functions.md,,"With _DEBUG defined, print_win_params() prints at row 25, below the bottom of a ",original-error,matches,yes
+L114,3,matches,unanimous,matches|matches|matches,docs/client-library/input/characters-and-strings.md,a-simple-getstr-example,char str[80]; ... getstr(str);,original-error,matches,no
+L115,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/input/characters-and-strings.md,a-simple-getstr-example,Example 4. A Simple scanw example,original-error,matches,yes
+L116,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/input/characters-and-strings.md,the-getstr-class-of-functions,These pseudo-line-oriented functions turn on echoing while they execute,original-error,matches,yes
+L117,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/input/,,begin read them; must used; one or the other has to changed; The resulting strin,original-error,matches,yes
+L121,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/attributes/colors.md,changing-color-definitions,"Initially RED color is defined with content 1000(r), 0(g), 0(b); init_color(COLO",original-error,matches,yes
+L122,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/attributes/attribute-functions.md,attr_get,attr_get() is useful in scanning areas of screen when we are not sure what attri,original-error,matches,yes
+L123,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/attributes/chgat.md,,"Other functions wchgat(), mvchgat(), wchgat() behave similarly",original-error,matches,yes
+L124,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/attributes/attributes.md,a-simple-attributes-example,"/* pager functionality by Joseph Spainhour"" <spainhou@bellsouth.net> */",original-error,matches,yes
+L125,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/attributes/,,screeen; are we are at; cut bold on; Forth parameter; Viola !!!; loose track; th,original-error,matches,yes
+L129,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/keyboard/key-usage-example.md,a-simple-key-usage-example,"mvprintw(24, 0, ""Character pressed is ...""); mvprintw(23, 0, ""You chose choice .",original-error,matches,yes
+L130,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/keyboard/key-usage-example.md,a-simple-key-usage-example,startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;,original-error,matches,yes
+L131,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/keyboard/,,the Functions keys; See the initialization section; if(ch == KEY_LEFT); User did,original-error,matches,yes
+L135,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/mouse/mouse-events.md,clicks-and-mouseinterval,The default is one fifth of a second,original-error,matches,yes
+L136,3,matches,majority,disagrees|matches|matches,docs/client-library/mouse/mouse-menu-example.md,,"if (event.bstate & BUTTON1_PRESSED) with mousemask(ALL_MOUSE_EVENTS, NULL)",original-error,matches,no
+L137,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/mouse/mouse-menu-example.md,,"report_choice(event.x + 1, event.y + 1, ...); j = starty + 3; mouse_x <= i + str",original-error,matches,yes
+L138,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/mouse/mouse-menu-example.md,,"startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; mvprintw(23, 1, ...); mvp",original-error,matches,yes
+L139,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/mouse/mouse-events.md,,The event mask table stops at BUTTON4_TRIPLE_CLICKED,original-error,matches,yes
+L140,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/mouse/,,lets do the same thing from mouse; any thing; a class of mouse events have been ,original-error,matches,yes
+L146,3,disagrees,majority,disagrees|disagrees|matches,docs/client-library/screen/coordinates.md,,getbegyx() and getmaxyx() store the window's beginning and maximum co-ordinates,original-error,matches,yes
+L148,4,matches,unanimous,matches|matches|matches,docs/client-library/screen/saving-and-copying.md,,copywin() can be used to copy a window completely onto another window,original-error,matches,no
+L155,4,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/init-and-debugging/terminal-descriptions.md,setuptermterm-filedes-errret,"The values returned can be 1 (all is well), 0 (no such terminal), or -1 (some pr",original-error,matches,yes
+L156,4,matches,unanimous,matches|matches|matches,docs/client-library/init-and-debugging/terminal-descriptions.md,setuptermterm-filedes-errret,"By calling setupterm() for each terminal, and saving and restoring cur_term, a p",original-error,matches,no
+L157,4,matches,unanimous,matches|matches|matches,docs/client-library/init-and-debugging/debugging.md,curses_trace,trace() sets the trace level; _tracef() is available only if you link with -lncu,original-error,matches,no
+L160,4,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/init-and-debugging/initialization-and-wrapup.md,newtermtype-ofp-ifp,endwin() should called once,original-error,matches,yes
+L161,4,disagrees,majority,matches|disagrees|disagrees,docs/client-library/init-and-debugging/debugging.md,_tracef,It is only available only if,original-error,matches,yes
+L162,4,matches,unanimous,matches|matches|matches,docs/client-library/init-and-debugging/terminal-descriptions.md,setuptermterm-filedes-errret,Setupterm() also stores,original-error,matches,no
+L164,4,disagrees,majority,disagrees|matches|disagrees,docs/client-library/hints/resizing.md,key_resize,"When ncurses returns that code, it calls resizeterm",original-error,matches,yes
+L167,4,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/hints/resizing.md,your-own-handler,The refresh will pick up the new screen size from the xterm's environment,original-error,matches,yes
+L168,4,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/hints/terminals.md,handling-multiple-terminal-screens,Note that you will also have to call def_shell_mode and def_prog_mode on each tt,original-error,matches,yes
+L169,4,superseded,majority,superseded|disagrees|superseded,docs/client-library/hints/extensions.md,number-of-colors,"Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While mo",original-error,matches,no
+L170,4,matches,unanimous,matches|matches|matches,docs/client-library/hints/compatibility.md,background-erase,the attribute of erased blanks is normal unless and until it is modified by the ,original-error,matches,no
+L171,4,matches,unanimous,matches|matches|matches,docs/client-library/hints/compatibility.md,xopen-curses-conformance,every macro entry point have a corresponding function which may be linked,original-error,matches,no
+L174,4,can't tell,majority,can't tell|can't tell|disagrees,docs/client-library/more/hanoi.md,,"mvprintw(24, 0, ""Press F1 to Exit"")",original-error,matches,no
+L175,4,can't tell,majority,can't tell|can't tell|disagrees,docs/client-library/more/shuffle.md,,"mvprintw(24, 0, ...) for ""Press F1 to Exit"" and ""You Win !!!""",original-error,matches,no
+L176,4,can't tell,majority,can't tell|can't tell|disagrees,docs/client-library/more/typing-tutor.md,,#define STATUSY 25,original-error,matches,no
+L177,4,can't tell,majority,can't tell|can't tell|matches,docs/client-library/more/typing-tutor.md,,#define KEY_F1 265,original-error,matches,no
+L178,4,can't tell,unanimous,can't tell|can't tell|can't tell,docs/client-library/more/widget-libraries.md,dialog,http://www2.linuxjournal.com/lj-issues/issue5/2807.html,original-error,matches,no
+L179,4,can't tell,unanimous,can't tell|can't tell|can't tell,docs/client-library/more/widget-libraries.md,perl-modules-curses-and-curseswidgets,"Curses::Form, from the CPAN All Modules page",original-error,matches,no
+L194,4,disagrees,majority,disagrees|disagrees|matches,site/src/content/docs/index.mdx,,Thomas E. Dickey has maintained ncurses since 1.9.9e,edition-error,matches,yes
+L195,4,matches,unanimous,matches|matches|matches,site/src/content/docs/index.mdx,,Thomas E. Dickey wrote or revised most of the manual pages,edition-error,matches,no
+L196,4,disagrees,majority,disagrees|disagrees|matches,site/src/content/docs/credits.md,,"Thomas E. Dickey, maintainer since ncurses 1.9.9e",edition-error,matches,yes
+L198,4,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/hackguide/objective.md,,The third objective (standards conformance),original-error,matches,yes
+L199,4,can't tell,unanimous,can't tell|can't tell|can't tell,docs/contributor/hackguide/reporting-bugs.md,,This is a majordomo list,original-error,matches,no
+L200,4,matches,unanimous,matches|matches|matches,docs/contributor/hackguide/reporting-bugs.md,3-generate-and-examine-a-trace-file-for-the-broken-behavior,`trace()`,original-error,matches,no
+L201,4,disagrees,majority,superseded|disagrees|disagrees,docs/contributor/hackguide/reporting-bugs.md,test-frames-for-the-library-algorithms,Test frames for the library algorithms are in the progs directory,original-error,matches,yes
+L202,4,matches,unanimous,matches|matches|matches,docs/contributor/hackguide/engine-room.md,keyboard-input,If the entire sequence takes less than 1 second,original-error,matches,no
+L203,4,,split,disagrees|superseded|missing,docs/contributor/hackguide/engine-room.md,keyboard-input,`timed_wait()`,original-error,matches,
+L204,4,superseded,unanimous,superseded|superseded|superseded,docs/contributor/hackguide/engine-room.md,output-and-screen-updating,`lib_doupdate.c`,original-error,matches,no
+L205,4,superseded,majority,superseded|superseded|missing,docs/contributor/hackguide/engine-room.md,output-and-screen-updating,`_nc_mvcur_scrolln()` in `lib_mvcur.c`,original-error,matches,no
+L206,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/hackguide/engine-room.md,output-and-screen-updating,See `include/curses.h.in` for mask values,original-error,matches,yes
+L207,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/hackguide/engine-room.md,mouse-events,The `lib_mouse()` code,original-error,matches,yes
+L208,5,matches,unanimous,matches|matches|matches,docs/contributor/hackguide/forms-and-menus.md,,will settle for BSD regexps,original-error,matches,no
+L209,5,disagrees,majority,missing|disagrees|disagrees,docs/contributor/hackguide/terminfo-compiler.md,,`ncurses/dump_entry.c`,original-error,matches,yes
+L210,5,disagrees,majority,missing|disagrees|disagrees,docs/contributor/hackguide/style-tips.md,,`ncurses/MKlib_gen.sh`,original-error,matches,yes
+L211,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/hackguide/style-tips.md,,The fifth field (flags) of `include/Caps`,original-error,matches,yes
+L212,5,disagrees,majority,superseded|disagrees|disagrees,docs/contributor/hackguide/porting-hints.md,library-overview,"`lib_getstr.c` is pure curses, but calls `outstr()`",original-error,matches,yes
+L213,5,superseded,majority,superseded|superseded|disagrees,docs/contributor/hackguide/porting-hints.md,library-overview,`lib_insstr.c`,original-error,matches,no
+L214,5,superseded,majority,superseded|superseded|disagrees,docs/contributor/hackguide/porting-hints.md,library-overview,`lib_unctrl.c`,original-error,matches,no
+L215,5,,split,missing|superseded|disagrees,docs/contributor/hackguide/porting-hints.md,,`comp_main.c`,original-error,matches,
+L223,5,disagrees,majority,can't tell|disagrees|disagrees,docs/contributor/install/installation-procedure.md,step-1-choose-where-to-install,"The configure script attempts to locate previous installation of ncurses, and wi",original-error,matches,yes
+L224,5,disagrees,majority,matches|disagrees|disagrees,docs/contributor/install/installation-procedure.md,step-2-run-configure,Typing 'configure' with no arguments is equivalent to: ./configure --with-normal,original-error,matches,yes
+L225,5,missing,majority,missing|missing|disagrees,docs/contributor/install/installation-procedure.md,step-2-run-configure,read the PORTABILITY section in the file ncurses/README,original-error,matches,no
+L227,5,matches,unanimous,matches|matches|matches,docs/contributor/install/installation-procedure.md,step-3-build,"tic(1), captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1",original-error,matches,no
+L228,5,matches,majority,matches|matches|disagrees,docs/contributor/install/configure-options/with-m-z.md,--with-tparm-argxxx,"If the option is not given, this defaults to ""long"".",original-error,matches,no
+L229,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/install/configure-options/with-m-z.md,--with-versioned-symsxxx,--with-weak-symbols,original-error,matches,yes
+L232,5,disagrees,majority,matches|disagrees|disagrees,docs/contributor/install/system-integrators.md,configuration-and-installation,"FreeBSD, NetBSD, OpenBSD, Cygwin, MinGW",original-error,matches,yes
+L233,5,disagrees,majority,missing|disagrees|disagrees,docs/contributor/install/system-integrators.md,naming-the-console-terminal,listed in the misc/terminfo file,original-error,matches,yes
+L235,5,disagrees,majority,matches|disagrees|disagrees,docs/contributor/install/bsd-conversion.md,private-installations-with-termcap,$HOME/terminfo (twice),original-error,matches,yes
+L241,5,can't tell,majority,matches|can't tell|can't tell,docs/contributor/install/bug-reports.md,,To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subs,original-error,matches,no
+L243,5,disagrees,majority,can't tell|disagrees|disagrees,docs/contributor/install/mingw.md,configuring,assuming environment variable MINGW_ROOT holds the root directory name of your M,original-error,matches,yes
+L247,5,superseded,unanimous,superseded|superseded|superseded,docs/contributor/ada/limitations.md,,I provide no functions to switch on/off curses tracing options.,original-error,matches,no
+L248,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/ada/index.md,general-remarks,Just make the boolean member bold of the record true.,original-error,matches,yes
+L249,5,superseded,majority,superseded|superseded|disagrees,docs/contributor/ada/index.md,general-remarks,"Support for wide characters is currently not in the binding, as it is not really",original-error,matches,no
+L250,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/ada/implementation-details.md,enumeration-fields,"The (n)curses documentation says, that the String arrays to be passed to an TYPE",original-error,matches,yes
+L256,5,matches,unanimous,matches|matches|matches,docs/contributor/announce/release-notes.md,,"The most important bug-fixes/improvements (a link to ""Interesting bug-fixes"", a ",original-error,matches,no
+L257,5,disagrees,majority,can't tell|disagrees|disagrees,docs/contributor/announce/program-improvements.md,utilities,https://invisible-island.net/ncurses/man/tput.1m.html,original-error,matches,yes
+L258,5,can't tell,unanimous,can't tell|can't tell|can't tell,docs/contributor/announce/development.md,,Patches to the current release are made available at https://invisible-island.ne,original-error,matches,no
+L259,5,can't tell,majority,matches|can't tell|can't tell,docs/contributor/announce/development.md,,"To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.",original-error,matches,no
+L260,5,disagrees,unanimous,disagrees|disagrees|disagrees,docs/contributor/announce/portability.md,,modify MKlib_gen.c to allow for Solaris's definition of NULL as 0L,original-error,matches,yes
+L264,6,disagrees,majority,matches|disagrees|disagrees,docs/client-library/getting-started/introduction.md,terminals-and-escape-sequences,"to revert to the original mode, type this: printf '\033[0;37;40m\n'",original-error,matches,yes
+L268,6,matches,majority,matches|matches|disagrees,docs/client-library/getting-started/initialization.md,raw-and-cbreak,"control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C)",original-error,matches,no
+L271,6,matches,majority,disagrees|matches|matches,docs/client-library/output/forms-characters.md,,Other border functions draws lines with them (the forms-drawing characters),edition-error,matches,no
+L272,6,matches,unanimous,matches|matches|matches,docs/client-library/input/characters-and-strings.md,the-getch-class-of-functions,"Initially the terminal has echoing enabled and is in ordinary cooked mode, so on",original-error,matches,no
+L273,6,matches,unanimous,matches|matches|matches,docs/client-library/input/characters-and-strings.md,a-simple-getstr-example,"While getnstr() is reading the line, F1 is ignored, like the other function keys",edition-error,matches,no
+L274,6,disagrees,majority,disagrees|matches|disagrees,docs/client-library/attributes/chgat.md,,Fifth is the color index. It is the index given during init_pair(),original-error,matches,yes
+L275,6,matches,unanimous,matches|matches|matches,docs/client-library/mouse/mouse-events.md,getting-the-events,Do this before the next wgetch(); otherwise another mouse event might come in an,original-error,matches,no
+L276,6,matches,majority,disagrees|matches|matches,docs/client-library/screen/line-drawing-characters.md,,"An example showing all the characters, with 31 SHOW() lines and no ACS_URCORNER",original-error,matches,no
+L277,6,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/forms/fields.md,creating-and-freeing-fields-and-forms,Note that new_field() does not copy the pointer array into private storage,original-error,matches,yes
+L278,6,matches,unanimous,matches|matches|matches,docs/client-library/forms/field-options.md,field-option-bits,"By default, all options are on.",original-error,matches,no
+L279,6,superseded,unanimous,superseded|superseded|superseded,docs/client-library/forms/field-options.md,field-user-pointer,Each field structure contains one character pointer slot ... The (char *) type i,original-error,matches,no
+L280,6,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/forms/field-options.md,variable-sized-fields,"The growth limit can be changed whether or not the O_STATIC bit is on, but has n",original-error,matches,yes
+L281,6,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/forms/form-driver.md,inter-field-navigation-requests,A REQ_MOVE_RIGHT from A will go to B,original-error,matches,yes
+L282,6,disagrees,majority,disagrees|disagrees|matches,docs/client-library/forms/form-driver.md,inter-field-navigation-requests,the position of a form for purposes of these requests is its upper-left corner,original-error,matches,yes
+L283,6,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/forms/form-driver.md,editing-requests,REQ_DEL_PREV: Delete previous word at cursor.,original-error,matches,yes
+L284,6,disagrees,unanimous,disagrees|disagrees|disagrees,docs/client-library/forms/hooks-and-form-options.md,field-change-hooks,When the current page is changed by set_current_field() call; When the current f,original-error,matches,yes
+L285,6,matches,unanimous,matches|matches|matches,docs/client-library/hints/compatibility.md,xopen-curses-conformance,ncurses is intended to be base-level conformant with the X/Open Curses standard ,original-error,matches,no
+L286,6,can't tell,unanimous,can't tell|can't tell|can't tell,docs/client-library/more/shuffle.md,,Slide the tiles with the arrow keys until they're in order,original-error,matches,no
+L287,6,,split,can't tell|matches|disagrees,docs/client-library/hints/resizing.md,key_resize,[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb,edition-error,matches,
+L293,6,matches,unanimous,matches|matches|matches,docs/contributor/ada/implementation-details.md,extended-ripoffline-usage,"ncurses also uses the parameter's absolute value as the number of lines to take,",edition-error,matches,no
+L294,6,disagrees,majority,disagrees|matches|disagrees,docs/contributor/hackguide/terminfo-compiler.md,use-capability-resolution,parse an entire terminfo file into a doubly-linked circular list of entry struct,original-error,matches,yes
+L295,6,matches,unanimous,matches|matches|matches,docs/contributor/hackguide/terminfo-compiler.md,source-form-translation,"This, for example, is where the AIX box1 capability gets translated to an acsc s",original-error,matches,no
+L296,6,matches,unanimous,matches|matches|matches,docs/contributor/hackguide/other-utilities.md,,The tput and clear utilities just do an entry load followed by a tputs() of a se,original-error,matches,no
+L297,6,matches,majority,matches|matches|disagrees,docs/contributor/install/installation-procedure.md,step-2-run-configure,and also interprets the contents of the $TERM environment variable,original-error,matches,no
+L298,6,matches,unanimous,matches|matches|matches,docs/contributor/install/installation-procedure.md,step-1-choose-where-to-install,$(prefix)/man: the manual pages,original-error,matches,no
+L300,6,matches,unanimous,matches|matches|matches,docs/glossary/attribute.md,,"The color pair is stored with the attributes, and the wide-character functions u",edition-error,matches,no
+L301,6,matches,unanimous,matches|matches|matches,docs/glossary/wide-character-library.md,,"most are named by adding _w to the 8-bit name, so waddch() becomes wadd_wch()",edition-error,matches,no
+L302,6,matches,majority,matches|matches|disagrees,docs/contributor/install/installation-procedure.md,step-2-run-configure,the library searches /etc/termcap before the terminfo database,original-error,matches,no

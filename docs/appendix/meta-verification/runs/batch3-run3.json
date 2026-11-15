@@ -1,0 +1,379 @@
+[
+  {
+    "id": "L88",
+    "claim": "Changes should be made to through the API; To write to a different window. use the routine waddch() ... is provided",
+    "opened": [
+      "doc/html/ncurses-intro.html:534-542"
+    ],
+    "quote": "Changes should be made to through the API, and then the routine refresh() (or wrefresh()) called. ... To write to a different window. use the routine waddch() (for window-specific addch()) is provided.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Before reading the intro paragraph end-to-end, the fragments looked like separate typos; the same sentence also breaks grammar around 'is provided'."
+  },
+  {
+    "id": "L89",
+    "claim": "rearing to get started; halfdelay()is called; if he doesn't respond with in certain time",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:809",
+      "doc/html/NCURSES-Programming-HOWTO.html:1389",
+      "doc/html/NCURSES-Programming-HOWTO.html:1397"
+    ],
+    "quote": "you must be rearing to get started. ... halfdelay()is called to enable the half-delay mode ... and if he doesn't respond with in certain time, we can do some thing else.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Finding only 'rearing' would have left the halfdelay spacing and 'with in' unchecked."
+  },
+  {
+    "id": "L90",
+    "claim": "Mail links to zmbenhal@netcom.com and esr@snark.thyrsus.com, and a link to adahome.com for the Ada95 binding",
+    "opened": [
+      "doc/html/ncurses-intro.html:416-424"
+    ],
+    "quote": "mailto:zmbenhal@netcom.com ... mailto:esr@snark.thyrsus.com ... as well as the Ada95 binding (http://www.adahome.com).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Seeing only the maintainer names would not have confirmed the three specific URLs/addresses in the claim."
+  },
+  {
+    "id": "L96",
+    "claim": "create_box() puts the corners at x + w and y + h, so a box of width 10 and height 3 is drawn 11 columns wide and 4 rows tall, and the erase loop clears one row and column more",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2457-2463",
+      "doc/html/NCURSES-Programming-HOWTO.html:2489-2512"
+    ],
+    "quote": "p_win->height = 3; p_win->width = 10; ... mvaddch(y, x + w, ...); mvaddch(y + h, x, ...); mvaddch(y + h, x + w, ...); ... for (j = y; j <= y + h; ++j) for (i = x; i <= x + w; ++i) mvaddch(j, i, ' ');",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Inspecting only the draw corners without init_win_params width/height would not pin the 11×4 overshoot."
+  },
+  {
+    "id": "L97",
+    "claim": "printw(string); mvprintw(y, x, string); ...",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1520-1525",
+      "man/curs_printw.3x:59-62"
+    ],
+    "quote": "HOWTO shows printw(string); mvprintw(y, x, string); ... man prototypes are printw(const char *fmt, ...); mvprintw(int y, int x, const char *fmt, ...);",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Without the manpage prototypes, the HOWTO listing could be mistaken for informal shorthand rather than a wrong signature."
+  },
+  {
+    "id": "L98",
+    "claim": "let me clear few things; It doesn't create any thing; as user press a key; Let's dissect it by line by line",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1487-1488",
+      "doc/html/NCURSES-Programming-HOWTO.html:2237-2238",
+      "doc/html/NCURSES-Programming-HOWTO.html:2366-2369"
+    ],
+    "quote": "let me clear few things about windows. ... It doesn't create any thing on the screen actually. ... as user press a key. ... Let's dissect it by line by line.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "One hit for 'clear few things' alone would undercount the other three claimed phrases."
+  },
+  {
+    "id": "L102",
+    "claim": "If the terminal does not have such characters, curses.h will map them to a recognizable (though ugly) set of ASCII defaults",
+    "opened": [
+      "doc/html/ncurses-intro.html:801-805",
+      "ncurses/tinfo/lib_acs.c:108-120",
+      "man/curs_addch.3x:289-296",
+      "include/curses.h.in:359-378"
+    ],
+    "quote": "Intro: curses.h will map them to a recognizable (though ugly) set of ASCII defaults. lib_acs.c: Initializations ... Use ASCII chars ... real_map['l'] = '+'; ... man: curses uses the ACS default listed below if the terminal type lacks acs_chars. curses.h.in only defines ACS_* via acs_map[].",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Reading only the intro would leave the curses.h attribution unchecked; the mapping is done in _nc_init_acs, not by the header."
+  },
+  {
+    "id": "L103",
+    "claim": "If n is negative, then the entire string will be added",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1770-1773",
+      "man/curs_addstr.3x:81-90",
+      "ncurses/base/lib_addstr.c:58-68"
+    ],
+    "quote": "HOWTO: If n is negative, then the entire string will be added. man: If n is -1, waddnstr writes the entire string. lib_addstr.c: bool explicit = (n >= 0); if (!explicit) n = INT_MAX;",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Stopping at the manpage's '-1' wording would have treated the HOWTO as wrong; the implementation accepts any n < 0 as 'entire string'."
+  },
+  {
+    "id": "L104",
+    "claim": "It gives the number of columns and the number of rows in a given window",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1743-1750",
+      "man/curs_getyx.3x:54-78"
+    ],
+    "quote": "HOWTO: getmaxyx() ... It gives the number of columns and the number of rows in a given window. man: getmaxyx(WINDOW *win, int y, int x); stores maximum valid line and column dimensions in y and x respectively.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Without the manpage argument order, 'columns and ... rows' would not clearly show the swapped description."
+  },
+  {
+    "id": "L105",
+    "claim": "let's interact with world; message to be appeared on the screen; Try resizing your window(if possible); ch(of type char); the character printed ... until it is turned off",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1539",
+      "doc/html/NCURSES-Programming-HOWTO.html:1588-1604",
+      "doc/html/NCURSES-Programming-HOWTO.html:1721-1729"
+    ],
+    "quote": "let's interact with world. ... ch(of type char) ... the character printed in the window are associated with the attributes until it is turned off. ... message to be appeared on the screen ... Try resizing your window(if possible) and then run this program again",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "A single phrase search would miss the chapter-6 typo cluster the claim lists together."
+  },
+  {
+    "id": "L111",
+    "claim": "With _DEBUG defined, print_win_params() prints at row 25, below the bottom of a 24-row screen, so nothing is shown",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2477-2482",
+      "man/curs_initscr.3x:440-442"
+    ],
+    "quote": "mvprintw(25, 0, \"%d %d %d %d\", p_win->startx, p_win->starty, p_win->width, p_win->height); under #ifdef _DEBUG. Screens expose LINES/COLS; a common 24-line screen has valid rows 0..23.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Seeing mvprintw(25,0) without relating it to a 24-row screen would leave the 'nothing is shown' part unproven."
+  },
+  {
+    "id": "L114",
+    "claim": "char str[80]; ... getstr(str);",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1920-1927",
+      "man/curs_getstr.3x:64-66",
+      "man/curs_getstr.3x:138-145"
+    ],
+    "quote": "Example uses char str[80]; getstr(str);. man documents wgetstr/getstr and wgetnstr which reads at most n characters, aiding the application to avoid overrunning the buffer.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Confirming getstr exists would miss that the unbounded call into an 80-byte buffer is the documented hazard wgetnstr addresses."
+  },
+  {
+    "id": "L115",
+    "claim": "Example 4. A Simple scanw example",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1908-1927"
+    ],
+    "quote": "Caption: Example 4. A Simple scanw example. Body calls getstr(str); with no scanw/wscanw call.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Reading only the caption would not show the example actually demonstrates getstr."
+  },
+  {
+    "id": "L116",
+    "claim": "These pseudo-line-oriented functions turn on echoing while they execute",
+    "opened": [
+      "doc/html/ncurses-intro.html:775-779",
+      "ncurses/base/lib_getstr.c:97-101",
+      "ncurses/base/lib_getstr.c:150-152",
+      "man/curs_getstr.3x:118-123"
+    ],
+    "quote": "Intro: These pseudo-line-oriented functions turn on echoing while they execute. lib_getstr.c: calls noecho(); then if (save_flags._echo == TRUE) waddch(...). man: If the screen's echo option is enabled, wgetstr updates win with waddch.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Trusting the intro alone would accept 'turn on echoing'; the implementation forces noecho and only locally echoes when echo was already on."
+  },
+  {
+    "id": "L117",
+    "claim": "begin read them; must used; one or the other has to changed; The resulting string of characters are pointed to",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1826-1829",
+      "doc/html/ncurses-intro.html:770-772",
+      "doc/html/NCURSES-Programming-HOWTO.html:1895-1897"
+    ],
+    "quote": "begin read them only after a new line ... the cbreak() function must used so that characters are immediately available ... one or the other has to changed before calling getch() ... The resulting string of characters are pointed to by str",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Checking only the HOWTO would miss the intro's 'has to changed' phrase from Writing Programs with NCURSES."
+  },
+  {
+    "id": "L121",
+    "claim": "Initially RED color is defined with content 1000(r), 0(g), 0(b); init_color(COLOR_RED, 700, 0, 0) is described as lightening red by a minuscule",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2688-2704",
+      "man/curs_color.3x:425",
+      "man/curs_color.3x:661"
+    ],
+    "quote": "Say you wanted to lighten the intensity of red color by a minuscule. Then ... init_color(COLOR_RED, 700, 0, 0); ... Initially RED color is defined with content 1000(r), 0(g), 0(b). man: color channel values in the range 0-1000.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Seeing only the init_color(700,...) line without the 1000 initial content would not show that 700 darkens red rather than lightens it."
+  },
+  {
+    "id": "L122",
+    "claim": "attr_get() is useful in scanning areas of screen when we are not sure what attribute each character is associated with",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2107-2113",
+      "man/curs_attr.3x:80-81",
+      "man/curs_attr.3x:142"
+    ],
+    "quote": "HOWTO: attr_get() gets the current attributes and color pair of the window ... useful in scanning areas of screen ... not sure what attribute each character is associated with. man: Use wattr_get to retrieve attributes for the given window.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Without the manpage, the HOWTO's 'scanning ... each character' use-case would not clearly conflict with window-current attributes."
+  },
+  {
+    "id": "L123",
+    "claim": "Other functions wchgat(), mvchgat(), wchgat() behave similarly",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2163-2168",
+      "man/curs_attr.3x"
+    ],
+    "quote": "Other functions wchgat(), mvchgat(), wchgat() behave similarly except that the w functions operate on the particular window. The mv functions first move the cursor then perform the work given to them.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "A casual reading could miss that wchgat is listed twice and mvwchgat is omitted."
+  },
+  {
+    "id": "L124",
+    "claim": "/* pager functionality by Joseph Spainhour\" <spainhou@bellsouth.net> */",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1957"
+    ],
+    "quote": "/* pager functionality by Joseph Spainhour\" <spainhou@bellsouth.net> */",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Nothing further; the mismatched quote is visible in the example comment itself."
+  },
+  {
+    "id": "L125",
+    "claim": "screeen; are we are at; cut bold on; Forth parameter; Viola !!!; loose track; the the source; Don't worry about all those initialization and other crap",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1979",
+      "doc/html/NCURSES-Programming-HOWTO.html:1984",
+      "doc/html/NCURSES-Programming-HOWTO.html:1994",
+      "doc/html/NCURSES-Programming-HOWTO.html:2013",
+      "doc/html/NCURSES-Programming-HOWTO.html:2091",
+      "doc/html/NCURSES-Programming-HOWTO.html:2192",
+      "doc/html/NCURSES-Programming-HOWTO.html:2631",
+      "doc/html/NCURSES-Programming-HOWTO.html:2660"
+    ],
+    "quote": "boundaries of the screeen ... are we are at the end of the screen ... cut bold on ... Don't worry about all those initialization and other crap. ... loose track of what attributes ... Forth parameter is the normal attribute ... Viola !!! In color ... look into the the source code",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Finding 'screeen' alone would leave the rest of the chapter 8/10 typo bundle unverified."
+  },
+  {
+    "id": "L129",
+    "claim": "mvprintw(24, 0, \"Character pressed is ...\"); mvprintw(23, 0, \"You chose choice ...\")",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2867-2878"
+    ],
+    "quote": "mvprintw(24, 0, \"Character pressed is = %3d Hopefully it can be printed as '%c'\", c, c); ... mvprintw(23, 0, \"You chose choice %d with choice string %s\\n\", choice, choices[choice - 1]);",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Seeing only the choice line at row 23 would miss the off-screen row-24 status line on a 24-row terminal."
+  },
+  {
+    "id": "L130",
+    "claim": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2839-2840",
+      "man/curs_initscr.3x:440-442"
+    ],
+    "quote": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; hard-coded instead of COLS/LINES.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Without comparing to LINES/COLS, the literals look like ordinary centering arithmetic."
+  },
+  {
+    "id": "L131",
+    "claim": "the Functions keys; See the initialization section; if(ch == KEY_LEFT); User did a choice come out of the infinite loop",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2742-2743",
+      "doc/html/NCURSES-Programming-HOWTO.html:2768",
+      "doc/html/NCURSES-Programming-HOWTO.html:2874"
+    ],
+    "quote": "be enabled to get the Functions keys, arrow keys, etc. See the initialization section for details. ... if(ch == KEY_LEFT) ... if (choice != 0) /* User did a choice come out of the infinite loop */",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "One keyboard-section phrase would not cover the comment and KEY_LEFT snippet together."
+  },
+  {
+    "id": "L135",
+    "claim": "The default is one fifth of a second",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3134-3138",
+      "man/curs_mouse.3x:436-438",
+      "ncurses/curses.priv.h:184",
+      "ncurses/base/lib_set_term.c:548"
+    ],
+    "quote": "HOWTO: The default is one fifth of a second. man: The mouse interval is set to one sixth of a second when the corresponding screen is initialized. curses.priv.h: #define DEFAULT_MAXCLICK 166; lib_set_term.c: sp->_maxclick = DEFAULT_MAXCLICK;",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "HOWTO alone states one fifth; man and DEFAULT_MAXCLICK 166 show the real default is one sixth."
+  },
+  {
+    "id": "L136",
+    "claim": "if (event.bstate & BUTTON1_PRESSED) with mousemask(ALL_MOUSE_EVENTS, NULL)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3096-3104",
+      "man/curs_mouse.3x:402-425"
+    ],
+    "quote": "mousemask(ALL_MOUSE_EVENTS, NULL); ... if (event.bstate & BUTTON1_PRESSED). man: mouseinterval resolves press+release into a click when within the interval.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "Before the mouseinterval man section, BUTTON1_PRESSED with ALL_MOUSE_EVENTS looks merely complete rather than click-resolution sensitive."
+  },
+  {
+    "id": "L137",
+    "claim": "report_choice(event.x + 1, event.y + 1, ...); j = starty + 3; mouse_x <= i + strlen(...)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3027-3064",
+      "doc/html/NCURSES-Programming-HOWTO.html:3103-3104"
+    ],
+    "quote": "print_menu places first item at window (y=2,x=2). report_choice uses i = startx + 2; j = starty + 3; and is called as report_choice(event.x + 1, event.y + 1, ...). Hit test: mouse_x <= i + strlen(choices[choice]).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Looking only at event.x+1 without print_menu's y=2 vs j=starty+3 would miss the vertical off-by-one."
+  },
+  {
+    "id": "L138",
+    "claim": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; mvprintw(23, 1, ...); mvprintw(22, 1, ...)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3082-3109"
+    ],
+    "quote": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2; ... mvprintw(23, 1, \"Click on Exit...\"); ... mvprintw(22, 1, \"Choice made is : %d ...\");",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Hardcoded geometry alone; the fixed rows 22/23 match the same 80×24 assumption."
+  },
+  {
+    "id": "L139",
+    "claim": "The event mask table stops at BUTTON4_TRIPLE_CLICKED",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2919-2945",
+      "man/curs_mouse.3x:211-221"
+    ],
+    "quote": "HOWTO table ends BUTTON4_TRIPLE_CLICKED then BUTTON_SHIFT/... man also lists BUTTON5_PRESSED through BUTTON5_TRIPLE_CLICKED.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Without the manpage BUTTON5 entries, a table ending at BUTTON4 looks complete."
+  },
+  {
+    "id": "L140",
+    "claim": "lets do the same thing from mouse; any thing; a class of mouse events have been enabled; Do some thing; thousands of a second; convert to mouse co-ordinates to screen relative",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:2894-2905",
+      "doc/html/NCURSES-Programming-HOWTO.html:2954",
+      "doc/html/NCURSES-Programming-HOWTO.html:2966",
+      "doc/html/NCURSES-Programming-HOWTO.html:3130-3135"
+    ],
+    "quote": "lets do the same thing from mouse. ... Before you do any thing else ... Once a class of mouse events have been enabled ... /* Do some thing with the event */ ... convert to mouse co-ordinates to screen relative ... maximum time (in thousands of a second)",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Verifying only 'thousands of a second' would miss the other chapter-12 phrasing errors in the claim."
+  },
+  {
+    "id": "L146",
+    "claim": "getbegyx() and getmaxyx() store the window's beginning and maximum co-ordinates",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3178-3180",
+      "man/curs_getyx.3x:71-87"
+    ],
+    "quote": "HOWTO: getbegyx() and getmaxyx() store current window's beginning and maximum co-ordinates. man: getmaxyx stores maximum valid line and column dimensions (one more than the corresponding maximum positions); getbegyx stores the position of win's origin relative to the screen.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "HOWTO wording alone sounds plausible; the manpage shows getmaxyx returns dimensions, not maximum coordinates."
+  }
+]

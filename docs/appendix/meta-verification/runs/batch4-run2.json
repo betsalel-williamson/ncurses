@@ -1,0 +1,382 @@
+[
+  {
+    "id": "L148",
+    "claim": "copywin() can be used to copy a window completely onto another window",
+    "opened": [
+      "man/curs_overlay.3x:58-79",
+      "doc/html/NCURSES-Programming-HOWTO.html:3212-3219"
+    ],
+    "quote": "man/curs_overlay.3x: copywin provides finer control over overlay/overwrite; a destination rectangle and source upper-left are specified, and overlay true makes copying non-destructive. That API can express a full-window copy when the rectangle covers the destination.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "From the HOWTO wording alone I would have matched; the man page confirms copywin is the rectangle form of overlay/overwrite, so a complete-window copy is supported."
+  },
+  {
+    "id": "L155",
+    "claim": "The values returned can be 1 (all is well), 0 (no such terminal), or -1 (some problem locating the terminfo database)",
+    "opened": [
+      "man/curs_terminfo.3x:244-300",
+      "doc/html/ncurses-intro.html:1064-1068"
+    ],
+    "quote": "man/curs_terminfo.3x: setupterm returns OK/ERR; *errret status 1 with OK is normal, but if ERR then errret 1 means hard-copy (unsuitable), 0 means not found/generic, -1 means terminfo database not found.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Before reading the ERR/errret=1 hard-copy case I would have treated the three codes as matching the intro's gloss."
+  },
+  {
+    "id": "L156",
+    "claim": "By calling setupterm() for each terminal, and saving and restoring cur_term, a program can use two or more terminals",
+    "opened": [
+      "man/curs_terminfo.3x:322-354",
+      "man/term_variables.3x:129-140",
+      "doc/html/ncurses-intro.html:1079-1084"
+    ],
+    "quote": "man/curs_terminfo.3x: setupterm stores terminal info in a TERMINAL pointed to by cur_term; set_curterm sets cur_term to another TERMINAL and returns the old value.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same conclusion from the intro text before confirming set_curterm/cur_term in the man pages."
+  },
+  {
+    "id": "L157",
+    "claim": "trace() sets the trace level; _tracef() is available only if you link with -lncurses_g",
+    "opened": [
+      "man/curs_trace.3x:94-104",
+      "man/curs_trace.3x:128-140",
+      "man/ncurses.3x:163-171",
+      "doc/html/ncurses-intro.html:1101-1120"
+    ],
+    "quote": "man/curs_trace.3x: deprecated trace(mask) remains; aside from curses_trace, other trace functions including _tracef are normally available only with the debugging library e.g. libncurses_g.a.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Would have matched from the intro; man confirms trace still exists (deprecated) and _tracef still needs the debug library."
+  },
+  {
+    "id": "L160",
+    "claim": "endwin() should called once",
+    "opened": [
+      "man/curs_initscr.3x:186-195",
+      "doc/html/ncurses-intro.html:992-993"
+    ],
+    "quote": "man/curs_initscr.3x: The program must also call endwin for each terminal being used. Intro text: \"endwin() should called once at wrapup time for each terminal\" (missing \"be\").",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "From the truncated claim alone I would have marked it impossible/incomplete; the man page shows \"once\" as absolute is false when multiple terminals are open."
+  },
+  {
+    "id": "L161",
+    "claim": "It is only available only if",
+    "opened": [
+      "doc/html/ncurses-intro.html:1118-1120",
+      "man/curs_trace.3x:102-104"
+    ],
+    "quote": "Intro: \"It is only available only if you link with -lncurses_g.\" Man: \"normally available only with the debugging library e.g., libncurses_g.a.\"",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Stopping at the fragment alone would be can't tell; opening the intro shows a doubled \"only\" typo against the man page's single \"only\"."
+  },
+  {
+    "id": "L162",
+    "claim": "Setupterm() also stores",
+    "opened": [
+      "doc/html/ncurses-intro.html:1085-1089",
+      "man/curs_terminfo.3x:845-847",
+      "man/term_variables.3x:186-187"
+    ],
+    "quote": "Intro continues: stores the names section in ttytype[]. man/curs_terminfo.3x Legacy Data: setupterm copies the terminal name to the array ttytype.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "The truncated fragment alone would be can't tell; completing it from the intro and checking ttytype in the man pages settles matches."
+  },
+  {
+    "id": "L164",
+    "claim": "When ncurses returns that code, it calls resizeterm",
+    "opened": [
+      "man/curs_initscr.3x:413-442",
+      "doc/html/ncurses-intro.html:1232-1236"
+    ],
+    "quote": "man/curs_initscr.3x SIGWINCH: wgetch returns KEY_RESIZE; at the same time ncurses calls resizeterm to adjust stdscr and update LINES/COLS.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same match from the intro; man page confirms KEY_RESIZE handling calls resizeterm."
+  },
+  {
+    "id": "L167",
+    "claim": "The refresh will pick up the new screen size from the xterm's environment",
+    "opened": [
+      "man/curs_util.3x:228-258",
+      "man/curs_initscr.3x:413-442",
+      "doc/html/ncurses-intro.html:1216-1221"
+    ],
+    "quote": "man/curs_util.3x: ncurses normally uses the terminal database, then OS screen-size calls, then LINES/COLUMNS overrides; SIGWINCH updates size unless overridden by those variables—not \"from the xterm's environment\" as the primary path.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Before use_env/SIGWINCH man detail I would have matched the intro's environment claim."
+  },
+  {
+    "id": "L168",
+    "claim": "Note that you will also have to call def_shell_mode and def_prog_mode on each tty yourself",
+    "opened": [
+      "man/curs_kernel.3x:86-94",
+      "ncurses/base/lib_set_term.c:618-624",
+      "ncurses/base/lib_initscr.c:100-104",
+      "doc/html/ncurses-intro.html:1255-1257"
+    ],
+    "quote": "man/curs_kernel.3x: def_prog_mode/def_shell_mode saving \"is done automatically by initscr\"; lib_set_term.c calls both when setting up a SCREEN; lib_initscr.c notes shell mode done in newterm/_nc_setupscreen.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "From the intro alone I would have matched; code and curs_kernel show the library already saves modes per screen."
+  },
+  {
+    "id": "L169",
+    "claim": "Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While most terminals which provide color allow only 8 colors, about a quarter (including XFree86 xterm) support 16 colors.",
+    "opened": [
+      "man/curs_color.3x:198-200",
+      "man/curs_color.3x:654-662",
+      "ncurses/base/lib_color.c:85-91",
+      "doc/html/ncurses-intro.html:1305-1308"
+    ],
+    "quote": "COLORS is set from the terminal's max_colors; man discusses terminals with at least 16 colors and extended-color builds. The printed \"up 16\" lacks \"to\" and states a fixed ceiling that is not the library's limit.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Before reading COLORS/max_colors I might have called it superseded historical prose; the missing \"to\" and fixed-16 ceiling still disagree with current behavior."
+  },
+  {
+    "id": "L170",
+    "claim": "the attribute of erased blanks is normal unless and until it is modified by the functions bkgdset() or wbkgdset()",
+    "opened": [
+      "man/curs_bkgd.3x:82-99",
+      "man/curs_bkgd.3x:175-178",
+      "doc/html/ncurses-intro.html:1388-1389"
+    ],
+    "quote": "man/curs_bkgd.3x: erasing replaces cells with the background character; blank cells combine with the background character's attributes set via bkgdset/wbkgdset.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matched from the intro; curs_bkgd confirms background-controlled erase rendition."
+  },
+  {
+    "id": "L171",
+    "claim": "every macro entry point have a corresponding function which may be linked",
+    "opened": [
+      "man/ncurses.3x:117-122",
+      "doc/html/ncurses-intro.html:1406-1409"
+    ],
+    "quote": "Intro states the XSI macro/function requirement (with subject-verb \"have\"). man/ncurses.3x still discusses availability of a preprocessor macro exclusive of a function definition as a NOTES concern, consistent with providing linkable functions.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "Would have matched on the XSI requirement alone; confidence stays medium because the printed grammar is wrong even though the library still exposes functions for macros."
+  },
+  {
+    "id": "L174",
+    "claim": "mvprintw(24, 0, \"Press F1 to Exit\")",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:904-909",
+      "doc/html/NCURSES-Programming-HOWTO.html:7481-7487"
+    ],
+    "quote": "HOWTO names JustForFun/hanoi.c but does not embed that source line in primary evidence trees (ncurses/, man/, doc/html body for hanoi).",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Same: without the external example archive contents, the specific mvprintw line cannot be verified."
+  },
+  {
+    "id": "L175",
+    "claim": "mvprintw(24, 0, ...) for \"Press F1 to Exit\" and \"You Win !!!\"",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:908-909",
+      "doc/html/NCURSES-Programming-HOWTO.html:7518"
+    ],
+    "quote": "HOWTO references JustForFun/shuffle.c only; those string literals are not present in primary evidence sources opened here.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Unchanged: outside-repo example archive would settle it."
+  },
+  {
+    "id": "L176",
+    "claim": "#define STATUSY 25",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:909",
+      "doc/html/NCURSES-Programming-HOWTO.html:7528"
+    ],
+    "quote": "HOWTO mentions a typing tutor (tt.c) without embedding STATUSY; no STATUSY in man/include/ncurses primary paths searched.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Same without the example archive."
+  },
+  {
+    "id": "L177",
+    "claim": "#define KEY_F1 265",
+    "opened": [
+      "include/Caps:439-440",
+      "include/MKkey_defs.sh:151-158",
+      "doc/html/NCURSES-Programming-HOWTO.html:7528"
+    ],
+    "quote": "ncurses exposes KEY_F(1) as KEY_F0+(n) with KEY_F0=0410 octal (264), so KEY_F(1)=265, but not a public #define KEY_F1. Whether the HOWTO example archive defines KEY_F1 is outside primary evidence.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Before Caps I might have said missing for KEY_F1; the numeric value matches KEY_F(1), but the example's #define itself remains unverified in-repo."
+  },
+  {
+    "id": "L178",
+    "claim": "http://www2.linuxjournal.com/lj-issues/issue5/2807.html",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:7337-7340"
+    ],
+    "quote": "HOWTO cites that URL for Jeff Tranter's dialog article. Whether the URL still resolves is outside the repository.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Same: outside-repo-only URL liveness."
+  },
+  {
+    "id": "L179",
+    "claim": "Curses::Form, from the CPAN All Modules page",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:7385-7389"
+    ],
+    "quote": "HOWTO asserts Curses::Form is obtainable from CPAN. CPAN contents are outside primary evidence.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "Same without querying CPAN."
+  },
+  {
+    "id": "L194",
+    "claim": "Thomas E. Dickey has maintained ncurses since 1.9.9e",
+    "opened": [
+      "README:159-164",
+      "NEWS:35-36",
+      "ANNOUNCE:653-658"
+    ],
+    "quote": "README: \"Thomas Dickey (maintainer for 1.9.9g through 4.1, resuming with FSF's 5.0)\". NEWS: changes since 1.9.9e are recorded by Dickey. ANNOUNCE: ongoing development by Dickey; Florian La Roche was official maintainer for FSF 4.2 per README.",
+    "verdict": "disagrees",
+    "confidence": "medium",
+    "earlier": "From NEWS \"since 1.9.9e\" alone I would have matched; README's maintainer start at 1.9.9g and the 4.2 gap contradict a continuous \"since 1.9.9e\"."
+  },
+  {
+    "id": "L195",
+    "claim": "Thomas E. Dickey wrote or revised most of the manual pages",
+    "opened": [
+      "README:172-177",
+      "man/ncurses.3x:1-5",
+      "ANNOUNCE:39"
+    ],
+    "quote": "README credits Eric S. Raymond for originally writing the man pages; current man/*.3x carry Thomas E. Dickey copyright headers reflecting extensive revision.",
+    "verdict": "matches",
+    "confidence": "medium",
+    "earlier": "From README's ESR credit alone I would have disagreed on \"wrote\"; the universal Dickey copyrights on present man pages support \"wrote or revised most\" for the current tree."
+  },
+  {
+    "id": "L196",
+    "claim": "Thomas E. Dickey, maintainer since ncurses 1.9.9e",
+    "opened": [
+      "README:159-169",
+      "NEWS:35-36",
+      "ANNOUNCE:653-658"
+    ],
+    "quote": "Same as L194: README states maintainer for 1.9.9g through 4.1 (and again from 5.0), not continuously since 1.9.9e.",
+    "verdict": "disagrees",
+    "confidence": "medium",
+    "earlier": "NEWS changelog attribution since 1.9.9e would have suggested matches before README's 1.9.9g/4.2 details."
+  },
+  {
+    "id": "L198",
+    "claim": "The third objective (standards conformance)",
+    "opened": [
+      "doc/html/hackguide.html:125-138",
+      "doc/html/hackguide.html:162-165"
+    ],
+    "quote": "Objectives list in order: (1) source-compatible, (2) Conformant with the XSI Curses standard, (3) High-quality, (4) Featureful. Later prose wrongly calls standards conformance the third objective.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Reading only the \"third objective (standards conformance)\" sentence would have matched; the numbered list shows conformance is second."
+  },
+  {
+    "id": "L199",
+    "claim": "This is a majordomo list",
+    "opened": [
+      "doc/html/hackguide.html:252-260",
+      "ANNOUNCE:660-670"
+    ],
+    "quote": "hackguide calls bug-ncurses a majordomo list. ANNOUNCE documents the same subscribe-via-request address pattern but does not name majordomo; list-server software is not evidenced in-repo.",
+    "verdict": "can't tell",
+    "confidence": "high",
+    "earlier": "From hackguide alone I would have matched; ANNOUNCE neither confirms nor refutes majordomo specifically."
+  },
+  {
+    "id": "L200",
+    "claim": "`trace()`",
+    "opened": [
+      "man/curs_trace.3x:94-104",
+      "doc/html/hackguide.html:309"
+    ],
+    "quote": "man/curs_trace.3x still declares deprecated void trace(const unsigned int trace-mask); hackguide tells readers to insert a trace() call.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Same after confirming the symbol remains in the man page."
+  },
+  {
+    "id": "L201",
+    "claim": "Test frames for the library algorithms are in the progs directory",
+    "opened": [
+      "doc/html/hackguide.html:372-376",
+      "progs/",
+      "ncurses/Makefile.in:205-213",
+      "ncurses/Makefile.in:375-381"
+    ],
+    "quote": "hackguide places tiny test frames in progs. Current progs/ holds tic/infocmp/tput/etc.; hashmap and lib_mvcur test productions are under ncurses/Makefile.in.",
+    "verdict": "disagrees",
+    "confidence": "high",
+    "earlier": "Before listing progs/ and ncurses/Makefile.in I would have matched the hackguide sentence."
+  },
+  {
+    "id": "L202",
+    "claim": "If the entire sequence takes less than 1 second",
+    "opened": [
+      "doc/html/hackguide.html:507-510",
+      "ncurses/base/lib_getch.c:66",
+      "man/ncurses.3x:1285-1299"
+    ],
+    "quote": "ESCDELAY defaults to 1000 ms (one second) in lib_getch.c and man/ncurses.3x; hackguide's \"less than 1 second\" matches that default timer.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "Matched from hackguide; ESCDELAY=1000 confirms the default."
+  },
+  {
+    "id": "L203",
+    "claim": "`timed_wait()`",
+    "opened": [
+      "doc/html/hackguide.html:516-517",
+      "ncurses/tty/lib_twait.c:39",
+      "ncurses/tty/lib_twait.c:165",
+      "ncurses/curses.priv.h:2245"
+    ],
+    "quote": "hackguide names timed_wait(); the implementation is _nc_timed_wait in lib_twait.c. No timed_wait symbol remains in .c/.h sources.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "Before searching symbols I would have matched the hackguide name."
+  },
+  {
+    "id": "L204",
+    "claim": "`lib_doupdate.c`",
+    "opened": [
+      "doc/html/hackguide.html:577-578",
+      "ncurses/tty/tty_update.c:37-41",
+      "NEWS:14734"
+    ],
+    "quote": "tty_update.c header still says \"lib_doupdate.c\" historically, but the source file is ncurses/tty/tty_update.c; progs/ has no lib_doupdate.c.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "The comment banner alone would have suggested the old name still matched; the actual filename is tty_update.c."
+  },
+  {
+    "id": "L205",
+    "claim": "`_nc_mvcur_scrolln()` in `lib_mvcur.c`",
+    "opened": [
+      "doc/html/hackguide.html:597-598",
+      "NEWS:14734",
+      "ncurses/tty/hardscroll.c:250-284",
+      "ncurses/tty/lib_mvcur.c:1257"
+    ],
+    "quote": "NEWS: \"rename _nc_mvcur_scrolln() to _nc_scrolln()\". hardscroll.c calls _nc_scrolln; no _nc_mvcur_scrolln symbol remains.",
+    "verdict": "superseded",
+    "confidence": "high",
+    "earlier": "hackguide would have matched until NEWS and the current call sites showed the rename."
+  }
+]

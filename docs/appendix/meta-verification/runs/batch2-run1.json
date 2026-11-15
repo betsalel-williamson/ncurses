@@ -1,0 +1,380 @@
+[
+  {
+    "id": "L46",
+    "claim": "menu_driver() accepts an ascii character (HOWTO); it accumulates printable ASCII characters (Writing Programs)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4435-4440",
+      "doc/html/NCURSES-Programming-HOWTO.html:4550-4555",
+      "doc/html/ncurses-intro.html:1744-1750",
+      "man/menu_driver.3x:55",
+      "man/menu_driver.3x:114-118",
+      "menu/m_driver.c:446"
+    ],
+    "quote": "HOWTO: value can be either a menu navigational request, an ascii character, or a KEY_MOUSE... Whenever ascii characters are given to menu_driver, it puts in to the pattern buffer. / ncurses-intro: The menu_driver() logic tries to accumulate printable ASCII characters passed in in that buffer. / man: The input is a printable character; appends it to the pattern buffer. / m_driver.c: isprint(UChar(c))",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO alone already says ascii character for menu_driver"
+  },
+  {
+    "id": "L47",
+    "claim": "Example 21. Milt Columnar Menus Example",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4927-4939"
+    ],
+    "quote": "heading 17.6. Multi Columnar Menus; example title Example 21. Milt Columnar Menus Example",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the Milt title is on the example line itself"
+  },
+  {
+    "id": "L48",
+    "claim": "The Menu Basics listing frees only items 0 and 1 of five, and calls free_menu() on a menu that is still posted",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4372-4422",
+      "menu/m_new.c:115-132",
+      "man/menu_new.3x:48-73"
+    ],
+    "quote": "choices[] has five entries; post_menu(my_menu) with no unpost_menu; free_item(my_items[0]); free_item(my_items[1]); free_menu(my_menu). / free_menu: E_POSTED if menu->status & _POSTED; man: free_menu returns E_POSTED when posted.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the listing alone shows two free_item calls and no unpost before free_menu"
+  },
+  {
+    "id": "L49",
+    "claim": "The Multi Valued Menus listing frees only items 0 and 1 of eight, and calls free_menu() on a menu that is still posted",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5110-5194",
+      "menu/m_new.c:125-132"
+    ],
+    "quote": "choices[] has eight entries (Choice 1..7, Exit); post_menu then free_item(my_items[0]); free_item(my_items[1]); free_menu(my_menu) with no unpost_menu. / free_menu returns E_POSTED when still posted.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — listing alone shows only items 0 and 1 freed without unpost"
+  },
+  {
+    "id": "L50",
+    "claim": "The Menu Options listing frees the items before the menu",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5330-5333",
+      "man/menu_new.3x:48-53"
+    ],
+    "quote": "unpost_menu(my_menu); for (...) free_item(my_items[i]); free_menu(my_menu). / man: free_menu disconnects menu from its item array then frees the menu.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the free_item loop precedes free_menu in the listing"
+  },
+  {
+    "id": "L51",
+    "claim": "The Menu User Pointer listing frees the items before the menu",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5456-5459",
+      "man/menu_new.3x:48-53"
+    ],
+    "quote": "unpost_menu(my_menu); for (...) free_item(my_items[i]); free_menu(my_menu).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — free_item loop is before free_menu"
+  },
+  {
+    "id": "L52",
+    "claim": "The Menu User Pointer listing stores the address of `MY_DATA data`, a variable local to the loop body, as each item's user pointer and calls through it after the loop",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5415-5450"
+    ],
+    "quote": "for (i = 0; i < n_choices; ++i) { MY_DATA data = {func}; ... set_item_userptr(my_items[i], (void *) &data); } then later data = item_userptr(cur); data->my_func(item_name(cur));",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the set_item_userptr of &data inside the for-body is enough"
+  },
+  {
+    "id": "L53",
+    "claim": "The list of menu options ends at O_NONCYCLIC",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5058-5077",
+      "man/menu_opts.3x:72-95",
+      "menu/menu.h:66-72"
+    ],
+    "quote": "HOWTO list: O_ONEVALUE ... O_NONCYCLIC (last). / man and menu.h continue with O_MOUSE_MENU after O_NONCYCLIC.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO's printed list already ends at O_NONCYCLIC"
+  },
+  {
+    "id": "L54",
+    "claim": "The mouse requests are quoted from an older menu_driver(3X), with its line breaks and soft hyphens (decora­tion), and without the double-click on an item",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4575-4589",
+      "man/menu_driver.3x:122-154"
+    ],
+    "quote": "HOWTO quote ends: if you click at an item inside the display area of the menu, the menu cursor is positioned to that item. Contains decora&shy; tion soft hyphen. / current man adds: If you double-click an item a REQ_TOGGLE_ITEM is generated and E_UNKNOWN_COMMAND is returned.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO quote alone lacks the double-click item case and keeps the soft-hyphenated decoration"
+  },
+  {
+    "id": "L55",
+    "claim": "A link to text mode dos games at http://www.jersey.net/~debinjoe/games/",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:5224-5230"
+    ],
+    "quote": "similar to those text mode <a href=\"http://www.jersey.net/~debinjoe/games/\">dos games</a>",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the href is on that line; URL reachability is outside the repo"
+  },
+  {
+    "id": "L56",
+    "claim": "the drive assumes it is an application-specific command",
+    "opened": [
+      "man/menu_driver.3x:163-166",
+      "doc/html/man/menu_driver.3x.html:173-176"
+    ],
+    "quote": "man/menu_driver.3x: the driver assumes it is an application-specific command. / doc/html/man/menu_driver.3x.html: the drive assumes it is an application-specific command.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "disagrees — man/menu_driver.3x alone already says driver, not drive"
+  },
+  {
+    "id": "L57",
+    "claim": "menu_driver return one of the following error codes",
+    "opened": [
+      "man/menu_driver.3x:169-170",
+      "doc/html/man/menu_driver.3x.html:181-182"
+    ],
+    "quote": "man/menu_driver.3x: menu_driver returns one of the following error codes. / doc/html/man/menu_driver.3x.html: menu_driver return one of the following error codes.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "disagrees — man/menu_driver.3x alone has returns"
+  },
+  {
+    "id": "L65",
+    "claim": "replace a panel's window with a different window by calling `replace_window`",
+    "opened": [
+      "doc/html/ncurses-intro.html:1467-1472",
+      "man/panel.3x:63",
+      "man/panel.3x:178-187",
+      "panel/panel.h:84",
+      "panel/p_replace.c:43-47"
+    ],
+    "quote": "ncurses-intro: You can replace a panel's window with a different window by calling replace_window. / man and panel.h/p_replace.c: replace_panel(PANEL *, WINDOW *); no replace_window symbol.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone prints replace_window"
+  },
+  {
+    "id": "L66",
+    "claim": "The `stsdcr` window is a special case",
+    "opened": [
+      "doc/html/ncurses-intro.html:1506-1510"
+    ],
+    "quote": "The stsdcr window is a special case. It is considered below all panels. ... even when you only change stdscr.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — stsdcr is on that sentence"
+  },
+  {
+    "id": "L67",
+    "claim": "The `panel_update` code ignores hidden panels",
+    "opened": [
+      "doc/html/ncurses-intro.html:1528-1530",
+      "panel/p_update.c:44-67",
+      "man/panel.3x:205-209"
+    ],
+    "quote": "intro: The panel_update code ignores hidden panels. / implementation and man name the function update_panels; it walks the linked stack only.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone uses the panel_update wording"
+  },
+  {
+    "id": "L68",
+    "claim": "You cannot do `top_panel()` or `bottom_panel` on a hidden panel()",
+    "opened": [
+      "doc/html/ncurses-intro.html:1528-1530",
+      "man/panel.3x:245-254",
+      "panel/p_top.c:43-46",
+      "panel/p_show.c:42-72",
+      "panel/p_bottom.c:44-74"
+    ],
+    "quote": "intro: You cannot do top_panel() or bottom_panel on a hidden panel(). / man PORTABILITY: show_panel and top_panel are identical in this implementation, and work equally well with displayed or hidden panels. / top_panel calls show_panel; bottom_panel HIDE_PANEL then relinks.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone prints that prohibition (including the empty panel())"
+  },
+  {
+    "id": "L69",
+    "claim": "Note that `wgetch` automatically calls `wrefresh`",
+    "opened": [
+      "doc/html/ncurses-intro.html:1512-1515",
+      "man/curs_getch.3x:162-169"
+    ],
+    "quote": "intro: Note that wgetch automatically calls wrefresh. / man: If the window win has been moved or modified since the last call to wrefresh, curses calls wrefresh on it.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro sentence alone states the automatic wrefresh"
+  },
+  {
+    "id": "L70",
+    "claim": "For some reason the function `panel_hidden()` which tells whether a panel is hidden or not is not working, with a link to a 1999 bug report",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4067-4072",
+      "panel/p_hidden.c:43-55",
+      "man/panel.3x:163-168"
+    ],
+    "quote": "HOWTO: For some reason the function panel_hidden() which tells whether a panel is hidden or not is not working. A bug report was also presented by Michael Andres here (http://www.geocrawler.com/archives/3/344/1999/9/0/2643549/). / p_hidden.c and man: panel_hidden returns TRUE/FALSE from IS_LINKED.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO paragraph alone has the not working claim and the geocrawler link"
+  },
+  {
+    "id": "L71",
+    "claim": "/* Update the stacking order. 2nd panel will be on top */ (also in the moving and hiding listings)",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3680-3681",
+      "doc/html/NCURSES-Programming-HOWTO.html:3908-3909",
+      "doc/html/NCURSES-Programming-HOWTO.html:4191"
+    ],
+    "quote": "browsing, moving, and hiding listings each contain: /* Update the stacking order. 2nd panel will be on top */",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — browsing listing alone has the comment; the other two confirm also"
+  },
+  {
+    "id": "L72",
+    "claim": "The program reads a panel's position and size from its PANEL_DATA when it comes to the top, but never writes them back, so a moved panel jumps back to where it started the next time it is moved",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3919-3992",
+      "doc/html/NCURSES-Programming-HOWTO.html:3847-3862"
+    ],
+    "quote": "on Tab: newx = top->x; newy = top->y; ... from PANEL_DATA. move_panel updates newx/newy locally. set_user_ptrs writes x,y once at init; no later assignment to top->x/top->y after moves.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — Tab reload from PANEL_DATA with no write-back is visible before tracing every move key"
+  },
+  {
+    "id": "L73",
+    "claim": "\"Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Window)\", 83 characters on an 80-column screen",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:4195-4197"
+    ],
+    "quote": "mvprintw(..., \"Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Window)\"); string length 83.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — counting the quoted string is enough"
+  },
+  {
+    "id": "L74",
+    "claim": "Mainpulate; is used to created panels; removes it form the stack; Entered Resizing :Use",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:3450",
+      "doc/html/NCURSES-Programming-HOWTO.html:3460",
+      "doc/html/NCURSES-Programming-HOWTO.html:4057-4058",
+      "doc/html/NCURSES-Programming-HOWTO.html:3944-3945"
+    ],
+    "quote": "new_panel() is used to created panels. / Mainpulate the panels with show_panel()... / removes it form the stack / Entered Resizing :Use Arrow Keys to resize...",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — each typo is on its own HOWTO line"
+  },
+  {
+    "id": "L75",
+    "claim": "`bottom_panel` on a hidden panel()",
+    "opened": [
+      "doc/html/ncurses-intro.html:1528-1530"
+    ],
+    "quote": "You cannot do top_panel() or bottom_panel on a hidden panel().",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — the empty panel() after hidden is in that sentence"
+  },
+  {
+    "id": "L81",
+    "claim": "In the `cbreak()` mode these control characters are interpreted as any other character by the terminal driver",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1337-1342",
+      "man/curs_inopts.3x:148-158",
+      "man/curs_inopts.3x:435-448"
+    ],
+    "quote": "HOWTO: In the cbreak() mode these control characters are interpreted as any other character by the terminal driver. / man cbreak: interrupt, quit, suspend, and flow control characters are unaffected. / man raw: passes through interrupt, quit, suspend, and flow control characters uninterpreted.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO alone prints that cbreak claim"
+  },
+  {
+    "id": "L82",
+    "claim": "`endwin()` frees the memory taken by curses sub-system and its data structures and puts the terminal in normal mode",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1280-1285",
+      "man/curs_initscr.3x:203-227",
+      "man/curs_initscr.3x:266-284",
+      "man/curs_initscr.3x:484-491"
+    ],
+    "quote": "HOWTO: endwin() frees the memory taken by curses sub-system and its data structures and puts the terminal in normal mode. / man: endwin restores terminal modes; delscreen frees SCREEN storage; Calling endwin does not dispose of the memory allocated by initscr or newterm.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO alone states that endwin frees the memory"
+  },
+  {
+    "id": "L83",
+    "claim": "`<curses.h>` also includes `<termios.h>`, `<termio.h>`, or `<sgtty.h>` depending on your system",
+    "opened": [
+      "doc/html/ncurses-intro.html:485-489",
+      "include/curses.h.in:250",
+      "include/curses.h.in:95-113"
+    ],
+    "quote": "intro: <curses.h> also includes <termios.h>, <termio.h>, or <sgtty.h> depending on your system. / curses.h.in includes <stdio.h> and optional stdint/stdbool; no termios.h/termio.h/sgtty.h include.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone prints the termios/termio/sgtty include claim"
+  },
+  {
+    "id": "L84",
+    "claim": "In linking with `curses` you need to have `-lncurses` ... There is no need for any other libraries",
+    "opened": [
+      "doc/html/ncurses-intro.html:490-493",
+      "INSTALL:405",
+      "INSTALL:1311-1342",
+      "INSTALL:2530"
+    ],
+    "quote": "intro: In linking with curses you need to have -lncurses ... There is no need for any other libraries. / INSTALL: ncurses always available as -lncurses; --with-termlib can split libtinfo; example also shows -lgpm -lncurses.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone states no need for any other libraries"
+  },
+  {
+    "id": "L85",
+    "claim": "To use ncurses library functions, you have to include ncurses.h in your programs",
+    "opened": [
+      "doc/html/NCURSES-Programming-HOWTO.html:1174-1182",
+      "doc/html/ncurses-intro.html:482",
+      "include/curses.h.in:38-40"
+    ],
+    "quote": "HOWTO: To use ncurses library functions, you have to include ncurses.h in your programs. ... #include <ncurses.h>. / intro examples use #include <curses.h>; installed header is __NCURSES_H / curses.h.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — HOWTO alone requires ncurses.h"
+  },
+  {
+    "id": "L86",
+    "claim": "`bool`: boolean type, actually a \"char\"",
+    "opened": [
+      "doc/html/ncurses-intro.html:596-600",
+      "include/curses.h.in:272-307"
+    ],
+    "quote": "intro: bool — boolean type, actually a \"char\". / curses.h.in: typedef @cf_cv_type_of_bool@ NCURSES_BOOL; may use C++ bool, <stdbool.h>, or a configure-chosen type — not fixed as char.",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone says actually a char"
+  },
+  {
+    "id": "L87",
+    "claim": "`OK`: error flag returned by routines when things go right",
+    "opened": [
+      "doc/html/ncurses-intro.html:617-620",
+      "include/curses.h.in:426-429"
+    ],
+    "quote": "intro: OK — error flag returned by routines when things go right. / curses.h.in: #define OK (0); #define ERR (-1).",
+    "verdict": "matches",
+    "confidence": "high",
+    "earlier": "matches — intro alone calls OK an error flag for success"
+  }
+]

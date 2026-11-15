@@ -1,0 +1,212 @@
+[
+  {
+    "id": "L148",
+    "claim_as_printed": "copywin() can be used to copy a window completely onto another window",
+    "appears_in": "docs/client-library/screen/saving-and-copying.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, chapter 13"
+  },
+  {
+    "id": "L155",
+    "claim_as_printed": "The values returned can be 1 (all is well), 0 (no such terminal), or -1 (some problem locating the terminfo database)",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L156",
+    "claim_as_printed": "By calling setupterm() for each terminal, and saving and restoring cur_term, a program can use two or more terminals",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L157",
+    "claim_as_printed": "trace() sets the trace level; _tracef() is available only if you link with -lncurses_g",
+    "appears_in": "docs/client-library/init-and-debugging/debugging.md",
+    "section": "curses_trace",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L160",
+    "claim_as_printed": "endwin() should called once",
+    "appears_in": "docs/client-library/init-and-debugging/initialization-and-wrapup.md",
+    "section": "newtermtype-ofp-ifp",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L161",
+    "claim_as_printed": "It is only available only if",
+    "appears_in": "docs/client-library/init-and-debugging/debugging.md",
+    "section": "_tracef",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L162",
+    "claim_as_printed": "Setupterm() also stores",
+    "appears_in": "docs/client-library/init-and-debugging/terminal-descriptions.md",
+    "section": "setuptermterm-filedes-errret",
+    "original_source": "Writing Programs with NCURSES, Function Descriptions"
+  },
+  {
+    "id": "L164",
+    "claim_as_printed": "When ncurses returns that code, it calls resizeterm",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "key_resize",
+    "original_source": "Writing Programs with NCURSES, Hints, Tips, and Tricks"
+  },
+  {
+    "id": "L167",
+    "claim_as_printed": "The refresh will pick up the new screen size from the xterm's environment",
+    "appears_in": "docs/client-library/hints/resizing.md",
+    "section": "your-own-handler",
+    "original_source": "Writing Programs with NCURSES, Hints, Tips, and Tricks"
+  },
+  {
+    "id": "L168",
+    "claim_as_printed": "Note that you will also have to call def_shell_mode and def_prog_mode on each tty yourself",
+    "appears_in": "docs/client-library/hints/terminals.md",
+    "section": "handling-multiple-terminal-screens",
+    "original_source": "Writing Programs with NCURSES, Hints, Tips, and Tricks"
+  },
+  {
+    "id": "L169",
+    "claim_as_printed": "Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While most terminals which provide color allow only 8 colors, about a quarter (including XFree86 xterm) support 16 colors.",
+    "appears_in": "docs/client-library/hints/extensions.md",
+    "section": "number-of-colors",
+    "original_source": "Writing Programs with NCURSES, Special Features of NCURSES"
+  },
+  {
+    "id": "L170",
+    "claim_as_printed": "the attribute of erased blanks is normal unless and until it is modified by the functions bkgdset() or wbkgdset()",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "background-erase",
+    "original_source": "Writing Programs with NCURSES, Compatibility with Older Versions"
+  },
+  {
+    "id": "L171",
+    "claim_as_printed": "every macro entry point have a corresponding function which may be linked",
+    "appears_in": "docs/client-library/hints/compatibility.md",
+    "section": "xopen-curses-conformance",
+    "original_source": "Writing Programs with NCURSES, XSI Curses Conformance"
+  },
+  {
+    "id": "L174",
+    "claim_as_printed": "mvprintw(24, 0, \"Press F1 to Exit\")",
+    "appears_in": "docs/client-library/more/hanoi.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Just For Fun (example archive)"
+  },
+  {
+    "id": "L175",
+    "claim_as_printed": "mvprintw(24, 0, ...) for \"Press F1 to Exit\" and \"You Win !!!\"",
+    "appears_in": "docs/client-library/more/shuffle.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Just For Fun (example archive)"
+  },
+  {
+    "id": "L176",
+    "claim_as_printed": "#define STATUSY 25",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Just For Fun (example archive)"
+  },
+  {
+    "id": "L177",
+    "claim_as_printed": "#define KEY_F1 265",
+    "appears_in": "docs/client-library/more/typing-tutor.md",
+    "section": "",
+    "original_source": "NCURSES Programming HOWTO, Just For Fun (example archive)"
+  },
+  {
+    "id": "L178",
+    "claim_as_printed": "http://www2.linuxjournal.com/lj-issues/issue5/2807.html",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "dialog",
+    "original_source": "NCURSES Programming HOWTO, Tools and Widget Libraries"
+  },
+  {
+    "id": "L179",
+    "claim_as_printed": "Curses::Form, from the CPAN All Modules page",
+    "appears_in": "docs/client-library/more/widget-libraries.md",
+    "section": "perl-modules-curses-and-curseswidgets",
+    "original_source": "NCURSES Programming HOWTO, Tools and Widget Libraries"
+  },
+  {
+    "id": "L194",
+    "claim_as_printed": "Thomas E. Dickey has maintained ncurses since 1.9.9e",
+    "appears_in": "site/src/content/docs/index.mdx",
+    "section": "",
+    "original_source": "This edition's front page"
+  },
+  {
+    "id": "L195",
+    "claim_as_printed": "Thomas E. Dickey wrote or revised most of the manual pages",
+    "appears_in": "site/src/content/docs/index.mdx",
+    "section": "",
+    "original_source": "This edition's front page"
+  },
+  {
+    "id": "L196",
+    "claim_as_printed": "Thomas E. Dickey, maintainer since ncurses 1.9.9e",
+    "appears_in": "site/src/content/docs/credits.md",
+    "section": "",
+    "original_source": "This edition's Credits page"
+  },
+  {
+    "id": "L198",
+    "claim_as_printed": "The third objective (standards conformance)",
+    "appears_in": "docs/contributor/hackguide/objective.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L199",
+    "claim_as_printed": "This is a majordomo list",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L200",
+    "claim_as_printed": "`trace()`",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "3-generate-and-examine-a-trace-file-for-the-broken-behavior",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L201",
+    "claim_as_printed": "Test frames for the library algorithms are in the progs directory",
+    "appears_in": "docs/contributor/hackguide/reporting-bugs.md",
+    "section": "test-frames-for-the-library-algorithms",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L202",
+    "claim_as_printed": "If the entire sequence takes less than 1 second",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "keyboard-input",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L203",
+    "claim_as_printed": "`timed_wait()`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "keyboard-input",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L204",
+    "claim_as_printed": "`lib_doupdate.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "original_source": "A Hacker's Guide to NCURSES"
+  },
+  {
+    "id": "L205",
+    "claim_as_printed": "`_nc_mvcur_scrolln()` in `lib_mvcur.c`",
+    "appears_in": "docs/contributor/hackguide/engine-room.md",
+    "section": "output-and-screen-updating",
+    "original_source": "A Hacker's Guide to NCURSES"
+  }
+]
