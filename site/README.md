@@ -70,6 +70,7 @@ A program that fails shows a note instead of a button, with its build log, and C
 - `cross compiling: assume setvbuf params not reversed`. Configure can't run its test program, and the assumption is right for musl.
 - `MB_LEN_MAX is missing/inconsistent`. musl sets it to 4, and ncurses falls back to its own value of 16, which is what it needs.
 - `cat: write error: Broken pipe`. `make_hash` reads only the lines it needs, so the `cat` feeding it sees the pipe close early.
+- `creating temporary terminfo directory...` and `removing temporary terminfo directory...`. `MKfallback.sh` prints these when it compiles the built-in xterm-256color entry with the host's `tic`, so they appear only where `tic` is installed.
 - The `emconfigure` and `emmake` banner lines.
 
 Two warnings are fixed rather than hidden. Configure gets `CPPFLAGS=-D_XOPEN_SOURCE=600`, which ends the `_POSIX_C_SOURCE` and `_XOPEN_SOURCE` warnings. `CFLAGS` adds `-Wno-unknown-warning-option`, because clang doesn't know the GCC-only warning that one ncurses pragma names.

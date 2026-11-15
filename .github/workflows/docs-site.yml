@@ -173,6 +173,9 @@ jobs:
   indexnow:
     # Tell IndexNow search engines (Bing, Yandex, Seznam, Naver, ...) about the pages just deployed.
     needs: deploy
+    # deploy can succeed while build is skipped (a reused build). A job with no if inherits
+    # success(), which treats a skipped job anywhere upstream as a failure, so say what counts.
+    if: ${{ !cancelled() && needs.deploy.result == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
