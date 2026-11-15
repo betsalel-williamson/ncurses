@@ -1,0 +1,39 @@
+{
+  "about": "The front page's Migration progress section reads this file. The manual-page counts, merged pull requests and errata come from the repository at build time; the rest is kept here. scripts/migration-stats.mjs refreshes the session block.",
+  "tracks": [
+    {
+      "name": "Guides",
+      "unit": "chapters",
+      "note": "The HOWTO, Writing Programs with NCURSES and the hints, each chapter checked against its sources and the library.",
+      "total": 15,
+      "sharded": 15,
+      "reviewed": 15
+    },
+    {
+      "name": "Manual pages",
+      "unit": "pages",
+      "note": "Every page in man/, split into one troff fragment per section. The editorial review hasn't started.",
+      "reviewed": 0
+    },
+    {
+      "name": "Contributor and install docs",
+      "unit": "documents",
+      "note": "The hacker's guide, INSTALL, the Ada binding and the announcement.",
+      "total": 4,
+      "sharded": 0,
+      "reviewed": 0
+    }
+  ],
+  "session": {
+    "asOf": "2026-11-15T07:28:52Z",
+    "started": "2026-11-12T16:50:27Z",
+    "inputTokens": 42021,
+    "outputTokens": 1351411,
+    "cacheReadTokens": 528895387,
+    "cacheWriteTokens": 5106260,
+    "costUsd": 172.72,
+    "agentActiveSeconds": 35122,
+    "maintainerSeconds": 11365,
+    "maintainerMessages": 60
+  }
+}
