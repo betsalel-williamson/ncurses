@@ -8,10 +8,10 @@ import { codeLinks } from './code-links.mjs';
 // so frames and backgrounds come from each style's tokens; these set the token colors.
 const style = (name) =>
   ExpressiveCodeTheme.fromJSONString(readFileSync(new URL(`./src/code-themes/${name}.json`, import.meta.url), 'utf8'));
-const styled = { 'ncurses-textmode': 'textmode', 'ncurses-workstation': 'workstation', 'ncurses-terminal': 'terminal' };
+const styled = { 'ncurses-textmode': 'textmode', 'ncurses-workstation': 'workstation', 'ncurses-terminal': 'terminal', 'ncurses-manpage': 'manpage' };
 
 export default defineEcConfig({
-  themes: ['starlight-dark', 'starlight-light', style('textmode'), style('workstation'), style('terminal')],
+  themes: ['starlight-dark', 'starlight-light', style('textmode'), style('workstation'), style('terminal'), style('manpage')],
   useStarlightUiThemeColors: true,
   // starlight-dark is the base theme. Modern switches to starlight-light with the light scheme;
   // each other style has its own theme whatever the scheme.

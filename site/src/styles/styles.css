@@ -444,6 +444,174 @@
   --nc-ansi-15: #ffffff;
 }
 
+/* Manual page: set like a printed man page, in Times and Courier on paper, with bold capital
+   section headings and no window chrome. */
+:root[data-style='manpage'] {
+  --sl-font: 'Tinos', 'Times New Roman', Times, serif;
+  --sl-font-mono: 'Cousine', 'Courier New', monospace;
+  --sl-text-body: 1.125rem;
+  --sl-line-height: 1.55;
+
+  --sl-color-white: #1b1b1b;
+  --sl-color-gray-1: #222222;
+  --sl-color-gray-2: #2c2c28;
+  --sl-color-gray-3: #3d3d38;
+  --sl-color-gray-4: #8a8a80;
+  --sl-color-gray-5: #d8d8cc;
+  --sl-color-gray-6: #ececdf;
+  --sl-color-gray-7: #f1f1e8;
+  --sl-color-black: #fdfdf8;
+  --sl-color-accent-low: #dde4f3;
+  --sl-color-accent: #1d3f8f;
+  --sl-color-accent-high: #0d2259;
+  --sl-color-text-invert: #fdfdf8;
+  --sl-color-bg-nav: #fdfdf8;
+  --sl-color-bg-sidebar: #fdfdf8;
+  --sl-color-hairline: #d8d8cc;
+  --sl-color-hairline-light: #d8d8cc;
+  --sl-color-hairline-shade: #1b1b1b;
+
+  --nc-heading-font: var(--sl-font);
+  --nc-heading-weight: 700;
+  --nc-nav-font: var(--sl-font);
+  --nc-h1-fg: #1b1b1b;
+  --nc-h2-fg: #1b1b1b;
+  /* Section headings as man sets NAME and DESCRIPTION: bold capitals at body size. */
+  --nc-h2-size: 1.0625rem;
+  --nc-h2-transform: uppercase;
+  --nc-h2-tracking: 0.08em;
+  --nc-h3-style: italic;
+  --nc-h3-fg: #1b1b1b;
+  --nc-h2-before: none;
+  --nc-h2-after: none;
+  --nc-h2-rule: 0;
+  --nc-link-fg: #1d3f8f;
+  --nc-hotkey-fg: inherit;
+
+  --nc-page-bg: #fdfdf8;
+  --nc-header-bg: #fdfdf8;
+  --nc-header-fg: #1b1b1b;
+  --nc-header-border: 1px solid #1b1b1b;
+  --nc-header-shadow: none;
+  --nc-input-bg: #fdfdf8;
+  --nc-input-fg: #55554e;
+  --nc-input-border: 1px solid;
+  --nc-input-border-color: #8a8a80;
+  --nc-input-radius: 0;
+
+  --nc-statusbar-display: none;
+  --nc-statusbar-height: 0rem;
+
+  --nc-panel-gap: 0rem;
+  --nc-panel-radius: 0;
+
+  --nc-nav-bg: transparent;
+  --nc-nav-fg: #3d3d38;
+  --nc-nav-group-fg: #1b1b1b;
+  --nc-nav-muted: #8a8a80;
+  --nc-nav-current-bg: transparent;
+  --nc-nav-current-fg: #1b1b1b;
+  --nc-nav-current-weight: 700;
+  --nc-nav-current-decoration: underline;
+  --nc-nav-border: 0;
+  --nc-nav-border-color: transparent;
+  --nc-nav-shadow: none;
+  --nc-nav-title: none;
+
+  --nc-toc-bg: transparent;
+  --nc-toc-fg: #3d3d38;
+  --nc-toc-heading-fg: #1b1b1b;
+  --nc-toc-current-fg: #1d3f8f;
+  --nc-toc-border: 0;
+  --nc-toc-border-color: transparent;
+  --nc-toc-shadow: none;
+  --nc-toc-title: none;
+  /* Code hints (code-hints.js): a ruled note on paper. */
+  --nc-hint-bg: #fdfdf8;
+  --nc-hint-fg: #2c2c28;
+  --nc-hint-name-fg: #1b1b1b;
+  --nc-hint-page-fg: #1d3f8f;
+  --nc-hint-border: 1px solid #1b1b1b;
+  --nc-hint-shadow: 0.1875rem 0.1875rem 0 #d8d8cc;
+  --nc-hint-radius: 0;
+  --nc-sym-decoration: underline dotted;
+
+  --nc-content-bg: #fdfdf8;
+  --nc-content-border: 0;
+  --nc-content-border-color: transparent;
+  --nc-content-shadow: none;
+  --nc-content-title: none;
+
+  --nc-code-bg: #f1f1e8;
+  --nc-code-titlebar-bg: #f1f1e8;
+  --nc-code-titlebar-fg: #3d3d38;
+  --nc-code-border: 1px solid;
+  --nc-code-border-color: #d8d8cc;
+  --nc-code-shadow: none;
+  --nc-code-radius: 0;
+  /* A shell listing is set like a man page's EXAMPLES: no window chrome, a rule under the title. */
+  --nc-frame-close: none;
+  --nc-frame-close-fg: #1b1b1b;
+  --nc-frame-close-box: 0;
+  --nc-frame-titlebar-bg: #f1f1e8;
+  --nc-frame-titlebar-fg: #3d3d38;
+  --nc-frame-titlebar-rule: 0;
+  /* The search dialog: a sheet of paper with a ruled edge. */
+  --nc-dialog-bg: #fdfdf8;
+  --nc-dialog-fg: #2c2c28;
+  --nc-dialog-border: 1px solid #1b1b1b;
+  --nc-dialog-shadow: 0.25rem 0.25rem 0 #d8d8cc;
+  --nc-dialog-title: none;
+  --nc-dialog-title-fg: #161616;
+  --nc-dialog-input-border: 1px solid;
+  --nc-dialog-result-bg: #f1f1e8;
+  --nc-dialog-result-fg: #2c2c28;
+  --nc-dialog-result-title-fg: #1b1b1b;
+  --nc-dialog-accent: #1d3f8f;
+  --nc-dialog-backdrop: rgb(0 0 0 / 0.25);
+  --nc-inline-code-bg: transparent;
+  --nc-inline-code-fg: #1b1b1b;
+  --nc-inline-code-weight: 700;
+
+  --nc-button-bg: #1b1b1b;
+  --nc-button-fg: #fdfdf8;
+  --nc-button-hover-bg: #1d3f8f;
+  --nc-button-hover-fg: #fdfdf8;
+  --nc-button-border: 1px solid;
+  --nc-button-border-color: #1b1b1b;
+  --nc-button-shadow: none;
+  --nc-button-radius: 0;
+  --nc-card-bg: #fdfdf8;
+  --nc-card-fg: #2c2c28;
+  --nc-card-title-fg: #1b1b1b;
+
+  --nc-term-frame-bg: #f1f1e8;
+  --nc-term-frame-border: 1px solid;
+  --nc-term-frame-border-color: #d8d8cc;
+  --nc-term-frame-shadow: none;
+  --nc-term-frame-radius: 0;
+  /* xterm's defaults. */
+  --nc-term-bg: #ffffff;
+  --nc-term-fg: #000000;
+  --nc-term-cursor: #000000;
+  --nc-ansi-0: #000000;
+  --nc-ansi-1: #cd0000;
+  --nc-ansi-2: #00cd00;
+  --nc-ansi-3: #cdcd00;
+  --nc-ansi-4: #0000ee;
+  --nc-ansi-5: #cd00cd;
+  --nc-ansi-6: #00cdcd;
+  --nc-ansi-7: #e5e5e5;
+  --nc-ansi-8: #7f7f7f;
+  --nc-ansi-9: #ff0000;
+  --nc-ansi-10: #00ff00;
+  --nc-ansi-11: #ffff00;
+  --nc-ansi-12: #5c5cff;
+  --nc-ansi-13: #ff00ff;
+  --nc-ansi-14: #00ffff;
+  --nc-ansi-15: #ffffff;
+}
+
 /* Terminal: amber phosphor on near black, VT323 for headings and navigation, thin rules. */
 :root[data-style='terminal'] {
   --sl-font: 'Arimo', Helvetica, Arial, sans-serif;
@@ -703,6 +871,8 @@
   }
   & .sidebar-content [aria-current='page'] {
     border-radius: var(--nc-panel-radius);
+    font-weight: var(--nc-nav-current-weight, inherit);
+    text-decoration: var(--nc-nav-current-decoration, none);
   }
 
   /* Right panel: on this page. */
@@ -787,6 +957,9 @@
   }
   & .sl-markdown-content h2 {
     color: var(--nc-h2-fg);
+    font-size: var(--nc-h2-size, var(--sl-text-h2));
+    text-transform: var(--nc-h2-transform, none);
+    letter-spacing: var(--nc-h2-tracking, normal);
   }
   & .sl-markdown-content h2::before {
     content: var(--nc-h2-before);
@@ -800,8 +973,9 @@
   }
   & .sl-markdown-content h3 {
     color: var(--nc-h3-fg);
+    font-style: var(--nc-h3-style, normal);
   }
-  & .sl-markdown-content a:not(.sl-anchor-link) {
+  & .sl-markdown-content a:not(.sl-anchor-link, .nc-sym) {
     color: var(--nc-link-fg);
   }
 
@@ -809,6 +983,7 @@
   & .sl-markdown-content code:not(pre code) {
     background: var(--nc-inline-code-bg);
     color: var(--nc-inline-code-fg);
+    font-weight: var(--nc-inline-code-weight, inherit);
   }
   & .expressive-code {
     --ec-frm-edBg: var(--nc-code-bg);
