@@ -1,6 +1,6 @@
-// An Expressive Code plugin for C listings. Each call of a curses library function becomes a
-// link to the function's man page, with its declaration and the page's NAME summary shown on hover
-// and focus; the names and pages come from .generated/symbols.json, which scripts/sync.mjs writes.
+// An Expressive Code plugin for C listings. Each call of a curses library function, and each use
+// of a curses type, variable or constant, becomes a link to its man page, with its declaration and
+// the page's NAME summary (or a constant's meaning) shown on hover and focus; the names and pages come from .generated/symbols.json, which scripts/sync.mjs writes.
 // Each use of a name the listing defines itself (a function, macro, type, variable, parameter or
 // local, found by code-defs.mjs) becomes a link to its definition, with that line as the hint.
 import { createHash } from 'node:crypto';
@@ -12,8 +12,9 @@ const symbols = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {};
 const siteFile = new URL('./.generated/site.json', import.meta.url);
 const site = existsSync(siteFile) ? JSON.parse(readFileSync(siteFile, 'utf8')) : {};
 const LANGS = new Set(['c', 'h', 'cpp']);
-// A name followed by "(", so a variable that shares a function's name (box, move) stays plain.
+// A function's name followed by "(", so a variable that shares its name (box, move) stays plain.
 const CALL = /^\s*\(/;
+const callable = (sym) => Boolean(sym.proto?.includes('('));
 const KIND = {
   function: () => 'Function defined in this listing',
   macro: () => 'Macro defined in this listing',
@@ -97,8 +98,9 @@ export function codeLinks() {
           const d = own && !site && resolve(defs, name, lineIndex);
           if (site) hits.push({ index: m.index, name, node: target(name, site, hash) });
           else if (d) hits.push({ index: m.index, name, node: defLink(name, d, hash) });
-          // A constant (KEY_UP, A_BOLD) links as written; a function only when it is called.
-          else if (Object.hasOwn(symbols, name) && (symbols[name].constant || CALL.test(code.slice(m.index + name.length))))
+          // A type, variable or constant (WINDOW, stdscr, KEY_UP) links as written; a function or
+          // function-like macro only when it is called.
+          else if (Object.hasOwn(symbols, name) && (!callable(symbols[name]) || CALL.test(code.slice(m.index + name.length))))
             hits.push({ index: m.index, name, node: link(name, symbols[name]) });
         }
         // Right to left, so splitting a node leaves earlier offsets valid.

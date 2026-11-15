@@ -326,6 +326,18 @@ for (const p of pages) {
     symbols[n] = entry;
   }
 }
+// The form, menu and panel libraries' types (FIELD, FORM, MENU, ITEM, PANEL, FIELDTYPE) have no
+// typedef in any SYNOPSIS. Each links to the page of the function that creates one: new_field()
+// returns a FIELD *, so FIELD goes to form_field_new(3X).
+for (const p of pages) {
+  if (p.section !== '3x') continue;
+  for (const [n, proto] of prototypes(p.md)) {
+    const type = /^([A-Z][A-Z0-9_]*)\s*\*\s*new_?\w*\(/.exec(proto)?.[1];
+    if (type && !(type in symbols) && /^new/.test(n) && !n.endsWith('_sp')) {
+      symbols[type] = { href: `${base}/${route(p)}/`, page: `${p.name}(3X)`, summary: `The type that ${n}() creates` };
+    }
+  }
+}
 
 /**
  * The declarations in a page's SYNOPSIS, by name: "int wrefresh(WINDOW *win);" for wrefresh,
@@ -372,8 +384,12 @@ function prototypes(md) {
     .filter((l) => /^ {4}/.test(l))
     .map((l) => l.slice(4))
     .join('\n')
+    // An elided body stays visible as an ellipsis: "typedef /* . . . */ WINDOW;" shows as
+    // "typedef … WINDOW;", and a struct's members fold to "{ … }" so its name is the one declared.
+    .replace(/\/\*\s*(?:\.\s*)+\*\//g, '…')
     .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/^\s*#.*$/gm, '');
+    .replace(/^\s*#.*$/gm, '')
+    .replace(/\{[^{}]*\}/g, '{ … }');
   const found = new Map();
   for (const statement of code.split(';')) {
     const decl = statement.replace(/\s+/g, ' ').replace(/\(\s+/g, '(').replace(/\s+\)/g, ')').trim();
@@ -382,6 +398,52 @@ function prototypes(md) {
     if (name && !found.has(name)) found.set(name, `${decl};`);
   }
   return found;
+}
+// Each link goes to the part of its page that documents the name: a heading that names it
+// ("### initscr", "### ERR, OK"), else the section where the page first describes it.
+const byPage = new Map(pages.map((p) => [`${base}/${route(p)}/`, p]));
+for (const [n, sym] of Object.entries(symbols)) {
+  const p = byPage.get(sym.href);
+  const anchor = p && anchorFor(p.md, n);
+  if (anchor) sym.href += `#${anchor}`;
+}
+
+/**
+ * The id of the heading in a man page's Markdown that documents a name, as Starlight makes it
+ * (github-slugger: lower case, punctuation dropped, spaces to hyphens, a repeat numbered). A
+ * heading whose words include the name wins; otherwise the section where the name first appears
+ * after the SYNOPSIS. A page often describes a family by one member (wgetch for getch, mvwgetch
+ * and mvgetch), so the family's w-form counts too, after the name itself.
+ */
+function anchorFor(md, name) {
+  const w = name.replace(/^(?:mvw|mv|w)?/, 'w');
+  const names = [...new Set([name, w])].map((n) => new RegExp(`(^|[^\\w])${n}([^\\w]|$)`));
+  const seen = new Map();
+  let current = null;
+  let past = false;
+  let headed = null;
+  let found = null;
+  for (const line of md.split('\n')) {
+    // pandoc writes a man page's .SH as # and .SS as ##; the site shows them one level down.
+    const h = /^(#{1,2}) (.+)$/.exec(line);
+    if (h) {
+      const text = h[2].replace(/[*`\\]/g, '').trim();
+      let slug = text.toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/ /g, '-');
+      const count = seen.get(slug) ?? 0;
+      seen.set(slug, count + 1);
+      if (count) slug += `-${count}`;
+      current = slug;
+      if (h[1] === '#') past = !/^(NAME|SYNOPSIS)$/.test(text);
+      if (past && text.split(/[^\w]+/).includes(name)) return slug;
+      if (past && !headed && text.split(/[^\w]+/).includes(w)) headed = slug;
+      continue;
+    }
+    if (!past) continue;
+    const plainLine = line.replace(/^>\s?/, '');
+    // The first section that mentions the name or its family, whichever comes first.
+    if (!found && names.some((re) => re.test(plainLine))) found = current;
+  }
+  return headed ?? found;
 }
 writeFileSync(join(tmp, 'symbols.json'), JSON.stringify(symbols, null, 2));
 // .generated/site.json: the release the index describes, for the hints in code listings

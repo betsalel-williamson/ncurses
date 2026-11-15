@@ -172,6 +172,16 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     /* Room for the frame's shadow, which would otherwise be clipped. */
     padding: 0 0.75rem 0.75rem 0;
   }
+  /* xterm.js gives its viewport overflow-y: scroll for scrollback, and the browser drew that
+     scroll bar beside the screen until the renderer covered it: a flash on every load, and an
+     overlay bar on macOS. A curses program draws on the alternate screen, which has no
+     scrollback, and the wheel goes to the page (run-example.ts), so the bar has nothing to do. */
+  .run-example-screen .xterm-viewport {
+    scrollbar-width: none;
+  }
+  .run-example-screen .xterm-viewport::-webkit-scrollbar {
+    display: none;
+  }
   .run-example-screen {
     padding: 0.5rem;
     background: #1e1e1e;
