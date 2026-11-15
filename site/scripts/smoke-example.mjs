@@ -6,6 +6,8 @@
  * quits on F1). A program reading a line (getstr) ignores F1, so it gets Enter, then F1 again.
  * A program that turned on mouse tracking and is still running gets a left click on the word
  * Exit, found on a rough model of the 80x24 screen, so a menu that ends on a click ends.
+ * A program still running that shows a numbered menu with an Exit item ("14: Exit") gets
+ * that number and Enter, for a menu read with scanw().
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
  * Usage: node smoke-example.mjs <path to .mjs> [program arguments]
  */
@@ -106,6 +108,15 @@ if (exited === null && mouse) {
     for (let i = 0; i < 20 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
   }
 }
-const tried = `F1 three times, then Enter and F1${mouse ? ', then a click on Exit' : ''}`;
+let typed = false;
+if (exited === null) {
+  const item = screen.map((r) => /(\d+)\s*[:.)]\s*Exit\b/.exec(r.join(''))).find(Boolean);
+  if (item) {
+    typed = true;
+    pty.push(new TextEncoder().encode(`${item[1]}\r`));
+    for (let i = 0; i < 20 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+  }
+}
+const tried = `F1 three times, then Enter and F1${mouse ? ', then a click on Exit' : ''}${typed ? ', then the number of the Exit item' : ''}`;
 if (exited === null) report('no-quit', `still running after ${tried}`);
 report(exited === 0 ? 'runs' : 'crashed', exited === 0 ? '' : `exited (${exited}) after F1`);

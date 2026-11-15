@@ -33,7 +33,7 @@ for (const file of walk(docs)) {
   const rel = relative(repo, file);
   const text = readFileSync(file, 'utf8');
   let changed = false;
-  const out = text.replace(/^```c\n([\s\S]*?)^```$/gm, (block, body, offset) => {
+  const out = text.replace(/^```c([^\n]*)\n([\s\S]*?)^```$/gm, (block, meta, body, offset) => {
     let code = body;
     const startLine = text.slice(0, offset).split('\n').length + 1;
     if (/^main\s*\(/m.test(code)) {
@@ -72,7 +72,7 @@ for (const file of walk(docs)) {
     };
     lines.forEach((l, n) => (l.trim() || !program ? run.push([n, l]) : flush()));
     flush();
-    return '```c\n' + code + '```';
+    return '```c' + meta + '\n' + code + '```';
   });
   if (changed) writeFileSync(file, out);
 }
