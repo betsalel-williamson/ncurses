@@ -1048,3 +1048,90 @@
     --nc-statusbar-height: 0rem;
   }
 }
+
+/* Icons. The retro styles draw pixel icons (src/icons/pixel/, pixelarticons) in place of
+   Starlight's. Each Starlight icon keeps its box and its color; its paths are hidden and the
+   pixel icon is drawn as a mask over currentColor. Starlight still rotates the sidebar caret. */
+:root[data-style]:not([data-style='modern']) {
+  --nc-icon-search: url('../icons/pixel/search.svg');
+  --nc-icon-github: url('../icons/pixel/github.svg');
+  --nc-icon-style: url('../icons/pixel/app-windows.svg');
+  --nc-icon-dropdown: url('../icons/pixel/chevron-down.svg');
+  --nc-icon-expand: url('../icons/pixel/chevron-right.svg');
+  --nc-icon-next: url('../icons/pixel/arrow-right.svg');
+  --nc-icon-previous: url('../icons/pixel/arrow-left.svg');
+  --nc-icon-menu: url('../icons/pixel/menu.svg');
+  --nc-icon-close: url('../icons/pixel/close.svg');
+  --nc-icon-anchor: url('../icons/pixel/link.svg');
+  --nc-icon-copy: url('../icons/pixel/copy.svg');
+
+  & site-search button[data-open-modal] svg {
+    --nc-icon: var(--nc-icon-search);
+  }
+  & .social-icons a svg,
+  & header a[href^='https://github.com/'] svg {
+    --nc-icon: var(--nc-icon-github);
+  }
+  & label svg.label-icon {
+    --nc-icon: var(--nc-icon-style);
+  }
+  & label svg.caret {
+    --nc-icon: var(--nc-icon-dropdown);
+  }
+  & summary svg.caret {
+    --nc-icon: var(--nc-icon-expand);
+  }
+  & .sl-link-button svg,
+  & .pagination-links a[rel='next'] svg {
+    --nc-icon: var(--nc-icon-next);
+  }
+  & .pagination-links a[rel='prev'] svg {
+    --nc-icon: var(--nc-icon-previous);
+  }
+  & svg.open-menu {
+    --nc-icon: var(--nc-icon-menu);
+  }
+  & svg.close-menu {
+    --nc-icon: var(--nc-icon-close);
+  }
+  & .sl-anchor-icon svg {
+    --nc-icon: var(--nc-icon-anchor);
+  }
+  & :is(
+      site-search button[data-open-modal] svg,
+      .social-icons a svg,
+      header a[href^='https://github.com/'] svg,
+      label svg.label-icon,
+      label svg.caret,
+      summary svg.caret,
+      .sl-link-button svg,
+      .pagination-links a svg,
+      svg.open-menu,
+      svg.close-menu,
+      .sl-anchor-icon svg
+    ) {
+    -webkit-mask: var(--nc-icon) center / contain no-repeat;
+    mask: var(--nc-icon) center / contain no-repeat;
+    background-color: currentColor;
+    & > * {
+      visibility: hidden;
+    }
+  }
+  & .expressive-code {
+    --ec-frm-copyIcon: var(--nc-icon-copy);
+  }
+  & .expressive-code .copy button::after {
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  & #starlight__search .pagefind-ui__form::before {
+    -webkit-mask-image: var(--nc-icon-search);
+    mask-image: var(--nc-icon-search);
+  }
+  & #starlight__search .pagefind-ui__search-clear::before {
+    -webkit-mask-image: var(--nc-icon-close);
+    mask-image: var(--nc-icon-close);
+  }
+}
