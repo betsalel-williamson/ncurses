@@ -21,3 +21,17 @@
     width: min(calc(100% - var(--toc-width)), calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--toc-width)) / 2));
   }
 }
+
+/* Starlight sizes the column's contents from --sl-sidebar-width too (PageSidebar.astro), so in a
+   14rem column they ran past the window's right edge and were cut off. Size them from the
+   column's own width instead, capped at Starlight's. The column is position: fixed, so 100%
+   inside it is the window: this repeats the column's width formula above in terms of 100vw. */
+@media (min-width: 72rem) {
+  .right-sidebar-panel .sl-container {
+    max-width: none;
+    width: min(
+      calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x)),
+      calc(max(var(--toc-width), var(--toc-width) + (100vw - var(--sl-sidebar-width) - var(--sl-content-width) - var(--toc-width)) / 2) - 2 * var(--sl-sidebar-pad-x))
+    );
+  }
+}
