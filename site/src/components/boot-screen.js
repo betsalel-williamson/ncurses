@@ -107,7 +107,10 @@ function kislev25(year) {
   }
   return kislevCache.get(year);
 }
-/** The night of Hanukkah lit on this date's evening (1–8), or 0. Night 1 is the eve of 25 Kislev. */
+/**
+ * The night of Hanukkah lit on this date's evening (1–8), or 0. Night 1 is the eve of 25 Kislev.
+ * Its first nights for 2025–2036 match Hebcal's (site/tests/boot-screen.test.mjs).
+ */
 export function hanukkahNight(date) {
   const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   for (const y of [day.getFullYear(), day.getFullYear() - 1]) {
@@ -125,15 +128,26 @@ export function kwanzaaDay(date) {
 }
 const PRINCIPLES = [['Umoja', 'unity'], ['Kujichagulia', 'self-determination'], ['Ujima', 'collective work and responsibility'],
   ['Ujamaa', 'cooperative economics'], ['Nia', 'purpose'], ['Kuumba', 'creativity'], ['Imani', 'faith']];
-/** The December solstice as an instant (Meeus's mean formula, good to a few minutes). */
-function decemberSolstice(year) {
+// The December solstice as the US Naval Observatory publishes it (aa.usno.navy.mil/api/seasons),
+// to the minute. Meeus's mean formula below drifts up to 14 minutes from it in these years, enough
+// to put a reader near midnight on the wrong day, so it is used only for years past the table.
+const SOLSTICE = {
+  2025: '2025-12-21T15:03Z', 2026: '2026-12-21T20:50Z', 2027: '2027-12-22T02:42Z', 2028: '2028-12-21T08:19Z',
+  2029: '2029-12-21T14:14Z', 2030: '2030-12-21T20:09Z', 2031: '2031-12-22T01:55Z', 2032: '2032-12-21T07:56Z',
+  2033: '2033-12-21T13:46Z', 2034: '2034-12-21T19:34Z', 2035: '2035-12-22T01:31Z', 2036: '2036-12-21T07:13Z',
+};
+/** The December solstice as an instant. */
+export function decemberSolstice(year) {
+  if (SOLSTICE[year]) return new Date(SOLSTICE[year]);
   const Y = (year - 2000) / 1000;
   const jde = 2451900.05952 + 365242.74049 * Y - 0.06223 * Y ** 2 - 0.00823 * Y ** 3 + 0.00032 * Y ** 4;
   return new Date((jde - 2440587.5) * 864e5);
 }
 const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-// Lunar New Year as published (Hong Kong Observatory). The browser's Chinese calendar puts 2027 and
-// 2030 a day off, so it is used only for years past the table.
+// Lunar New Year as the Hong Kong Observatory publishes it, in its Gregorian-Lunar conversion tables
+// (www.hko.gov.hk/en/gts/time/calendar/text/files/T<year>e.txt, the "1st Lunar Month" line). The
+// browser's Chinese calendar (ICU 78) puts 2027 on 7 February and 2030 on 2 February, a day off,
+// so it is used only for years past the table.
 const LUNAR_NEW_YEAR = {
   2025: [0, 29], 2026: [1, 17], 2027: [1, 6], 2028: [0, 26], 2029: [1, 13], 2030: [1, 3],
   2031: [0, 23], 2032: [1, 11], 2033: [0, 31], 2034: [1, 19], 2035: [1, 8], 2036: [0, 28],

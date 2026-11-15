@@ -53,3 +53,28 @@ test('occasions fall on their local dates', async () => {
   assert.ok(on(2027, 2, 6).includes('lunarnewyear'));
   assert.ok(!on(2027, 2, 7).includes('lunarnewyear'));
 });
+
+// Published dates the calendar code is checked against, 2025–2036.
+// Hanukkah's first candle: Hebcal (hebcal.com/hebcal?v=1&cfg=json&year=<year>&maj=on, "Chanukah: 1 Candle").
+const HEBCAL_FIRST_CANDLE = ['2025-12-14', '2026-12-04', '2027-12-24', '2028-12-12', '2029-12-01', '2030-12-20',
+  '2031-12-09', '2032-11-27', '2033-12-16', '2034-12-06', '2035-12-25', '2036-12-13'];
+// Lunar New Year: the Hong Kong Observatory's conversion tables (hko.gov.hk/en/gts/time/calendar/text/files/T<year>e.txt).
+const HKO_LUNAR_NEW_YEAR = ['2025-01-29', '2026-02-17', '2027-02-06', '2028-01-26', '2029-02-13', '2030-02-03',
+  '2031-01-23', '2032-02-11', '2033-01-31', '2034-02-19', '2035-02-08', '2036-01-28'];
+
+test('festival dates match the published calendars, 2025–2036', async () => {
+  const { occasionsOn, hanukkahNight } = await import('../src/components/boot-screen.js');
+  const day = (iso, shift = 0) => {
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(y, m - 1, d + shift);
+  };
+  for (const iso of HEBCAL_FIRST_CANDLE) {
+    assert.equal(hanukkahNight(day(iso)), 1, iso);
+    assert.equal(hanukkahNight(day(iso, -1)), 0, iso);
+    assert.equal(hanukkahNight(day(iso, 7)), 8, iso);
+  }
+  for (const iso of HKO_LUNAR_NEW_YEAR) {
+    assert.ok(occasionsOn(day(iso)).includes('lunarnewyear'), iso);
+    for (const shift of [-1, 1]) assert.ok(!occasionsOn(day(iso, shift)).includes('lunarnewyear'), `${iso} ${shift}`);
+  }
+});
