@@ -133,6 +133,16 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
         theme: { background: '#1e1e1e', black: '#1e1e1e' },
       });
       term.open(screen);
+      // On the alternate screen xterm.js turns the wheel into arrow keys, which a curses program
+      // reads as input (getstr() echoed them as ^[[A) while the page scrolls too. Leave the wheel
+      // to the page, unless the program turned on mouse tracking and asked for wheel reports
+      // (BUTTON4/BUTTON5): then the terminal takes it and the page stays put.
+      const t = term;
+      t.attachCustomWheelEventHandler((event) => {
+        if (t.modes.mouseTrackingMode === 'none') return false;
+        event.preventDefault();
+        return true;
+      });
       // The default DOM renderer blinks a block cursor against the page background, not the
       // cell's own (white on blue in a form field showed as white on black). The WebGL renderer
       // draws the cell as ncurses left it; without WebGL the DOM renderer stays.
