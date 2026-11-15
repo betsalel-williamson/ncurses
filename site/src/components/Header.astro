@@ -64,6 +64,19 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
       padding-inline-start: calc(var(--sl-label-icon-size) + var(--sl-inline-padding) + 0.25rem);
     }
   }
+  /* On narrow screens Starlight's own header row dissolves into this one, so the search button can
+     come last, at the top right, after the GitHub link and the Style menu. */
+  @media (max-width: 49.99rem) {
+    .nc-header > :global(.header) {
+      display: contents;
+    }
+    .nc-header :global(.title-wrapper) {
+      flex: 1;
+    }
+    .nc-header > :global(.header > :nth-child(2)) {
+      order: 1;
+    }
+  }
   @media (min-width: 50rem) {
     .nc-header-mobile {
       display: none;
