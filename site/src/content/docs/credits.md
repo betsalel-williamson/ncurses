@@ -7,7 +7,7 @@ All the documentation on this site was written by the ncurses authors and contri
 
 ## Maintainer
 
-- **Thomas E. Dickey** ([ThomasDickey](https://github.com/ThomasDickey) on GitHub), maintainer since ncurses 1.9.9e. NEWS records changes since then; changes with no cited author are his.
+- **Thomas E. Dickey** ([ThomasDickey](https://github.com/ThomasDickey) on GitHub), maintainer from ncurses 1.9.9g through 4.1 and again from 5.0, as the project's README records. NEWS records every change since 1.9.9e in his hand; changes with no cited author are his. His [ncurses page](https://invisible-island.net/ncurses/#involved) dates his involvement to the 1.8.1 release, and its history of the package names the earlier authors.
 
 ## Principal authors and contributors
 
