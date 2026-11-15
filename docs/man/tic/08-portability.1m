@@ -1,0 +1,23 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 7 (2009) provides a brief description of \fBtic\fP.
+It lists one option: \fB\-c\fP.
+The omission of \fB\-v\fP is unexpected.
+The change history states that the description is derived from Tru64.
+According to its manual pages, that system also supported the \fB\-v\fP option.
+.PP
+Shortly after Issue\ 7 was released, Tru64 was discontinued.
+As of 2019, the surviving implementations of \fBtic\fP
+are SVr4 (AIX, HP-UX and Solaris),
+\fI\%ncurses\fP
+and NetBSD curses.
+The SVr4 \fBtic\fP programs all support the \fB\-v\fP option.
+The NetBSD \fBtic\fP program follows X/Open's documentation,
+omitting the \fB\-v\fP option.
+.PP
+The X/Open rationale states that some implementations of \fBtic\fP
+read terminal descriptions from the standard input if the \fIfile\fP
+parameter is omitted.
+None of these implementations do that.
+Further, it comments that some may choose to read from \*(''./terminfo.src\*(''
+but that is obsolescent behavior from SVr2,
+and is not (for example) a documented feature of SVr3.

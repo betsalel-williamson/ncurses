@@ -1,0 +1,187 @@
+.SH DESCRIPTION
+.SS "\fItset\fP \(em initialization"
+This program initializes terminals.
+.PP
+First, \fB@TSET@\fP retrieves the current terminal mode settings
+for your terminal.
+It does this by successively testing
+.bP
+the standard error,
+.bP
+standard output,
+.bP
+standard input and
+.bP
+ultimately \*(``/dev/tty\*(''
+.PP
+to obtain terminal settings.
+Having retrieved these settings, \fB@TSET@\fP remembers which
+file descriptor to use when updating settings.
+.PP
+Next, \fB@TSET@\fP determines the type of terminal that you are using.
+This determination is done as follows, using the first terminal type found.
+.PP
+1. The
+.I terminal-type
+argument specified on the command line.
+.PP
+2. The value of the \fITERM\fP environment variable.
+.PP
+3. (BSD systems only.) The terminal type associated with the standard
+error output device in the \fI/etc/ttys\fP file.
+(On System\ V hosts and systems using that convention,
+\fI\%getty\fP(8) does this job by setting
+\fITERM\fP according to the type passed to it by \fI\%/etc/inittab\fP.)
+.PP
+4. The default terminal type, \*(``unknown\*('',
+is not suitable for curses applications.
+.PP
+If the terminal type was not specified on the command-line, the \fB\-m\fP
+option mappings are then applied;
+see subsection \*(``Terminal Type Mapping\*(''.
+Then, if the terminal type begins with a question mark (\*(``?\*(''), the
+user is prompted for confirmation of the terminal type.
+An empty
+response confirms the type, or, another type can be entered to specify
+a new type.
+Once the terminal type has been determined,
+the terminal description for the terminal is retrieved.
+If no terminal description is found
+for the type, the user is prompted for another terminal type.
+.PP
+Once the terminal description is retrieved,
+.bP
+if the \*(``\fB\-w\fP\*('' option is enabled, \fB@TSET@\fP may update
+the terminal's window size.
+.IP
+If the window size cannot be obtained from the operating system,
+but the terminal description
+(or environment,
+e.g.,
+\fILINES\fP and \fI\%COLUMNS\fP variables specify this),
+use this to set the operating system's notion of the window size.
+.bP
+if the \*(``\fB\-c\fP\*('' option is enabled,
+the backspace, interrupt and line kill characters
+(among many other things) are set
+.bP
+unless the \*(``\fB\-I\fP\*('' option is enabled,
+the terminal
+and tab \fIinitialization\fP strings are sent to the standard error output,
+and,
+if the terminal device does not appear to be a pseudoterminal
+(as might be used by a terminal emulator program),
+\fB@TSET@\fP waits one second in case a hardware reset was issued.
+.bP
+Finally, if the erase, interrupt and line kill characters have changed,
+or are not set to their default values, their values are displayed to the
+standard error output.
+.SS "\fIreset\fP \(em reinitialization"
+When invoked as \fB@RESET@\fP, \fB@TSET@\fP sets the terminal
+modes to \*(``sane\*('' values:
+.bP
+sets canonical (\*(``cooked\*('') and echo modes,
+.bP
+turns off cbreak and raw modes,
+.bP
+turns on newline translation and
+.bP
+resets special input characters to their default values
+.PP
+before
+doing the terminal initialization described above.
+Also, rather than using the terminal \fIinitialization\fP strings,
+it uses the terminal \fIreset\fP strings.
+.PP
+The \fB@RESET@\fP command is useful
+after a program dies leaving a terminal in an abnormal state:
+.bP
+you may have to type
+.sp
+    \fI<LF>\fB@RESET@\fI<LF>\fR
+.sp
+(the line-feed character is normally control-J) to get the terminal
+to work, as carriage-return may no longer work in the abnormal state.
+.bP
+Also, the terminal will often not echo the command.
+.SS "Setting the Environment"
+It is often desirable to enter the terminal type and information about
+the terminal's capabilities into the shell's environment.
+This is done using the \fB\-s\fP option.
+.PP
+When the \fB\-s\fP option is specified, the commands to enter the information
+into the shell's environment are written to the standard output.
+If the \fISHELL\fP environment variable ends in \*(``csh\*('',
+the commands
+are for \fIcsh\fP(1),
+otherwise,
+they are for \fIsh\fP(1).
+The \fIcsh\fP commands set and unset the shell variable \fBnoglob\fP,
+leaving it unset.
+The following line in the \fB.login\fP
+or \fB.profile\fP files will initialize the environment correctly:
+.sp
+    eval \(ga@TSET@ \-s options ... \(ga
+.
+.SS "Terminal Type Mapping"
+When the terminal is not hardwired into the system (or the current
+system information is incorrect) the terminal type derived from the
+\fI/etc/ttys\fP file or the \fITERM\fP environment variable is often
+something generic like \fBnetwork\fP, \fBdialup\fP, or \fBunknown\fP.
+When \fB@TSET@\fP is used in a startup script it is often desirable to
+provide information about the type of terminal used on such ports.
+.PP
+The \fB\-m\fP options maps
+from some set of conditions to a terminal type, that is, to
+tell \fB@TSET@\fP
+\*(``If I'm on this port at a particular speed,
+guess that I'm on that kind of terminal\*(''.
+.PP
+The argument to the \fB\-m\fP option consists of an optional port type, an
+optional operator, an optional baud rate specification, an optional
+colon (\*(``:\*('') character and a terminal type.
+The port type is a
+string (delimited by either the operator or the colon character).
+The operator may be any combination of
+\*(``>\*('',
+\*(``<\*('',
+\*(``@\*('',
+and \*(``!\*('';
+\*(``>\*('' means greater than,
+\*(``<\*('' means less than,
+\*(``@\*('' means equal to and
+\*(``!\*('' inverts the sense of the test.
+The baud rate is specified as a number and is compared with the speed
+of the standard error output (which should be the control terminal).
+The terminal type is a string.
+.PP
+If the terminal type is not specified on the command line, the \fB\-m\fP
+mappings are applied to the terminal type.
+If the port type and baud
+rate match the mapping, the terminal type specified in the mapping
+replaces the current type.
+If more than one mapping is specified, the
+first applicable mapping is used.
+.PP
+For example, consider the following mapping: \fBdialup>9600:vt100\fP.
+The port type is dialup , the operator is >, the baud rate
+specification is 9600, and the terminal type is vt100.
+The result of
+this mapping is to specify that if the terminal type is \fBdialup\fP,
+and the baud rate is greater than 9600 baud, a terminal type of
+\fBvt100\fP will be used.
+.PP
+If no baud rate is specified, the terminal type will match any baud rate.
+If no port type is specified, the terminal type will match any port type.
+For example, \fB\-m dialup:vt100 \-m :?xterm\fP
+will cause any dialup port, regardless of baud rate, to match the terminal
+type vt100, and any non-dialup port type to match the terminal type ?xterm.
+Note, because of the leading question mark, the user will be
+queried on a default port as to whether they are actually using an xterm
+terminal.
+.PP
+No whitespace characters are permitted in the \fB\-m\fP option argument.
+Also, to avoid problems with meta-characters, it is suggested that the
+entire \fB\-m\fP option argument be placed within single quote characters,
+and that \fIcsh\fP users insert a backslash character (\*(``\e\*('')
+before any exclamation marks (\*(``!\*('').

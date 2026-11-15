@@ -1,0 +1,29 @@
+.SH DESCRIPTION
+.B @INFOCMP@
+reports a human-readable terminal type description
+from a compiled entry in the
+.I \%term\%info
+database in a variety of selectable formats,
+compares such entries to each other,
+and rewrites an entry to replace
+.RB \*(`` use \*(''
+expressions with the content of other entries by reference.
+A
+.I "\%term\%info entry"
+comprises
+a list of one or more terminal type identifiers,
+a human-readable description of the terminal type,
+and a list of terminal
+.I capabilities
+that characterize its programming interface.
+In all cases,
+the program reports
+Boolean-valued capabilities first,
+followed by numeric ones,
+and then string-valued capabilities.
+.so infocmp/03-description/01-default-options.1m
+.so infocmp/03-description/02-source-listing-options.1m
+.so infocmp/03-description/03-entry-comparison-options.1m
+.so infocmp/03-description/04-use-option.1m
+.so infocmp/03-description/05-changing-databases.1m
+.so infocmp/03-description/06-other-options.1m

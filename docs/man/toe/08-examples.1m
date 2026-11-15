@@ -1,0 +1,71 @@
+.SH EXAMPLES
+When not sorting with the \fB\-s\fP option,
+the \fB\-a\fP option reports all of the names found in all of the
+terminal database directories named in the \fI\%TERMINFO\fP and
+\fI\%TERMINFO_DIRS\fP environment variables.
+.RS 4
+.PP
+.\" toe -a | grep -E '^(xterm|vt)'
+.ft \*(CW
+.TS
+L2 Lw(32n)x.
+xterm\-color	generic color xterm
+xterm\-xfree86	xterm terminal emulator (XFree86)
+xterm\-vt220	xterm emulating vt220
+xterm\-256color	xterm with 256 colors
+xterm\-r6	xterm X11R6 version
+xterm\-r5	xterm R5 version
+xterm\-mono	monochrome xterm
+xterm	T{
+.na
+xterm terminal emulator (X Window System)
+T}
+vt220	dec vt220
+vt102	dec vt102
+vt100	dec vt100 (w/advanced video)
+vt52	dec vt52
+.T&
+L.
+\&.\|.\|.
+.TE
+.ft
+.RE
+.PP
+Use the \fB\-a\fP and \fB\-s\fP options together to show where each
+terminal description was found.
+.RS 4
+.PP
+.\" toe -as | grep -E '(^-+>|:.(xterm|vt))'
+.ft \*(CW
+.TS
+Lw(31n)x.
+\-\-> /etc/terminfo
+\-\-\-\-> /lib/terminfo
+\-\-\-\-\-\-> /usr/share/terminfo
+.TE
+.TS
+L1 L2 Lw(31n)x.
+\-\-*\-\-\-:	vt100	dec vt100 (w/advanced video)
+\-\-*\-\-\-:	vt102	dec vt102
+\-\-*\-\-\-:	vt220	dec vt220
+\-\-*\-\-\-:	vt52	dec vt52
+\-\-*\-\-\-:	xterm	T{
+.na
+xterm terminal emulator (X Window System)
+T}
+\-\-*\-\-\-:	xterm\-256color	xterm with 256 colors
+\-\-*\-\-\-:	xterm\-color	generic color xterm
+\-\-*\-\-\-:	xterm\-mono	monochrome xterm
+\-\-*\-\-\-:	xterm\-r5	xterm R5 version
+\-\-*\-\-\-:	xterm\-r6	xterm X11R6 version
+\-\-*\-\-\-:	xterm\-vt220	xterm emulating vt220
+\-\-*\-\-\-:	xterm\-xfree86	T{
+.na
+xterm terminal emulator (XFree86)
+T}
+.T&
+L.
+\&.\|.\|.
+.TE
+.ft
+.RE

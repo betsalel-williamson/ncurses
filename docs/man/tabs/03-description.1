@@ -1,0 +1,35 @@
+.SH DESCRIPTION
+The \fB@TABS@\fP program clears and sets tab-stops on the terminal.
+This uses the terminfo \fBclear_all_tabs\fP and \fBset_tab\fP capabilities.
+If either is absent, \fB@TABS@\fP is unable to clear/set tab-stops.
+The terminal should be configured to use hard tabs, e.g.,
+.PP
+.RS 4
+.EX
+stty tab0
+.EE
+.RE
+.PP
+Like \fB@CLEAR@\fP(1), \fB@TABS@\fP writes to the standard output.
+You can redirect the standard output to a file (which prevents
+\fB@TABS@\fP from actually changing the tabstops),
+and later \fBcat\fP the file to the screen, setting tabstops at that point.
+.PP
+These are hardware tabs, which cannot be queried rapidly by applications
+running in the terminal, if at all.
+Curses and other full-screen applications may use hardware tabs
+in optimizing their output to the terminal.
+If the hardware tabstops differ from the information in the terminal
+database, the result is unpredictable.
+Before running curses programs,
+you should either reset tab-stops to the standard interval
+.PP
+.RS 4
+.EX
+@TABS@ \-8
+.EE
+.RE
+.PP
+or use the \fB@RESET@\fP program,
+since the normal initialization sequences do not ensure that tab-stops
+are reset.

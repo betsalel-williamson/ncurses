@@ -1,0 +1,121 @@
+.SH EXTENSIONS
+Unlike the SVr4
+.I tic
+command,
+.I \%ncurses
+.I tic
+can compile
+.I termcap
+sources.
+In fact,
+entries in
+.I \%term\%info
+and
+.I termcap
+syntax can be mixed in a single source file.
+See \fBterminfo\fP(5) for the list of
+.I termcap
+capability names
+.I \%ncurses
+.B \%@TIC@
+treats as equivalent to
+.I \%term\%info
+names.
+.PP
+The SVr4 man pages are not clear on the resolution rules for
+.RB \*(`` use \*(''
+capabilities.
+.IR ncurses 's
+.B \%@TIC@
+finds
+.RB \*(`` use \*(''
+targets anywhere in the source file,
+or anywhere in the file tree rooted at the location in the
+.I \%TERMINFO
+environment variable
+(if
+.I \%TERMINFO
+is defined),
+or in the user's
+.I \%$HOME/.terminfo
+database
+(if it exists),
+or (finally) anywhere in the system's collection of compiled entries.
+.PP
+The error messages from
+.I \%ncurses
+.B \%@TIC@
+have the same format as GNU C error messages,
+and can be parsed by GNU Emacs's \*(``compile\*('' facility.
+.PP
+Aside from
+.B \-c
+and
+.BR \-v ","
+options are not portable.
+.bP
+Most of
+.I \%ncurses
+.BR \%@TIC@ 's
+options are not supported by SVr4
+.IR tic "."
+.PP
+.RS
+.B \-0
+.B \-1
+.B \-C
+.B \-G
+.B \-I
+.B \-N
+.B \-R
+.B \-T
+.B \-V
+.B \-a
+.B \-e
+.B \-f
+.B \-g
+.B \-o
+.B \-r
+.B \-s
+.B \-t
+.B \-x
+.RE
+.bP
+NetBSD
+.I tic
+supports a few of the
+.I \%ncurses
+.B \%@TIC@
+options.
+.PP
+.RS
+.B \-a
+.B \-o
+.B \-x
+.RE
+.bP
+NetBSD
+.I tic
+also adds
+.BR \-S ","
+a feature which does the same thing as
+.I \%ncurses
+.BR \%@INFOCMP@ 's
+.B \-e
+and
+.B \-E
+options.
+.PP
+SVr4
+.IR tic 's
+.B \-c
+mode does not report bad
+.RB \*(`` use \*(''
+links.
+.PP
+SVr4 does not compile entries to
+or read entries from your
+.I \%$HOME/.terminfo
+database unless the
+.I \%TERMINFO
+environment variable is explicitly set to it.

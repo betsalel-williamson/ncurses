@@ -1,0 +1,83 @@
+.SH DESCRIPTION
+The curses library provides applications with the ability to write the
+contents of a window to an external file using \fBscr_dump\fP or \fBputwin\fP,
+and read it back using \fBscr_restore\fP or \fBgetwin\fP.
+.PP
+The \fBputwin\fP and \fBgetwin\fP functions do the work;
+while \fBscr_dump\fP and \fBscr_restore\fP conveniently save and restore
+the whole screen, i.e., \fBstdscr\fP.
+.SS ncurses6
+A longstanding implementation of screen-dump was
+revised with ncurses6 to remedy problems with the earlier approach:
+.IP \(bu 4
+A \*(``magic number\*('' is written to the beginning of the dump file,
+allowing applications (such as \fBfile\fP(1)) to recognize curses dump files.
+.IP
+Because ncurses6 uses a new format,
+that requires a new magic number
+was unused by other applications.
+This 16-bit number was unused:
+.RS 4
+.PP
+.RS 4
+.EX
+0x8888 (octal \*(``\e210\e210\*('')
+.EE
+.RE
+.PP
+but to be more certain, this 32-bit number was chosen:
+.PP
+.RS 4
+.EX
+0x88888888 (octal \*(``\e210\e210\e210\e210\*('')
+.EE
+.RE
+.PP
+This is the pattern submitted to the maintainers of the \fBfile\fP program:
+.PP
+.RS 4
+.EX
+.nf
+#
+# ncurses5 (and before) did not use a magic number,
+# making screen dumps "data".
+#
+# ncurses6 (2015) uses this format, ignoring byte-order
+0    string    \e210\e210\e210\e210ncurses    ncurses6 screen image
+#
+.fi
+.EE
+.RE
+.RE
+.bP
+The screen dumps are written in textual form,
+so that internal data sizes are not directly related to the dump-format, and
+enabling the library to read dumps from either narrow- or wide-character-
+configurations.
+.IP
+The \fInarrow\fP library configuration holds characters and video attributes
+in a 32-bit \fBchtype\fP, while the \fIwide-character\fP library stores
+this information in the \fBcchar_t\fP structure, which is much larger than
+32-bits.
+.bP
+It is possible to read a screen dump into a terminal with a different
+screen-size,
+because the library truncates or fills the screen as necessary.
+.bP
+The ncurses6 \fBgetwin\fP reads the legacy screen dumps from ncurses5.
+.SS "ncurses5 (Legacy)"
+The screen-dump feature was added to \fI\%ncurses\fP in June 1995.
+While there were fixes and improvements in succeeding years,
+the basic scheme was unchanged:
+.bP
+The \fI\%WINDOW\fP structure was written in binary form.
+.bP
+The \fI\%WINDOW\fP structure refers to lines of data,
+which were written as an array of binary data following the \fI\%WINDOW\fP.
+.bP
+When \fBgetwin\fP restored the window,
+it would keep track of offsets into the array of line-data
+and adjust the \fI\%WINDOW\fP structure which was read back into memory.
+.PP
+This is similar to Unix System\ V,
+but does not write a \*(``magic number\*('' to identify the file format.

@@ -1,0 +1,84 @@
+.SS "Entry Comparison Options [-d] [-c] [-n]"
+Given
+.BR \-c ,
+.BR \-d ,
+or
+.BR \-n ,
+.B @INFOCMP@
+compares the
+.I \%term\%info
+description of the first specified
+.I terminal-type
+with those of each of the subsequent operands.
+If fewer
+.I terminal-types
+than required are specified,
+.B @INFOCMP@
+uses the environment variable
+.I TERM
+in their place.
+.PP
+If a capability is defined for only one terminal type,
+the value reported depends on the capability's type:
+.bP
+.B F
+for missing Boolean variables
+.bP
+.B NULL
+for missing integer or string variables
+.PP
+The
+.B \-c
+and
+.B \-d
+options report string capability values
+between \*(``\*'\*('' characters.
+Use the
+.B \-q
+option to distinguish
+.I absent
+and
+.I canceled
+capabilities;
+see \fB\%terminfo\fP(5).
+.PP
+The comparison option selects the form of report.
+.TP 5
+.B \-d
+lists each capability that
+.I differs
+between two entries.
+Each capability name is followed by \*(``:\*(''
+and comma-separated capability values,
+then a period.
+.TP
+.B \-c
+lists each capability that two entries have in
+.IR common "."
+.B @INFOCMP@
+ignores capabilities missing from either entry.
+Each capability name is followed by \*(``=\*('',
+a space,
+and the capability value,
+then a period.
+.IP
+If the
+.B \-u
+option is further specified,
+.B @INFOCMP@
+rewrites the description of the first type
+employing \*(``use=\*('' syntax
+to use the second as a building block.
+.TP
+.B \-n
+lists capabilities that are in
+.I none
+of the given entries.
+Each capability name is preceded by \*(``!\*(''
+and followed by a period.
+.IP
+Normally only conventional capabilities are shown.
+Use the
+.B \-x
+option to add BSD-compatibility capabilities
+(names prefixed with \*(``OT\*('').

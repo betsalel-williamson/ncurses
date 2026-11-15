@@ -1,0 +1,30 @@
+.SH PORTABILITY
+X/Open Curses Issue\ 7 (2009) specifies
+.IR \%infocmp "."
+It does not mention options for producing descriptions in
+.I \%term\%cap
+format.
+.PP
+SVr4
+.I \%infocmp
+does not distinguish between absent and canceled capabilities.
+It furthermore reports missing integer capabilities as
+.B \-1
+(its internal representation).
+.I \%ncurses
+shows these as \*(``NULL\*(''
+for consistency with missing string capabilities.
+.PP
+The
+.B \-r
+option
+of
+.I \%ncurses
+.I \%infocmp
+uses SVr4's notion of \*(``termcap\*('' capabilities.
+BSD
+.I curses
+had a more restricted set.
+To see only those present in 4.4BSD,
+use
+.RB \*(`` "\-r \-RBSD" \*(''.

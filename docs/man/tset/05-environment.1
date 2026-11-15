@@ -1,0 +1,16 @@
+.SH ENVIRONMENT
+The \fB@TSET@\fP command uses these environment variables:
+.TP 5
+.I SHELL
+tells \fB@TSET@\fP whether to initialize \fITERM\fP using \fIsh\fP(1) or
+\fIcsh\fP(1) syntax.
+.TP 5
+.I TERM
+Denotes your terminal type.
+Each terminal type is distinct, though many are similar.
+.TP 5
+.I TERMCAP
+may denote the location of a termcap database.
+If it is not an absolute pathname, e.g., begins with a \*(``/\*('',
+\fB@TSET@\fP removes the variable from the environment before looking
+for the terminal description.

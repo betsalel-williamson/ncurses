@@ -1,0 +1,83 @@
+.SH HISTORY
+A \fBclear\fP command using the \fItermcap\fP database and library
+appeared in 2BSD (1979).
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=2BSD/src/clear.c
+Eighth Edition Unix (1985) later included it.
+.PP
+The commercial Unix arm of AT&T adapted a different BSD program
+(\fBtset\fP) to make a new command,
+\fBtput\fP,
+and replaced the \fBclear\fP program with a shell script that called
+\*(``\fBtput clear\fP\*(''.
+.PP
+.RS 4
+.EX
+.nf
+/usr/bin/tput ${1:+\-T$1} clear 2> /dev/null
+exit
+.fi
+.EE
+.RE
+.PP
+In 1989, when Keith Bostic revised the BSD \fBtput\fP command
+to make it similar to AT&T's \fBtput\fP,
+he added a \fBclear\fP shell script as well.
+.\" https://minnie.tuhs.org/cgi-bin/utree.pl?file=Net2/usr/src/usr.bin/\
+.\"   tput/clear.sh
+.PP
+.RS 4
+.EX
+exec tput clear
+.EE
+.RE
+.PP
+The remainder of the script in each case is a copyright notice.
+.PP
+In 1995,
+\fI\%ncurses\fP's \fBclear\fP began by adapting BSD's original
+\fBclear\fP command to use \fIterminfo\fP.
+The \fBE3\fP extension came later.
+.bP
+In June 1999, \fIxterm\fP provided an extension to the standard control
+sequence for clearing the screen.
+Rather than clearing just the visible part of the screen using
+.RS 8
+.PP
+.EX
+printf \*'\e033[2J\*'
+.EE
+.RE
+.IP
+one could clear the scrollback buffer as well by using
+.RS 8
+.PP
+.EX
+printf \*'\e033[\fB3\fPJ\*'
+.EE
+.RE
+.IP
+instead.
+\*(``XTerm Control Sequences\fP\*('' documents this feature as
+originating with \fIxterm\fP.
+.bP
+A few other terminal emulators adopted it,
+such as PuTTY in 2006.
+.bP
+In April 2011, a Red Hat developer submitted a patch to the Linux
+kernel, modifying its console driver to do the same thing.
+Documentation of this change,
+appearing in Linux 3.0,
+did not mention \fIxterm\fP,
+although that program was cited in the Red Hat bug report (#683733)
+motivating the feature.
+.bP
+Subsequently,
+more terminal developers adopted the feature.
+The next relevant step was to change the \fI\%ncurses\fP \fBclear\fP
+program in 2013 to incorporate this extension.
+.bP
+In 2013,
+the \fBE3\fP capability was not exercised by
+\*(``\fB\%@TPUT@ clear\fP\*(''.
+That oversight was addressed in 2016 by reorganizing \fB\%@TPUT@\fP to
+share its logic with \fB\%@CLEAR@\fP and \fB\%@TSET@\fP.

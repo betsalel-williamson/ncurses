@@ -1,0 +1,25 @@
+.SH HISTORY
+Although System V Release 2 provided a terminfo library,
+it had no documented tool for decompiling the terminal descriptions.
+Tony Hansen (AT&T) wrote the first \fBinfocmp\fP in early 1984,
+for System V Release 3.
+.PP
+Eric Raymond used the AT&T documentation in 1995 to provide an equivalent
+\fB@INFOCMP@\fP for \fI\%ncurses\fP.
+In addition, he added a few new features such as:
+.bP
+the \fB\-e\fP option, to support \fIfallback\fP
+(compiled-in) terminal descriptions
+.bP
+the \fB\-i\fP option, to help with analysis
+.PP
+Later, Thomas Dickey added the \fB\-x\fP (user-defined capabilities)
+option, and the \fB\-E\fP option to support fallback entries with
+user-defined capabilities.
+.PP
+For a complete list, see the \fIEXTENSIONS\fP section.
+.PP
+In 2010, Roy Marples provided an \fBinfocmp\fP program for NetBSD.
+It is less capable than the SVr4 or \fI\%ncurses\fP versions
+(e.g., it lacks the sorting options documented in X/Open),
+but does include the \fB\-x\fP option adapted from \fI\%ncurses\fP.
