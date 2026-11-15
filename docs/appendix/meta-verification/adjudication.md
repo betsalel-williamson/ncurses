@@ -2,17 +2,40 @@
 
 This page records how the [first outside pass](../meta-verification.md#this-repositorys-first-outside-pass) was acted on. Every row the pass reported as misaligned with [errata.csv](../errata.csv), and every three-way split, was checked again from primary evidence, without trusting the votes. Each card in [findings/adjudication.json](findings/adjudication.json) holds the five-step check (claim as printed, what was opened, what it says, verdict and confidence, one step earlier), the Bo3 votes, which runs were right, and the likely cause when they were not.
 
-Verdicts use the errata convention: `matches` means the errata row's error claim holds.
+Each card tests one finding: the claim that a printed text is wrong. The adjudicated truth is `error_real`: true when the printed text is wrong, false when it was right, and null when the repository can't settle it. Verdicts use the prompt's convention, the same as the runs: `matches` means the printed text is right and `disagrees` means it is wrong.
+
+Two finders are scored against that truth, in the standard terms:
+
+- A finding is **valid** when it agrees with the truth: a **true positive** (an error reported that is real) or a **true negative** (no error reported, and there is none).
+- A **type I error** is a false positive: an error reported that isn't there.
+- A **type II error** is a false negative: a real error that was missed.
+- **Unsettled** means the truth is null, and **no call** means the finder gave no answer (`can't tell`, or a three-way split).
+
+An errata row that isn't `rejected` reports an error, and a `rejected` row reports none. A run's `disagrees`, `missing`, `superseded` or `impossible` reports an error, and `matches` reports none. Fourteen cards (`claim_states_error` in the JSON) state the error itself instead of quoting the printed text, so on those cards `matches` reports the error.
 
 ## Counts
 
-| Group | Row confirmed (a) | Row wrong, original right (b) | Can't tell from the repo (c) |
-| --- | ---: | ---: | ---: |
-| 97 misaligned rows | 78 | 9 | 10 |
-| 5 splits | 5 | 0 | 0 |
-| 10 aligned rows, spot-checked | 10 | 0 | 0 |
+### The errata rows
 
-The 78 confirmed rows include the three `rejected` rows (`L28`, `L29`, `L34`), whose rejection stands.
+| Group | True positive | True negative | Type I (false positive) | Type II (false negative) | Unsettled |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 97 misaligned rows | 75 | 3 | 9 | 0 | 10 |
+| 5 splits | 5 | 0 | 0 | 0 | 0 |
+| 10 aligned rows, spot-checked | 10 | 0 | 0 | 0 | 0 |
+| **All 112** | **90** | **3** | **9** | **0** | **10** |
+
+Of the 102 settled rows, 93 are valid findings and 9 are type I errors: rows that reported an error in text the original had right. The 3 true negatives are the `rejected` rows `L28`, `L29` and `L34`, whose rejection stands. No type II error turned up, but this sample was drawn from rows the pass flagged, so it can't measure how many real errors the errata missed.
+
+### The checkers' Bo3 majority
+
+| Group | True positive | True negative | Type I (false positive) | Type II (false negative) | No call | Unsettled |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 97 misaligned rows | 20 | 11 | 0 | 49 | 16 | 1 |
+| 5 splits | 0 | 0 | 0 | 0 | 5 | 0 |
+| 10 aligned rows, spot-checked | 10 | 0 | 0 | 0 | 0 | 0 |
+| **All 112** | **30** | **11** | **0** | **49** | **21** | **1** |
+
+Scored on their labels as cast, the checkers made no type I errors in these rows: each time the majority said the printed text was wrong, it was. They missed far more than they caught, with 49 type II errors against 30 true positives, so the majority found 38% of the real errors it was asked about. Of the 336 single-run votes, 125 are true positives, 30 true negatives, 4 type I errors, 124 type II errors, 46 no call and 7 unsettled. This sample leans toward disagreement by design, so these rates describe the flagged rows, not the whole pass.
 
 ## Rows changed
 
@@ -57,7 +80,7 @@ The counts below cover the 102 misaligned and split rows. Each row has one domin
 
 | Pattern | Rows |
 | --- | ---: |
-| Label inversion: the run scored the error claim (matches = the error is real), and its own quote says the print was wrong | 26 |
+| Label inversion: the run scored the error claim (matches = the error is real), and its own quote says the print was wrong. On 11 of these the card stated the error, so the label was right under standard scoring | 26 |
 | Evidence outside the allowed paths: edition history, site build, example archive, web | 20 |
 | Checked that the original prints the text, not whether the text is right | 13 |
 | A symbol or default exists, so the prose passed | 11 |
@@ -68,7 +91,7 @@ The counts below cover the 102 misaligned and split rows. Each row has one domin
 
 ## What it says about the method
 
-Of the 68 misaligned rows with a Bo3 majority of `matches`, 8 were real errata mistakes and 60 were not. A majority vote on these cards can't stand in for reading the quotes. Most misalignments came from the card format, not from the checkers' reading:
+The checkers' errors were almost all type II: a `matches` on text that was wrong. Of the 68 misaligned rows with a Bo3 majority of `matches`, 8 were the errata's own type I errors, which the checkers rightly caught. Most of the other 60 were the checkers' type II errors, though on 11 of them the card stated the error, so `matches` was the right label. A majority vote on these cards can't stand in for reading the quotes. Most misalignments came from the card format, not from the checkers' reading:
 
 - Cards mixed two kinds of claim. Some `was` fields are the printed text, and others describe an error ("frees only items 0 and 1"), so `matches` meant opposite things on different cards.
 - `man/` pages are fixed in place, so a checker reading the current file sees this edition's correction. Cards for those rows need the upstream base commit.

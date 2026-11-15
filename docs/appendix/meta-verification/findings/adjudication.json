@@ -1,17 +1,43 @@
 {
- "about": "Adjudication of the outside errata meta-verification (PR 63). verdict uses the errata convention: does the errata row's error claim hold? classification: a = errata row confirmed, b = errata row wrong (the original was right), c = can't tell from the repo. runs_right lists the runs whose substance (not label) agreed with the verdict.",
+ "about": "Adjudication of the outside errata meta-verification (PR 63). Each card tests one finding: the errata row's claim that the printed text is wrong. error_real is the adjudicated truth (true: the printed text is wrong; false: it was right; null: can't tell from the repo). errata_finding scores the errata row against it: a row that is not rejected asserts an error (positive), a rejected row asserts none (negative); true positive and true negative are valid findings, a false positive is a type I error (an error reported that isn't there), a false negative is a type II error (a real error missed), and unsettled means error_real is null. finding_valid is true for a valid finding, false for a type I or II error, null when unsettled. bo3_finding scores the Bo3 majority the same way, reading the checkers' labels as the prompt defined them: matches means the printed text is right (negative); disagrees, missing, superseded or impossible mean it is wrong (positive); can't tell or a three-way split is no call. Where claim_states_error is true, the card's claim was written as the error itself rather than the printed text, so those labels are read the other way round: matches means the error is real. verdict is the adjudicator's five-line verdict in the prompt's convention, the same as the runs': matches means the printed text is right, disagrees that it is wrong, can't tell that the repo can't settle it. classification a/b/c is kept for reference: a row stands, b row wrong, c can't tell. runs_right lists the runs whose substance (not label) agreed with the adjudication.",
  "repo_commit_checked": "4dc3cdc (PR 63 head); upstream base 7404b37 for man/ originals",
  "counts": {
-  "misaligned": {
-   "a": 78,
-   "c": 10,
-   "b": 9
+  "errata_findings": {
+   "misaligned": {
+    "true positive": 75,
+    "true negative": 3,
+    "unsettled": 10,
+    "false positive (type I)": 9
+   },
+   "split": {
+    "true positive": 5
+   },
+   "aligned-spot-check": {
+    "true positive": 10
+   }
   },
-  "split": {
-   "a": 5
+  "bo3_findings": {
+   "misaligned": {
+    "false negative (type II)": 49,
+    "no call": 16,
+    "true negative": 11,
+    "true positive": 20,
+    "unsettled": 1
+   },
+   "split": {
+    "no call": 5
+   },
+   "aligned-spot-check": {
+    "true positive": 10
+   }
   },
-  "aligned-spot-check": {
-   "a": 10
+  "single_run_votes": {
+   "true positive": 125,
+   "false negative (type II)": 124,
+   "no call": 46,
+   "true negative": 30,
+   "false positive (type I)": 4,
+   "unsettled": 7
   }
  },
  "cards": [
@@ -25,7 +51,7 @@
    "claim_as_printed": "Post the form with `form_post()`",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5528; form/form.h:429; man/form_post.3x",
    "it_says": "HOWTO: \"Post the form with form_post() and refresh the screen.\" form.h: \"extern FORM_EXPORT(int) post_form (FORM *);\" No function form_post exists; man/form_post.3x is the page that documents post_form().",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "From the HOWTO alone form_post() reads like a real name; form.h shows it is not.",
    "classification": "a",
@@ -42,7 +68,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L3",
@@ -54,7 +85,7 @@
    "claim_as_printed": "Unpost the menu with `form_unpost()`",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5538; form/form.h:430",
    "it_says": "HOWTO: \"Unpost the menu with form_unpost()\". form.h: \"unpost_form (FORM *)\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The HOWTO line alone shows 'menu' in a forms step; form.h shows the name is wrong too.",
    "classification": "a",
@@ -71,7 +102,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L4",
@@ -83,7 +119,7 @@
    "claim_as_printed": "Free the memory allocated to menu by `free_form()`",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5542 and 4325",
    "it_says": "5542: \"Free the memory allocated to menu by free_form()\"; 4325: \"Free the memory allocated to menu by free_menu()\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "free_form() exists, so the step looks right until 'menu' is read against the menus chapter it was copied from.",
    "classification": "a",
@@ -100,7 +136,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L5",
@@ -112,7 +153,7 @@
    "claim_as_printed": "Successor and predecessor hooks set with `set_fieldtype_arg()`",
    "opened": "doc/html/ncurses-intro.html:3354-3361; form/form.h:346-352",
    "it_says": "intro: \"int set_fieldtype_arg(FIELDTYPE *type, INTHOOK succ, INTHOOK pred);\" form.h: set_fieldtype_arg takes make_arg, copy_arg, free_arg; set_fieldtype_choice takes next_choice, prev_choice.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "With only the intro, the second set_fieldtype_arg block looks deliberate.",
    "classification": "a",
@@ -129,7 +170,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L6",
@@ -141,7 +187,7 @@
    "claim_as_printed": "`new_fieldtype()` prototype without its closing semicolon",
    "opened": "doc/html/ncurses-intro.html:3257-3261",
    "it_says": "\"FIELDTYPE *new_fieldtype(HOOK f_validate, /* field validator */ HOOK c_validate) /* character validator */\" with no semicolon; the next prototype has one.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "In rendered HTML the trailing comment hides the missing semicolon.",
    "classification": "a",
@@ -158,7 +204,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L7",
@@ -170,7 +221,7 @@
    "claim_as_printed": "The library routines will that call them will return error indication",
    "opened": "doc/html/ncurses-intro.html:3342",
    "it_says": "\"routines will that call them will return error indication when this happens\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None; the sentence is ungrammatical as printed.",
    "classification": "a",
@@ -187,7 +238,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L8",
@@ -199,7 +255,7 @@
    "claim_as_printed": "should never see a NULL file pointer",
    "opened": "doc/html/ncurses-intro.html:3291, 3336, 3344",
    "it_says": "3291: \"this pile pointer argument will be NULL\"; 3344: \"should never see a NULL file pointer\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "Read alone, 'file pointer' could be literal; the section only ever describes the pile pointer.",
    "classification": "a",
@@ -216,7 +272,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L9",
@@ -228,7 +289,7 @@
    "claim_as_printed": "Example comment: This filed is like a password field",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:6074",
    "it_says": "\"/* This filed is like a password field */\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None; 'filed' is a typo.",
    "classification": "a",
@@ -245,7 +306,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L10",
@@ -257,7 +323,7 @@
    "claim_as_printed": "Merging the guides split the `field_pad()` comment out of its code block; the stray fence turned the next paragraph and the Form Attributes heading into code",
    "opened": "git show f52aae7^:docs/client-library/forms/fields.md lines 127-131",
    "it_says": "A lone \"/* returns present pad character */\" followed by an unmatched ``` fence.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Upstream text is fine, which is all the runs could open.",
    "classification": "a",
@@ -270,7 +336,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Edition row."
+   "note": "Edition row.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L11",
@@ -282,7 +353,7 @@
    "claim_as_printed": "Backspace at the start of a field moved to the previous field but left the cursor at its start",
    "opened": "git show 3a0e739 (fields.md); form/frm_driver.c:2586-2591, 1563",
    "it_says": "frm_driver.c: at the first position with O_BS_OVERLOAD, \"res = Inter_Field_Navigation(FN_Previous_Field, form);\" and _nc_Set_Current_Field sets \"form->currow = form->curcol = ... = 0\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The library behaviour alone does not show the example lacked REQ_END_LINE; the diff does.",
    "classification": "a",
@@ -298,7 +369,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Edition row."
+   "note": "Edition row.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L20",
@@ -310,7 +386,7 @@
    "claim_as_printed": "see `infocmp(1)` (line 579)",
    "opened": "git show 7404b37:man/curs_getch.3x at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"see \\fB\\%infocmp\\fP(1).\" (line 579). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -327,7 +403,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L21",
@@ -339,7 +420,7 @@
    "claim_as_printed": "`tic(1)` (line 207)",
    "opened": "git show 7404b37:man/curs_trace.3x at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"such as \\fBtic\\fP(1)\" (line 207). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -356,7 +437,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L22",
@@ -368,7 +454,7 @@
    "claim_as_printed": "`@TIC@(1)` (line 77)",
    "opened": "git show 7404b37:man/curs_extend.3x at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"\\fB\\%@TIC@\\fP(1)'s\" (line 77). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -385,7 +471,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L23",
@@ -397,7 +488,7 @@
    "claim_as_printed": "`@TIC@(1)` (line 669)",
    "opened": "git show 7404b37:man/curs_inopts.3x at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"option of \\fB\\%@TIC@\\fP(1),\" (line 669). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -414,7 +505,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L24",
@@ -426,7 +522,7 @@
    "claim_as_printed": "`@TIC@(1)` (line 63)",
    "opened": "git show 7404b37:man/term.5 at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"\\fB\\%@TIC@\\fP(1) compiles a\" (line 63). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -443,7 +539,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L25",
@@ -455,7 +556,7 @@
    "claim_as_printed": "`@TIC@(1)` and `@INFOCMP@(1)` (line 142)",
    "opened": "git show 7404b37:man/term_variables.3x at the line given; man/tic.1m:31 and man/infocmp.1m:32 (.TH ... 1M); git grep at 7404b37 (21 references use (1M))",
    "it_says": "At the upstream base: \"The \\fB@TIC@\\fP(1) and \\fB@INFOCMP@\\fP(1) programs\" (line 142). .TH @TIC@ 1M and .TH @INFOCMP@ 1M.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current man/ file already reads (1M), so reading it alone hides the error.",
    "classification": "a",
@@ -472,7 +573,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L26",
@@ -484,7 +590,7 @@
    "claim_as_printed": "The background character's set of attributes becomes a property of the character cell and move with it (line 101)",
    "opened": "git show 7404b37:man/curs_bkgd.3x lines 101-104",
    "it_says": "\"The background character's set of attributes becomes a property of the character cell and move with it\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current file reads 'moves'.",
    "classification": "a",
@@ -501,7 +607,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L27",
@@ -513,7 +624,7 @@
    "claim_as_printed": "The background character's set of attributes becomes a property of the character cell and move with it (line 92)",
    "opened": "git show 7404b37:man/curs_bkgrnd.3x lines 92-95",
    "it_says": "Same sentence: \"... becomes a property of the character cell and move with it\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "As L26.",
    "classification": "a",
@@ -530,7 +641,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L28",
@@ -542,7 +658,7 @@
    "claim_as_printed": "The same 51-word paragraph is in curs_bkgd.3x:101 and curs_bkgrnd.3x:92, so one copy is an error",
    "opened": "git show 7404b37:man/curs_bkgd.3x lines 96-110 and man/curs_bkgrnd.3x lines 87-101",
    "it_says": "Both pages carry the same paragraph, one for the chtype functions and one for the cchar_t functions.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "Counting shared words alone suggests one copy is surplus.",
    "classification": "a",
@@ -558,7 +674,12 @@
     3
    ],
    "checker_error": "the study expected 'matches' for a rejected row, but the card's claim is the error claim, so 'disagrees' supports the rejection",
-   "note": "Rejection stands."
+   "note": "Rejection stands.",
+   "claim_states_error": true,
+   "error_real": false,
+   "errata_finding": "true negative",
+   "finding_valid": true,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L29",
@@ -570,7 +691,7 @@
    "claim_as_printed": "The same 50-word paragraph is in curs_border.3x:228 and curs_clear.3x:117, so one copy is an error",
    "opened": "git show 7404b37:man/curs_border.3x lines 229-244 and man/curs_clear.3x lines 118-133",
    "it_says": "Both PORTABILITY sections quote SVr4 \"or a non-negative integer if immedok() is set\" about different functions.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "As L28.",
    "classification": "a",
@@ -586,7 +707,12 @@
     3
    ],
    "checker_error": "the study expected 'matches' for a rejected row, but the card's claim is the error claim, so 'disagrees' supports the rejection",
-   "note": "Rejection stands."
+   "note": "Rejection stands.",
+   "claim_states_error": true,
+   "error_real": false,
+   "errata_finding": "true negative",
+   "finding_valid": true,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L34",
@@ -598,7 +724,7 @@
    "claim_as_printed": "The same 25-word paragraph is in curs_bkgd.3x and curs_bkgrnd.3x (If the terminal does not support color …), so one copy is an error",
    "opened": "git show 7404b37:man/curs_bkgd.3x line 171 and man/curs_bkgrnd.3x line 160",
    "it_says": "Both: \"If the terminal does not support color, or if color has not been initialized with start_color(3X), ncurses ignores the new background character's color pair selection.\"",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "As L28.",
    "classification": "a",
@@ -614,7 +740,12 @@
     3
    ],
    "checker_error": "the study expected 'matches' for a rejected row, but the card's claim is the error claim, so 'disagrees' supports the rejection",
-   "note": "Rejection stands."
+   "note": "Rejection stands.",
+   "claim_states_error": true,
+   "error_real": false,
+   "errata_finding": "true negative",
+   "finding_valid": true,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L35",
@@ -626,7 +757,7 @@
    "claim_as_printed": "The site's man pages showed literal `**` around page references and after italic words, e.g. `**curs_getch(3X),** **curs_variables(3X),** **wresize(3X)**`",
    "opened": "man/resizeterm.3x:200-203; pandoc 3.1.3 -f man -t gfm, run here",
    "it_says": "pandoc output: \"**curs_getch(3X),** **curs_variables(3X),** **wresize(3X)**\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The troff source has no asterisks.",
    "classification": "a",
@@ -639,7 +770,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Reproduced."
+   "note": "Reproduced.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L36",
@@ -651,7 +787,7 @@
    "claim_as_printed": "The site showed the page as troff source because pandoc stopped at the table format `Lf(BI)`",
    "opened": "man/infocmp.1m:205-208; pandoc 3.1.3 -f man, run here",
    "it_says": "pandoc: \"Error at \\\"man/infocmp.1m\\\" (line 207, column 3): unexpected '('\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The format line is valid tbl.",
    "classification": "a",
@@ -664,7 +800,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Reproduced."
+   "note": "Reproduced.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L37",
@@ -676,7 +817,7 @@
    "claim_as_printed": "The site showed the page as troff source because pandoc stopped at a table cell continued with a trailing backslash, and the backticks in troff's quote strings closed the fallback's code fence early",
    "opened": "man/curs_terminfo.3x:1083-1084; pandoc 3.1.3 -f man, run here",
    "it_says": "pandoc: \"Error at \\\"man/curs_terminfo.3x\\\" (line 1083, column 65): unexpected end of input\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The continued line is valid troff.",
    "classification": "a",
@@ -689,7 +830,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Reproduced."
+   "note": "Reproduced.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L38",
@@ -701,7 +847,7 @@
    "claim_as_printed": "In the runnable examples the cursor blinked white and black inside a blue form field",
    "opened": "@xterm/xterm 5.5.0 lib/xterm.js (DOM renderer cursor keyframes); site/src/components/run-example.ts:183-189",
    "it_says": "xterm.js: \"@keyframes ... { 0% { background-color: ${e.cursor.css}; ... } 50% { background-color: inherit; ...}\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The keyframes show the cell's own colour is replaced by the inherited one; the pixel samples were not repeated here.",
    "classification": "a",
@@ -714,7 +860,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Edition row."
+   "note": "Edition row.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L41",
@@ -726,7 +877,7 @@
    "claim_as_printed": "Post the menu with `menu_post()`; Unpost the menu with `menu_unpost()`",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:4311, 4321; menu/menu.h:239, 263",
    "it_says": "HOWTO: \"Post the menu with menu_post()\", \"Unpost the menu with menu_unpost()\". menu.h: post_menu(MENU *), unpost_menu(MENU *).",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Without menu.h the names look plausible.",
    "classification": "a",
@@ -743,7 +894,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L42",
@@ -755,7 +911,7 @@
    "claim_as_printed": "The menu can then by posted",
    "opened": "doc/html/ncurses-intro.html:1579",
    "it_says": "\"The menu can then by <dfn>posted</dfn>\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None; the typo is in the sentence.",
    "classification": "a",
@@ -772,7 +928,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L43",
@@ -784,7 +945,7 @@
    "claim_as_printed": "When you call `unpost_menu()`, you erase the subwindow, However, neither of these…",
    "opened": "doc/html/ncurses-intro.html:1711",
    "it_says": "\"erase the subwindow, However, neither of these\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None; the comma splice is in the sentence.",
    "classification": "a",
@@ -801,7 +962,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L44",
@@ -813,7 +979,7 @@
    "claim_as_printed": "see the `menu_attribs(3x)` manual page. (no closing parenthesis)",
    "opened": "doc/html/ncurses-intro.html:1688-1691; ls man/ | grep menu_attr",
    "it_says": "\"(see the <code>menu_attribs(3x)</code> manual page.</p>\" with no closing parenthesis; man/ has menu_attributes.3x only.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The HTML alone shows the missing parenthesis but not the wrong page name.",
    "classification": "a",
@@ -830,7 +996,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L46",
@@ -842,7 +1013,7 @@
    "claim_as_printed": "menu_driver() accepts an ascii character (HOWTO); it accumulates printable ASCII characters (Writing Programs)",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:4439; doc/html/ncurses-intro.html:1746; menu/m_driver.c:446; menu/mf_common.h:71; man/menu_driver.3x:55,114",
    "it_says": "m_driver.c: \"if (!(c & ~((int)MAX_REGULAR_CHARACTER)) && isprint(UChar(c)))\", MAX_REGULAR_CHARACTER is 0xff; menu_driver.3x: \"The input is a printable character.\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The two guides agree with each other on ASCII; only the driver shows any locale-printable byte is accepted.",
    "classification": "a",
@@ -857,7 +1028,12 @@
     2
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": "Runs 1 and 3 found the guides consistent with each other and stopped there."
+   "note": "Runs 1 and 3 found the guides consistent with each other and stopped there.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L48",
@@ -869,7 +1045,7 @@
    "claim_as_printed": "The Menu Basics listing frees only items 0 and 1 of five, and calls free_menu() on a menu that is still posted",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:4372-4379, 4406, 4418-4422; menu/m_new.c:131-132; menu/m_item_new.c:173-174",
    "it_says": "Five choices; post_menu(my_menu); then \"free_item(my_items[0]); free_item(my_items[1]); free_menu(my_menu);\". m_new.c: \"if (menu->status & _POSTED) RETURN(E_POSTED);\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The listing alone shows the partial cleanup; m_new.c shows free_menu() fails on a posted menu.",
    "classification": "a",
@@ -885,8 +1061,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error, so 'matches' meant the error is real."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error, so 'matches' meant the error is real.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L49",
@@ -898,7 +1079,7 @@
    "claim_as_printed": "The Multi Valued Menus listing frees only items 0 and 1 of eight, and calls free_menu() on a menu that is still posted",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5105-5122, 5157, 5190-5194; menu/m_new.c:131-132",
    "it_says": "Eight choices; post_menu then \"free_item(my_items[0]); free_item(my_items[1]); free_menu(my_menu);\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Same as L48.",
    "classification": "a",
@@ -914,8 +1095,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error, so 'matches' meant the error is real."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error, so 'matches' meant the error is real.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L50",
@@ -927,7 +1113,7 @@
    "claim_as_printed": "The Menu Options listing frees the items before the menu",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5328-5333; menu/m_item_new.c:173-174; menu/m_new.c:134-135",
    "it_says": "\"unpost_menu(my_menu); for (...) free_item(my_items[i]); free_menu(my_menu);\" m_item_new.c: \"if (item->imenu) RETURN(E_CONNECTED);\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The order looks harmless until free_item() is read.",
    "classification": "a",
@@ -943,8 +1129,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L51",
@@ -956,7 +1147,7 @@
    "claim_as_printed": "The Menu User Pointer listing frees the items before the menu",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5454-5459; menu/m_item_new.c:173-174",
    "it_says": "Same loop order as L50: free_item() on each item, then free_menu().",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "As L50.",
    "classification": "a",
@@ -972,8 +1163,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L52",
@@ -985,7 +1181,7 @@
    "claim_as_printed": "The Menu User Pointer listing stores the address of `MY_DATA data`, a variable local to the loop body, as each item's user pointer and calls through it after the loop",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5413-5421",
    "it_says": "\"for (i = 0; i < n_choices; ++i) { MY_DATA data = {func}; ... set_item_userptr(my_items[i], (void *) &data);\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Running it shows nothing wrong; only the block scope of data shows the pointer dangles.",
    "classification": "a",
@@ -1001,8 +1197,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L53",
@@ -1014,7 +1215,7 @@
    "claim_as_printed": "The list of menu options ends at O_NONCYCLIC",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5070-5078; menu/menu.h:71-72; man/menu_opts.3x:87-95",
    "it_says": "HOWTO list ends \"O_NONCYCLIC Don't wrap around\"; menu.h: \"#define O_MOUSE_MENU (0x40)\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The HOWTO list quotes the man page of its day and looks complete.",
    "classification": "a",
@@ -1031,7 +1232,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Run 2 used the study's label; 1 and 3 scored the card as an error claim."
+   "note": "Run 2 used the study's label; 1 and 3 scored the card as an error claim.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L54",
@@ -1043,7 +1249,7 @@
    "claim_as_printed": "The mouse requests are quoted from an older menu_driver(3X), with its line breaks and soft hyphens (decora­tion), and without the double-click on an item",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:4572-4588; man/menu_driver.3x:123-161",
    "it_says": "HOWTO quote has \"decora&shy; tion\" and ends at positioning the cursor; menu_driver.3x:148: \"If you double-click an item a REQ_TOGGLE_ITEM is generated\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The quoted text is accurate as far as it goes.",
    "classification": "a",
@@ -1059,8 +1265,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L55",
@@ -1072,7 +1283,7 @@
    "claim_as_printed": "A link to text mode dos games at http://www.jersey.net/~debinjoe/games/",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:5228; http://www.jersey.net/~debinjoe/games/ (fetched 2026-11-15)",
    "it_says": "HOWTO links \"dos games\" to http://www.jersey.net/~debinjoe/games/. The page today is a parking redirect: <script>window.location.href=\"/lander\"</script>.",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "In the repo the link is only printed; whether it is dead needs the web.",
    "classification": "c",
@@ -1088,7 +1299,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Repo confirms only that the link is printed. A fetch today agrees with the row; left as it is."
+   "note": "Repo confirms only that the link is printed. A fetch today agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "unsettled"
   },
   {
    "id": "L69",
@@ -1100,7 +1316,7 @@
    "claim_as_printed": "Note that `wgetch` automatically calls `wrefresh`",
    "opened": "doc/html/ncurses-intro.html:1512; ncurses/base/lib_getch.c:382-385; man/curs_getch.3x:161-169",
    "it_says": "intro: \"wgetch automatically calls wrefresh\". lib_getch.c: \"if ((is_wintouched(win) || (win->_flags & _HASMOVED)) && !IS_PAD(win)) { wrefresh(win); }\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The advice that follows still holds; only 'automatically' is too strong.",
    "classification": "a",
@@ -1115,7 +1331,12 @@
     2
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": "An overstatement rather than a falsehood; kept as the row records it."
+   "note": "An overstatement rather than a falsehood; kept as the row records it.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L72",
@@ -1127,7 +1348,7 @@
    "claim_as_printed": "The program reads a panel's position and size from its PANEL_DATA when it comes to the top, but never writes them back, so a moved panel jumps back to where it started the next time it is moved",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:3851, 3905-4010",
    "it_says": "set_user_ptrs: \"ptrs[i].x = x;\"; on Tab: \"newx = top->x;\"; the move cases only change newx/newy; nothing writes top->x.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Reading the Tab case alone shows the reload but not the missing write-back.",
    "classification": "a",
@@ -1143,8 +1364,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L73",
@@ -1156,7 +1382,7 @@
    "claim_as_printed": "\"Show or Hide a window with 'a'(first window)  'b'(Second Window)  'c'(Third Window)\", 83 characters on an 80-column screen",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:4197",
    "it_says": "The mvprintw string is 83 characters long.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Without counting, the line looks fine.",
    "classification": "a",
@@ -1172,8 +1398,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L84",
@@ -1185,7 +1416,7 @@
    "claim_as_printed": "In linking with `curses` you need to have `-lncurses` ... There is no need for any other libraries",
    "opened": "doc/html/ncurses-intro.html:488-493; INSTALL:1311-1315; man/ncurses.3x:1880-1901",
    "it_says": "intro: \"There is no need for any other libraries.\" INSTALL: --with-termlib splits the library into libncurses and libtinfo.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "True for the default shared build; not for every configuration INSTALL supports.",
    "classification": "a",
@@ -1200,7 +1431,12 @@
     2
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": "Run 3 read the sentence as limited to the basic case; defensible, so medium."
+   "note": "Run 3 read the sentence as limited to the basic case; defensible, so medium.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L87",
@@ -1212,7 +1448,7 @@
    "claim_as_printed": "`OK`: error flag returned by routines when things go right",
    "opened": "doc/html/ncurses-intro.html:620; include/curses.h.in:426-429",
    "it_says": "intro: OK: \"error flag returned by routines when things go right\". curses.h.in: \"#define OK (0)\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The definition list pairs OK with ERR, which explains the copied wording.",
    "classification": "a",
@@ -1227,7 +1463,12 @@
     2
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L97",
@@ -1239,7 +1480,7 @@
    "claim_as_printed": "printw(string); mvprintw(y, x, string); ...",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1520-1521; man/curs_printw.3x:59",
    "it_says": "HOWTO: \"printw(string);\" man: \"int printw(const char *fmt, ...);\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "As shorthand the listing reads fine; the first argument is a format, and a string with % in it misprints.",
    "classification": "a",
@@ -1254,7 +1495,12 @@
     2
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L103",
@@ -1266,7 +1512,7 @@
    "claim_as_printed": "If n is negative, then the entire string will be added",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1766-1773; ncurses/base/lib_addstr.c:51-79; man/curs_addstr.3x:84-90",
    "it_says": "HOWTO: \"If n is negative, then the entire string will be added.\" lib_addstr.c waddnstr: \"bool explicit = (n >= 0); ... if (!explicit) n = INT_MAX;\" man: \"If n is \\-1, waddnstr writes the entire string.\"",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "With only the man page's -1, the HOWTO looked overbroad; the source adds the whole string for any negative n.",
    "classification": "b",
@@ -1283,7 +1529,12 @@
     3
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
-   "note": "All three runs read the source; run 3 found the same facts but labelled them disagrees. Original right for ncurses. Row moves to rejected. The shard keeps its wording, which states both facts, so no revert."
+   "note": "All three runs read the source; run 3 found the same facts but labelled them disagrees. Original right for ncurses. Row moves to rejected. The shard keeps its wording, which states both facts, so no revert.",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L104",
@@ -1295,7 +1546,7 @@
    "claim_as_printed": "It gives the number of columns and the number of rows in a given window",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1725, 1743-1750; man/curs_getyx.3x",
    "it_says": "HOWTO: getmaxyx() \"gives the number of columns and the number of rows in a given window\"; the example: \"getmaxyx(stdscr, row, col); /* get the number of rows and columns */\".",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "medium",
    "one_step_earlier": "Next to the macro's (y, x) order the sentence looks swapped; it names both values and says nothing about argument order.",
    "classification": "b",
@@ -1312,7 +1563,12 @@
     3
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
-   "note": "Judgement call: the sentence is true, the edition's reordering is a style change. Row moves to rejected; shard unchanged."
+   "note": "Judgement call: the sentence is true, the edition's reordering is a style change. Row moves to rejected; shard unchanged.",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L114",
@@ -1324,7 +1580,7 @@
    "claim_as_printed": "char str[80]; ... getstr(str);",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1920-1927; include/curses.h.in:1222, 1328; man/curs_getstr.3x:150-160",
    "it_says": "\"char str[80]; ... getstr(str);\" curses.h: \"#define wgetstr(w, s) wgetnstr(w, s, -1)\"; man: \"If n is negative, wgetn_wstr reads up to LINE_MAX characters\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The call matches getstr's prototype, which is what the runs checked.",
    "classification": "a",
@@ -1339,7 +1595,12 @@
     3
    ],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "Runs 1 and 2 confirmed the prototype, not the buffer size."
+   "note": "Runs 1 and 2 confirmed the prototype, not the buffer size.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L136",
@@ -1351,7 +1612,7 @@
    "claim_as_printed": "if (event.bstate & BUTTON1_PRESSED) with mousemask(ALL_MOUSE_EVENTS, NULL)",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:3096, 3103; ncurses/base/lib_mouse.c:1619-1657; man/curs_mouse.3x:402-428",
    "it_says": "lib_mouse.c merges a press/release pair into a click when clicks are in the mask: \"next->bstate |= MASK_CLICK(b); ... Invalidate(ep);\" so BUTTON1_PRESSED is dropped.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "ALL_MOUSE_EVENTS includes BUTTON1_PRESSED, so the test looks valid until the merge pass is read.",
    "classification": "a",
@@ -1367,7 +1628,12 @@
     3
    ],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "Run 2 checked that the mask contains the bit."
+   "note": "Run 2 checked that the mask contains the bit.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L148",
@@ -1379,7 +1645,7 @@
    "claim_as_printed": "copywin() can be used to copy a window completely onto another window",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:3211-3216; man/curs_overlay.3x:72-80",
    "it_says": "HOWTO: \"copywin() can be used to copy a window completely onto another window. ... according to the rectangle specified, it copies the rectangular region\". man: a rectangle in the destination and the source origin.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "medium",
    "one_step_earlier": "Read alone, the first sentence sounds like a whole-window copy; 'can be used to' is true, since the rectangle may cover the window, and the next sentence gives the rectangle.",
    "classification": "b",
@@ -1396,7 +1662,12 @@
     3
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
-   "note": "Judgement call. Row moves to rejected; the shard's fuller wording stays."
+   "note": "Judgement call. Row moves to rejected; the shard's fuller wording stays.",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L156",
@@ -1408,7 +1679,7 @@
    "claim_as_printed": "By calling setupterm() for each terminal, and saving and restoring cur_term, a program can use two or more terminals",
    "opened": "doc/html/ncurses-intro.html:1080-1087; man/term_variables.3x:126-140; man/curs_terminfo.3x:342-354; include/MKterm.h.awk.in:270-279",
    "it_says": "intro: \"By calling setupterm() for each terminal, and saving and restoring cur_term, it is possible for a program to use two or more terminals at once.\" term_variables.3x: \"It is possible to save a value of cur_term for subsequent use\"; set_curterm \"returns the old value of cur_term\".",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "medium",
    "one_step_earlier": "Read as assignment to cur_term, the advice fails in a reentrant build; read as save and restore through set_curterm(), it is what the manual describes.",
    "classification": "b",
@@ -1425,7 +1696,12 @@
     3
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
-   "note": "The original does not say to assign cur_term. Row moves to rejected; the shard's set_curterm() wording is accurate and stays."
+   "note": "The original does not say to assign cur_term. Row moves to rejected; the shard's set_curterm() wording is accurate and stays.",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L157",
@@ -1437,7 +1713,7 @@
    "claim_as_printed": "trace() sets the trace level; _tracef() is available only if you link with -lncurses_g",
    "opened": "doc/html/ncurses-intro.html:1101-1120; man/curs_trace.3x:85-93, 130-138, 300; INSTALL:1358",
    "it_says": "curs_trace.3x: \"/* deprecated */ void trace(...)\"; \"The original trace routine was deprecated because it often conflicted with application names.\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "trace() still links and _tracef() is still normally in the debug library, so the text works; it names a deprecated function.",
    "classification": "a",
@@ -1450,7 +1726,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "Kept: the same standard as the other superseded rows (L169, L247). The runs were right that it still works."
+   "note": "Kept: the same standard as the other superseded rows (L169, L247). The runs were right that it still works.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L162",
@@ -1462,7 +1743,7 @@
    "claim_as_printed": "Setupterm() also stores",
    "opened": "doc/html/ncurses-intro.html:1085",
    "it_says": "\"<code>Setupterm()</code> also stores the names section\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "At a sentence start the capital looks like style; no function Setupterm exists.",
    "classification": "a",
@@ -1475,7 +1756,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "Runs confirmed the ttytype fact and treated the capital as style."
+   "note": "Runs confirmed the ttytype fact and treated the capital as style.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L169",
@@ -1487,7 +1773,7 @@
    "claim_as_printed": "Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8. While most terminals which provide color allow only 8 colors, about a quarter (including XFree86 xterm) support 16 colors.",
    "opened": "doc/html/ncurses-intro.html:1305-1308; man/curs_color.3x:63,81,92,192",
    "it_says": "\"Ncurses supports up 16 colors, unlike SVr4 curses which defines only 8.\" curs_color.3x: COLORS from the terminal; init_extended_color().",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "True when written; 'up 16' also lacks 'to'.",
    "classification": "a",
@@ -1504,7 +1790,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "'superseded' and 'disagrees' both say the print is wrong today."
+   "note": "'superseded' and 'disagrees' both say the print is wrong today.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L170",
@@ -1516,7 +1807,7 @@
    "claim_as_printed": "the attribute of erased blanks is normal unless and until it is modified by the functions bkgdset() or wbkgdset()",
    "opened": "doc/html/ncurses-intro.html:1387-1389; man/curs_bkgd.3x:50-52",
    "it_says": "\"the attribute of erased blanks is normal unless and until it is modified by the functions bkgdset() or wbkgdset()\"; bkgd() and wbkgd() set the background too.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The runs read the newer-versions note as current; it omits bkgd() and wbkgd().",
    "classification": "a",
@@ -1529,7 +1820,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L171",
@@ -1541,7 +1837,7 @@
    "claim_as_printed": "every macro entry point have a corresponding function which may be linked",
    "opened": "doc/html/ncurses-intro.html:1404-1408; man/curs_getyx.3x:104-116",
    "it_says": "intro: \"every macro entry point have a corresponding function which may be linked\"; curs_getyx: \"All of these interfaces are implemented as macros.\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "As a summary of the XSI rule it reads fine; getyx() and friends are macro entry points with no function.",
    "classification": "a",
@@ -1554,7 +1850,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": "Overbroad rather than false; medium."
+   "note": "Overbroad rather than false; medium.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L174",
@@ -1566,7 +1867,7 @@
    "claim_as_printed": "mvprintw(24, 0, \"Press F1 to Exit\")",
    "opened": "ncurses_programs.tar.gz JustForFun/hanoi.c:107 (copy in the session scratchpad; the URL now answers 403); not in the repo",
    "it_says": "\"mvprintw(24, 0, \\\"Press F1 to Exit\\\");\"",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "Rows count from 0, so row 24 is off a 24-line screen.",
    "classification": "c",
@@ -1581,7 +1882,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "The example archive is not in the repo. The copy read here agrees with the row; left as it is."
+   "note": "The example archive is not in the repo. The copy read here agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L175",
@@ -1593,7 +1899,7 @@
    "claim_as_printed": "mvprintw(24, 0, ...) for \"Press F1 to Exit\" and \"You Win !!!\"",
    "opened": "ncurses_programs.tar.gz JustForFun/shuffle.c:165, 223 (scratchpad copy); not in the repo",
    "it_says": "\"mvprintw(24, 0, \\\"You Win !!!\\\\n\\\");\"",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "As L174.",
    "classification": "c",
@@ -1608,7 +1914,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "As L174."
+   "note": "As L174.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L176",
@@ -1620,7 +1931,7 @@
    "claim_as_printed": "#define STATUSY 25",
    "opened": "ncurses_programs.tar.gz JustForFun/tt.c:16, 94, 146 (scratchpad copy); not in the repo",
    "it_says": "\"#define STATUSY 25\"",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "Row 25 is two rows below a 24-line screen.",
    "classification": "c",
@@ -1635,7 +1946,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "As L174."
+   "note": "As L174.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L177",
@@ -1647,7 +1963,7 @@
    "claim_as_printed": "#define KEY_F1 265",
    "opened": "include/Caps:439; include/MKkey_defs.sh:151-158; ncurses_programs.tar.gz JustForFun/tt.c:18 (scratchpad copy)",
    "it_says": "Caps: \"key_f0 kf0 str k0 KEY_F(0) 0410\"; MKkey_defs.sh: \"KEY_F(n) (KEY_F0+(n))\". 0410 octal is 264, so KEY_F(1) is 265.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "A hard-coded key value looks wrong until it is computed; 265 is ncurses' own KEY_F(1).",
    "classification": "b",
@@ -1662,7 +1978,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Original right in value; replacing it with KEY_F(1) is style. Row moves to rejected; shard unchanged."
+   "note": "Original right in value; replacing it with KEY_F(1) is style. Row moves to rejected; shard unchanged.",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "no call"
   },
   {
    "id": "L178",
@@ -1674,7 +1995,7 @@
    "claim_as_printed": "http://www2.linuxjournal.com/lj-issues/issue5/2807.html",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:7339; the old and new URLs (fetched 2026-11-15)",
    "it_says": "HOWTO links http://www2.linuxjournal.com/lj-issues/issue5/2807.html. Today the old host does not answer; https://www.linuxjournal.com/article/2807 is \"Dialog: An Introductory Tutorial\".",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "In the repo only the printed link can be checked.",
    "classification": "c",
@@ -1687,7 +2008,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Web check today agrees with the row; left as it is."
+   "note": "Web check today agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L179",
@@ -1716,7 +2042,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Owner decision: the HOWTO's module is ambiguous. Row left as it is."
+   "note": "Owner decision: the HOWTO's module is ambiguous. Row left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L195",
@@ -1728,7 +2059,7 @@
    "claim_as_printed": "Thomas E. Dickey wrote or revised most of the manual pages",
    "opened": "README:171-176; AUTHORS sections and copyright lines of every file in man/; site/src/content/docs/credits.md:43",
    "it_says": "Every man page carries Dickey's copyright. AUTHORS name \"Thomas Dickey\" in curs_extend.3x, default_colors.3x, define_key.3x, key_defined.3x, keybound.3x, keyok.3x, legacy_coding.3x, new_pair.3x, resizeterm.3x, wresize.3x (and jointly in tic, infocmp, term.5, user_caps.5).",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "README's \"Eric S. Raymond: the man pages\" alone supported the edition's change; the AUTHORS sections show Dickey wrote several pages.",
    "classification": "b",
@@ -1746,7 +2077,12 @@
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
    "note": "The old front-page text was right and the edition's 'which Eric S. Raymond first wrote' was wrong. Row moves to rejected; the front page now says he revised every page and wrote several.",
-   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb"
+   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L199",
@@ -1758,7 +2094,7 @@
    "claim_as_printed": "This is a majordomo list",
    "opened": "doc/html/hackguide.html:255; INSTALL:2584-2587; https://lists.gnu.org/mailman/listinfo/bug-ncurses (fetched 2026-11-15)",
    "it_says": "hackguide: \"majordomo list\". The list page today is \"Bug-ncurses Info Page\", a Mailman listinfo page.",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "INSTALL gives only the address; nothing in the repo names the list software.",
    "classification": "c",
@@ -1771,7 +2107,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Web check agrees with the row; left as it is."
+   "note": "Web check agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L200",
@@ -1783,7 +2124,7 @@
    "claim_as_printed": "`trace()`",
    "opened": "doc/html/hackguide.html:309; man/curs_trace.3x:93, 300",
    "it_says": "hackguide: \"Insert a trace() call\". curs_trace.3x: trace() is marked deprecated.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "trace() still links, which is what the runs checked.",
    "classification": "a",
@@ -1796,7 +2137,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "As L157."
+   "note": "As L157.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L202",
@@ -1808,7 +2154,7 @@
    "claim_as_printed": "If the entire sequence takes less than 1 second",
    "opened": "doc/html/hackguide.html:505-510; ncurses/base/lib_getch.c:66, 684-702, 760-768",
    "it_says": "hackguide: \"If the entire sequence takes less than 1 second\". lib_getch.c: \"After each character is received, set an alarm call based on ESCDELAY\"; timeleft = ESCDELAY is passed unchanged to each wait.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "ESCDELAY = 1000 matches '1 second'; only kgetch() shows the wait is per character.",
    "classification": "a",
@@ -1821,7 +2167,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "All runs stopped at the default value."
+   "note": "All runs stopped at the default value.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L204",
@@ -1833,7 +2184,7 @@
    "claim_as_printed": "`lib_doupdate.c`",
    "opened": "doc/html/hackguide.html:468, 578, 602; ncurses/tty/tty_update.c:1115",
    "it_says": "No lib_doupdate.c in the tree; doupdate() is in tty_update.c.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The function name still matches.",
    "classification": "a",
@@ -1850,7 +2201,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "'superseded' = the print was true of an older tree."
+   "note": "'superseded' = the print was true of an older tree.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L205",
@@ -1862,7 +2218,7 @@
    "claim_as_printed": "`_nc_mvcur_scrolln()` in `lib_mvcur.c`",
    "opened": "doc/html/hackguide.html:597; ncurses/tty/tty_update.c:2023, 2160; grep -r _nc_mvcur_scrolln ncurses (none)",
    "it_says": "\"NCURSES_SP_NAME(_nc_scrolln)\" in tty_update.c; no _nc_mvcur_scrolln.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "lib_mvcur.c still exists.",
    "classification": "a",
@@ -1879,7 +2235,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L208",
@@ -1891,7 +2252,7 @@
    "claim_as_printed": "will settle for BSD regexps",
    "opened": "doc/html/hackguide.html:633-635; aclocal.m4:7271-7330; form/fty_regex.c:40, 88",
    "it_says": "configure falls back to \"AC_CHECK_FUNC(compile, ...)\" with \"for cf_regex_hdr in regexp.h regexpr.h\", the System V compile()/step() interface; no BSD re_comp().",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "fty_regex.c still has a non-POSIX fallback, which the runs counted as 'BSD'.",
    "classification": "a",
@@ -1904,7 +2265,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L213",
@@ -1916,7 +2282,7 @@
    "claim_as_printed": "`lib_insstr.c`",
    "opened": "doc/html/hackguide.html:409, 828; ls ncurses/base/lib_insnstr.c (present), lib_insstr.c (absent)",
    "it_says": "Only lib_insnstr.c exists.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The function names are unchanged.",
    "classification": "a",
@@ -1933,7 +2299,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L214",
@@ -1945,7 +2316,7 @@
    "claim_as_printed": "`lib_unctrl.c`",
    "opened": "doc/html/hackguide.html:417, 832; ncurses/Makefile.in:180, 315; ncurses/base/MKunctrl.awk",
    "it_says": "\"./unctrl.c: $(base)/MKunctrl.awk\"; no lib_unctrl.c.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "unctrl() still exists.",
    "classification": "a",
@@ -1962,7 +2333,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L225",
@@ -1974,7 +2350,7 @@
    "claim_as_printed": "read the PORTABILITY section in the file ncurses/README",
    "opened": "INSTALL:115; ncurses/README:31",
    "it_says": "INSTALL: \"read the PORTABILITY section in\" ncurses/README; ncurses/README: \"For discussion of the package internals, see hackguide.html\" and no PORTABILITY section.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -1991,7 +2367,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "'missing' = the section is not there, which is the error."
+   "note": "'missing' = the section is not there, which is the error.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L227",
@@ -2003,7 +2384,7 @@
    "claim_as_printed": "tic(1), captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1)",
    "opened": "INSTALL:182-185; progs/Makefile.in:202-208, 237-241",
    "it_says": "INSTALL step 3 lists \"captoinfo(1), infocmp(1), toe(1), clear(1) tset(1), reset(1), and tput(1)\"; Makefile.in also builds actual_infotocap and actual_tabs.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The listed programs all exist; only the Makefile shows two missing.",
    "classification": "a",
@@ -2016,7 +2397,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "The runs checked that the listed programs exist, not that the list is complete."
+   "note": "The runs checked that the listed programs exist, not that the list is complete.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L228",
@@ -2028,7 +2414,7 @@
    "claim_as_printed": "If the option is not given, this defaults to \"long\".",
    "opened": "INSTALL:1346-1354; aclocal.m4:92, 97-110; dist.mk:39",
    "it_says": "INSTALL: \"defaults to \\\"long\\\"\". aclocal.m4: \"cf_dft_tparm_arg=long\" then for ABI 6+: \"cf_dft_tparm_arg=intptr_t\"; NCURSES_MAJOR = 6.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The ABI 5 default is long, which is what two runs found.",
    "classification": "a",
@@ -2043,7 +2429,12 @@
     3
    ],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L241",
@@ -2055,7 +2446,7 @@
    "claim_as_printed": "To subscribe send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>",
    "opened": "INSTALL:2584-2587; https://lists.gnu.org/mailman/listinfo/bug-ncurses (fetched 2026-11-15)",
    "it_says": "INSTALL: \"send mail to bug-ncurses-request@gnu.org with body that reads: subscribe ncurses <your-email-address-here>\". The list is on Mailman today.",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "Nothing in the repo describes the list software.",
    "classification": "c",
@@ -2068,7 +2459,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Web check agrees with the row; left as it is."
+   "note": "Web check agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L247",
@@ -2080,7 +2476,7 @@
    "claim_as_printed": "I provide no functions to switch on/off curses tracing options.",
    "opened": "doc/html/Ada95.html:105; Ada95/gen/terminal_interface-curses-trace.ads.m4:115-119",
    "it_says": "Ada95.html: \"I provide no functions to switch on/off curses tracing\"; the binding has \"procedure Trace_On\" and \"procedure Trace_Put\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None in the document itself.",
    "classification": "a",
@@ -2097,7 +2493,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L249",
@@ -2109,7 +2510,7 @@
    "claim_as_printed": "Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.",
    "opened": "doc/html/Ada95.html:92-94; INSTALL:135, 857",
    "it_says": "\"Support for wide characters is currently not in the binding, as it is not really in ncurses at this point in time.\" INSTALL documents --enable-widec.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The binding half is still true.",
    "classification": "a",
@@ -2126,7 +2527,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L256",
@@ -2138,7 +2544,7 @@
    "claim_as_printed": "The most important bug-fixes/improvements (a link to \"Interesting bug-fixes\", a section with no content)",
    "opened": "announce.html.in:170-171, 926-930",
    "it_says": "Link \"important bug-fixes/improvements\" to #h3-bug-fixes; the h3 \"Interesting bug-fixes\" is followed directly by the h3 \"Configuration changes\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The table of contents lists the section.",
    "classification": "a",
@@ -2154,8 +2560,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Card describes an error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Card describes an error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L258",
@@ -2167,7 +2578,7 @@
    "claim_as_printed": "Patches to the current release are made available at https://invisible-island.net/archives/ncurses/6.5/",
    "opened": "announce.html.in:36, 157, 1745-1751; dist.mk:39-44; https://invisible-island.net/archives/ncurses/6.6/ (fetched 2026-11-15)",
    "it_says": "The page announces @VERSION@, which dist.mk makes 6.6; \"Patches to the current release are made available at .../ncurses/6.5/\". The 6.6 directory exists today.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "Without dist.mk the page's own version is a placeholder.",
    "classification": "a",
@@ -2180,7 +2591,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Settled in the repo (6.6 vs 6.5); the web only confirms the 6.6 directory."
+   "note": "Settled in the repo (6.6 vs 6.5); the web only confirms the 6.6 directory.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L259",
@@ -2192,7 +2608,7 @@
    "claim_as_printed": "To join the ncurses mailing list, please write email to bug-ncurses-request@gnu.org containing the line: subscribe <name>@<host.domain>",
    "opened": "announce.html.in:1720-1730; https://lists.gnu.org/mailman/listinfo/bug-ncurses (fetched 2026-11-15)",
    "it_says": "announce: \"subscribe <name>@<host.domain>\" by mail. The list is on Mailman today.",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "Nothing in the repo describes the list software.",
    "classification": "c",
@@ -2205,7 +2621,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Web check agrees with the row; left as it is."
+   "note": "Web check agrees with the row; left as it is.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L268",
@@ -2217,7 +2638,7 @@
    "claim_as_printed": "control characters like suspend (CTRL-Z), interrupt and quit (CTRL-C)",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1336-1338; progs/reset_cmd.c:172-173; man/curs_inopts.3x:148-158",
    "it_says": "HOWTO: \"interrupt and quit (CTRL-C)\". reset_cmd.c: \"#define CQUIT CTRL('\\\\')\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Read alone, CTRL-C might belong to interrupt only.",
    "classification": "a",
@@ -2232,7 +2653,12 @@
     3
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L271",
@@ -2244,7 +2670,7 @@
    "claim_as_printed": "Other border functions draws lines with them (the forms-drawing characters)",
    "opened": "docs/client-library/windows/border-functions.md:34-38; docs/client-library/output/forms-characters.md:9",
    "it_says": "border-functions.md: \"p_win->border.ls = '|'; ... p_win->border.tl = '+';\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Without init_win_params both programs look like ACS users.",
    "classification": "a",
@@ -2259,7 +2685,12 @@
     1
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Edition row; run 1 found the ASCII borders."
+   "note": "Edition row; run 1 found the ASCII borders.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L272",
@@ -2271,7 +2702,7 @@
    "claim_as_printed": "Initially the terminal has echoing enabled and is in ordinary cooked mode, so one or the other has to be changed before calling getch(); otherwise, the program's output will be unpredictable",
    "opened": "doc/html/ncurses-intro.html:765-772; man/curs_getch.3x:631-633; ncurses/base/lib_getch.c:453-477",
    "it_says": "intro: \"one or the other has to changed before calling getch(); otherwise, the program's output will be unpredictable.\" curs_getch.3x: \"Use of wgetch with echo(3X) and neither cbreak(3X) nor raw(3X) is not well-defined.\"",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "medium",
    "one_step_earlier": "lib_getch.c alone shows ncurses handles cooked mode, which is how the row was made; the manual keeps the case undefined.",
    "classification": "b",
@@ -2289,7 +2720,12 @@
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
    "note": "Original right. Row moves to rejected; the warning is restored in the input guide (edition-error row). The missing 'be' is L117.",
-   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb"
+   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L273",
@@ -2301,7 +2737,7 @@
    "claim_as_printed": "While getnstr() is reading the line, F1 is ignored, like the other function keys",
    "opened": "git show of docs/client-library/input/characters-and-strings.md before the fix; ncurses/base/lib_getstr.c:112-148",
    "it_says": "Edition: \"F1 is ignored, like the other function keys.\" lib_getstr.c: KEY_DOWN/KEY_ENTER end the line, KEY_LEFT/KEY_BACKSPACE erase, other \"ch >= KEY_MIN\" beep.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "'Ignored' is close to 'beeps'; the example never calls keypad(), so F1 arrives as an escape sequence.",
    "classification": "a",
@@ -2317,8 +2753,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Edition row; runs confirmed the error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Edition row; runs confirmed the error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L275",
@@ -2330,7 +2771,7 @@
    "claim_as_printed": "Do this before the next wgetch(); otherwise another mouse event might come in and make the first one inaccessible",
    "opened": "doc/html/ncurses-intro.html:889-892; ncurses/curses.priv.h:185; man/curs_mouse.3x:105-112, 249-260",
    "it_says": "intro: \"otherwise another mouse event might come in and make the first one inaccessible\". curses.priv.h: \"#define EV_MAX 8 /* size of mouse circular event queue */\"; man: \"A subsequent getmouse call retrieves the next older event from the queue.\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "As advice it is sound; the reason given is wrong for a queue of eight.",
    "classification": "a",
@@ -2343,7 +2784,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L276",
@@ -2355,7 +2801,7 @@
    "claim_as_printed": "An example showing all the characters, with 31 SHOW() lines and no ACS_URCORNER",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:3312-3365; include/curses.h.in (ACS_ defines)",
    "it_says": "\"Here is an example showing all the characters.\" 31 distinct ACS_ names, no ACS_URCORNER; curses.h.in has 32 NCURSES_ACS() names.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Counting the list alone, 31 looked complete.",
    "classification": "a",
@@ -2372,7 +2818,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L278",
@@ -2384,7 +2835,7 @@
    "claim_as_printed": "By default, all options are on.",
    "opened": "doc/html/ncurses-intro.html:2096, 3190; form/form.priv.h:151-168; form/fld_def.c:57; man/form_field_opts.3x:70, 111",
    "it_says": "\"By default, all options are on.\" form_field_opts.3x: \"extensions are off by default\"; default field uses STD_FIELD_OPTS.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "True of the options the intro lists.",
    "classification": "a",
@@ -2401,7 +2852,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L279",
@@ -2413,7 +2869,7 @@
    "claim_as_printed": "Each field structure contains one character pointer slot ... The (char *) type is retained for System V compatibility",
    "opened": "doc/html/ncurses-intro.html:2212-2224; form/form.h:376, 389",
    "it_says": "intro: \"one character pointer slot ... The (char *) type is retained for System V compatibility.\" form.h: \"set_field_userptr (FIELD *, void *)\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2430,7 +2886,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L285",
@@ -2442,7 +2903,7 @@
    "claim_as_printed": "ncurses is intended to be base-level conformant with the X/Open Curses standard ... almost all the features not directly concerned with wide characters and internationalization",
    "opened": "doc/html/ncurses-intro.html:1394-1399; man/ncurses.3x:104, 2255-2264",
    "it_says": "intro: \"almost all features not directly concerned with wide characters and internationalization\". ncurses.3x: \"implements the interface described by X/Open Curses Issue 7\"; \"intends base-level conformance ... and supports all features of its enhanced level except the untic utility\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The base-level half still matches the manual; the wide-character exclusion does not.",
    "classification": "a",
@@ -2455,7 +2916,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": "Partly right: 'base-level conformance' is still in ncurses.3x."
+   "note": "Partly right: 'base-level conformance' is still in ncurses.3x.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L286",
@@ -2467,7 +2933,7 @@
    "claim_as_printed": "Slide the tiles with the arrow keys until they're in order",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:7512-7519; ncurses_programs.tar.gz JustForFun/shuffle.c:89-110 (scratchpad copy)",
    "it_says": "HOWTO: \"A fun game, if you have time to kill.\" shuffle.c: \"k = rand() % (n * n);\" with no parity check.",
-   "verdict": "matches",
+   "verdict": "can't tell",
    "confidence": "medium",
    "one_step_earlier": "The 'was' text is the edition's own sentence, not the HOWTO's.",
    "classification": "c",
@@ -2480,7 +2946,12 @@
    "bo3_majority": "can't tell",
    "runs_right": [],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "The defect is in the example program, outside the repo; the row's 'was' quotes the edition. Owner may want the 'was' reworded."
+   "note": "The defect is in the example program, outside the repo; the row's 'was' quotes the edition. Owner may want the 'was' reworded.",
+   "claim_states_error": false,
+   "error_real": null,
+   "errata_finding": "unsettled",
+   "finding_valid": null,
+   "bo3_finding": "no call"
   },
   {
    "id": "L293",
@@ -2492,7 +2963,7 @@
    "claim_as_printed": "ncurses also uses the parameter's absolute value as the number of lines to take, and the binding's Rip_Off_Lines routine relies on this.",
    "opened": "ncurses/base/lib_set_term.c:650, 760-782; Ada95/gen/terminal_interface-curses.adb.m4:2325-2329; doc/html/Ada95.html:298",
    "it_says": "lib_set_term.c: \"count = (rop->line < 0) ? -rop->line : rop->line;\" public ripoffline passes \"(line < 0) ? -1 : 1\"; Ada: \"pragma Import (C, Ripoffline, \\\"_nc_ripoffline\\\");\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The edition dropped 'internally'.",
    "classification": "a",
@@ -2508,8 +2979,13 @@
     2,
     3
    ],
-   "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Edition row; runs confirmed the error."
+   "checker_error": "none under standard scoring: the card's claim states the error, so matches was the right label; the study had expected disagrees",
+   "note": "Edition row; runs confirmed the error.",
+   "claim_states_error": true,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L295",
@@ -2521,7 +2997,7 @@
    "claim_as_printed": "This, for example, is where the AIX box1 capability gets translated to an acsc string.",
    "opened": "doc/html/hackguide.html:762-767; ncurses/tinfo/parse_entry.c:1077-1115; include/Caps:1031",
    "it_says": "parse_entry.c postprocess_terminfo: \"Translate AIX forms characters. if (PRESENT(box_chars_1)) { ... acs_chars = _nc_save_str(buf2); _nc_warning(\\\"acsc string synthesized from AIX capabilities\\\");\"; Caps: box_chars_1 is box1.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "A search for the literal \"box1\" finds nothing in parse_entry.c, which is how the row was made.",
    "classification": "b",
@@ -2539,7 +3015,12 @@
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
    "note": "Original right. Row moves to rejected; the example is restored (edition-error row), with 'get' corrected to 'gets' (formatting row).",
-   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb"
+   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L296",
@@ -2551,7 +3032,7 @@
    "claim_as_printed": "The tput and clear utilities just do an entry load followed by a tputs() of a selected capability.",
    "opened": "doc/html/hackguide.html:779-781; progs/clear_cmd.c:56-61; progs/tput.c:118-125",
    "it_says": "hackguide: \"just do an entry load followed by a tputs() of a selected capability.\" clear_cmd.c also sends E3; tput.c handles init and reset.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "medium",
    "one_step_earlier": "The core path is still a load and a tputs().",
    "classification": "a",
@@ -2564,7 +3045,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L297",
@@ -2576,7 +3062,7 @@
    "claim_as_printed": "and also interprets the contents of the $TERM environment variable",
    "opened": "INSTALL:177-181; ncurses/tinfo/read_termcap.c:804, 994, 1053",
    "it_says": "INSTALL: \"will also interpret the contents of the $TERM environment variable\"; read_termcap.c: getenv(\"TERMCAP\").",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "Read alone, INSTALL is self-consistent.",
    "classification": "a",
@@ -2591,7 +3077,12 @@
     3
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L298",
@@ -2603,7 +3094,7 @@
    "claim_as_printed": "$(prefix)/man: the manual pages",
    "opened": "INSTALL:93; configure:176, 186; man/Makefile.in:47-51",
    "it_says": "INSTALL: \"Under $(prefix)/man: the manual pages\"; configure: \"datarootdir='${prefix}/share'\", \"mandir='${datarootdir}/man'\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "INSTALL alone is self-consistent.",
    "classification": "a",
@@ -2616,7 +3107,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L300",
@@ -2628,7 +3124,7 @@
    "claim_as_printed": "The color pair is stored with the attributes, and the wide-character functions use the attr_t type and names such as attr_on().",
    "opened": "include/curses.h.in:637-638; git show df81beb:docs/glossary/attribute.md",
    "it_says": "Edition: \"the wide-character functions use the attr_t type and names such as attr_on()\". curses.h.in: \"attr_on (attr_t, void *); /* generated */\" with no WIDEC mark.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "attr_on() takes attr_t, which is what the runs checked.",
    "classification": "a",
@@ -2641,7 +3137,12 @@
    "bo3_majority": "matches",
    "runs_right": [],
    "checker_error": "symbol or default exists, so the prose passed; the run did not test what the sentence claims",
-   "note": "Edition row."
+   "note": "Edition row.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L301",
@@ -2653,7 +3154,7 @@
    "claim_as_printed": "most are named by adding _w to the 8-bit name, so waddch() becomes wadd_wch()",
    "opened": "man/ncurses.3x:518-530; include/curses.wide",
    "it_says": "ncurses.3x: \"where a non-wide function name contains ch or str, prefix it with _w ... (Exceptions that add only w comprise addwstr, inwstr, and their variants.)\" curses.wide: 49 names with _w, 16 with a bare w.",
-   "verdict": "disagrees",
+   "verdict": "matches",
    "confidence": "high",
    "one_step_earlier": "waddstr/waddwstr alone made the exception look like the rule.",
    "classification": "b",
@@ -2671,7 +3172,12 @@
    ],
    "checker_error": "no checker error: the runs that said the original was right were right",
    "note": "The edition's original glossary text was right. Row moves to rejected; the glossary states the rule and its exception (edition-error row).",
-   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb"
+   "content_commit": "3cc6b890c438ca7a90760432889c9a617f15cffb",
+   "claim_states_error": false,
+   "error_real": false,
+   "errata_finding": "false positive (type I)",
+   "finding_valid": false,
+   "bo3_finding": "true negative"
   },
   {
    "id": "L302",
@@ -2683,7 +3189,7 @@
    "claim_as_printed": "the library searches /etc/termcap before the terminfo database",
    "opened": "INSTALL:177-180; include/term_entry.h:90-108; ncurses/tinfo/read_entry.c:946-958",
    "it_says": "INSTALL: \"will search /etc/termcap before the terminfo database\"; term_entry.h lists every terminfo location before dbdEnvOnce2/dbdEnvList2/dbdCfgList2.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "INSTALL alone is self-consistent.",
    "classification": "a",
@@ -2698,7 +3204,12 @@
     3
    ],
    "checker_error": "checked that the original prints the text, not whether the text is right",
-   "note": ""
+   "note": "",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "false negative (type II)"
   },
   {
    "id": "L56",
@@ -2710,7 +3221,7 @@
    "claim_as_printed": "the drive assumes it is an application-specific command",
    "opened": "git show 7404b37:man/menu_driver.3x line 165; man/menu_driver.3x now",
    "it_says": "Upstream: \"the drive assumes it is an application-specific\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current file reads 'driver'.",
    "classification": "a",
@@ -2726,7 +3237,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": "Split resolved: run 1 found the typo still in doc/html/man and run 3 in the history; run 2 read only the fixed man/ file and concluded there was no typo."
+   "note": "Split resolved: run 1 found the typo still in doc/html/man and run 3 in the history; run 2 read only the fixed man/ file and concluded there was no typo.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L57",
@@ -2738,7 +3254,7 @@
    "claim_as_printed": "menu_driver return one of the following error codes",
    "opened": "git show 7404b37:man/menu_driver.3x line 170",
    "it_says": "Upstream: \"\\fBmenu_driver\\fP return one of the following error codes:\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The current file reads 'returns'.",
    "classification": "a",
@@ -2754,7 +3270,12 @@
     3
    ],
    "checker_error": "read the current man/ file, which this edition had already corrected; 'matches' and 'superseded' describe the fixed source or the stale HTML, not a correct original",
-   "note": "Split resolved as L56."
+   "note": "Split resolved as L56.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L203",
@@ -2766,7 +3287,7 @@
    "claim_as_printed": "`timed_wait()`",
    "opened": "doc/html/hackguide.html:516; ncurses/tty/lib_twait.c:39, 165; ncurses/curses.priv.h:2444",
    "it_says": "lib_twait.c: \"The routine _nc_timed_wait().\"; no function timed_wait.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The file name still matches.",
    "classification": "a",
@@ -2783,7 +3304,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "Split resolved: disagrees, superseded and missing all say the printed name is not current."
+   "note": "Split resolved: disagrees, superseded and missing all say the printed name is not current.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L215",
@@ -2795,7 +3321,7 @@
    "claim_as_printed": "`comp_main.c`",
    "opened": "doc/html/hackguide.html:858-866; ls ncurses/tinfo/comp_*.c progs/; progs/tic.c:687",
    "it_says": "No comp_main.c; tic's main() is at progs/tic.c:687.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The other comp_*.c files are still there.",
    "classification": "a",
@@ -2812,7 +3338,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "Split resolved as L203."
+   "note": "Split resolved as L203.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L287",
@@ -2824,7 +3355,7 @@
    "claim_as_printed": "[pads](glossary/pad.md) stdscr with blanks: the glossary link was on the verb",
    "opened": "git show df81beb:docs/client-library/hints/resizing.md line 11",
    "it_says": "\"and [pads](../../glossary/pad.md) `stdscr` with blanks if the screen grew\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The word matches the glossary term.",
    "classification": "a",
@@ -2840,7 +3371,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Split resolved: runs 2 and 3 both found pads is a verb there; run 1 could not open the edition text."
+   "note": "Split resolved: runs 2 and 3 both found pads is a verb there; run 1 could not open the edition text.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "no call"
   },
   {
    "id": "L75",
@@ -2852,7 +3388,7 @@
    "claim_as_printed": "`bottom_panel` on a hidden panel()",
    "opened": "doc/html/ncurses-intro.html:1528-1530",
    "it_says": "\"You cannot do top_panel() or bottom_panel on a hidden panel().\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2868,7 +3404,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L81",
@@ -2880,7 +3421,7 @@
    "claim_as_printed": "In the `cbreak()` mode these control characters are interpreted as any other character by the terminal driver",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1340-1342; man/curs_inopts.3x:148-158",
    "it_says": "HOWTO: \"In the cbreak() mode these control characters are interpreted as any other character by the terminal driver.\" man: \"the interrupt, quit, suspend, and flow control characters are unaffected\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2896,7 +3437,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L82",
@@ -2908,7 +3454,7 @@
    "claim_as_printed": "`endwin()` frees the memory taken by curses sub-system and its data structures and puts the terminal in normal mode",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1280-1284; man/curs_initscr.3x:229-232",
    "it_says": "HOWTO: \"endwin() frees the memory taken by curses sub-system\". man: calling refresh() after endwin() resumes managing the terminal.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2924,7 +3470,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L117",
@@ -2936,7 +3487,7 @@
    "claim_as_printed": "begin read them; must used; one or the other has to changed; The resulting string of characters are pointed to",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:1824-1829; doc/html/ncurses-intro.html:770",
    "it_says": "\"begin read them\", \"must used\"; intro: \"has to changed\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2952,7 +3503,12 @@
     2
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L130",
@@ -2964,7 +3520,7 @@
    "claim_as_printed": "startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:2839-2840",
    "it_says": "\"startx = (80 - WIDTH) / 2; starty = (24 - HEIGHT) / 2;\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -2980,7 +3536,12 @@
     2
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L139",
@@ -2992,7 +3553,7 @@
    "claim_as_printed": "The event mask table stops at BUTTON4_TRIPLE_CLICKED",
    "opened": "doc/html/NCURSES-Programming-HOWTO.html:2938-2942; man/curs_mouse.3x:217-218",
    "it_says": "HOWTO table ends at BUTTON4_TRIPLE_CLICKED; man lists BUTTON5_PRESSED and BUTTON5_RELEASED.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -3008,7 +3569,12 @@
     2
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L201",
@@ -3020,7 +3586,7 @@
    "claim_as_printed": "Test frames for the library algorithms are in the progs directory",
    "opened": "doc/html/hackguide.html:374; ncurses/Makefile.in:205-208, 237, 351",
    "it_says": "hackguide: \"tiny test frames for the library algorithms in the progs\"; Makefile.in builds lib_mvcur and the test_progs target in ncurses/.",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -3037,7 +3603,12 @@
     3
    ],
    "checker_error": "all three runs found the same facts and chose different verdict words",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L223",
@@ -3049,7 +3620,7 @@
    "claim_as_printed": "The configure script attempts to locate previous installation of ncurses, and will set the default prefix according to where it finds the ncurses headers",
    "opened": "aclocal.m4:960-985 (CF_CFG_DEFAULTS)",
    "it_says": "\"(openbsd*|freebsd*|mirbsd*|linux*|...) prefix=/usr ;; (*) prefix=$ac_default_prefix\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "The macro's own comment says it looks for a previous installation.",
    "classification": "a",
@@ -3065,7 +3636,12 @@
     3
    ],
    "checker_error": "the evidence (edition history, site build, example archive or a web page) was outside the study's allowed paths",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L235",
@@ -3077,7 +3653,7 @@
    "claim_as_printed": "$HOME/terminfo (twice)",
    "opened": "INSTALL:2504, 2509; ncurses/tinfo/home_terminfo.c:35",
    "it_says": "INSTALL: \"$HOME/terminfo\"; home_terminfo.c: \"return the $HOME/.terminfo string\".",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -3093,7 +3669,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   },
   {
    "id": "L294",
@@ -3105,7 +3686,7 @@
    "claim_as_printed": "parse an entire terminfo file into a doubly-linked circular list of entry structures",
    "opened": "doc/html/hackguide.html:705; ncurses/tinfo/comp_parse.c:68-76",
    "it_says": "hackguide: \"doubly-linked circular list\"; comp_parse.c: \"newp->next = NULL;\"",
-   "verdict": "matches",
+   "verdict": "disagrees",
    "confidence": "high",
    "one_step_earlier": "None.",
    "classification": "a",
@@ -3121,7 +3702,12 @@
     3
    ],
    "checker_error": "label inversion: the run scored the error claim (matches = the error is real) instead of the printed text, so its quote and its label disagree with the study's frame",
-   "note": "Aligned; spot check."
+   "note": "Aligned; spot check.",
+   "claim_states_error": false,
+   "error_real": true,
+   "errata_finding": "true positive",
+   "finding_valid": true,
+   "bo3_finding": "true positive"
   }
  ]
 }
