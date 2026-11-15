@@ -109,6 +109,45 @@
   color: var(--nc-hint-page-fg, var(--sl-color-text-accent));
 }
 
+/* Line numbers on longer C listings (code-line-numbers.mjs picks them; Expressive Code's
+   line-numbers plugin draws them). Right-aligned figures as wide as the last line's number, one
+   character of space each side, a rule, then one character before the code. The gutter is pinned
+   on its own background, so on a phone the numbers stay put while the code scrolls under the
+   rule. Modern draws Starlight's theme colors; each other style sets the --nc-ln-* tokens.
+   The numbers are aria-hidden and unselectable, so neither a copy nor a screen reader gets them. */
+.expressive-code .ec-line .gutter {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--nc-ln-bg, var(--code-background));
+  border-inline-end: var(--nc-ln-rule, 1.5px solid var(--nc-ln-rule-color));
+  box-shadow: var(--nc-ln-rule-shadow, none);
+  --nc-ln-rule-color: color-mix(in srgb, var(--nc-ln-fg-modern) 28%, transparent);
+}
+.expressive-code .ec-line .gutter .ln {
+  padding-inline: 1ch;
+  color: var(--nc-ln-fg, var(--nc-ln-fg-modern));
+  font-variant-numeric: tabular-nums;
+}
+.expressive-code .ec-line .gutter ~ .code {
+  --ecGtrBrdWd: 0px;
+  padding-inline-start: calc(var(--ecIndent, 0ch) + 1ch);
+  padding-inline-end: 1ch;
+}
+/* The gutter makes a numbered listing wider, so its lines end 1ch after the code, which keeps 77
+   columns inside the code box at 1280px in every style (check-listings.mjs). Only the first two
+   lines, which the copy button covers, keep the room to clear it. */
+.expressive-code :nth-child(-n + 2 of .ec-line) .gutter ~ .code {
+  padding-inline-end: calc(2rem + var(--ec-codePadInl));
+}
+/* Modern's figures: the theme's line-number gray, darkened or lightened to 4.6:1. */
+:root {
+  --nc-ln-fg-modern: #8b909b;
+}
+:root[data-theme='light'] {
+  --nc-ln-fg-modern: #6c717c;
+}
+
 /* The status bar (SkipLink.astro) is hidden unless a style turns it on. */
 .nc-statusbar {
   display: none;
@@ -287,6 +326,11 @@
   --nc-card-bg: var(--nc-cga-gray);
   --nc-card-fg: var(--nc-cga-black);
   --nc-card-title-fg: var(--nc-cga-black);
+  /* Listing line numbers: a DOS editor's line column, dark cyan on black, a dark gray rule. */
+  --nc-ln-fg: var(--nc-cga-cyan);
+  --nc-ln-bg: var(--nc-cga-black);
+  --nc-ln-rule: 2px solid var(--nc-cga-dark-gray);
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: var(--nc-cga-black);
   --nc-term-frame-border: 4px double;
@@ -454,6 +498,11 @@
   --nc-card-bg: #d6d6d1;
   --nc-card-fg: #33332f;
   --nc-card-title-fg: #161616;
+  /* A Motif editor's line-number pane: a shade darker than the text, an etched rule. */
+  --nc-ln-fg: #62625d;
+  --nc-ln-bg: #e4e4de;
+  --nc-ln-rule: 1px solid #7d7d78;
+  --nc-ln-rule-shadow: 1px 0 0 #ffffff;
 
   --nc-term-frame-bg: #d6d6d1;
   --nc-term-frame-border: 2px solid;
@@ -622,6 +671,11 @@
   --nc-card-bg: #fdfdf8;
   --nc-card-fg: #2c2c28;
   --nc-card-title-fg: #1b1b1b;
+  /* A printed listing: gray figures and a hairline in the frame's color, on the code's paper. */
+  --nc-ln-fg: #6b6b62;
+  --nc-ln-bg: #f1f1e8;
+  --nc-ln-rule: 1px solid #d8d8cc;
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: #f1f1e8;
   --nc-term-frame-border: 1px solid;
@@ -786,6 +840,11 @@
   --nc-card-bg: transparent;
   --nc-card-fg: #b3ae9f;
   --nc-card-title-fg: var(--nc-amber);
+  /* An amber screen at half intensity: dim amber figures, the frame's dark rule. */
+  --nc-ln-fg: #8f7d4f;
+  --nc-ln-bg: #050504;
+  --nc-ln-rule: 1px solid var(--nc-rule);
+  --nc-ln-rule-shadow: none;
 
   --nc-term-frame-bg: #050504;
   --nc-term-frame-border: 1px solid;
