@@ -29,6 +29,7 @@ const GUIDES = [
   { src: 'docs/client-library/output', route: 'guides/output', indexLabel: 'Introduction' },
   { src: 'docs/client-library/input', route: 'guides/input', indexLabel: 'Introduction' },
   { src: 'docs/client-library/attributes', route: 'guides/attributes', indexLabel: 'Introduction' },
+  { src: 'docs/client-library/keyboard', route: 'guides/keyboard', indexLabel: 'Introduction' },
   { src: 'docs/client-library/forms', route: 'guides/forms', indexLabel: 'Introduction' },
   { src: 'docs/client-library/menus', route: 'guides/menus', indexLabel: 'Introduction' },
   { src: 'docs/client-library/panels', route: 'guides/panels', indexLabel: 'Introduction' },
