@@ -7,6 +7,7 @@ import { Terminal, type ITheme } from '@xterm/xterm';
 import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 import { FULL_SIZE, STEP, fitFontSize, keySequence, offersFullSize, overflows } from './terminal-fit.js';
+import { bootScreen } from './boot-screen.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const FONT_SIZE = FULL_SIZE;
@@ -325,14 +326,31 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
     fit();
     term.reset();
     term.focus();
+    // A boot screen plays while the program loads; its output waits until it has (boot-screen.js).
+    const boot = bootScreen(term, example);
+    scroller.setAttribute('aria-busy', 'true');
+    let shown: Promise<void> | null = null;
+    const show = (bytes: Uint8Array) => {
+      shown ??= boot.release().then(() => scroller.removeAttribute('aria-busy'));
+      void shown.then(() => term!.write(keepScreen(bytes)));
+    };
     keys.group.hidden = false;
     const encoder = new TextEncoder();
     pty = null;
     const input = term.onData((d) => pty?.push(encoder.encode(d)));
     const done = (message: string) => {
+      // A program that ends before it draws (an error while loading) ends the boot screen too.
+      if (!shown) {
+        boot.stop();
+        term!.reset();
+        scroller.removeAttribute('aria-busy');
+      }
       input.dispose();
       pty = null;
-      term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
+      // After the program's last screen, which may still be waiting on the boot screen.
+      const note = () => term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
+      if (shown) void shown.then(note);
+      else note();
       running = false;
       keys.stop();
       const hadFocus = keys.group.contains(document.activeElement);
@@ -354,7 +372,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
             pty = m.pty;
             // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
             [pty.cols, pty.rows] = chosen();
-            pty.write = (bytes) => term!.write(keepScreen(bytes));
+            pty.write = show;
           },
         ],
         onExit: (code: number) => done(`${label} exited (${code}).`),
