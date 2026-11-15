@@ -63,7 +63,11 @@ const routeOf = (target) => {
 for (const g of GUIDES) {
   const dir = join(repo, g.src);
   // Sidebar order follows the guide's index: the order its links list the shards.
-  const order = [...readFileSync(join(dir, 'index.md'), 'utf8').matchAll(/\]\(([^)#\s]+\.md)\)/g)].map((m) => m[1]);
+  // When the index has a "## Guide" list, that list sets the order; links in the prose above it
+  // (such as "packagers should read …") don't.
+  const indexText = readFileSync(join(dir, 'index.md'), 'utf8');
+  const guideList = indexText.split(/^## Guide$/m)[1] ?? indexText;
+  const order = [...guideList.matchAll(/\]\(([^)#\s]+\.md)\)/g)].map((m) => m[1]);
   if (g.alphabetical) {
     const term = (f) => (/^# (.+)$/m.exec(readFileSync(join(dir, f), 'utf8'))?.[1] ?? f).toLowerCase();
     order.sort((x, y) => term(x).localeCompare(term(y), 'en'));

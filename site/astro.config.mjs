@@ -40,6 +40,7 @@ export default defineConfig({
       ],
       social: [{ icon: 'github', label: 'GitHub', href: `https://github.com/${repo}` }],
       sidebar: [
+        { label: 'Credits', link: '/credits/' },
         { label: 'Getting started', items: [{ autogenerate: { directory: 'guides/getting-started' } }] },
         { label: 'Windows and screen updates', items: [{ autogenerate: { directory: 'guides/windows' } }] },
         { label: 'Output', items: [{ autogenerate: { directory: 'guides/output' } }] },
@@ -67,7 +68,6 @@ export default defineConfig({
         { label: 'The Ada95 binding', items: [{ autogenerate: { directory: 'contributing/ada' } }] },
         { label: 'Release announcement', items: [{ autogenerate: { directory: 'contributing/announce' } }] },
         { label: 'Glossary', collapsed: true, items: [{ autogenerate: { directory: 'glossary' } }] },
-        { label: 'Credits', link: '/credits/' },
         { label: 'Appendix', items: [{ autogenerate: { directory: 'appendix' } }] },
       ],
     }),
