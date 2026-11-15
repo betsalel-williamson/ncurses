@@ -4,7 +4,7 @@ This page lists the `--with-*` options from `--with-manpage-aliases` to `--with-
 
 ## `--with-manpage-aliases`
 
-Create files in subdirectories of the installation "man" directory that alias the man pages documenting them. For example, the "beep" man page also documents the function "flash". This is the default. You can disable this procedure if your system's makewhatis(8) or mandb(8) program indexes the directory to which the pages are installed. If you disable man page symlinks by specifying "`--without-manpage-symlinks`", the alias pages are created as stubs containing ".so" *roff requests.
+Create files in subdirectories of the installation "man" directory that alias the man pages documenting them. For example, the `beep` man page also documents the function `flash`. This is the default. You can disable this procedure if your system's makewhatis(8) or mandb(8) program indexes the directory to which the pages are installed. If you disable man page symlinks by specifying "`--without-manpage-symlinks`", the alias pages are created as stubs containing ".so" *roff requests.
 
 ## `--with-manpage-format=XXX`
 
@@ -38,7 +38,7 @@ Note: on Linux, the configure script will attempt to use the GPM library via the
 
 ## `--with-ospeed=TYPE`
 
-Override type of ospeed variable, which is part of the termcap compatibility interface. In termcap, this is a 'short', which works for a wide range of baudrates because ospeed is not the actual speed but the encoded value, e.g., B9600 would be a small number such as 13. However the encoding scheme originally allowed for values "only" up to 38400bd. A newer set of definitions past 38400bd is not encoded as compactly, and is not guaranteed to fit into a short (see the function `cfgetospeed()`, which returns a `speed_t` for this reason). In practice, applications that required knowledge of the ospeed variable, i.e., those using termcap, do not use the higher speeds. Your application (or system, in general) may or may not.
+Override type of `ospeed` variable, which is part of the termcap compatibility interface. In termcap, this is a 'short', which works for a wide range of baudrates because `ospeed` is not the actual speed but the encoded value, e.g., B9600 would be a small number such as 13. However the encoding scheme originally allowed for values "only" up to 38400bd. A newer set of definitions past 38400bd is not encoded as compactly, and is not guaranteed to fit into a short (see the function `cfgetospeed()`, which returns a `speed_t` for this reason). In practice, applications that required knowledge of the `ospeed` variable, i.e., those using termcap, do not use the higher speeds. Your application (or system, in general) may or may not.
 
 ## `--with-panel-libname=NAME`
 
@@ -154,7 +154,7 @@ NOTE: Overriding the name of the tic library may be useful if you are also using
 
 ## `--with-tparm-arg[=XXX]`
 
-Override the type used for `tparm()` arguments, which normally is a "long". However the function must assume that its arguments can hold a pointer to char's which is not always workable for 64-bit platforms. A better choice would be `intptr_t`, which was not available at the time tparm's interface was defined.
+Override the type used for `tparm()` arguments, which normally is a "long". However the function must assume that its arguments can hold a pointer to char's which is not always workable for 64-bit platforms. A better choice would be `intptr_t`, which was not available at the time `tparm()`'s interface was defined.
 
 If the option is not given, the default depends on the ABI: `intptr_t` for ABI 6, the default ABI, and `long` for ABI 5.
 
@@ -186,7 +186,7 @@ These sample ".map" files will not cover all possible combinations. In some case
 
 ## `--with-wrap-prefix=XXX`
 
-When using the `--enable-reentrant` option, ncurses redefines variables that would be global in curses, e.g., LINES, as a macro that calls a "wrapping" function which fetches the data from the current SCREEN structure. Normally that function is named by prepending "_nc_" to the variable's name. The function is technically private (since portable applications would not refer directly to it). But according to one line of reasoning, it is not the same type of "private" as functions which applications should not call even via a macro. This configure option lets you choose the prefix for these wrapped variables.
+When using the `--enable-reentrant` option, ncurses redefines variables that would be global in curses, e.g., `LINES`, as a macro that calls a "wrapping" function which fetches the data from the current `SCREEN` structure. Normally that function is named by prepending "_nc_" to the variable's name. The function is technically private (since portable applications would not refer directly to it). But according to one line of reasoning, it is not the same type of "private" as functions which applications should not call even via a macro. This configure option lets you choose the prefix for these wrapped variables.
 
 ## `--with-x11-rgb=FILE`
 

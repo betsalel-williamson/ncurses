@@ -86,7 +86,7 @@ _nc_freeall()           debug
 
 ### Interface changes
 
-- revert [termcap](../../../glossary/termcap.md) ospeed variable to 'short' (see discussion of the `--with-ospeed` configure option).
+- revert [termcap](../../../glossary/termcap.md) `ospeed` variable to 'short' (see discussion of the `--with-ospeed` configure option).
 
 ## 5.1 (July 8, 2000)
 
@@ -106,9 +106,9 @@ Added extensions: `assume_default_colors()`.
 
 - implemented the `wcolor_set()` and `slk_color()` functions.
 
-- move macro winch to a function, to hide details of struct ldat
+- move macro `winch` to a function, to hide details of struct ldat
 
-- corrected prototypes for slk_* functions, using chtype rather than `attr_t`.
+- corrected prototypes for `slk_*` functions, using `chtype` rather than `attr_t`.
 
 - the `slk_attr_{set,off,on}` functions need an additional void* parameter according to XSI.
 

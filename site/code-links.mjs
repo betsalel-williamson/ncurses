@@ -9,6 +9,8 @@ import { definitions, mask, resolve, uses } from './code-defs.mjs';
 
 const file = new URL('./.generated/symbols.json', import.meta.url);
 const symbols = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {};
+const siteFile = new URL('./.generated/site.json', import.meta.url);
+const site = existsSync(siteFile) ? JSON.parse(readFileSync(siteFile, 'utf8')) : {};
 const LANGS = new Set(['c', 'h', 'cpp']);
 // A name followed by "(", so a variable that shares a function's name (box, move) stays plain.
 const CALL = /^\s*\(/;
@@ -65,6 +67,7 @@ function link(name, sym) {
       dataSummary: sym.summary,
       dataPage: sym.page,
       dataProto: sym.proto,
+      dataVersion: site.version ? `ncurses ${site.version}` : undefined,
       ariaLabel: `${sym.proto ?? name} ${sym.summary}, in ${sym.page}`,
     },
     children: [{ type: 'text', value: name }],
@@ -94,7 +97,8 @@ export function codeLinks() {
           const d = own && !site && resolve(defs, name, lineIndex);
           if (site) hits.push({ index: m.index, name, node: target(name, site, hash) });
           else if (d) hits.push({ index: m.index, name, node: defLink(name, d, hash) });
-          else if (Object.hasOwn(symbols, name) && CALL.test(code.slice(m.index + name.length)))
+          // A constant (KEY_UP, A_BOLD) links as written; a function only when it is called.
+          else if (Object.hasOwn(symbols, name) && (symbols[name].constant || CALL.test(code.slice(m.index + name.length))))
             hits.push({ index: m.index, name, node: link(name, symbols[name]) });
         }
         // Right to left, so splitting a node leaves earlier offsets valid.

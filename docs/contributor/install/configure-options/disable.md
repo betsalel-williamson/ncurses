@@ -70,7 +70,7 @@ Starting with patch 20141115, using this option causes the configure script to a
 
 ## `--disable-lp64`
 
-The header files will ignore use of the _LP64 symbol to make chtype and `mmask_t` types 32 bits, for compatibility with older releases. The default "unsigned" for these types may be long on 64-bit hosts.
+The header files will ignore use of the _LP64 symbol to make `chtype` and `mmask_t` types 32 bits, for compatibility with older releases. The default "unsigned" for these types may be long on 64-bit hosts.
 
 NOTE: this is potentially an ABI change, depending on existing packages. The default for this option is "disabled" for ncurses ABI 5, and "enabled" for ABI 6.
 

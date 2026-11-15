@@ -1,6 +1,7 @@
-// The hint for a linked name in a code listing (code-links.mjs adds the links), shown on hover
-// or keyboard focus. For a library function: its declaration, its man page's NAME summary and the
-// page. For a name the listing defines: the line that defines it and what it is. Escape hides it.
+// The hint for a linked name in a code listing or in a guide's prose (code-links.mjs and
+// prose-links.mjs add the links), shown on hover or keyboard focus. For a library name: its
+// declaration, its man page's NAME summary (or a constant's meaning), the page and the release.
+// For a name a listing defines: the line that defines it and what it is. Escape hides it.
 // Each link goes to the man page or the definition, so the hint adds nothing a reader without it
 // misses. On a touch screen there is no hover, so the first tap on a name shows its hint instead of
 // following the link; the hint's own link, or a second tap on the name, follows it. A tap
@@ -39,6 +40,13 @@
     page.href = a.href;
     page.textContent = a.dataset.page || 'Go to the definition';
     hint.append(name, summary, page);
+    // The release whose manual pages the hint quotes, since a declaration can change between them.
+    if (a.dataset.version) {
+      const version = document.createElement('span');
+      version.className = 'nc-hint-version';
+      version.textContent = a.dataset.version;
+      hint.append(version);
+    }
     hint.hidden = false;
     const r = a.getBoundingClientRect();
     const w = hint.offsetWidth;

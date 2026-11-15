@@ -16,9 +16,9 @@ These two functions are similar to the above two, except that they print in the 
 
 This function is similar to `vprintf()`. It can be used when a variable number of arguments are to be printed.
 
-## A simple printw example
+## A simple `printw()` example
 
-**Example: A Simple printw example**
+**Example: A Simple `printw()` example**
 
 ```c
 #include <stdlib.h>

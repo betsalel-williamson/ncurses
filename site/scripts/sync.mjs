@@ -6,7 +6,9 @@
  * - man/*.{3x,1,1m,5,7} plus terminfo.5 (built by man/MKterminfo.sh) -> src/content/docs/man/<section>/<name>.md,
  *   through `pandoc -f man`, with autoconf placeholders filled in and page references turned into links
  * - .generated/sidebar.json: the man page groups for the sidebar
- * - .generated/symbols.json: library names and their man pages, for links in code listings
+ * - .generated/symbols.json: library names and constants with their man pages, for links in code
+ *   listings and in the guides' inline code (prose-links.mjs)
+ * - .generated/site.json: the release the man pages describe, for the hints on those links
  * - a Run placeholder after each complete program in a guide (examples.mjs)
  * - docs/glossary -> src/content/docs/glossary (one page per term)
  * - the errata tables in the appendix, from docs/appendix/errata.csv
@@ -18,6 +20,7 @@ import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderErrata } from './errata.mjs';
 import { findPrograms } from './examples.mjs';
+import { linkProse } from '../prose-links.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
@@ -46,7 +49,9 @@ const GUIDES = [
   { src: 'docs/contributor/ada', route: 'contributing/ada', indexLabel: 'Introduction' },
   { src: 'docs/contributor/announce', route: 'contributing/announce', indexLabel: 'Introduction' },
   { src: 'docs/contributor/install/configure-options', route: 'contributing/configure-options', indexLabel: 'Introduction' },
-  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Introduction' },
+  // A history page describes older releases, so a function's hint there leaves out this release's
+  // declaration (prose-links.mjs).
+  { src: 'docs/contributor/install/compatibility', route: 'contributing/compatibility', indexLabel: 'Introduction', historical: true },
   // A glossary is looked up, not read in order, so its terms are listed A to Z.
   { src: 'docs/glossary', route: 'glossary', indexLabel: 'Introduction', alphabetical: true },
   { src: 'docs/appendix', route: 'appendix', indexLabel: 'Errata' },
@@ -65,6 +70,8 @@ const routeOf = (target) => {
   const name = basename(target, '.md');
   return `${base}/${g.route}/${name === 'index' ? '' : `${name}/`}`;
 };
+// Each guide page written, for the links added once the man pages' names are known.
+const written = [];
 for (const g of GUIDES) {
   const dir = join(repo, g.src);
   // Sidebar order follows the guide's index: the order its links list the shards.
@@ -109,6 +116,7 @@ for (const g of GUIDES) {
     const position = isIndex ? 0 : order.indexOf(file) + 1;
     const fm = `---\ntitle: ${JSON.stringify(title)}\nsidebar:\n  order: ${position}\n${isIndex ? `  label: ${g.indexLabel}\n` : ''}---\n\n`;
     writeFileSync(out, fm + text);
+    written.push({ out, historical: Boolean(g.historical) });
   }
 }
 
@@ -294,11 +302,69 @@ for (const p of pages) {
     }
   }
 }
+// Named constants (REQ_NEXT_FIELD, O_AUTOSKIP, KEY_UP, A_BOLD, ACS_HLINE, E_BAD_ARGUMENT …) have
+// no NAME line of their own; the pages define them in tables or in a list of terms, each with a
+// one-line meaning, which becomes the constant's hint.
+for (const p of pages) {
+  if (p.section !== '3x') continue;
+  for (const [n, meaning] of constants(p.md)) {
+    if (!(n in symbols)) symbols[n] = { href: `${base}/${route(p)}/`, page: `${p.name}(3X)`, summary: meaning, constant: true };
+  }
+}
+// Some pages name only themselves on the NAME line (panel(3X)) or leave functions off it
+// (form_field_buffer(3X) lists field_buffer but declares more), so a name declared in a page's
+// SYNOPSIS joins too, after every NAME line has had its turn.
+for (const p of pages) {
+  if (p.section !== '3x') continue;
+  for (const [n, proto] of prototypes(p.md)) {
+    // A typedef's or struct member's name (MEVENT's id, x, bstate) isn't a library name.
+    if (n in symbols || /^(typedef|struct)\b/.test(proto)) continue;
+    const entry = { href: `${base}/${route(p)}/`, page: `${p.name}(3X)`, summary: p.summary };
+    // A bare constant, like ACS_HLINE in a list of names, has no declaration worth showing.
+    if (proto.includes('(')) entry.proto = proto;
+    else if (!/^[A-Z][A-Z0-9_]*$/.test(n)) continue;
+    symbols[n] = entry;
+  }
+}
 
 /**
  * The declarations in a page's SYNOPSIS, by name: "int wrefresh(WINDOW *win);" for wrefresh,
  * one line each, so a code hint can show what a function takes and returns.
  */
+/**
+ * The named constants a page defines, by name, each with its meaning: from a table whose first
+ * column is the constant ("| REQ_NEXT_FIELD | Move to the next field. |"), or from a term on a
+ * line of its own with the meaning on the next ("O_AUTOSKIP" then "Skip to the next field when
+ * this one fills."). A table row with an empty meaning shares the row above's, as KEY_UP shares
+ * "Arrow keys" with KEY_DOWN.
+ */
+function constants(md) {
+  const CONSTANT = /^(?:REQ|O|KEY|A|WA|ACS|WACS|E|COLOR|BUTTON[1-5])_[A-Z0-9_]+$/;
+  const plain = (s) => s.replace(/<[^>]+>/g, '').replace(/[*\\]/g, '').replace(/\s+/g, ' ').trim();
+  const found = new Map();
+  const lines = md.split('\n').map((l) => l.replace(/^>\s?/, ''));
+  let last = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('|')) {
+      const cells = line.split('|').slice(1, -1).map(plain);
+      if (CONSTANT.test(cells[0] ?? '')) {
+        const meaning = cells.slice(1).reverse().find((c) => c && !/^[\\-]$|^\S$/.test(c)) ?? '';
+        last = meaning || last;
+        if (last && !found.has(cells[0])) found.set(cells[0], last);
+      } else last = null;
+      continue;
+    }
+    last = null;
+    const term = plain(line);
+    const next = plain(lines[i + 1] ?? '');
+    if (CONSTANT.test(term) && next && !CONSTANT.test(next) && !found.has(term)) {
+      found.set(term, next.split(/(?<=\.)\s/)[0]);
+    }
+  }
+  return found;
+}
+
 function prototypes(md) {
   const synopsis = /^# SYNOPSIS\n([\s\S]*?)(?=^# )/m.exec(md)?.[1] ?? '';
   const code = synopsis
@@ -318,5 +384,15 @@ function prototypes(md) {
   return found;
 }
 writeFileSync(join(tmp, 'symbols.json'), JSON.stringify(symbols, null, 2));
+// .generated/site.json: the release the index describes, for the hints in code listings
+// (code-links.mjs).
+const version = `${FILL.NCURSES_MAJOR}.${FILL.NCURSES_MINOR}`;
+writeFileSync(join(tmp, 'site.json'), JSON.stringify({ version }, null, 2));
+// Library names in the guides' inline code link to their man pages, now that the index is known.
+for (const { out, historical } of written) {
+  const page = readFileSync(out, 'utf8');
+  const end = page.indexOf('\n---\n', 4) + 5;
+  writeFileSync(out, page.slice(0, end) + linkProse(page.slice(end), { symbols, historical, version }));
+}
 const failed = pages.filter((p) => p.failed).map((p) => p.file);
 console.log(`synced ${pages.length} man pages${failed.length ? ` (${failed.join(', ')} shown as source)` : ''}`);
