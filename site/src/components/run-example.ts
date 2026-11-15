@@ -174,7 +174,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
             pty = m.pty;
             // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
             [pty.cols, pty.rows] = chosen();
-            pty.write = (bytes) => term!.write(bytes);
+            pty.write = (bytes) => term!.write(keepScreen(bytes));
           },
         ],
         onExit: (code: number) => done(`${label} exited (${code}).`),
@@ -194,6 +194,23 @@ function setup(box: HTMLElement, variants: Variant[], args: string[]) {
 window.addEventListener('error', (e) => {
   if ((e.error as { name?: string } | null)?.name === 'ExitStatus') e.preventDefault();
 });
+
+/**
+ * Drops the "leave the alternate screen" sequence (rmcup, CSI ?1049 l) from a program's output.
+ * endwin() sends it, and xterm.js would then switch back to the empty normal screen, so whatever
+ * the program printed last, such as a choice it reports just before it ends, would vanish with
+ * it. A real terminal shows the shell there; this page has no shell, so it keeps the program's
+ * last screen in view instead.
+ */
+const RMCUP = [0x1b, 0x5b, 0x3f, 0x31, 0x30, 0x34, 0x39, 0x6c];
+function keepScreen(bytes: Uint8Array): Uint8Array {
+  const out: number[] = [];
+  for (let i = 0; i < bytes.length; i++) {
+    if (RMCUP.every((b, k) => bytes[i + k] === b)) i += RMCUP.length - 1;
+    else out.push(bytes[i]);
+  }
+  return out.length === bytes.length ? bytes : Uint8Array.from(out);
+}
 
 const boxes = document.querySelectorAll<HTMLElement>('.run-example');
 if (boxes.length) {
