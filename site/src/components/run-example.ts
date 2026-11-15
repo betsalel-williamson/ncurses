@@ -32,7 +32,6 @@ const REASONS: Record<string, string> = {
   crashed: 'stops with an error when run',
   'no-quit': "doesn't quit on F1",
   'no-output': 'draws nothing when run',
-  'needs-shell': 'starts a shell with system(), and a web page has no shell',
 };
 
 async function statuses(): Promise<Map<string, Status> | null> {
@@ -219,7 +218,7 @@ if (boxes.length) {
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
       if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? []);
-      else if (s) flag(box, `This program doesn't run in the browser${s.status === 'needs-shell' ? '' : ' yet'}: it ${REASONS[s.status] ?? s.status}.`, s.detail);
+      else if (s) flag(box, `This program doesn't run in the browser yet: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }
   });
