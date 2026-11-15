@@ -87,7 +87,7 @@ for (const g of GUIDES) {
     // or a "doesn't run yet" flag (build-examples.mjs, run-example.ts). From the end, so the
     // offsets stay good.
     for (const ex of findPrograms(text, `${g.src}/${file}`).reverse()) {
-      const widget = `\n\n<div class="run-example" data-example="${ex.id}" data-title=${JSON.stringify(ex.title)}></div>`;
+      const widget = `\n\n<div class="run-example" data-example="${ex.id}" data-title=${JSON.stringify(ex.title)}${ex.keys.length ? ` data-keys="${ex.keys.join(' ')}"` : ''}></div>`;
       text = text.slice(0, ex.end) + widget + text.slice(ex.end);
     }
     const out = join(content, g.route, file);

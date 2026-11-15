@@ -15,8 +15,7 @@ tar zxvf ncurses-<version>.tar.gz   # unzip and untar the archive
 cd ncurses-<version>                # cd to the directory
 ./configure                         # configure the build for your system
 make                                # make it
-su root                             # become root
-make install                        # install it
+sudo make install                   # install it as root
 ```
 
 To build a program you also need the library's header files. Operating systems that split libraries into packages usually put them in a separate development package.

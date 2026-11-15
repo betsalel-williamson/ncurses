@@ -29,10 +29,22 @@ export function listingMacros(code) {
   return [...new Set(tested)].filter((n) => !defined.has(n) && !/^(NCURSES_|_XOPEN|__)/.test(n));
 }
 
+/**
+ * The keys a program reads that a phone has no key for, so the Run row can offer them while it
+ * runs: 'arrows' for KEY_LEFT, KEY_UP, KEY_DOWN or KEY_RIGHT, 'pages' for KEY_PPAGE or KEY_NPAGE.
+ * F1 is always offered, since every example quits on it.
+ */
+export function programKeys(code) {
+  const keys = [];
+  if (/\bKEY_(?:LEFT|UP|DOWN|RIGHT)\b/.test(code)) keys.push('arrows');
+  if (/\bKEY_(?:PPAGE|NPAGE)\b/.test(code)) keys.push('pages');
+  return keys;
+}
+
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /**
- * The programs in one shard's text, in order: { id, title, code, end, libs }. `end` is the
+ * The programs in one shard's text, in order: { id, title, code, end, libs, keys }. `end` is the
  * offset just past the closing fence. The title is the "**Example: …**" line before the block,
  * if there is one in the preceding paragraph or two; otherwise the shard's name and a number.
  * The id comes from the title, so it is the same whatever was done to the text around it.
@@ -53,7 +65,7 @@ export function findPrograms(text, shard) {
     const libs = Object.keys(LIBS).filter((l) => LIBS[l].test(code));
     const given = /\bargs="([^"]*)"/.exec(meta);
     const args = given ? given[1].split(/\s+/).filter(Boolean) : MAIN_ARGS.test(code) ? ['example.c'] : [];
-    programs.push({ id, title, code, end: m.index + m[0].length, libs, macros: listingMacros(code), args, shell: SHELL.test(code) });
+    programs.push({ id, title, code, end: m.index + m[0].length, libs, macros: listingMacros(code), args, shell: SHELL.test(code), keys: programKeys(code) });
   }
   return programs;
 }

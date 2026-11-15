@@ -8,7 +8,8 @@
  * - Trailing comments line up: every one in a declaration listing, and those in each run of
  *   lines (no blank line between) in a program.
  * - No line is longer than 77 columns, the width that fits the site's content column at 1280px
- *   without scrolling (see codeFontSize in site/astro.config.mjs).
+ *   without scrolling, in every reader style, with the 3-digit line-number gutter that a long
+ *   listing gets (see codeFontSize in site/ec.config.mjs, and the gutter in styles.css).
  * Usage: node site/scripts/check-listings.mjs [--fix]   (--fix reformats complete programs)
  */
 import { execFileSync } from 'node:child_process';
