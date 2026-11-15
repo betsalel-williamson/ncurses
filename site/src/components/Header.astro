@@ -1,0 +1,72 @@
+---
+// Starlight's header, plus the GitHub link and the Style menu on narrow screens. Starlight shows
+// those only from 50rem up and moves them into the menu below that; here they stay in the bar.
+// The color-scheme picker stays in the menu, for room.
+import Default from '@astrojs/starlight/components/Header.astro';
+import SocialIcons from 'virtual:starlight/components/SocialIcons';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+---
+
+<div class="nc-header">
+  <Default />
+  <div class="nc-header-mobile md:sl-hidden print:hidden">
+    <div class="sl-flex nc-header-social"><SocialIcons /></div>
+    <ThemeSelect />
+  </div>
+</div>
+
+<style>
+  .nc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 100%;
+  }
+  .nc-header > :global(.header) {
+    flex: 1;
+    min-width: 0;
+  }
+  .nc-header-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .nc-header-social {
+    align-items: center;
+  }
+  /* The style menu only: the Auto/Light/Dark picker stays in the menu. */
+  .nc-header-mobile :global(starlight-theme-select) {
+    display: none;
+  }
+  /* Narrower than the 10em it has in the wide header, which Select.astro sets inline. */
+  .nc-header-mobile :global(ncurses-style-select label) {
+    --sl-select-width: 7.5em !important;
+  }
+  /* The caret marks it as a menu, so the window icon gives its room to the style's name. */
+  .nc-header-mobile :global(ncurses-style-select .label-icon) {
+    display: none;
+  }
+  .nc-header-mobile :global(ncurses-style-select select) {
+    font-size: var(--sl-text-sm);
+    padding-inline-start: var(--sl-inline-padding);
+  }
+  /* On the narrowest phones the menu keeps only its icon and caret, so the site title fits. The
+     select still opens the full list, and its label stays for screen readers. */
+  @media (max-width: 23rem) {
+    .nc-header-mobile :global(ncurses-style-select label) {
+      --sl-select-width: 0.5em !important;
+    }
+    .nc-header-mobile :global(ncurses-style-select .label-icon) {
+      display: block;
+    }
+    .nc-header-mobile :global(ncurses-style-select select) {
+      color: transparent;
+      padding-inline-start: calc(var(--sl-label-icon-size) + var(--sl-inline-padding) + 0.25rem);
+    }
+  }
+  @media (min-width: 50rem) {
+    .nc-header-mobile {
+      display: none;
+    }
+  }
+</style>

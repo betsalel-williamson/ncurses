@@ -16,6 +16,7 @@ export default defineConfig({
       description: 'Documentation for ncurses, the new curses library: guides and every manual page.',
       components: {
         Footer: './src/components/Footer.astro',
+        Header: './src/components/Header.astro',
         ThemeProvider: './src/components/ThemeProvider.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
       },
