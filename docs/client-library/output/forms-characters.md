@@ -6,4 +6,4 @@ The `addch()` function (and some others, including `box()` and `border()`) can a
 
 The most useful of the ACS defines are the forms-drawing characters. You can use these to draw boxes, tables, horizontal or vertical lines, and simple graphs on the screen. If the terminal does not have such characters, curses maps them to a recognizable (though ugly) set of ASCII defaults when it starts. The manual page `curs_addch(3X)` lists each character and its default, under "Forms-Drawing Characters".
 
-The [window border program](../windows/creating-windows.md) draws its box with these characters, and [Other border functions](../windows/border-functions.md) draws lines with them.
+The [window border program](../windows/creating-windows.md) draws its box with these characters: passing 0 for a character to `box()` or `wborder()` selects the matching `ACS_` default. [Other border functions](../windows/border-functions.md) draws with the ASCII characters `|`, `-` and `+` instead, and could pass `ACS_VLINE`, `ACS_HLINE` and the `ACS_` corner names to get lines.

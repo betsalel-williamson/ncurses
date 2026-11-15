@@ -17,7 +17,7 @@ printf '\033[0;31;40mIn Color\n'
 `\033` is the escape character. All the others are normal printable characters. You should see the string "In Color" in red. It stays that way; to revert to the original mode, type this:
 
 ```sh
-printf '\033[0;37;40m\n'
+printf '\033[0m\n'
 ```
 
 What do these magic characters mean? They might even be different for different terminals. So the designers of UNIX invented a mechanism named `termcap`: a file that lists all the [capabilities](../../glossary/terminal-capability.md) of a particular terminal, along with the escape sequences needed to achieve a particular effect. In later years, it was replaced by `terminfo`, a database format that can describe the capabilities of thousands of different terminals. Application programs query the [terminfo](../../glossary/terminfo.md) database to obtain the control characters to send to a terminal or terminal emulator.
@@ -42,4 +42,4 @@ The `curses` API has the advantage of (a) back-portability to character-cell ter
 
 With them you can create applications that contain multiple windows, menus, [panels](../../glossary/panel.md) and forms. Windows can be managed independently, can scroll, and can even be hidden.
 
-If you are already an experienced `curses` programmer, read the sections of *Writing Programs with NCURSES* on [Mouse Interfacing](https://invisible-island.net/ncurses/ncurses-intro.html#mouse), [Debugging](https://invisible-island.net/ncurses/ncurses-intro.html#debugging), [Compatibility with Older Versions](https://invisible-island.net/ncurses/ncurses-intro.html#compat), and [Hints, Tips, and Tricks](https://invisible-island.net/ncurses/ncurses-intro.html#hints). They will bring you up to speed on the special features and quirks of the `ncurses` implementation. If you are not so experienced, keep reading.
+If you are already an experienced `curses` programmer, read the pages on the [mouse](../mouse/index.md), [debugging with traces](../init-and-debugging/debugging.md), [compatibility with older versions](../hints/compatibility.md), and [hints, tips and compatibility](../hints/index.md). They will bring you up to speed on the special features and quirks of the `ncurses` implementation. If you are not so experienced, keep reading.

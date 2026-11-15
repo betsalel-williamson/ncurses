@@ -17,7 +17,7 @@ The package's idea of what the terminal display currently looks like, i.e., what
 
 ## Standard windows
 
-The routines can use several windows, but two are automatically given: `curscr`, which knows what the terminal looks like, and `stdscr`, which is what the programmer wants the terminal to look like next. The user should never actually access `curscr` directly. Changes should be made through the API, and then the routine `refresh()` (or `wrefresh()`) called.
+The routines can use several windows, but two are automatically given: `curscr`, which knows what the terminal looks like, and `stdscr`, which is what the programmer wants the terminal to look like next. When a program uses several windows, `wnoutrefresh()` combines them into a third structure, `newscr`, the [virtual screen](../../glossary/virtual-screen.md). The user should never actually access `curscr` directly. Changes should be made through the API, and then the routine `refresh()` (or `wrefresh()`) called.
 
 ## Function naming conventions
 

@@ -8,7 +8,7 @@
 - <https://ftp.gnu.org/pub/gnu/ncurses/>, or
 - any of the GNU mirror sites listed at <https://www.gnu.org/order/ftp.html>.
 
-Read the `README` and [`INSTALL`](https://invisible-island.net/ncurses/INSTALL.html) files for details on how to install it. It usually involves the following operations:
+Read the `README` file and the [installation guide](../../contributor/install/index.md) for details on how to install it. It usually involves the following operations:
 
 ```sh
 tar zxvf ncurses-<version>.tar.gz   # unzip and untar the archive

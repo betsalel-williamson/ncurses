@@ -53,4 +53,4 @@ main(void)
 
 The program above demonstrates how easy it is to use `printw()`. You just feed the coordinates and the message to appear on the screen, then it does what you want.
 
-The program introduces a new function, `getmaxyx()`, a macro defined in `ncurses.h`. It gives the number of rows and the number of columns in a given window. `getmaxyx()` does this by updating the variables given to it. Since `getmaxyx()` is not a function, we don't pass pointers to it; we just give two integer variables.
+The program introduces a new function, `getmaxyx()`, a macro defined in `curses.h`. It gives the number of rows and the number of columns in a given window. `getmaxyx()` does this by updating the variables given to it. Since `getmaxyx()` is not a function, we don't pass pointers to it; we just give two integer variables.
