@@ -369,6 +369,7 @@
   --nc-button-border: 2px solid;
   --nc-button-border-color: var(--nc-raised);
   --nc-button-shadow: none;
+  --nc-button-primary-shadow: 0 0 0 2px #f4f4f0, 0 0 0 3px #161616;
   --nc-button-radius: 0;
   --nc-card-bg: #d6d6d1;
   --nc-card-fg: #33332f;
@@ -769,7 +770,11 @@
     border: 0;
   }
 
-  /* Buttons: Run this example, and the previous and next page links. */
+  /* Buttons: the home page's primary action, Run this example, the mobile menu button and the
+     copy button on listings. Secondary actions and cards draw as the style's card. */
+  & .sl-link-button.primary,
+  & button.sl-menu-button,
+  & .expressive-code .copy button,
   & .run-example-bar button,
   & .run-example-size select {
     background: var(--nc-button-bg);
@@ -780,13 +785,46 @@
     box-shadow: var(--nc-button-shadow);
     font-family: var(--sl-font);
   }
+  & .sl-link-button.primary:hover,
+  & button.sl-menu-button:hover,
   & .run-example-bar button:not(:disabled):hover {
     background: var(--nc-button-hover-bg);
     color: var(--nc-button-hover-fg);
   }
+  & .sl-link-button:active,
+  & button.sl-menu-button:active,
   & .run-example-bar button:not(:disabled):active {
     box-shadow: none;
     transform: translate(0.125rem, 0.125rem);
+  }
+  & .sl-link-button {
+    font-family: var(--sl-font);
+  }
+  /* A style can mark the default action, as CDE ringed its default button. */
+  & .sl-link-button.primary {
+    box-shadow: var(--nc-button-primary-shadow, var(--nc-button-shadow));
+  }
+  & .sl-link-button:is(.secondary, .minimal),
+  & .card {
+    background: var(--nc-card-bg);
+    color: var(--nc-card-fg);
+    border: var(--nc-button-border);
+    border-color: var(--nc-button-border-color);
+    border-radius: var(--nc-button-radius);
+    box-shadow: var(--nc-button-shadow);
+    --sl-color-white: var(--nc-card-title-fg);
+    --sl-card-border: var(--nc-button-border-color);
+    --sl-card-bg: var(--nc-card-bg);
+  }
+  & .sl-link-button.minimal {
+    padding-inline: 1.25rem;
+  }
+  & .sl-link-button:is(.secondary, .minimal):hover {
+    background: var(--nc-button-hover-bg);
+    color: var(--nc-button-hover-fg);
+  }
+  & .card .icon {
+    border-radius: var(--nc-button-radius);
   }
   & .pagination-links a {
     background: var(--nc-card-bg);
