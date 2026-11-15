@@ -34,11 +34,12 @@ Astro caches the code-block stylesheet's name between local builds. After changi
 
 ## Code hints
 
-In C listings, each call of a curses library function links to its man page. Hovering or focusing the name shows the function's declaration from the page's SYNOPSIS, so a reader sees its arguments, and the page's NAME summary.
+In C listings, each call of a curses library function links to its man page, and each use of the listing's own functions and variables links to where it is defined. Hovering or focusing the name shows the function's declaration from the page's SYNOPSIS, so a reader sees its arguments, and the page's NAME summary.
 
 - `scripts/sync.mjs` writes `.generated/symbols.json` from every 3X page: each name from the NAME line, its page, the summary and its declaration from SYNOPSIS (598 of 708 names have one).
 - pandoc leaves the man pages' code blocks without a language, so `sync.mjs` marks an indented block in a 3X page as C when it looks like code (a line ending in `;`, an `#include`, a comment or a brace). The blocks are then highlighted and linked like the guides' listings.
 - `code-links.mjs` is an Expressive Code plugin, loaded from `ec.config.mjs`. It links a name only when a `(` follows it, so a variable called `box` or `move` stays plain.
+- A name the listing defines for itself links to its definition instead: its functions, macros, types and file-scope variables, and each function's parameters and locals. The hint shows the defining line and what the name is, such as "Parameter of print_in_middle(), line 26", and the definition is outlined when the link is followed. `code-defs.mjs` finds the definitions from the text, because most listings are fragments that don't compile alone. It reads comments and strings as blank, follows braces to scope parameters and locals to their function, and takes the innermost definition in scope. Names after `.` or `->` stay plain. A name it misses stays plain too. These links show only on hover or focus, since they are on almost every line.
 - `src/components/code-hints.js` draws the hint, and `src/styles/styles.css` styles it from the `--nc-hint-*` tokens of each reader style.
 
 ## Runnable examples

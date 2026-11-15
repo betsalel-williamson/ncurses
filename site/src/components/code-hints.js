@@ -1,7 +1,8 @@
-// The hint for a linked library name in a code listing (code-links.mjs adds the links): the
-// function's declaration, its man page's NAME summary and the page, shown on hover or keyboard
-// focus. Escape hides it. The link itself goes to the man page, so the hint adds nothing a
-// reader without it misses.
+// The hint for a linked name in a code listing (code-links.mjs adds the links), shown on hover
+// or keyboard focus. For a library function: its declaration, its man page's NAME summary and the
+// page. For a name the listing defines: the line that defines it and what it is. Escape hides it.
+// Each link goes to the man page or the definition, so the hint adds nothing a reader without it
+// misses.
 (() => {
   if (window.__ncHints) return;
   window.__ncHints = true;
@@ -21,15 +22,16 @@
     }
     current = a;
     hint.replaceChildren();
-    // The declaration from the man page's SYNOPSIS when it has one, else the bare name.
+    // The declaration from the man page's SYNOPSIS or the listing, else the bare name.
     const name = document.createElement('code');
     name.textContent = a.dataset.proto || a.textContent;
     const summary = document.createElement('span');
     summary.textContent = a.dataset.summary;
     const page = document.createElement('span');
     page.className = 'nc-hint-page';
-    page.textContent = a.dataset.page;
-    hint.append(name, summary, page);
+    page.textContent = a.dataset.page ?? '';
+    hint.append(name, summary);
+    if (a.dataset.page) hint.append(page);
     hint.hidden = false;
     const r = a.getBoundingClientRect();
     const w = hint.offsetWidth;
@@ -39,7 +41,7 @@
     hint.style.left = `${left}px`;
     hint.style.top = `${below + h > innerHeight - 8 ? r.top - h - 6 : below}px`;
   };
-  const target = (e) => e.target instanceof Element && e.target.closest('a.nc-sym');
+  const target = (e) => e.target instanceof Element && e.target.closest('a.nc-sym, a.nc-def');
   document.addEventListener('pointerover', (e) => {
     const a = target(e);
     if (a && a !== current) show(a);
