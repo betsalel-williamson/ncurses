@@ -71,7 +71,7 @@ type Pty = {
 type Variant = { define: string; id: string; bytes?: number };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean };
 
 const REASONS: Record<string, string> = {
   'compile-error': "doesn't compile",
@@ -79,7 +79,6 @@ const REASONS: Record<string, string> = {
   crashed: 'stops with an error when run',
   'no-quit': "doesn't quit on F1",
   'no-output': 'draws nothing when run',
-  'needs-shell': 'starts a shell with system(), and a web page has no shell',
 };
 
 async function statuses(): Promise<Map<string, Status> | null> {
@@ -163,7 +162,7 @@ function keyGroup(wanted: string[], send: (key: string) => void) {
   return { group, stop };
 }
 
-function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: number) {
+function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: number, shell = false) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
   const wantedKeys = (box.dataset.keys ?? '').split(/\s+/).filter(Boolean);
@@ -195,7 +194,8 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
   const note = document.createElement('span');
   note.className = 'run-example-note';
   note.textContent =
-    'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.';
+    'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.' +
+    (shell ? ' A web page has no shell, so a pretend one answers system(): type help to see what it knows, and exit to go back.' : '');
   const keys = keyGroup(wantedKeys, (k) => {
     if (!term || !running) return;
     term.input(keySequence(k, term.modes.applicationCursorKeysMode), true);
@@ -359,7 +359,14 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
       input.dispose();
       pty = null;
       // After the program's last screen, which may still be waiting on the boot screen.
-      const note = () => term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
+      // On the bottom row when it is empty: endwin() leaves the cursor there, and a new line would
+      // scroll the program's last screen up.
+      const note = () => {
+        const t = term!;
+        const buf = t.buffer.active;
+        const last = buf.getLine(buf.baseY + t.rows - 1)?.translateToString(true).trim();
+        t.write(last ? `\r\n\x1b[2m${message}\x1b[0m\r\n` : `\x1b[${t.rows};1H\x1b[2m${message}\x1b[0m`);
+      };
       if (shown) void shown.then(note);
       else note();
       running = false;
@@ -455,8 +462,9 @@ async function download(url: string, size: number | undefined, progress: (fracti
  * Drops the "leave the alternate screen" sequence (rmcup, CSI ?1049 l) from a program's output.
  * endwin() sends it, and xterm.js would then switch back to the empty normal screen, so whatever
  * the program printed last, such as a choice it reports just before it ends, would vanish with
- * it. A real terminal shows the shell there; this page has no shell, so it keeps the program's
- * last screen in view instead.
+ * it. A real terminal shows the shell there; this page keeps the program's last screen in view
+ * instead. A program that shells out gets the pretend shell (examples/pty.js), which leaves the
+ * alternate screen itself with CSI ?1047 l.
  */
 const RMCUP = [0x1b, 0x5b, 0x3f, 0x31, 0x30, 0x34, 0x39, 0x6c];
 function keepScreen(bytes: Uint8Array): Uint8Array {
@@ -473,8 +481,8 @@ if (boxes.length) {
   void statuses().then((all) => {
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
-      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? [], s.bytes);
-      else if (s) flag(box, `This program doesn't run in the browser${s.status === 'needs-shell' ? '' : ' yet'}: it ${REASONS[s.status] ?? s.status}.`, s.detail);
+      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? [], s.bytes, s.shell);
+      else if (s) flag(box, `This program doesn't run in the browser yet: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }
   });

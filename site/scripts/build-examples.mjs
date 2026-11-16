@@ -172,8 +172,9 @@ for (const dir of GUIDE_DIRS) {
     for (const ex of findPrograms(readFileSync(join(repo, shard), 'utf8'), shard)) {
       const entry = { id: ex.id, title: ex.title, shard };
       status.push(entry);
-      if (ex.shell) entry.status = 'needs-shell';
-      else programs.push({ ex, entry });
+      // A program that shells out gets the pretend shell in examples/pty.js; the page says so.
+      if (ex.shell) entry.shell = true;
+      programs.push({ ex, entry });
     }
   }
 }
@@ -259,7 +260,7 @@ async function buildExample(ex, id, defines, libs, entryFile) {
       '-O2', obj, entryFile, ...libs, ...files,
       '-o', join(out, `${id}.mjs`),
       '--js-library', join(site, 'examples/pty.js'),
-      '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll"]',
+      '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll","_emscripten_system"]',
       '-sMODULARIZE', '-sEXPORT_ES6', '-sENVIRONMENT=web,node', '-sEXIT_RUNTIME=1',
       '-sEXPORTED_RUNTIME_METHODS=["ENV"]', '-sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE=["$PTY"]',
     ], quiet);

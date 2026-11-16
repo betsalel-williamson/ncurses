@@ -10,7 +10,7 @@ export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/men
 // A listing's fence can give the program's arguments: ```c args="5".
 const BLOCK = /^```c([^\n]*)\n([\s\S]*?)^```$/gm;
 const MAIN = /^(?:int\s+|void\s+)?main\s*\(/m;
-/** A program that starts a shell with system() can't run in a web page, which has none. */
+/** A program that starts a shell with system(): a web page has none, so it gets a pretend one. */
 const SHELL = /\bsystem\s*\(/;
 /**
  * main(int argc, char *argv[]): unless the fence gives arguments, the program reads the file
