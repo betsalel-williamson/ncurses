@@ -235,3 +235,15 @@ test('resolvePath and tilde', () => {
   assert.equal(tilde('/home/reader/menus'), '~/menus');
   assert.equal(tilde('/usr/games'), '/usr/games');
 });
+
+test('echo expands $NAME, ${NAME} and $?, and env lists the variables', async () => {
+  const { shell, text } = fixture();
+  const session = shell.session();
+  shell.feed('echo $PATH\r./hello\recho status $?\rcd ..\recho ${PWD}/x$NOPE.\rprintenv HOME\renv\rexit\r');
+  await session;
+  assert.match(text(), /\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/games\r\n/);
+  assert.match(text(), /status 3\r\n/);
+  assert.match(text(), /\/home\/reader\/x\.\r\n/);
+  assert.match(text(), /printenv HOME\r\n\/home\/reader\r\n/);
+  assert.match(text(), /USER=reader\r\n/);
+});

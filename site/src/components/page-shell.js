@@ -20,14 +20,14 @@ export const HELP =
   'The examples are in folders, one per guide: ls lists a\r\n' +
   'folder, cd goes into one, and ./name runs a program.\r\n' +
   'Tab completes a name. It also knows pwd, echo, date,\r\n' +
-  'whoami, uname, clear and help.\r\n' +
+  'whoami, uname, env, clear and help.\r\n' +
   'exit leaves this shell; halt powers the terminal off.\r\n';
 
 /** Names a shell is started by, so system("sh") gets a prompt rather than one command. */
 export const SHELL_NAMES = /^\s*(?:(?:\/usr)?\/bin\/)?(?:sh|bash|ksh|zsh|dash)\s*$|^\s*\$SHELL\s*$/;
 
 /** The commands the shell itself knows, for Tab. */
-export const BUILTINS = ['cd', 'clear', 'date', 'echo', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
+export const BUILTINS = ['cd', 'clear', 'date', 'echo', 'env', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'printenv', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
 
 const GAMES_DIR = '/usr/games';
 const HOME = '/home/reader';
@@ -82,6 +82,22 @@ export function commonPrefix(names) {
 export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24, cwd: start = HOME }) {
   const queue = [];
   let cwd = start;
+  let last = 0;
+  /** The environment echo $NAME and env see; PWD follows cd. */
+  const environ = () => ({
+    HOME,
+    LOGNAME: 'reader',
+    PATH: `/usr/local/bin:/usr/bin:/bin:${GAMES_DIR}`,
+    PWD: cwd,
+    SHELL: '/bin/sh',
+    TERM: 'xterm-256color',
+    USER: 'reader',
+  });
+  /** $NAME, ${NAME} and $? in a command line, as sh expands them; an unset name is empty. */
+  const expand = (text) => {
+    const env = environ();
+    return text.replace(/\$(?:\?|\{(\w+)\}|(\w+))/g, (m, braced, bare) => (m === '$?' ? String(last) : (env[braced ?? bare] ?? '')));
+  };
 
   /**
    * What is at an absolute path: { dir: [entries] }, with a folder's entries ending in /, or
@@ -246,7 +262,7 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
 
   /** Runs one command line; resolves with its exit status, { exit } (null for the last status) or HALT. */
   const run = async (text) => {
-    const words = text.trim().split(/\s+/).filter(Boolean);
+    const words = expand(text).trim().split(/\s+/).filter(Boolean);
     if (!words.length) return 0;
     const [cmd, ...args] = words;
     switch (cmd) {
@@ -263,6 +279,16 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
       case 'pwd':
         out(cwd);
         return 0;
+      case 'env':
+      case 'printenv': {
+        const env = environ();
+        if (args.length) {
+          for (const a of args) if (a in env) out(env[a]);
+          return args.every((a) => a in env) ? 0 : 1;
+        }
+        for (const [k, v] of Object.entries(env)) out(`${k}=${v}`);
+        return 0;
+      }
       case 'cd': {
         const to = resolvePath(args[0] ?? '~', cwd);
         const at = node(to);
@@ -355,7 +381,7 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         const r = await run(text);
         if (r === HALT) return HALT;
         if (typeof r === 'object') return top ? HALT : (r.exit ?? status);
-        status = r;
+        status = last = r;
       }
     },
   };
