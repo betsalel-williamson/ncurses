@@ -15,15 +15,15 @@
     }
   ],
   "session": {
-    "asOf": "2026-11-17T19:23:16Z",
+    "asOf": "2026-11-17T20:08:07Z",
     "started": "2026-11-12T16:50:27Z",
-    "inputTokens": 137010,
-    "outputTokens": 3679084,
-    "cacheReadTokens": 1238801805,
-    "cacheWriteTokens": 15636511,
-    "costUsd": 412.05,
-    "agentActiveSeconds": 63418,
+    "inputTokens": 137074,
+    "outputTokens": 3692780,
+    "cacheReadTokens": 1247945123,
+    "cacheWriteTokens": 15681715,
+    "costUsd": 414.51,
+    "agentActiveSeconds": 63939,
     "maintainerSeconds": 28656,
-    "maintainerMessages": 130
+    "maintainerMessages": 131
   }
 }
