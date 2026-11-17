@@ -101,7 +101,7 @@ test('a game runs from /usr/games by name, with the arguments typed after it', a
   assert.match(text(), /rain\s+worm/);
 });
 
-test('ls does not list the games', async () => {
+test('the games are in /usr/games, not the home folder', async () => {
   const { shell, text } = fixture();
   const session = shell.session();
   shell.feed('ls\rexit\r');
