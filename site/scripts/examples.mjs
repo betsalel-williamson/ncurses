@@ -4,6 +4,24 @@
  * listing gets a Run button (or a "doesn't run yet" flag) without anyone listing it.
  */
 
+/**
+ * The ncurses test programs the pretend shell keeps in /usr/games, as easter eggs: built from
+ * test/ like the guides' listings, not listed by ls, and run by name. `quit` is the key that
+ * ends each one, for the smoke test, and `with` names other files in test/ it is linked with.
+ */
+export const GAMES = [
+  { id: 'worm', quit: 'q' },
+  { id: 'rain', quit: 'q', with: ['popup_msg'] },
+  { id: 'firework', quit: 'q' },
+  { id: 'xmas', quit: 'q' },
+  { id: 'tclock', quit: 'q' },
+  { id: 'knight', quit: 'q' },
+  { id: 'gdc', quit: 'q' },
+  { id: 'hanoi', quit: 'q' },
+  { id: 'blue', quit: 'q' },
+  { id: 'bs', quit: '\x11A\x11' },
+];
+
 /** Guide shard directories, relative to the repository root. */
 export const GUIDE_DIRS = ['docs/client-library/forms', 'docs/client-library/menus', 'docs/client-library/panels', 'docs/client-library/getting-started', 'docs/client-library/windows', 'docs/client-library/output', 'docs/client-library/input', 'docs/client-library/attributes', 'docs/client-library/keyboard', 'docs/client-library/mouse', 'docs/client-library/screen', 'docs/client-library/init-and-debugging', 'docs/client-library/hints', 'docs/client-library/more'];
 
