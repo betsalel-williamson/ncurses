@@ -72,7 +72,8 @@ addToLibrary({
     if (fd === 0 && ptyWinch()) return 27; // EINTR
     return r;
   },
-  // system(): a web page has no shell, so a small pretend one stands in. A program that shells
+  // system() where the page gives no shell of its own (in Node, for the smoke test): a web page
+  // has no shell, so a small pretend one stands in. A program that shells
   // out (system("sh"), system("/bin/sh")) gets a prompt in the terminal's normal screen, the one
   // endwin() returned to; any other command runs once. It reads a line at a time with its own
   // echo, as a shell in cooked mode does, and knows a few commands; `exit` returns to the program
@@ -152,12 +153,16 @@ addToLibrary({
       return status << 8;
     },
   },
-  // musl's system() calls _emscripten_system, which in Node would run a real shell.
+  // musl's system() calls _emscripten_system, which in Node would run a real shell. A page that
+  // gives Module.shell (run-example.ts) answers with its own shell, which can run the site's
+  // other examples; it resolves with the exit status. Without one, the shell above answers.
   _emscripten_system__deps: ['$ptyShell'],
   _emscripten_system__async: true,
   _emscripten_system: (command) => {
     if (!command) return 1; // a shell is available
-    return Asyncify.handleAsync(() => ptyShell.system(UTF8ToString(command)));
+    const text = UTF8ToString(command);
+    const page = Module['shell'];
+    return Asyncify.handleAsync(async () => (page ? ((await page(text)) & 255) << 8 : ptyShell.system(text)));
   },
   __syscall_poll__deps: ['$PTY', '$ptyWinch'],
   __syscall_poll__async: true,
