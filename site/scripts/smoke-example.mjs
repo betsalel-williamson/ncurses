@@ -9,11 +9,12 @@
  * A program still running that shows a numbered menu with an Exit item ("14: Exit") gets
  * that number and Enter, for a menu read with scanw().
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
- * Usage: node smoke-example.mjs <path to .mjs> [program arguments]
+ * Usage: [SMOKE_QUIT=<key>] node smoke-example.mjs <path to .mjs> [program arguments]
  */
 import { pathToFileURL } from 'node:url';
 
-const F1 = new TextEncoder().encode('\x1bOP');
+// A test program the shell keeps in /usr/games quits on its own key (SMOKE_QUIT), not F1.
+const F1 = new TextEncoder().encode(process.env.SMOKE_QUIT || '\x1bOP');
 const report = (status, detail = '') => {
   console.log(JSON.stringify({ status, detail }));
   process.exit(0);

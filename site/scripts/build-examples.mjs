@@ -19,7 +19,7 @@ import { availableParallelism } from 'node:os';
 import { promisify } from 'node:util';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { GUIDE_DIRS, findPrograms } from './examples.mjs';
+import { GAMES, GUIDE_DIRS, findPrograms } from './examples.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const run = promisify(execFile);
@@ -178,6 +178,26 @@ for (const dir of GUIDE_DIRS) {
     }
   }
 }
+// The test programs the pretend shell keeps in /usr/games (examples.mjs): each is built from
+// its source in test/ with the test directory's own header, and quits on its own key.
+for (const { id, quit, with: also = [] } of GAMES) {
+  const source = `test/${id}.c`;
+  const entry = { id, title: id, source, hidden: true };
+  status.push(entry);
+  const ex = {
+    id,
+    code: readFileSync(join(repo, source), 'utf8'),
+    args: [],
+    argv: true,
+    libs: [],
+    macros: [],
+    cflags: ['-DHAVE_CONFIG_H', '-I', join(repo, 'test'), '-I', join(repo, 'include')],
+    sleep: true,
+    quit,
+    with: also.map((f) => join(repo, `test/${f}.c`)),
+  };
+  programs.push({ ex, entry });
+}
 await pool(programs, async ({ ex, entry }) => Object.assign(entry, await cachedBuild(ex, ex.id, [])));
 // A listing that tests a macro of its own (#ifdef _DEBUG) gets a second build with the macro
 // defined, so a reader can run the code it hides.
@@ -203,11 +223,13 @@ console.log(`build-examples: ${hits} build(s) from the cache, ${builds} built, $
 /** One build of a listing: from the cache when its inputs are unchanged, else built and cached. */
 async function cachedBuild(ex, id, defines) {
   const libs = [...ex.libs.map((l) => `${l}w`), 'ncursesw'].map((l) => join(wasmBuild, `lib/lib${l}.a`));
-  const entryFile = join(site, ex.args.length ? 'examples/main-args.c' : 'examples/main.c');
+  const entryFile = join(site, ex.args.length || ex.argv ? 'examples/main-args.c' : 'examples/main.c');
+  const extra = [...(ex.sleep ? [join(site, 'examples/sleep.c')] : []), ...(ex.with ?? [])];
   const key = createHash('sha256')
-    .update(JSON.stringify({ id, code: ex.code, defines, args: ex.args, libs: ex.libs }))
+    .update(JSON.stringify({ id, code: ex.code, defines, args: ex.args, libs: ex.libs, cflags: ex.cflags, quit: ex.quit }))
     .update(toolHash)
     .update(hashFile(entryFile))
+    .update(extra.map(hashFile).join())
     .update(libs.map(hashFile).join())
     .digest('hex')
     .slice(0, 32);
@@ -219,7 +241,7 @@ async function cachedBuild(ex, id, defines) {
     hits++;
     return result;
   }
-  const result = await buildExample(ex, id, defines, libs, entryFile);
+  const result = await buildExample(ex, id, defines, libs, [entryFile, ...extra]);
   mkdirSync(dir, { recursive: true });
   if (result.status === 'runs') for (const ext of ['mjs', 'wasm']) copyFileSync(join(out, `${id}.${ext}`), join(dir, `${id}.${ext}`));
   writeFileSync(join(dir, 'result.json'), JSON.stringify(result));
@@ -228,7 +250,7 @@ async function cachedBuild(ex, id, defines) {
 }
 
 /** Compile, link and smoke-test one build of a listing; returns { status, detail }. */
-async function buildExample(ex, id, defines, libs, entryFile) {
+async function buildExample(ex, id, defines, libs, entryFiles) {
   const c = join(src, `${id}.c`);
   const obj = join(src, `${id}.o`);
   writeFileSync(c, ex.code);
@@ -241,6 +263,7 @@ async function buildExample(ex, id, defines, libs, entryFile) {
     await run('emcc', [
       '-O2', '-DNCURSES_STATIC', ...defines.map((d) => `-D${d}`), '-S', '-emit-llvm', c, '-o', ll,
       '-I', join(wasmBuild, 'include'),
+      ...(ex.cflags ?? []),
       ...ex.libs.map((l) => ['-I', join(repo, l)]).flat(),
     ], quiet);
     const ir = readFileSync(ll, 'utf8')
@@ -257,7 +280,8 @@ async function buildExample(ex, id, defines, libs, entryFile) {
   const files = ex.args.length ? ['--embed-file', `${c}@/example.c`] : [];
   try {
     await run('emcc', [
-      '-O2', obj, entryFile, ...libs, ...files,
+      // The include paths are for the files compiled here: sleep.c, and a game's other files.
+      '-O2', '-DNCURSES_STATIC', '-I', join(wasmBuild, 'include'), ...(ex.cflags ?? []), obj, ...entryFiles, ...libs, ...files,
       '-o', join(out, `${id}.mjs`),
       '--js-library', join(site, 'examples/pty.js'),
       '-sASYNCIFY', '-sASYNCIFY_IMPORTS=["fd_read","__syscall_poll","_emscripten_system"]',
@@ -267,7 +291,8 @@ async function buildExample(ex, id, defines, libs, entryFile) {
   } catch (e) {
     return { status: 'link-error', detail: tail(e) };
   }
-  const { stdout } = await run('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], quiet);
+  const smokeEnv = { ...process.env, ...(ex.quit ? { SMOKE_QUIT: ex.quit } : {}) };
+  const { stdout } = await run('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], { ...quiet, env: smokeEnv });
   const result = JSON.parse(stdout.trim().split('\n').pop());
   if (ex.args.length) result.args = ex.args;
   if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
@@ -284,14 +309,14 @@ for (const entry of status) {
 writeFileSync(join(out, 'status.json'), JSON.stringify(status, null, 2));
 
 const flagged = status.filter((e) => e.status !== 'runs');
-for (const e of status) console.log(`build-examples: ${e.status.padEnd(13)} ${e.id} (${e.shard})`);
+for (const e of status) console.log(`build-examples: ${e.status.padEnd(13)} ${e.id} (${e.shard ?? e.source})`);
 for (const e of flagged) {
   // A GitHub annotation on the shard, and the reason in the job log.
-  if (process.env.GITHUB_ACTIONS) console.log(`::warning file=${e.shard},title=Example doesn't run yet::${e.title}: ${e.status}`);
+  if (process.env.GITHUB_ACTIONS) console.log(`::warning file=${e.shard ?? e.source},title=Example doesn't run yet::${e.title}: ${e.status}`);
   console.log(`--- ${e.id}: ${e.status}\n${e.detail}`);
 }
 if (process.env.GITHUB_STEP_SUMMARY) {
-  const rows = status.map((e) => `| ${e.title} | \`${e.shard}\` | ${e.status === 'runs' ? 'runs' : `**${e.status}**`} |`);
+  const rows = status.map((e) => `| ${e.title} | \`${e.shard ?? e.source}\` | ${e.status === 'runs' ? 'runs' : `**${e.status}**`} |`);
   appendFileSync(
     process.env.GITHUB_STEP_SUMMARY,
     `### Runnable examples\n\n${status.length - flagged.length} of ${status.length} run in the browser.\n\n| Example | Shard | Status |\n| --- | --- | --- |\n${rows.join('\n')}\n`,

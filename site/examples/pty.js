@@ -164,22 +164,30 @@ addToLibrary({
     const page = Module['shell'];
     return Asyncify.handleAsync(async () => (page ? ((await page(text)) & 255) << 8 : ptyShell.system(text)));
   },
-  __syscall_poll__deps: ['$PTY', '$ptyWinch'],
+  // Which of the descriptors poll() asks about are ready: stdin when a key is queued, any
+  // other for writing. Fills in revents and returns the count.
+  $ptyReady__deps: ['$PTY'],
+  $ptyReady: (fds, nfds) => {
+    let count = 0;
+    for (let i = 0; i < nfds; i++) {
+      const p = fds + i * 8, fd = HEAP32[p >> 2], events = HEAP16[(p + 4) >> 1];
+      let rev = 0;
+      if (fd === 0 && (events & 1) && PTY.input.length) rev |= 1;       // POLLIN
+      if (fd !== 0 && (events & 4)) rev |= 4;                             // POLLOUT
+      HEAP16[(p + 6) >> 1] = rev;
+      if (rev) count++;
+    }
+    return count;
+  },
+  // poll() with a zero timeout comes here instead (Emscripten's musl), and Emscripten's own
+  // answer calls stdin always ready: nodelay() and timeout(0) programs then blocked in read().
+  __syscall_poll_nonblocking__deps: ['$ptyReady'],
+  __syscall_poll_nonblocking: (fds, nfds) => ptyReady(fds, nfds),
+  __syscall_poll__deps: ['$PTY', '$ptyWinch', '$ptyReady'],
   __syscall_poll__async: true,
   __syscall_poll: (fds, nfds, timeout) => {
     const r = Asyncify.handleAsync(async () => {
-      const ready = () => {
-        let count = 0;
-        for (let i = 0; i < nfds; i++) {
-          const p = fds + i * 8, fd = HEAP32[p >> 2], events = HEAP16[(p + 4) >> 1];
-          let rev = 0;
-          if (fd === 0 && (events & 1) && PTY.input.length) rev |= 1;       // POLLIN
-          if (fd !== 0 && (events & 4)) rev |= 4;                             // POLLOUT
-          HEAP16[(p + 6) >> 1] = rev;
-          if (rev) count++;
-        }
-        return count;
-      };
+      const ready = () => ptyReady(fds, nfds);
       let n = ready();
       if (n || timeout === 0 || PTY.winch) return n;
       await PTY.wait(timeout);

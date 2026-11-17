@@ -59,6 +59,9 @@ Every complete C program in the guides (a listing with a `main()`) gets a "Run t
 | `scripts/smoke-example.mjs` | Runs one build in Node on a fake 80×24 xterm and decides whether it runs. |
 | `examples/main.c`, `examples/main-args.c` | Entry points. They call the listing's `main()`, renamed `example_main()`, and pass its result to `exit()`. |
 | `examples/pty.js` | The terminal bridge between the program and the page. |
+| `examples/sleep.c` | `sleep()` and `usleep()` for the test programs in `/usr/games`, through `napms()`, so they wait without freezing the page. |
+| `src/components/page-shell.js` | The pretend shell a terminal comes back to when a program ends: `ls` (a screen at a time), Tab completion, Up for the last command, running any example by name, and `halt`. |
+| `src/components/pretend-editors.js` | The pretend `vi`, `nano` and `emacs` the shell opens. |
 | `src/components/run-example.ts` | The button, the terminal, the size picker, the "Run with X defined" variants, the keys for a running program (F1 Quit on every device; the arrows and Page Up/Down on touch screens, for programs that read them) and Fit to width. |
 | `src/components/terminal-fit.js` | The font size that fits the terminal's columns in a phone's column, and the bytes each key sends. |
 
@@ -77,6 +80,8 @@ In the browser, nothing about this is a busy loop. `pty.js` implements `read()` 
 - The `poll()` timeout passes.
 
 The program then resumes where it stopped. The C code keeps the polling model that curses teaches, and the page underneath it runs on events.
+
+A `poll()` with a zero timeout, which `nodelay()` and `timeout(0)` make, doesn't reach `__syscall_poll`: Emscripten's musl sends it to `__syscall_poll_nonblocking`, whose own answer calls stdin always ready. The program then blocked in `read()` until a key came. `pty.js` replaces that import too, with the same readiness check.
 
 A resize sets the size that `TIOCGWINSZ` reports. It then interrupts the wait with `SIGWINCH` and `EINTR`, as a real terminal does, so the program gets `KEY_RESIZE`.
 
@@ -99,6 +104,10 @@ A program's button appears only if its build passes the smoke test. The test run
 4. The number of an Exit item and Enter, for a numbered menu read with `scanw()`, such as "14: Exit".
 
 A program that fails shows a note instead of a button, with its build log, and CI lists it in the run summary.
+
+### The shell's games
+
+`GAMES` in `scripts/examples.mjs` lists ncurses test programs from `test/` (`worm`, `rain`, `firework`, `xmas` and others) that `build-examples.mjs` builds like the guides' listings, with `test/`'s own headers and `examples/sleep.c`. Their `status.json` entries have `hidden: true` and a `source` instead of a `shard`. The pretend shell keeps them in `/usr/games`: `ls` leaves them out, `ls /usr/games` lists them, and they run by name with any arguments typed after it. Each quits on its own key, which the smoke test presses instead of F1 (`SMOKE_QUIT`).
 
 ### Build messages
 

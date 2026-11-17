@@ -4,7 +4,11 @@
  * and knows a few commands. It can run any example the site has built, by name, and it can
  * power the terminal off. A program that calls system() gets one too, nested under it: there
  * `exit` goes back to the program, with the exit status a real system() reports.
+ *
+ * Easter eggs, not in help: ncurses's own test programs live in /usr/games and run by name
+ * (worm, rain, …), and vi, nano and emacs open pretend editors (pretend-editors.js).
  */
+import { EDITORS, runEditor } from './pretend-editors.js';
 
 /** What `halt`, or `exit` at the top shell, returns: the terminal powers off. */
 export const HALT = 'halt';
@@ -13,11 +17,17 @@ export const HALT = 'halt';
 export const HELP =
   'A pretend shell, since a web page has no real one.\r\n' +
   'ls lists the programs on this site; ./name runs one.\r\n' +
-  'It also knows echo, pwd, date, whoami, uname, clear, help.\r\n' +
+  'Tab completes a name. It also knows echo, pwd, date,\r\n' +
+  'whoami, uname, clear and help.\r\n' +
   'exit leaves this shell; halt powers the terminal off.\r\n';
 
 /** Names a shell is started by, so system("sh") gets a prompt rather than one command. */
 export const SHELL_NAMES = /^\s*(?:(?:\/usr)?\/bin\/)?(?:sh|bash|ksh|zsh|dash)\s*$|^\s*\$SHELL\s*$/;
+
+/** The commands the shell itself knows, for Tab. */
+export const BUILTINS = ['clear', 'date', 'echo', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
+
+const GAMES_DIR = '/usr/games';
 
 /** Names in columns, as ls prints them to a terminal `width` columns wide. */
 export function columns(names, width) {
@@ -37,14 +47,24 @@ export function columns(names, width) {
   return lines;
 }
 
+/** The longest start every name shares. */
+export function commonPrefix(names) {
+  if (!names.length) return '';
+  let p = names[0];
+  for (const n of names) while (!n.startsWith(p)) p = p.slice(0, -1);
+  return p;
+}
+
 /**
- * A shell. `write` sends text to the terminal; `programs()` names the examples it can run;
- * `launch(name)` runs one and resolves with its exit status, or HALT when the terminal powered
- * off while it ran; `cols()` is the terminal's width. Keys go in through `feed`.
+ * A shell. `write` sends text to the terminal; `programs()` names the examples it can run, and
+ * `games()` the test programs in /usr/games; `launch(name, args)` runs one and resolves with its
+ * exit status, or HALT when the terminal powered off while it ran; `cols()` and `rows()` are the
+ * terminal's size. Keys go in through `feed`.
  */
-export function createShell({ write, programs, launch, cols = () => 80 }) {
+export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24 }) {
   const queue = [];
   let waiter = null;
+  const history = [];
   const say = (text) => write(text);
   const out = (text) => say(`${text}\r\n`);
 
@@ -53,47 +73,113 @@ export function createShell({ write, programs, launch, cols = () => 80 }) {
     return queue.shift();
   };
 
+  /**
+   * The next key: a character, or a name for a key that sends a sequence ('up', 'down', 'left',
+   * 'right', 'other'), 'esc' for Escape alone and 'M-x' for Alt (or Escape) and a letter. The
+   * terminal sends a key's whole sequence at once, so what follows ESC is already queued.
+   */
+  const key = async () => {
+    const ch = await next();
+    if (ch !== '\x1b') return ch;
+    if (!queue.length) return 'esc';
+    const c = queue.shift();
+    if (c !== '[' && c !== 'O') return `M-${c}`;
+    let seq = '';
+    while (queue.length) {
+      const d = queue.shift();
+      seq += d;
+      if (d >= '@' && d <= '~') break;
+    }
+    return { A: 'up', B: 'down', C: 'right', D: 'left' }[seq.slice(-1)] ?? 'other';
+  };
+
+  /** What Tab can finish the last word of `text` with. */
+  const candidates = (text) => {
+    const words = text.split(' ');
+    const word = words.at(-1);
+    const first = words.length === 1;
+    if (word.startsWith(`${GAMES_DIR}/`)) return games().map((g) => `${GAMES_DIR}/${g}`);
+    if (word.startsWith('./')) return programs().map((p) => `./${p}`);
+    if (first) return [...new Set([...BUILTINS, ...Object.keys(EDITORS), ...programs(), ...games()])].sort();
+    return [...programs(), `${GAMES_DIR}/`];
+  };
+
   /** One line, echoed as it is typed; null at Ctrl-D on an empty line. */
   const line = async () => {
     let text = '';
-    let esc = 0;
+    let tabs = 0;
+    let back = history.length;
+    const replace = (t) => {
+      say('\b \b'.repeat(text.length) + t);
+      text = t;
+    };
     for (;;) {
-      const ch = await next();
-      const b = ch.charCodeAt(0);
-      // Function and cursor keys (ESC [ ... or ESC O x) mean nothing at this prompt.
-      if (esc) {
-        if (esc === 1 && (ch === '[' || ch === 'O')) esc = 2;
-        else if (b >= 0x40 && b <= 0x7e) esc = 0;
-        continue;
-      }
-      if (ch === '\x1b') esc = 1;
-      else if (ch === '\r' || ch === '\n') {
+      const k = await key();
+      tabs = k === '\t' ? tabs + 1 : 0;
+      if (k === '\r' || k === '\n') {
         say('\r\n');
+        if (text.trim() && history.at(-1) !== text) history.push(text);
         return text;
-      } else if (ch === '\x04') {
+      }
+      if (k === '\x04') {
         if (!text) return null;
-      } else if (ch === '\x03') {
+      } else if (k === '\x03') {
         say('^C\r\n');
         return '';
-      } else if (ch === '\x7f' || ch === '\b') {
-        if (text) {
-          text = text.slice(0, -1);
-          say('\b \b');
-        }
-      } else if (ch === '\x15') {
-        say('\b \b'.repeat(text.length));
-        text = '';
-      } else if (b >= 0x20 && b !== 0x7f) {
-        text += ch;
-        say(ch);
+      } else if (k === '\x7f' || k === '\b') {
+        if (text) replace(text.slice(0, -1));
+      } else if (k === '\x15') replace('');
+      else if (k === 'up' || k === 'down') {
+        back = Math.max(0, Math.min(history.length, back + (k === 'up' ? -1 : 1)));
+        replace(history[back] ?? '');
+      } else if (k === '\t') {
+        const word = text.split(' ').at(-1);
+        const found = candidates(text).filter((c) => c.startsWith(word));
+        const common = commonPrefix(found);
+        if (found.length === 1) replace(text + found[0].slice(word.length) + (found[0].endsWith('/') ? '' : ' '));
+        else if (common.length > word.length) replace(text + common.slice(word.length));
+        else if (found.length > 1 && tabs >= 2) {
+          // A second Tab lists what the word could be, then the line again.
+          say('\r\n');
+          await page(columns(found, cols()));
+          say(`$ ${text}`);
+        } else say('\x07');
+      } else if (k.length === 1 && k >= ' ' && k !== '\x7f') {
+        text += k;
+        say(k);
       }
     }
   };
 
-  /** The example a command names: `name`, `./name` or `/home/reader/name`. */
+  /**
+   * Prints lines a screen at a time, as more does: Space shows the next screen, Enter the next
+   * line, q stops.
+   */
+  const page = async (lines) => {
+    let shown = 0;
+    let room = rows() - 1;
+    while (shown < lines.length) {
+      for (; room > 0 && shown < lines.length; room--) out(lines[shown++]);
+      if (shown >= lines.length) break;
+      say(`\x1b[7m--More--(${Math.floor((shown / lines.length) * 100)}%)\x1b[0m`);
+      let k;
+      do k = await key();
+      while (![' ', '\r', 'q', 'Q', '\x03', 'down'].includes(k));
+      say('\r\x1b[2K');
+      if (k === 'q' || k === 'Q' || k === '\x03') break;
+      room = k === ' ' ? rows() - 1 : 1;
+    }
+  };
+
+  /** The program a command names: an example as `name`, `./name` or `/home/reader/name`, or a game as `name` or `/usr/games/name`. */
   const program = (word) => {
+    if (word.startsWith(`${GAMES_DIR}/`)) {
+      const g = word.slice(GAMES_DIR.length + 1);
+      return games().includes(g) ? g : null;
+    }
     const name = word.replace(/^(?:\.|\/home\/reader)\//, '');
-    return programs().includes(name) ? name : null;
+    if (programs().includes(name)) return name;
+    return word.includes('/') || !games().includes(word) ? null : word;
   };
 
   /** Runs one command line; resolves with its exit status, { exit } (null for the last status) or HALT. */
@@ -115,9 +201,17 @@ export function createShell({ write, programs, launch, cols = () => 80 }) {
       case 'pwd':
         out('/home/reader');
         return 0;
-      case 'ls':
-        for (const l of columns(programs(), cols())) out(l);
+      case 'ls': {
+        const dirs = args.filter((a) => !a.startsWith('-'));
+        const dir = (dirs[0] ?? '.').replace(/\/+$/, '') || '/';
+        if (dir === GAMES_DIR) await page(columns(games(), cols()));
+        else if (['.', '~', '/home/reader'].includes(dir)) await page(columns(programs(), cols()));
+        else {
+          out(`ls: cannot access '${dirs[0]}': No such file or directory`);
+          return 2;
+        }
         return 0;
+      }
       case 'date':
         out(new Date().toString());
         return 0;
@@ -143,8 +237,9 @@ export function createShell({ write, programs, launch, cols = () => 80 }) {
       out('sh: already in the pretend shell');
       return 0;
     }
+    if (EDITORS[cmd]) return runEditor(EDITORS[cmd], { write, key, rows, cols });
     const name = program(cmd);
-    if (name) return launch(name);
+    if (name) return launch(name, args);
     out(cmd.includes('/') ? `sh: ${cmd}: No such file or directory` : `sh: ${cmd}: not found`);
     return 127;
   };

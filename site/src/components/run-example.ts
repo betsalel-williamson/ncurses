@@ -72,10 +72,10 @@ type Pty = {
 type Variant = { define: string; id: string; bytes?: number };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean; hidden?: boolean };
 
 /** A program the site has built, which the shell can run by name: each example, and each variant. */
-type Program = { args: string[]; bytes?: number };
+type Program = { args: string[]; bytes?: number; hidden?: boolean };
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -223,7 +223,7 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
   // What has the keys, the last on top: the shell the terminal comes back to, a program started
   // from it, and the shell that program's system() starts, which can start another. A program's
   // frame has its pty once it is loaded.
-  type Frame = { sink: (data: string) => void; pty?: Pty | null };
+  type Frame = { sink: (data: string) => void; pty?: Pty | null; game?: boolean };
   const frames: Frame[] = [];
 
   // A terminal wider than the column (80x24 on a phone, 100x30 on a laptop) shrinks until every
@@ -355,7 +355,8 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
 
   /** The keys show while a program has the keyboard; the Run buttons work at the top prompt. */
   const refresh = () => {
-    const program = !!frames.length && frames.at(-1)!.pty !== undefined;
+    // A game from /usr/games quits on its own key, not F1, so it gets no key row.
+    const program = !!frames.length && frames.at(-1)!.pty !== undefined && !frames.at(-1)!.game;
     if (!program) {
       keys.stop();
       const hadFocus = keys.group.contains(document.activeElement);
@@ -370,13 +371,15 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
   const shellFor = () =>
     createShell({
       write: (text: string) => term?.write(text),
-      programs: () => [...programs.keys()],
-      launch: (name: string) => launch(name, name === id ? title : name),
+      programs: () => [...programs].filter(([, p]) => !p.hidden).map(([name]) => name),
+      games: () => [...programs].filter(([, p]) => p.hidden).map(([name]) => name),
+      launch: (name: string, args: string[] = []) => launch(name, name === id ? title : name, false, false, args),
       cols: () => term?.cols ?? 80,
+      rows: () => term?.rows ?? 24,
     });
 
   /** Runs a program; resolves with its exit status, or HALT if the terminal powers off first. */
-  const launch = (example: string, label: string, boot = false, verbose = false): Promise<number | typeof HALT> => {
+  const launch = (example: string, label: string, boot = false, verbose = false, typed: string[] = []): Promise<number | typeof HALT> => {
     const gen = generation;
     const live = () => gen === generation;
     const t = term!;
@@ -405,6 +408,7 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
       };
       const frame: Frame = {
         pty: null,
+        game: program.hidden,
         sink: (d) => {
           if (booting && !booting.done && booting.key(d)) return;
           frame.pty?.push(encoder.encode(d));
@@ -460,8 +464,9 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
               return {};
             },
             locateFile: (f: string) => `${base}/examples/${f}`,
-            // A program that reads a file gets its own listing, embedded in the build as example.c.
-            arguments: program.args,
+            // A program that reads a file gets its own listing, embedded in the build as example.c;
+            // a game gets the arguments typed after its name.
+            arguments: program.args.length ? program.args : typed,
             // system() gets this page's shell (examples/pty.js).
             shell: (command: string) => nested(command, gen),
             preRun: [
@@ -657,7 +662,7 @@ if (boxes.length) {
     const programs = new Map<string, Program>();
     for (const s of [...(all?.values() ?? [])].sort((a, b) => a.id.localeCompare(b.id))) {
       if (s.status !== 'runs') continue;
-      programs.set(s.id, { args: s.args ?? [], bytes: s.bytes });
+      programs.set(s.id, { args: s.args ?? [], bytes: s.bytes, hidden: s.hidden });
       for (const v of s.variants ?? []) programs.set(v.id, { args: s.args ?? [], bytes: v.bytes });
     }
     for (const box of boxes) {
