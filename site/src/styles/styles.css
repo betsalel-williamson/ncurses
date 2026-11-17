@@ -1631,6 +1631,13 @@ a:is(.nc-sym, .nc-def) {
 ::-webkit-scrollbar-button:end:decrement {
   display: none;
 }
+/* The bars are part of the interface, so they show even when there is nothing to scroll: a page
+   that fits the window keeps its bar, and moving between short and long pages doesn't shift
+   the layout by the bar's width. */
+:root[data-style]:not([data-style='modern']),
+:root[data-style]:not([data-style='modern']) .sidebar-pane {
+  overflow-y: scroll;
+}
 @supports not selector(::-webkit-scrollbar) {
   :root[data-style]:not([data-style='modern']) * {
     scrollbar-color: var(--nc-sb-ff-thumb) var(--nc-sb-ff-track);
