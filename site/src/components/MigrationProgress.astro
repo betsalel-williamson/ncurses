@@ -6,21 +6,28 @@
 // The session figures and the tracks' notes are in site/data/migration.json.
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-import { current, readHistory } from '../../scripts/migration-history.mjs';
+import { current, readHistory, wordProgress } from '../../scripts/migration-history.mjs';
 import data from '../../data/migration.json';
+import sizes from '../../data/doc-sizes.json';
 
 // Astro builds from site/, so the repository is its parent.
 const repo = resolve(process.cwd(), '..');
 const now = current();
+const words = wordProgress();
 const note = (name: string) => data.tracks.find((t: any) => t.name === name)?.note ?? '';
 const tracks = [
-  { name: 'Guides', unit: 'chapters', ...now.guides },
-  { name: 'Manual pages', unit: 'pages', ...now.man },
-  { name: 'Contributor and install docs', unit: 'documents', ...now.contributor },
+  { name: 'Guides', unit: 'chapters', ...now.guides, words: words.guides },
+  { name: 'Manual pages', unit: 'pages', ...now.man, words: words.man },
+  { name: 'Contributor and install docs', unit: 'documents', ...now.contributor, words: words.contributor },
 ].map((t) => ({ ...t, note: note(t.name) }));
 const total = tracks.reduce((n: number, t: any) => n + t.total, 0);
 const sharded = tracks.reduce((n: number, t: any) => n + t.sharded, 0);
 const reviewed = tracks.reduce((n: number, t: any) => n + t.reviewed, 0);
+// The same, weighed by words: a long manual page counts for more than a short one.
+const w = (k: string) => tracks.reduce((n: number, t: any) => n + t.words[k], 0);
+const wTotal = w('total');
+const wSharded = w('sharded');
+const wReviewed = w('reviewed');
 // Half a unit for sharding it, the other half for reviewing it.
 const percent = (s: number, r: number, of: number) => (of ? Math.round(((s + r) / (2 * of)) * 100) : 0);
 const width = (n: number, of: number) => `${of ? (n / of) * 100 : 0}%`;
@@ -57,6 +64,15 @@ const days = (sec: number) => {
   return d ? `${d} d ${h} h` : `${h} h`;
 };
 const date = (iso: string) => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+// Sizes before and after, per tokenizer (data/doc-sizes.json, from scripts/doc-sizes.py).
+const sizeTotal = (side: 'before' | 'now') =>
+  sizes.groups.reduce((acc: any, g: any) => {
+    for (const [k, v] of Object.entries(g[side])) acc[k] = (acc[k] ?? 0) + (v as number);
+    return acc;
+  }, {});
+const sizeRows = [...sizes.groups, { name: 'All', from: '', before: sizeTotal('before'), now: sizeTotal('now') }];
+const change = (a: number, b: number) => (a ? `${b >= a ? '+' : '−'}${Math.abs(Math.round(((b - a) / a) * 100))}%` : '');
+const tok0 = sizes.tokenizers[0];
 const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWriteTokens;
 ---
 
@@ -64,13 +80,19 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   <h2 id="nc-progress-title">Migration progress</h2>
   <p>
     This edition is moving every ncurses document into Merlon Docs shards, then reviewing each one against its sources.
-    Each guide chapter, manual page and contributor document counts once, in two steps: sharded, then reviewed.
+    Each guide chapter, manual page and contributor document counts in two steps: sharded, then reviewed.
+    Counted by documents, each one counts once; counted by words, a long one counts for more.
   </p>
 
-  <p class="nc-progress-total"><strong>{percent(sharded, reviewed, total)}% done</strong>: {sharded} of {total} sharded, {reviewed} of {total} reviewed.</p>
+  <p class="nc-progress-total"><strong>{percent(sharded, reviewed, total)}% done by documents</strong>: {sharded} of {total} sharded, {reviewed} of {total} reviewed.</p>
   <div class="nc-bar nc-bar-total" aria-hidden="true">
     <span class="nc-seg nc-seg-reviewed" style={`width: ${width(reviewed, total)}`}></span>
     <span class="nc-seg nc-seg-sharded" style={`width: ${width(sharded - reviewed, total)}`}></span>
+  </div>
+  <p class="nc-progress-total"><strong>{percent(wSharded, wReviewed, wTotal)}% done by words</strong>: {n.format(wSharded)} of {n.format(wTotal)} words sharded, {n.format(wReviewed)} reviewed.</p>
+  <div class="nc-bar nc-bar-total" aria-hidden="true">
+    <span class="nc-seg nc-seg-reviewed" style={`width: ${width(wReviewed, wTotal)}`}></span>
+    <span class="nc-seg nc-seg-sharded" style={`width: ${width(wSharded - wReviewed, wTotal)}`}></span>
   </div>
   <ul class="nc-legend">
     <li><span class="nc-key nc-seg-reviewed"></span>Sharded and reviewed</li>
@@ -83,7 +105,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
       tracks.map((t: any) => (
         <div>
           <dt>
-            {t.name} <span>{percent(t.sharded, t.reviewed, t.total)}%</span>
+            {t.name} <span>{percent(t.sharded, t.reviewed, t.total)}% of documents, {percent(t.words.sharded, t.words.reviewed, t.words.total)}% of words</span>
           </dt>
           <dd>
             <div class="nc-bar" aria-hidden="true">
@@ -91,13 +113,62 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
               <span class="nc-seg nc-seg-sharded" style={`width: ${width(t.sharded - t.reviewed, t.total)}`} />
             </div>
             <p>
-              {t.sharded} of {t.total} {t.unit} sharded, {t.reviewed} reviewed. {t.note}
+              {t.sharded} of {t.total} {t.unit} sharded, {t.reviewed} reviewed; {n.format(t.words.reviewed)} of {n.format(t.words.total)} words reviewed. {t.note}
             </p>
           </dd>
         </div>
       ))
     }
   </dl>
+
+  <h3>The docs' size, before and after</h3>
+  <p>
+    What a reader, or a language model, has to take in: the documents this edition started from
+    (the upstream snapshot <code>{sizes.before.label}</code>) and the shards that replaced them, each read whole as stored.
+    Tokens depend on the model's tokenizer.
+  </p>
+  <p class="nc-size-pick">
+    <label for="nc-tokenizer">Tokenizer</label>
+    <select id="nc-tokenizer">
+      {sizes.tokenizers.map((t: any) => <option value={t.id} data-note={t.note}>{t.name}</option>)}
+    </select>
+    <span class="nc-stat-note" id="nc-tokenizer-note">{tok0.note}</span>
+  </p>
+  <div class="nc-history-scroll">
+    <table class="nc-sizes">
+      <thead>
+        <tr><th>Track</th><th>Before</th><th>Now</th><th>Tokens before</th><th>Tokens now</th><th>Change</th></tr>
+      </thead>
+      <tbody>
+        {
+          sizeRows.map((g: any) => (
+            <tr class={g.name === 'All' ? 'nc-sizes-all' : undefined}>
+              <td>{g.name}</td>
+              <td>{n.format(g.before.files)} files, {n.format(g.before.words)} words</td>
+              <td>{n.format(g.now.files)} files, {n.format(g.now.words)} words</td>
+              {['before', 'now'].map((side) => (
+                <td data-tok={JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, n.format(g[side][t.id])])))}>{n.format(g[side][tok0.id])}</td>
+              ))}
+              <td data-tok={JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, change(g.before[t.id], g.now[t.id])])))}>{change(g.before[tok0.id], g.now[tok0.id])}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="nc-stat-note">
+    Before: the guides' HTML (the HOWTO and Writing Programs with NCURSES), the troff pages in <code>man/</code>, and the hacker's guide, <code>INSTALL</code> and READMEs, the Ada page and the announcement.
+    Now: their shards under <code>docs/</code>. Words leave out markup. Measured by
+    <a href={`${repoUrl}/blob/master/site/scripts/doc-sizes.py`}><code>doc-sizes.py</code></a>; rerun it after a change to the docs.
+  </p>
+  <script>
+    const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
+    pick?.addEventListener('change', () => {
+      for (const cell of document.querySelectorAll<HTMLElement>('.nc-sizes [data-tok]')) cell.textContent = JSON.parse(cell.dataset.tok!)[pick.value];
+      const note = document.getElementById('nc-tokenizer-note');
+      if (note) note.textContent = pick.selectedOptions[0]?.dataset.note ?? '';
+    });
+  </script>
 
   <h3>What it took so far</h3>
   <p>
@@ -240,6 +311,34 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     margin: 0;
     font-size: var(--sl-text-2xl);
     font-weight: 600;
+  }
+  .nc-size-pick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+  }
+  .nc-size-pick label {
+    font-weight: 600;
+  }
+  .nc-sizes {
+    font-size: var(--sl-text-sm);
+  }
+  .nc-sizes td,
+  .nc-sizes th {
+    white-space: nowrap;
+  }
+  .nc-sizes td:nth-child(n + 4) {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+  .nc-sizes-all td {
+    font-weight: 600;
+  }
+  .nc-size-pick .nc-stat-note,
+  .nc-progress > .nc-stat-note {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-2);
   }
   .nc-history summary {
     cursor: pointer;

@@ -1,0 +1,100 @@
+{
+ "about": "Sizes of the documentation before the migration and now, by site/scripts/doc-sizes.py.",
+ "before": {
+  "commit": "7404b3768325",
+  "label": "v6_6_20261107"
+ },
+ "now": {
+  "commit": "d0a7acb9d316"
+ },
+ "tokenizers": [
+  {
+   "id": "o200k",
+   "name": "OpenAI o200k",
+   "note": "Exact for GPT-4o, GPT-4.1, the o-series and GPT-5."
+  },
+  {
+   "id": "claude",
+   "name": "Claude (published tokenizer)",
+   "note": "Anthropic's published tokenizer is the Claude 1 and 2 one. Newer Claude models use another, so this is an estimate."
+  },
+  {
+   "id": "llama3",
+   "name": "Llama 3",
+   "note": "Exact for Llama 3 to 3.3."
+  },
+  {
+   "id": "gemma3",
+   "name": "Gemma 3",
+   "note": "Exact for Gemma 3; Gemini is close."
+  }
+ ],
+ "groups": [
+  {
+   "name": "Guides",
+   "from": "NCURSES Programming HOWTO and Writing Programs with NCURSES (HTML)",
+   "before": {
+    "files": 2,
+    "bytes": 398123,
+    "words": 40067,
+    "o200k": 103003,
+    "claude": 104659,
+    "llama3": 102502,
+    "gemma3": 108531
+   },
+   "now": {
+    "files": 82,
+    "bytes": 287993,
+    "words": 35653,
+    "o200k": 70313,
+    "claude": 76957,
+    "llama3": 70154,
+    "gemma3": 78845
+   }
+  },
+  {
+   "name": "Manual pages",
+   "from": "man/ (troff)",
+   "before": {
+    "files": 133,
+    "bytes": 1131402,
+    "words": 101203,
+    "o200k": 311693,
+    "claude": 356545,
+    "llama3": 309399,
+    "gemma3": 355043
+   },
+   "now": {
+    "files": 1187,
+    "bytes": 1163252,
+    "words": 103334,
+    "o200k": 323673,
+    "claude": 371425,
+    "llama3": 321457,
+    "gemma3": 370902
+   }
+  },
+  {
+   "name": "Contributor and install docs",
+   "from": "hackguide.html, INSTALL and READMEs, Ada95.html, announce.html.in",
+   "before": {
+    "files": 9,
+    "bytes": 235941,
+    "words": 25974,
+    "o200k": 59853,
+    "claude": 62678,
+    "llama3": 59734,
+    "gemma3": 63692
+   },
+   "now": {
+    "files": 50,
+    "bytes": 189568,
+    "words": 24533,
+    "o200k": 44315,
+    "claude": 49599,
+    "llama3": 44174,
+    "gemma3": 48684
+   }
+  }
+ ]
+}
