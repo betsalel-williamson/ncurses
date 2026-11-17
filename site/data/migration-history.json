@@ -1704,6 +1704,30 @@
     "rows": 357,
     "originalErrors": 152
    }
+  },
+  {
+   "pr": 72,
+   "merge": "b7927f3fa9d1",
+   "mergedAt": "2026-11-16T17:31:53-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 362,
+    "originalErrors": 152
+   }
   }
  ]
 }
