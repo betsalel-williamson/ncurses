@@ -19,15 +19,36 @@ export const HELP =
   'A pretend shell, since a web page has no real one.\r\n' +
   'The examples are in folders, one per guide: ls lists a\r\n' +
   'folder, cd goes into one, and ./name runs a program.\r\n' +
-  'Tab completes a name. It also knows pwd, echo, date,\r\n' +
-  'whoami, uname, env, clear and help.\r\n' +
+  'Tab completes a name, Up brings back the last command.\r\n' +
+  'It also knows pwd, echo, cat, which, history, env, date,\r\n' +
+  'uname, whoami, id, hostname, uptime, sleep, man and clear.\r\n' +
   'exit leaves this shell; halt powers the terminal off.\r\n';
 
 /** Names a shell is started by, so system("sh") gets a prompt rather than one command. */
 export const SHELL_NAMES = /^\s*(?:(?:\/usr)?\/bin\/)?(?:sh|bash|ksh|zsh|dash)\s*$|^\s*\$SHELL\s*$/;
 
 /** The commands the shell itself knows, for Tab. */
-export const BUILTINS = ['cd', 'clear', 'date', 'echo', 'env', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'printenv', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
+export const BUILTINS = [
+  'cat', 'cd', 'clear', 'command', 'cp', 'date', 'echo', 'env', 'exit', 'false', 'file', 'groups', 'halt', 'help', 'history',
+  'hostname', 'id', 'logout', 'ls', 'man', 'mkdir', 'mv', 'poweroff', 'printenv', 'pwd', 'reset', 'rm', 'rmdir', 'shutdown',
+  'sleep', 'su', 'sudo', 'touch', 'true', 'tty', 'type', 'uname', 'uptime', 'whoami', 'which',
+];
+
+/** The commands that would change a file: the page's files can't change. */
+const WRITERS = ['cp', 'mkdir', 'mv', 'rm', 'rmdir', 'touch'];
+
+/** Splits `-la -F` into its letters, and the rest into arguments; `--` ends the flags. */
+export function options(args) {
+  const flags = new Set();
+  const rest = [];
+  let done = false;
+  for (const a of args) {
+    if (!done && a === '--') done = true;
+    else if (!done && a.length > 1 && a.startsWith('-')) for (const f of a.slice(1)) flags.add(f);
+    else rest.push(a);
+  }
+  return { flags, rest };
+}
 
 const GAMES_DIR = '/usr/games';
 const HOME = '/home/reader';
@@ -47,20 +68,20 @@ export function resolvePath(path, cwd) {
 /** A path as the prompt shows it, with the home directory as ~. */
 export const tilde = (path) => (path === HOME ? '~' : path.startsWith(`${HOME}/`) ? `~${path.slice(HOME.length)}` : path);
 
-/** Names in columns, as ls prints them to a terminal `width` columns wide. */
-export function columns(names, width) {
+/** Names in columns, as ls prints them to a terminal `width` columns wide; `paint` colours each. */
+export function columns(names, width, paint = (n) => n) {
   if (!names.length) return [];
   const col = Math.max(...names.map((n) => n.length)) + 2;
   const per = Math.max(1, Math.floor((width + 2) / col));
   const rows = Math.ceil(names.length / per);
   const lines = [];
   for (let r = 0; r < rows; r++) {
-    let line = '';
+    const row = [];
     for (let c = 0; c < per; c++) {
       const n = names[c * rows + r];
-      if (n !== undefined) line += n.padEnd(col);
+      if (n !== undefined) row.push(n);
     }
-    lines.push(line.trimEnd());
+    lines.push(row.map((n, i) => paint(n) + (i < row.length - 1 ? ' '.repeat(col - n.length) : '')).join(''));
   }
   return lines;
 }
@@ -82,11 +103,15 @@ export function commonPrefix(names) {
 export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24, cwd: start = HOME }) {
   const queue = [];
   let cwd = start;
+  let previous = start;
   let last = 0;
+  const booted = Date.now();
   /** The environment echo $NAME and env see; PWD follows cd. */
   const environ = () => ({
     HOME,
+    HOSTNAME: 'ncurses',
     LOGNAME: 'reader',
+    OLDPWD: previous,
     PATH: `/usr/local/bin:/usr/bin:/bin:${GAMES_DIR}`,
     PWD: cwd,
     SHELL: '/bin/sh',
@@ -191,6 +216,7 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
       } else if (k === '\x7f' || k === '\b') {
         if (text) replace(text.slice(0, -1));
       } else if (k === '\x15') replace('');
+      else if (k === '\x0c') say(`\x1b[H\x1b[2J${prompt()}${text}`);
       else if (k === 'up' || k === 'down') {
         back = Math.max(0, Math.min(history.length, back + (k === 'up' ? -1 : 1)));
         replace(history[back] ?? '');
@@ -241,9 +267,24 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     return node(resolvePath(word, cwd))?.program ?? null;
   };
 
-  /** Lists folders and files, as ls does: a folder's entries, or a file's own name. */
+  /** Lists folders and files, as ls does: -a adds . and .., -l a line each, -1 one name a line, -F marks folders and programs. */
   const ls = async (args) => {
-    const paths = args.filter((a) => !a.startsWith('-'));
+    const { flags, rest: paths } = options(args);
+    const bad = [...flags].find((f) => !'alF1hd'.includes(f));
+    if (bad) {
+      out(`ls: invalid option -- '${bad}'`);
+      return 2;
+    }
+    // Folders in bold blue and programs in bold green, as ls --color shows them.
+    // -F marks folders with / and programs with *.
+    const mark = (e) => (!flags.has('F') ? e.replace(/\/$/, '') : e.endsWith('/') ? e : `${e}*`);
+    const colour = (e) => (e.endsWith('/') ? '1;34' : '1;32');
+    const show = (e) => `\x1b[${colour(e)}m${mark(e)}\x1b[0m`;
+    const long = (e) => {
+      const dir = e.endsWith('/');
+      const mode = dir ? 'drwxr-xr-x' : '-rwxr-xr-x';
+      return `${mode} 1 reader reader ${String(dir ? 4096 : 65536).padStart(6)} Nov 17 08:00 ${show(e)}`;
+    };
     let status = 0;
     const lines = [];
     for (const [i, p] of (paths.length ? paths : ['.']).entries()) {
@@ -254,10 +295,24 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         continue;
       }
       if (paths.length > 1) lines.push(`${i ? '\n' : ''}${p}:`);
-      lines.push(...(at.program ? [p] : columns(at.dir, cols())));
+      const entries = at.program ? [p] : [...(flags.has('a') ? ['./', '../'] : []), ...at.dir];
+      if (flags.has('l')) lines.push(...(at.program ? [] : [`total ${entries.length * 64}`]), ...entries.map(long));
+      else if (flags.has('1')) lines.push(...entries.map(show));
+      else {
+        const byName = new Map(entries.map((e) => [mark(e), e]));
+        lines.push(...columns([...byName.keys()], cols(), (n) => show(byName.get(n))));
+      }
     }
     await page(lines.flatMap((l) => l.split('\n')));
     return status;
+  };
+
+  /** What a command name is: a shell builtin, an editor or game on the PATH, or nothing. */
+  const lookup = (name) => {
+    if (BUILTINS.includes(name)) return { builtin: true };
+    if (EDITORS[name]) return { path: `/usr/bin/${name}` };
+    if (games().includes(name)) return { path: `${GAMES_DIR}/${name}` };
+    return null;
   };
 
   /** Runs one command line; resolves with its exit status, { exit } (null for the last status) or HALT. */
@@ -269,13 +324,96 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
       case 'exit':
         // With no status, the shell exits with the last command's, as sh does.
         return { exit: args.length ? Number.parseInt(args[0], 10) & 255 || 0 : null };
+      case 'logout':
+        return { exit: null };
       case 'halt':
       case 'poweroff':
       case 'shutdown':
         return HALT;
       case 'echo':
-        out(args.join(' '));
+        // -n leaves off the newline.
+        if (args[0] === '-n') say(args.slice(1).join(' '));
+        else out(args.join(' '));
         return 0;
+      case 'cat': {
+        let status = 0;
+        for (const a of args) {
+          const at = node(resolvePath(a, cwd));
+          if (!at) out(`cat: ${a}: No such file or directory`);
+          else if (at.dir) out(`cat: ${a}: Is a directory`);
+          else out(`cat: ${a}: a WebAssembly program, not text (run it: ${a.includes('/') ? a : `./${a}`})`);
+          status = 1;
+        }
+        return status;
+      }
+      case 'file':
+        for (const a of args) {
+          const at = node(resolvePath(a, cwd));
+          out(`${a}: ${!at ? 'cannot open (No such file or directory)' : at.dir ? 'directory' : 'WebAssembly (wasm) binary module version 0x1 (MVP)'}`);
+        }
+        return 0;
+      case 'which':
+      case 'command':
+      case 'type': {
+        const names = cmd === 'command' ? options(args).rest : args;
+        let status = 0;
+        for (const n of names) {
+          const at = lookup(n);
+          if (!at) {
+            if (cmd === 'type') out(`sh: type: ${n}: not found`);
+            status = 1;
+          } else if (cmd === 'type') out(at.builtin ? `${n} is a shell builtin` : `${n} is ${at.path}`);
+          else if (cmd === 'command' || at.path) out(at.path ?? n);
+          else status = 1;
+        }
+        return status;
+      }
+      case 'history':
+        if (args[0] === '-c') history.length = 0;
+        else await page(history.map((h, i) => `${String(i + 1).padStart(5)}  ${h}`));
+        return 0;
+      case 'hostname':
+        out('ncurses');
+        return 0;
+      case 'id':
+        out('uid=1000(reader) gid=1000(reader) groups=1000(reader),60(games)');
+        return 0;
+      case 'groups':
+        out('reader games');
+        return 0;
+      case 'tty':
+        out('/dev/pts/0');
+        return 0;
+      case 'uptime': {
+        const m = Math.floor((Date.now() - booted) / 60000);
+        const time = new Date().toTimeString().slice(0, 8);
+        out(` ${time} up ${m < 60 ? `${m} min` : `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`},  1 user,  load average: 0.00, 0.00, 0.00`);
+        return 0;
+      }
+      case 'sleep': {
+        const n = Number.parseFloat(args[0]);
+        if (!(n >= 0)) {
+          out('sleep: missing operand');
+          return 1;
+        }
+        await new Promise((resolve) => setTimeout(resolve, Math.min(n, 60) * 1000));
+        return 0;
+      }
+      case 'man':
+        if (!args.length) {
+          out('What manual page do you want?');
+          return 1;
+        }
+        out(`No manual entry for ${args.at(-1)} in this shell; the site's Manual section has the ncurses pages.`);
+        return 16;
+      case 'sudo':
+        out('[sudo] password for reader: ');
+        out('reader is not in the sudoers file.  This incident will be reported.');
+        return 1;
+      case 'su':
+        out('Password: ');
+        out('su: Authentication failure');
+        return 1;
       case 'pwd':
         out(cwd);
         return 0;
@@ -290,6 +428,12 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         return 0;
       }
       case 'cd': {
+        // cd - goes back to the last folder, and says where that is.
+        if (args[0] === '-') {
+          [cwd, previous] = [previous, cwd];
+          out(cwd);
+          return 0;
+        }
         const to = resolvePath(args[0] ?? '~', cwd);
         const at = node(to);
         if (!at) {
@@ -300,21 +444,34 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
           out(`sh: cd: ${args[0]}: Not a directory`);
           return 1;
         }
-        cwd = to;
+        if (to !== cwd) [previous, cwd] = [cwd, to];
         return 0;
       }
       case 'ls':
         return ls(args);
-      case 'date':
-        out(new Date().toString());
+      case 'date': {
+        const now = new Date();
+        out(args.includes('-u') ? now.toUTCString().replace('GMT', 'UTC') : now.toString());
         return 0;
+      }
       case 'whoami':
         out('reader');
         return 0;
-      case 'uname':
-        out(args.includes('-a') ? 'Emscripten browser 1.0 wasm32 (pretend shell)' : 'Emscripten');
+      case 'uname': {
+        // -a is all of them; -s the kernel's name, -n the host's, -r the release, -m the machine.
+        const { flags } = options(args);
+        const all = flags.has('a');
+        const parts = [
+          ['s', 'Emscripten'],
+          ['n', 'ncurses'],
+          ['r', '1.0'],
+          ['m', 'wasm32'],
+        ].filter(([f]) => all || flags.has(f));
+        out((parts.length ? parts.map(([, v]) => v) : ['Emscripten']).join(' '));
         return 0;
+      }
       case 'clear':
+      case 'reset':
         say('\x1b[H\x1b[2J');
         return 0;
       case 'help':
@@ -325,6 +482,17 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         return 0;
       case 'false':
         return 1;
+    }
+    // A web page's files can't change.
+    if (WRITERS.includes(cmd)) {
+      const target = options(args).rest.at(-1);
+      if (!target) {
+        out(`${cmd}: missing operand`);
+        return 1;
+      }
+      const verb = { cp: "cannot create regular file", mkdir: 'cannot create directory', mv: 'cannot move', rm: 'cannot remove', rmdir: 'failed to remove', touch: 'cannot touch' }[cmd];
+      out(`${cmd}: ${verb} '${target}': Read-only file system`);
+      return 1;
     }
     if (SHELL_NAMES.test(cmd)) {
       out('sh: already in the pretend shell');

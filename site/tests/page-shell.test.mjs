@@ -21,7 +21,8 @@ function fixture(programs = ['hello', 'menus']) {
     cols: () => 60,
     rows: () => 5,
   });
-  return { shell, ran, text: () => screen.join('') };
+  // Colours left out, so a test reads the text as the reader does.
+  return { shell, ran, text: () => screen.join('').replace(/\x1b\[[0-9;]*m/g, '') };
 }
 
 test('a program runs by its path: ./name, ~/folder/name or an absolute path', async () => {
@@ -195,7 +196,7 @@ test('ls ~ shows a folder per guide, and ls of a folder its programs', async () 
   const session = shell.session();
   shell.feed('ls ~\rls ~/menus\rexit\r');
   await session;
-  assert.match(text(), /menus\/\s+panels\//);
+  assert.match(text(), /menus\s+panels\r\n/);
   assert.match(text(), /menu-basics/);
 });
 
@@ -246,4 +247,45 @@ test('echo expands $NAME, ${NAME} and $?, and env lists the variables', async ()
   assert.match(text(), /\/home\/reader\/x\.\r\n/);
   assert.match(text(), /printenv HOME\r\n\/home\/reader\r\n/);
   assert.match(text(), /USER=reader\r\n/);
+});
+
+test('ls takes -a, -l, -1 and -F, alone or together', async () => {
+  const { shell, text } = fixture(['menus/menu-basics', 'panels/panel-basics']);
+  const session = shell.session();
+  shell.feed('ls -aF ~\rls -l ~/menus\rls -1 ~\rls -z\rexit\r');
+  await session;
+  assert.match(text(), /\.\/\s+\.\.\/\s+menus\/\s+panels\//);
+  assert.match(text(), /-rwxr-xr-x 1 reader reader .* menu-basics\r\n/);
+  assert.match(text(), /ls -1 ~\r\nmenus\r\npanels\r\n/);
+  assert.match(text(), /ls: invalid option -- 'z'/);
+});
+
+test('cd - goes back, and which, type and history answer as sh does', async () => {
+  const { shell, text } = fixture(['menus/menu-basics']);
+  const session = shell.session();
+  shell.feed('cd ~/menus\rcd -\rhistory\rwhich worm vi\rtype cd\rexit\r');
+  await session;
+  assert.match(text(), /cd -\r\n\/home\/reader\/start\r\n/);
+  assert.match(text(), /\/usr\/games\/worm\r\n\/usr\/bin\/vi\r\n/);
+  assert.match(text(), /cd is a shell builtin/);
+  assert.match(text(), /    1  cd ~\/menus\r\n    2  cd -\r\n/);
+});
+
+test('the files cannot change, and sudo is refused', async () => {
+  const { shell, text } = fixture();
+  const session = shell.session();
+  shell.feed('rm -rf /\rmkdir x\rsudo ls\rexit\r');
+  await session;
+  assert.match(text(), /rm: cannot remove '\/': Read-only file system/);
+  assert.match(text(), /mkdir: cannot create directory 'x': Read-only file system/);
+  assert.match(text(), /reader is not in the sudoers file/);
+});
+
+test('uname takes -s, -n, -r, -m and -a', async () => {
+  const { shell, text } = fixture();
+  const session = shell.session();
+  shell.feed('uname -sm\runame -a\rexit\r');
+  await session;
+  assert.match(text(), /uname -sm\r\nEmscripten wasm32\r\n/);
+  assert.match(text(), /uname -a\r\nEmscripten ncurses 1\.0 wasm32\r\n/);
 });

@@ -60,7 +60,7 @@ Every complete C program in the guides (a listing with a `main()`) gets a "Run t
 | `examples/main.c`, `examples/main-args.c` | Entry points. They call the listing's `main()`, renamed `example_main()`, and pass its result to `exit()`. |
 | `examples/pty.js` | The terminal bridge between the program and the page. |
 | `examples/sleep.c` | `sleep()` and `usleep()` for the test programs in `/usr/games`, through `napms()`, so they wait without freezing the page. |
-| `src/components/page-shell.js` | The pretend shell a terminal comes back to when a program ends: `ls` (a screen at a time), Tab completion, Up for the last command, running any example by name, and `halt`. |
+| `src/components/page-shell.js` | The pretend shell a terminal comes back to when a program ends. It keeps to real Unix command names and their common flags (`ls -laF1`, `cd -`, `echo $PATH`, `which`, `type`, `history`, `uname -a`, `sudo`), pages long output, completes with Tab, recalls with Up, runs any example by its path, and powers off with `halt`. The page's files are read-only, so `rm`, `mkdir` and the like say so. |
 | `src/components/pretend-editors.js` | The pretend `vi`, `nano` and `emacs` the shell opens. |
 | `src/components/run-example.ts` | The button, the terminal, the size picker, the "Run with X defined" variants, the keys for a running program (F1 Quit on every device; the arrows and Page Up/Down on touch screens, for programs that read them) and Fit to width. |
 | `src/components/terminal-fit.js` | The font size that fits the terminal's columns in a phone's column, and the bytes each key sends. |
