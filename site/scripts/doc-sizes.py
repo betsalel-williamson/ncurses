@@ -89,15 +89,22 @@ def words(text):
 
 
 def measure(commit, names):
+    """Totals for a set of files, and each file's tokens: perFile.path[i] has perFile[tokenizer][i]."""
     m = {"files": len(names), "bytes": 0, "words": 0, **{t["id"]: 0 for t in TOKENIZERS}}
+    per = {"path": [], **{t["id"]: [] for t in TOKENIZERS}}
     for name in names:
         raw = git("show", f"{commit}:{name}")
         text = raw.decode("utf-8", errors="replace")
         m["bytes"] += len(raw)
         m["words"] += words(text)
-        m["o200k"] += len(o200k.encode(text, disallowed_special=()))
+        counts = {"o200k": len(o200k.encode(text, disallowed_special=()))}
         for k, t in hf.items():
-            m[k] += len(t.encode(text, add_special_tokens=False).ids)
+            counts[k] = len(t.encode(text, add_special_tokens=False).ids)
+        per["path"].append(name)
+        for k, v in counts.items():
+            m[k] += v
+            per[k].append(v)
+    m["perFile"] = per
     return m
 
 

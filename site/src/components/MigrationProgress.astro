@@ -1,36 +1,46 @@
 ---
 // The front page's Migration progress section: how far the move to Merlon Docs shards has got,
-// and what it took. Each guide chapter, manual page and contributor document counts once, in
-// two steps: sharded, then reviewed against its sources. Every count comes from git through
-// scripts/migration-history.mjs, which also checks the per-pull-request history CI verifies.
+// and what it took. Sharding is counted in documents (each guide chapter, manual page and
+// contributor document once); review is counted in tokens, so a long page weighs more than a
+// short one. The counts come from git through scripts/migration-history.mjs, which also checks
+// the per-pull-request history CI verifies; the tokens come from data/doc-sizes.json.
 // The session figures and the tracks' notes are in site/data/migration.json.
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-import { current, readHistory, wordProgress } from '../../scripts/migration-history.mjs';
+import { current, readHistory, tokenProgress } from '../../scripts/migration-history.mjs';
 import data from '../../data/migration.json';
 import sizes from '../../data/doc-sizes.json';
 
 // Astro builds from site/, so the repository is its parent.
 const repo = resolve(process.cwd(), '..');
 const now = current();
-const words = wordProgress();
+const toks = tokenProgress(sizes);
 const note = (name: string) => data.tracks.find((t: any) => t.name === name)?.note ?? '';
 const tracks = [
-  { name: 'Guides', unit: 'chapters', ...now.guides, words: words.guides },
-  { name: 'Manual pages', unit: 'pages', ...now.man, words: words.man },
-  { name: 'Contributor and install docs', unit: 'documents', ...now.contributor, words: words.contributor },
+  { name: 'Guides', unit: 'chapters', ...now.guides },
+  { name: 'Manual pages', unit: 'pages', ...now.man },
+  { name: 'Contributor and install docs', unit: 'documents', ...now.contributor },
 ].map((t) => ({ ...t, note: note(t.name) }));
+const tokKey = { Guides: 'guides', 'Manual pages': 'man', 'Contributor and install docs': 'contributor' } as Record<string, 'guides' | 'man' | 'contributor'>;
 const total = tracks.reduce((n: number, t: any) => n + t.total, 0);
 const sharded = tracks.reduce((n: number, t: any) => n + t.sharded, 0);
 const reviewed = tracks.reduce((n: number, t: any) => n + t.reviewed, 0);
-// The same, weighed by words: a long manual page counts for more than a short one.
-const w = (k: string) => tracks.reduce((n: number, t: any) => n + t.words[k], 0);
-const wTotal = w('total');
-const wSharded = w('sharded');
-const wReviewed = w('reviewed');
-// Half a unit for sharding it, the other half for reviewing it.
+// Half a unit for sharding it, the other half for reviewing it (the history's measure).
 const percent = (s: number, r: number, of: number) => (of ? Math.round(((s + r) / (2 * of)) * 100) : 0);
+const pct = (n: number, of: number) => (of ? Math.round((n / of) * 100) : 0);
 const width = (n: number, of: number) => `${of ? (n / of) * 100 : 0}%`;
+// Reviewed tokens per tokenizer, for a track's key or for all of them.
+const reviewedTokens = (id: string, key?: string) => {
+  const ts = key ? [toks[id][key]] : Object.values(toks[id]);
+  return { reviewed: ts.reduce((n: number, t: any) => n + t.reviewed, 0), total: ts.reduce((n: number, t: any) => n + t.total, 0) };
+};
+// Done: half for the documents sharded, half for the tokens reviewed.
+const done = (docs: { sharded: number; total: number }, id: string, key?: string) => {
+  const r = reviewedTokens(id, key);
+  return Math.round(((docs.total ? docs.sharded / docs.total : 0) + (r.total ? r.reviewed / r.total : 0)) * 50);
+};
+// Per-tokenizer values for the dropdown to swap in: data-tok holds text, data-tok-width a bar width.
+const perTok = (f: (id: string) => string) => JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, f(t.id)])));
 
 let merged: number | undefined;
 try {
@@ -67,7 +77,7 @@ const date = (iso: string) => new Date(iso).toLocaleDateString('en-US', { year: 
 // Sizes before and after, per tokenizer (data/doc-sizes.json, from scripts/doc-sizes.py).
 const sizeTotal = (side: 'before' | 'now') =>
   sizes.groups.reduce((acc: any, g: any) => {
-    for (const [k, v] of Object.entries(g[side])) acc[k] = (acc[k] ?? 0) + (v as number);
+    for (const [k, v] of Object.entries(g[side])) if (typeof v === 'number') acc[k] = (acc[k] ?? 0) + v;
     return acc;
   }, {});
 const sizeRows = [...sizes.groups, { name: 'All', from: '', before: sizeTotal('before'), now: sizeTotal('now') }];
@@ -80,46 +90,58 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   <h2 id="nc-progress-title">Migration progress</h2>
   <p>
     This edition is moving every ncurses document into Merlon Docs shards, then reviewing each one against its sources.
-    Each guide chapter, manual page and contributor document counts in two steps: sharded, then reviewed.
-    Counted by documents, each one counts once; counted by words, a long one counts for more.
+    It counts two steps. Sharding counts documents: each guide chapter, manual page and contributor document once.
+    Review counts tokens, so a long manual page weighs more than a short one; the tokenizer picker below changes them.
+    Done gives half for the documents sharded and half for the tokens reviewed.
   </p>
 
-  <p class="nc-progress-total"><strong>{percent(sharded, reviewed, total)}% done by documents</strong>: {sharded} of {total} sharded, {reviewed} of {total} reviewed.</p>
+  <p class="nc-progress-total"><strong data-tok={perTok((id) => `${done({ sharded, total }, id)}% done`)}>{done({ sharded, total }, tok0.id)}% done</strong></p>
+  <p class="nc-bar-label">Sharded: {sharded} of {total} documents ({pct(sharded, total)}%)</p>
   <div class="nc-bar nc-bar-total" aria-hidden="true">
-    <span class="nc-seg nc-seg-reviewed" style={`width: ${width(reviewed, total)}`}></span>
-    <span class="nc-seg nc-seg-sharded" style={`width: ${width(sharded - reviewed, total)}`}></span>
+    <span class="nc-seg nc-seg-sharded" style={`width: ${width(sharded, total)}`}></span>
   </div>
-  <p class="nc-progress-total"><strong>{percent(wSharded, wReviewed, wTotal)}% done by words</strong>: {n.format(wSharded)} of {n.format(wTotal)} words sharded, {n.format(wReviewed)} reviewed.</p>
+  <p class="nc-bar-label" data-tok={perTok((id) => { const r = reviewedTokens(id); return `Reviewed: ${n.format(r.reviewed)} of ${n.format(r.total)} tokens (${pct(r.reviewed, r.total)}%)`; })}>
+    Reviewed: {n.format(reviewedTokens(tok0.id).reviewed)} of {n.format(reviewedTokens(tok0.id).total)} tokens ({pct(reviewedTokens(tok0.id).reviewed, reviewedTokens(tok0.id).total)}%)
+  </p>
   <div class="nc-bar nc-bar-total" aria-hidden="true">
-    <span class="nc-seg nc-seg-reviewed" style={`width: ${width(wReviewed, wTotal)}`}></span>
-    <span class="nc-seg nc-seg-sharded" style={`width: ${width(wSharded - wReviewed, wTotal)}`}></span>
+    <span class="nc-seg nc-seg-reviewed" data-tok-width={perTok((id) => width(reviewedTokens(id).reviewed, reviewedTokens(id).total))} style={`width: ${width(reviewedTokens(tok0.id).reviewed, reviewedTokens(tok0.id).total)}`}></span>
   </div>
-  <ul class="nc-legend">
-    <li><span class="nc-key nc-seg-reviewed"></span>Sharded and reviewed</li>
-    <li><span class="nc-key nc-seg-sharded"></span>Sharded, awaiting review</li>
-    <li><span class="nc-key nc-seg-todo"></span>Not started</li>
-  </ul>
 
   <dl class="nc-tracks">
     {
-      tracks.map((t: any) => (
-        <div>
-          <dt>
-            {t.name} <span>{percent(t.sharded, t.reviewed, t.total)}% of documents, {percent(t.words.sharded, t.words.reviewed, t.words.total)}% of words</span>
-          </dt>
-          <dd>
-            <div class="nc-bar" aria-hidden="true">
-              <span class="nc-seg nc-seg-reviewed" style={`width: ${width(t.reviewed, t.total)}`} />
-              <span class="nc-seg nc-seg-sharded" style={`width: ${width(t.sharded - t.reviewed, t.total)}`} />
-            </div>
-            <p>
-              {t.sharded} of {t.total} {t.unit} sharded, {t.reviewed} reviewed; {n.format(t.words.reviewed)} of {n.format(t.words.total)} words reviewed. {t.note}
-            </p>
-          </dd>
-        </div>
-      ))
+      tracks.map((t: any) => {
+        const k = tokKey[t.name];
+        const r = (id: string) => reviewedTokens(id, k);
+        return (
+          <div>
+            <dt>
+              {t.name} <span data-tok={perTok((id) => `${done(t, id, k)}% done`)}>{done(t, tok0.id, k)}% done</span>
+            </dt>
+            <dd>
+              <div class="nc-bar" aria-hidden="true">
+                <span class="nc-seg nc-seg-sharded" style={`width: ${width(t.sharded, t.total)}`} />
+              </div>
+              <div class="nc-bar" aria-hidden="true">
+                <span class="nc-seg nc-seg-reviewed" data-tok-width={perTok((id) => width(r(id).reviewed, r(id).total))} style={`width: ${width(r(tok0.id).reviewed, r(tok0.id).total)}`} />
+              </div>
+              <p>
+                <span>{t.sharded} of {t.total} {t.unit} sharded</span>;{' '}
+                <span data-tok={perTok((id) => `${n.format(r(id).reviewed)} of ${n.format(r(id).total)} tokens reviewed`)}>
+                  {n.format(r(tok0.id).reviewed)} of {n.format(r(tok0.id).total)} tokens reviewed
+                </span>
+                . {t.note}
+              </p>
+            </dd>
+          </div>
+        );
+      })
     }
   </dl>
+  <ul class="nc-legend">
+    <li><span class="nc-key nc-seg-sharded"></span>Documents sharded</li>
+    <li><span class="nc-key nc-seg-reviewed"></span>Tokens reviewed</li>
+    <li><span class="nc-key nc-seg-todo"></span>Not yet</li>
+  </ul>
 
   <h3>The docs' size, before and after</h3>
   <p>
@@ -164,7 +186,8 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   <script>
     const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
     pick?.addEventListener('change', () => {
-      for (const cell of document.querySelectorAll<HTMLElement>('.nc-sizes [data-tok]')) cell.textContent = JSON.parse(cell.dataset.tok!)[pick.value];
+      for (const el of document.querySelectorAll<HTMLElement>('.nc-progress [data-tok]')) el.textContent = JSON.parse(el.dataset.tok!)[pick.value];
+      for (const el of document.querySelectorAll<HTMLElement>('.nc-progress [data-tok-width]')) el.style.width = JSON.parse(el.dataset.tokWidth!)[pick.value];
       const note = document.getElementById('nc-tokenizer-note');
       if (note) note.textContent = pick.selectedOptions[0]?.dataset.note ?? '';
     });
@@ -177,7 +200,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   </p>
   <dl class="nc-stats">
     <div><dt>Tokens</dt><dd>{compact.format(tokens)}</dd><dd class="nc-stat-note">{compact.format(s.outputTokens)} output, {compact.format(s.inputTokens)} input, {compact.format(s.cacheReadTokens)} read from the prompt cache, {compact.format(s.cacheWriteTokens)} written to it</dd></div>
-    <div><dt>API cost</dt><dd>${n.format(Math.round(s.costUsd))}</dd><dd class="nc-stat-note">At list prices, as the session reports it</dd></div>
+    <div><dt>API cost*</dt><dd>${n.format(Math.round(s.costUsd))}</dd><dd class="nc-stat-note">At list prices, as the session reports it. *Not what was paid: the work ran on a flat-rate Claude subscription that includes this usage.</dd></div>
     <div><dt>Wall time</dt><dd>{days(elapsed)}</dd><dd class="nc-stat-note">From the first request to {date(s.asOf)}</dd></div>
     <div><dt>Agent working time</dt><dd>{hours(s.agentActiveSeconds)}</dd><dd class="nc-stat-note">Gaps of 5 minutes or less between the agent's steps; waits for CI and for the maintainer aren't counted</dd></div>
     <div><dt>Maintainer time</dt><dd>{hours(s.maintainerSeconds)}</dd><dd class="nc-stat-note">{s.maintainerMessages} messages; gaps of 15 minutes or less between them, so reading time is undercounted</dd></div>
@@ -208,7 +231,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     <div class="nc-history-scroll">
     <table>
       <thead>
-        <tr><th>Pull request</th><th>Merged</th><th>Done</th><th>Guides</th><th>Manual pages</th><th>Contributor docs</th><th>Errata</th></tr>
+        <tr><th>Pull request</th><th>Merged</th><th>Done (documents)</th><th>Guides</th><th>Manual pages</th><th>Contributor docs</th><th>Errata</th></tr>
       </thead>
       <tbody>
         {
@@ -227,7 +250,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
       </tbody>
     </table>
     </div>
-    <p class="nc-stat-note">Each track shows sharded/reviewed of its total.</p>
+    <p class="nc-stat-note">Each track shows sharded/reviewed of its total. The history counts review in documents, since tokens are measured only for the current shards.</p>
   </details>
 </section>
 
@@ -288,6 +311,14 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   }
   .nc-tracks dd {
     margin: 0.25rem 0 0;
+  }
+  .nc-tracks .nc-bar + .nc-bar,
+  .nc-bar-label + .nc-bar {
+    margin-top: 0.2rem;
+  }
+  .nc-bar-label {
+    margin: 0.5rem 0 0;
+    font-size: var(--sl-text-sm);
   }
   .nc-tracks dd p {
     margin-top: 0.25rem;
