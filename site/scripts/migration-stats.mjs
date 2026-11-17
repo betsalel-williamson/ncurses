@@ -5,8 +5,8 @@
  * - site/data/session/usage.json: the token counts and cost, copied field for field from the
  *   session API's get_session response (external_metadata.usage), with when it was fetched.
  * - site/data/session/daily.csv: one line per UTC day of the session, totalled from the transcript:
- *   the day's first and last event, how many events, the agent's and the maintainer's active
- *   seconds, and the maintainer's messages. No message text, and a line a day rather than a line
+ *   the day's first and last event, how many events, the agent's and the reviewer's active
+ *   seconds, and the reviewer's messages. No message text, and a line a day rather than a line
  *   an event, so the file stays small.
  *
  *   node site/scripts/migration-stats.mjs verify                  # recompute; fail if migration.json differs (CI)
@@ -21,8 +21,9 @@
  * daily lines, and each refresh is a commit, so the history of every figure is in git.
  *
  * - Agent working time adds up the gaps between consecutive events of 5 minutes or less, so time
- *   spent waiting for CI or for the maintainer isn't counted.
- * - Maintainer time adds up the gaps of 15 minutes or less between the maintainer's own messages.
+ *   spent waiting for CI or for the reviewer isn't counted.
+ * - Reviewer time adds up the gaps of 15 minutes or less between the reviewer's own messages. The
+ *   reviewer is the person running this edition, not the ncurses maintainer.
  *   It undercounts reading time between messages, and counts each burst from its first message.
  * - A gap belongs to the UTC day of the event that ends it.
  */
@@ -32,7 +33,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const AGENT_GAP = 5 * 60;
-export const MAINTAINER_GAP = 15 * 60;
+export const REVIEWER_GAP = 15 * 60;
 const repo = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
 export const USAGE = 'site/data/session/usage.json';
 export const DAILY = 'site/data/session/daily.csv';
@@ -48,8 +49,8 @@ export function activeSeconds(times, gap) {
   return Math.round(total);
 }
 
-/** Whether a transcript event is a message the maintainer wrote (not a relay, a bot or a tool). */
-export function fromMaintainer(event) {
+/** Whether a transcript event is a message the reviewer wrote (not a relay, a bot or a tool). */
+export function fromReviewer(event) {
   if (event.type !== 'user') return false;
   const c = event.message?.content;
   const text = typeof c === 'string' ? c : JSON.stringify(c ?? '');
@@ -66,7 +67,7 @@ export function timeline(lines) {
     } catch {
       continue;
     }
-    if (e.timestamp) events.push({ time: e.timestamp, actor: fromMaintainer(e) ? 'maintainer' : 'agent' });
+    if (e.timestamp) events.push({ time: e.timestamp, actor: fromReviewer(e) ? 'reviewer' : 'agent' });
   }
   return events.sort((a, b) => Date.parse(a.time) - Date.parse(b.time));
 }
@@ -87,22 +88,22 @@ export function daily(events) {
   const secs = (e) => Date.parse(e.time) / 1000;
   const iso = (t) => new Date(t * 1000).toISOString().replace(/\.\d+Z$/, 'Z');
   const all = events.map(secs).sort((a, b) => a - b);
-  const human = events.filter((e) => e.actor === 'maintainer').map(secs).sort((a, b) => a - b);
+  const human = events.filter((e) => e.actor === 'reviewer').map(secs).sort((a, b) => a - b);
   const days = new Map();
   for (const t of all) {
     const date = iso(t).slice(0, 10);
-    if (!days.has(date)) days.set(date, { date, first: iso(t), last: iso(t), events: 0, agentSeconds: 0, maintainerSeconds: 0, maintainerMessages: 0 });
+    if (!days.has(date)) days.set(date, { date, first: iso(t), last: iso(t), events: 0, agentSeconds: 0, reviewerSeconds: 0, reviewerMessages: 0 });
     const d = days.get(date);
     d.last = iso(t);
     d.events++;
   }
-  for (const t of human) days.get(iso(t).slice(0, 10)).maintainerMessages++;
+  for (const t of human) days.get(iso(t).slice(0, 10)).reviewerMessages++;
   gapsByDay(all, AGENT_GAP, days, 'agentSeconds');
-  gapsByDay(human, MAINTAINER_GAP, days, 'maintainerSeconds');
-  return [...days.values()].map((d) => ({ ...d, agentSeconds: Math.round(d.agentSeconds), maintainerSeconds: Math.round(d.maintainerSeconds) }));
+  gapsByDay(human, REVIEWER_GAP, days, 'reviewerSeconds');
+  return [...days.values()].map((d) => ({ ...d, agentSeconds: Math.round(d.agentSeconds), reviewerSeconds: Math.round(d.reviewerSeconds) }));
 }
 
-const COLUMNS = ['date', 'first', 'last', 'events', 'agentSeconds', 'maintainerSeconds', 'maintainerMessages'];
+const COLUMNS = ['date', 'first', 'last', 'events', 'agentSeconds', 'reviewerSeconds', 'reviewerMessages'];
 export const dailyCsv = (days) => `${COLUMNS.join(',')}\n${days.map((d) => COLUMNS.map((c) => d[c]).join(',')).join('\n')}\n`;
 export const parseDaily = (text) =>
   text
@@ -135,8 +136,8 @@ export function sessionStats(days, usage) {
     started: days[0].first,
     ...figures,
     agentActiveSeconds: sum('agentSeconds'),
-    maintainerSeconds: sum('maintainerSeconds'),
-    maintainerMessages: sum('maintainerMessages'),
+    reviewerSeconds: sum('reviewerSeconds'),
+    reviewerMessages: sum('reviewerMessages'),
   };
 }
 
