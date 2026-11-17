@@ -83,6 +83,11 @@ const sizeTotal = (side: 'before' | 'now') =>
 const sizeRows = [...sizes.groups, { name: 'All', from: '', before: sizeTotal('before'), now: sizeTotal('now') }];
 const change = (a: number, b: number) => (a ? `${b >= a ? '+' : '−'}${Math.abs(Math.round(((b - a) / a) * 100))}%` : '');
 const tok0 = sizes.tokenizers[0];
+// The violins' data: each side's per-file token counts (scripts/token-violins.js draws them).
+const violinData = {
+  tokenizers: sizes.tokenizers,
+  groups: sizes.groups.map((g: any) => ({ name: g.name, before: g.before.perFile, now: g.now.perFile })),
+};
 const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWriteTokens;
 ---
 
@@ -183,6 +188,36 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     Now: their shards under <code>docs/</code>. Words leave out markup. Measured by
     <a href={`${repoUrl}/blob/master/site/scripts/doc-sizes.py`}><code>doc-sizes.py</code></a>; rerun it after a change to the docs.
   </p>
+  <h4>Tokens per file</h4>
+  <p>
+    How the tokens are spread over files: a shard is read whole, so its size is what a reader, or a language model, takes in at once.
+    The tokenizer above switches the chart too.
+  </p>
+  <figure class="nc-violins" id="nc-violins">
+    <ul class="nc-v-legend" aria-hidden="true">
+      <li class="nc-v-before"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Before: upstream files</li>
+      <li class="nc-v-now"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Now: shards</li>
+      <li class="nc-v-now"><svg viewBox="0 0 24 12"><line x1="3" x2="21" y1="6" y2="6" style="stroke: var(--sl-color-gray-3); stroke-width: 4; stroke-linecap: round"/><circle cx="12" cy="6" r="4" style="fill: var(--sl-color-bg); stroke: var(--sl-color-gray-3); stroke-width: 2"/></svg>Median and middle half</li>
+      <li class="nc-v-before"><svg viewBox="0 0 24 12"><circle cx="12" cy="6" r="4" style="fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2"/></svg>One file, where there are few</li>
+    </ul>
+    <div class="nc-v-plot"></div>
+    <figcaption id="nc-violins-caption"></figcaption>
+    <details class="nc-v-table">
+      <summary>The same figures as a table</summary>
+      <div><table>
+        <thead><tr><th scope="col">Track</th><th scope="col">Files</th><th scope="col">25th percentile</th><th scope="col">Median</th><th scope="col">75th percentile</th><th scope="col">Largest</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </details>
+  </figure>
+  <script type="application/json" id="nc-violins-data" set:html={JSON.stringify(violinData)} />
+  <script>
+    import { ncInitViolins } from '../scripts/token-violins.js';
+    const fig = document.getElementById('nc-violins');
+    const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
+    const data = document.getElementById('nc-violins-data');
+    if (fig && pick && data) ncInitViolins(fig, JSON.parse(data.textContent!), pick);
+  </script>
   <script>
     const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
     pick?.addEventListener('change', () => {
@@ -398,4 +433,47 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     font-weight: 400;
     color: var(--sl-color-gray-2);
   }
+</style>
+
+<style is:global>
+  /* The violins are drawn by script, so their styles can't be scoped to the component. */
+.nc-violins { position: relative; margin: 1rem 0 0; }
+.nc-violins svg { display: block; width: 100%; height: auto; overflow: visible; }
+.nc-violins text { font-family: var(--sl-font); font-size: 12px; fill: var(--sl-color-gray-3); font-variant-numeric: tabular-nums; }
+.nc-violins .nc-v-track { font-size: 15px; font-weight: 600; fill: var(--sl-color-white); }
+.nc-violins .nc-v-lane { font-size: 13px; font-weight: 600; fill: var(--sl-color-text); }
+.nc-violins .nc-v-val { fill: var(--sl-color-text); }
+.nc-violins .nc-v-grid { stroke: var(--sl-color-hairline); stroke-width: 1; }
+.nc-violins .nc-v-grid-minor { stroke: var(--sl-color-hairline); stroke-width: 1; opacity: 0.45; }
+.nc-v-before { --nc-v-c: var(--sl-color-gray-3); }
+.nc-v-now { --nc-v-c: var(--sl-color-accent); }
+.nc-violins .nc-v-key { fill: var(--nc-v-c); }
+.nc-violins .nc-v-area { fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5; stroke-linejoin: round; }
+.nc-violins .nc-v-iqr { stroke: var(--nc-v-c); stroke-width: 4; stroke-linecap: round; }
+.nc-violins .nc-v-med { fill: var(--sl-color-bg); stroke: var(--nc-v-c); stroke-width: 2; }
+.nc-violins .nc-v-dot { fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2; }
+.nc-violins .nc-v-hi { fill: var(--nc-v-c); stroke: var(--sl-color-white); stroke-width: 2; pointer-events: none; }
+.nc-violins .nc-v-hit { fill: transparent; cursor: crosshair; }
+.nc-violins .nc-v-hit:focus { outline: none; }
+.nc-violins .nc-v-hit:focus-visible { stroke: var(--sl-color-accent); stroke-width: 2; }
+.nc-v-tip {
+  position: absolute; z-index: 5; pointer-events: none; max-width: min(18rem, calc(100% - 8px));
+  padding: 0.4rem 0.6rem; border-radius: 0.25rem; box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+  background: var(--sl-color-white); color: var(--sl-color-black);
+  font-size: var(--sl-text-xs); line-height: 1.4;
+}
+.nc-v-tip b { font-size: var(--sl-text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.nc-v-tip code { display: block; font-family: var(--sl-font-mono); font-size: 0.95em; overflow-wrap: anywhere; }
+.nc-v-tip span { display: block; opacity: 0.8; }
+.nc-v-legend { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.75rem 0 1rem; padding: 0; list-style: none; font-size: var(--sl-text-sm); }
+.nc-v-legend li { margin: 0; display: inline-flex; align-items: center; gap: 0.4em; }
+.nc-v-legend svg { width: 1.6em; height: 1em; overflow: visible; }
+.nc-violins figcaption { margin-top: 0.5rem; font-size: var(--sl-text-sm); color: var(--sl-color-text); }
+.nc-v-table { margin-top: 0.75rem; font-size: var(--sl-text-sm); }
+.nc-v-table summary { cursor: pointer; font-weight: 600; }
+.nc-v-table > div { max-width: 100%; overflow-x: auto; }
+.nc-v-table table { border-collapse: collapse; margin-top: 0.5rem; }
+.nc-v-table th, .nc-v-table td { padding: 0.25rem 0.6rem; border-bottom: 1px solid var(--sl-color-hairline); white-space: nowrap; text-align: end; font-variant-numeric: tabular-nums; }
+.nc-v-table th:first-child, .nc-v-table td:first-child { text-align: start; }
+.nc-v-table thead th { color: var(--sl-color-white); font-weight: 600; }
 </style>
