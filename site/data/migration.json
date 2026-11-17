@@ -23,7 +23,7 @@
     "cacheWriteTokens": 16015443,
     "costUsd": 423.73,
     "agentActiveSeconds": 65000,
-    "maintainerSeconds": 29180,
-    "maintainerMessages": 133
+    "reviewerSeconds": 29180,
+    "reviewerMessages": 133
   }
 }
