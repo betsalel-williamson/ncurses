@@ -195,7 +195,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   </p>
   <figure class="nc-violins" id="nc-violins">
     <ul class="nc-v-legend" aria-hidden="true">
-      <li class="nc-v-before"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Before: upstream files</li>
+      <li class="nc-v-before"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 10%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5; stroke-dasharray: 4 3"/></svg>Before: upstream files</li>
       <li class="nc-v-now"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Now: shards</li>
       <li class="nc-v-now"><svg viewBox="0 0 24 12"><line x1="3" x2="21" y1="6" y2="6" style="stroke: var(--sl-color-gray-3); stroke-width: 4; stroke-linecap: round"/><circle cx="12" cy="6" r="4" style="fill: var(--sl-color-bg); stroke: var(--sl-color-gray-3); stroke-width: 2"/></svg>Median and middle half</li>
       <li class="nc-v-before"><svg viewBox="0 0 24 12"><circle cx="12" cy="6" r="4" style="fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2"/></svg>One file, where there are few</li>
@@ -444,12 +444,14 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
 .nc-violins .nc-v-track { font-size: 15px; font-weight: 600; fill: var(--sl-color-white); }
 .nc-violins .nc-v-lane { font-size: 13px; font-weight: 600; fill: var(--sl-color-text); }
 .nc-violins .nc-v-val { fill: var(--sl-color-text); }
-.nc-violins .nc-v-grid { stroke: var(--sl-color-hairline); stroke-width: 1; }
-.nc-violins .nc-v-grid-minor { stroke: var(--sl-color-hairline); stroke-width: 1; opacity: 0.45; }
+.nc-violins .nc-v-grid { stroke: color-mix(in srgb, var(--sl-color-gray-3) 30%, var(--sl-color-bg)); stroke-width: 1; }
+.nc-violins .nc-v-grid-minor { stroke: color-mix(in srgb, var(--sl-color-gray-3) 15%, var(--sl-color-bg)); stroke-width: 1; }
 .nc-v-before { --nc-v-c: var(--sl-color-gray-3); }
 .nc-v-now { --nc-v-c: var(--sl-color-accent); }
 .nc-violins .nc-v-key { fill: var(--nc-v-c); }
 .nc-violins .nc-v-area { fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5; stroke-linejoin: round; }
+/* Before is dashed and Now solid, so the two differ by more than colour: their colours are close in lightness. */
+.nc-violins .nc-v-before .nc-v-area { fill: color-mix(in srgb, var(--nc-v-c) 10%, transparent); stroke-dasharray: 4 3; }
 .nc-violins .nc-v-iqr { stroke: var(--nc-v-c); stroke-width: 4; stroke-linecap: round; }
 .nc-violins .nc-v-med { fill: var(--sl-color-bg); stroke: var(--nc-v-c); stroke-width: 2; }
 .nc-violins .nc-v-dot { fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2; }
@@ -458,14 +460,16 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
 .nc-violins .nc-v-hit:focus { outline: none; }
 .nc-violins .nc-v-hit:focus-visible { stroke: var(--sl-color-accent); stroke-width: 2; }
 .nc-v-tip {
-  position: absolute; z-index: 5; pointer-events: none; max-width: min(18rem, calc(100% - 8px));
+  position: absolute; z-index: 5; pointer-events: none; max-width: min(16rem, calc(100% - 8px));
   padding: 0.4rem 0.6rem; border-radius: 0.25rem; box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
   background: var(--sl-color-white); color: var(--sl-color-black);
   font-size: var(--sl-text-xs); line-height: 1.4;
 }
 .nc-v-tip b { font-size: var(--sl-text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
-.nc-v-tip code { display: block; font-family: var(--sl-font-mono); font-size: 0.95em; overflow-wrap: anywhere; }
-.nc-v-tip span { display: block; opacity: 0.8; }
+.nc-v-tip > * { margin: 0; }
+.nc-v-tip .nc-v-path { margin-block: 0.1rem; font-family: var(--sl-font-mono); font-size: 0.95em; overflow-wrap: anywhere; }
+/* The tip's own colours, at full strength: dimming with opacity lost contrast in the lighter styles. */
+.nc-v-tip .nc-v-meta { font-size: 0.95em; }
 .nc-v-legend { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.75rem 0 1rem; padding: 0; list-style: none; font-size: var(--sl-text-sm); }
 .nc-v-legend li { margin: 0; display: inline-flex; align-items: center; gap: 0.4em; }
 .nc-v-legend svg { width: 1.6em; height: 1em; overflow: visible; }

@@ -1800,6 +1800,30 @@
     "rows": 387,
     "originalErrors": 152
    }
+  },
+  {
+   "pr": 76,
+   "merge": "95c552500c8f",
+   "mergedAt": "2026-11-17T12:54:41-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 0
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 391,
+    "originalErrors": 152
+   }
   }
  ]
 }
