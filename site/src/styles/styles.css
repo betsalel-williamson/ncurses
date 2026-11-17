@@ -1395,6 +1395,13 @@ a:is(.nc-sym, .nc-def) {
   }
 }
 
+/* On a wide screen the key hints start where the contents panel does. */
+@media (min-width: 90rem) {
+  :root[data-style]:not([data-style='modern']) .nc-statusbar {
+    padding-inline: calc(var(--nc-frame-start) + 2ch);
+  }
+}
+
 @media (min-width: 72rem) {
   :root[data-style]:not([data-style='modern']) .right-sidebar-panel {
     width: calc(var(--toc-column) - 2 * var(--nc-panel-gap) - var(--nc-panel-shadow-offset, 0rem));

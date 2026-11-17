@@ -1,13 +1,22 @@
-/* A narrower "On this page" column, so listings in the middle column have more room.
-   Starlight sizes the right column from --sl-sidebar-width, which also sizes the left one, so
-   these rules repeat Starlight's own (Page.astro, TwoColumnContent.astro) with --toc-width in
-   its place. The header's search box lines up with the content through --__toc-width.
+/* The columns: sidebar, content and "On this page".
+   Starlight sizes the right column from --sl-sidebar-width, which also sizes the left one, and
+   gives each side column half of any spare width, so on a wide screen the text drifted away from
+   the sidebar and the right column stretched. These rules repeat Starlight's own (Page.astro,
+   TwoColumnContent.astro, ContentPanel.astro) with a right column of its own width: 14rem at
+   72rem, growing to 16.25rem at 90rem and no wider. The text is centred in what is left.
+   From 90rem up the three columns stop at --nc-frame and the frame is centred in the window, so
+   the extra width becomes equal margins. The window still scrolls the page; the sidebar scrolls
+   in its own column. The header's search box lines up with the content through --__toc-width.
    The content column is 47rem, up from 45rem, so a 77-column listing fits without scrolling
    once the window is wide enough. Pages without a sidebar keep Starlight's 67.5rem. */
 :root {
-  --toc-width: 14rem;
-  /* The right column's width, written with 100vw for use inside the fixed column. */
-  --toc-column: max(var(--toc-width), var(--toc-width) + (100vw - var(--sl-sidebar-width) - var(--sl-content-width) - var(--toc-width)) / 2);
+  --nc-frame: 90rem;
+  /* Where the frame starts: the window's left edge, or the left margin once it is centred. Used
+     on fixed elements, where 100% is the window without its scrollbar, as .main-frame centres. */
+  --nc-frame-start: max(0px, (100% - var(--nc-frame)) / 2);
+  --toc-width: clamp(14rem, 14rem + (100vw - 72rem) / 8, 16.25rem);
+  /* The right column's width, for use inside the fixed column (styles.css uses it too). */
+  --toc-column: var(--toc-width);
 }
 :root[data-has-sidebar] {
   --sl-content-width: 47rem;
@@ -17,24 +26,33 @@
 }
 @media (min-width: 72rem) {
   .right-sidebar-container {
-    width: max(var(--toc-width), calc(var(--toc-width) + (100% - var(--sl-content-width) - var(--toc-width)) / 2));
+    width: var(--toc-width);
+  }
+  /* Starlight fixes the column at the window's full width. */
+  .right-sidebar {
+    width: var(--toc-width);
   }
   [data-has-sidebar][data-has-toc] .main-pane {
-    width: min(calc(100% - var(--toc-width)), calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--toc-width)) / 2));
+    --sl-content-margin-inline: auto;
+    width: calc(100% - var(--toc-width));
   }
-}
-
-/* Starlight sizes the column's contents from --sl-sidebar-width too (PageSidebar.astro), so in a
-   14rem column they ran past the window's right edge and were cut off. Size them from the
-   column's own width instead, capped at Starlight's. The column is position: fixed, so 100%
-   inside it is the window, so this uses --toc-column. */
-@media (min-width: 72rem) {
   .right-sidebar-panel .sl-container {
     max-width: none;
-    width: min(
-      calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x)),
-      calc(var(--toc-column) - 2 * var(--sl-sidebar-pad-x))
-    );
+    width: calc(var(--toc-width) - 2 * var(--sl-sidebar-pad-x));
+  }
+}
+@media (min-width: 90rem) {
+  /* The page is a flex column, where auto margins would shrink the frame to its content. */
+  .main-frame {
+    width: 100%;
+    max-width: var(--nc-frame);
+    margin-inline: auto;
+  }
+  .sidebar-pane {
+    inset-inline-start: var(--nc-frame-start);
+  }
+  header.header {
+    padding-inline: calc(var(--nc-frame-start) + var(--sl-nav-pad-x));
   }
 }
 
