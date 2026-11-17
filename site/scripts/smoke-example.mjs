@@ -9,11 +9,12 @@
  * A program still running that shows a numbered menu with an Exit item ("14: Exit") gets
  * that number and Enter, for a menu read with scanw().
  * Prints one JSON line: { status: "runs" | "crashed" | "no-quit" | "no-output", detail }.
- * Usage: [SMOKE_QUIT=<key>] node smoke-example.mjs <path to .mjs> [program arguments]
+ * Usage: [SMOKE_QUIT=<keys>] [SMOKE_DEBUG=1] node smoke-example.mjs <path to .mjs> [program arguments]
+ * SMOKE_DEBUG adds the screen to a no-quit report.
  */
 import { pathToFileURL } from 'node:url';
 
-// A test program the shell keeps in /usr/games quits on its own key (SMOKE_QUIT), not F1.
+// A test program the shell keeps in /usr/games quits on its own keys (SMOKE_QUIT), not F1.
 const F1 = new TextEncoder().encode(process.env.SMOKE_QUIT || '\x1bOP');
 const report = (status, detail = '') => {
   console.log(JSON.stringify({ status, detail }));
@@ -126,5 +127,5 @@ if (exited === null) {
   }
 }
 const tried = `F1 three times${shelled ? ', then exit at the shell prompt' : ''}, then Enter and F1${mouse ? ', then a click on Exit' : ''}${typed ? ', then the number of the Exit item' : ''}`;
-if (exited === null) report('no-quit', `still running after ${tried}`);
+if (exited === null) report('no-quit', `still running after ${tried}${process.env.SMOKE_DEBUG ? `\n${screen.map((r) => r.join('').trimEnd()).join('\n')}` : ''}`);
 report(exited === 0 ? 'runs' : 'crashed', exited === 0 ? '' : `exited (${exited}) after F1`);

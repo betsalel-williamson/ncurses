@@ -295,7 +295,7 @@ async function buildExample(ex, id, defines, libs, entryFiles) {
   const { stdout } = await run('node', [join(site, 'scripts/smoke-example.mjs'), join(out, `${id}.mjs`), ...ex.args], { ...quiet, env: smokeEnv });
   const result = JSON.parse(stdout.trim().split('\n').pop());
   if (ex.args.length) result.args = ex.args;
-  if (result.status !== 'runs') for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
+  if (result.status !== 'runs' && !process.env.KEEP) for (const ext of ['mjs', 'wasm']) rmSync(join(out, `${id}.${ext}`), { force: true });
   return result;
 }
 // Each build's .wasm size, so the page can show its download's progress: the server may compress

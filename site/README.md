@@ -107,7 +107,9 @@ A program that fails shows a note instead of a button, with its build log, and C
 
 ### The shell's games
 
-`GAMES` in `scripts/examples.mjs` lists ncurses test programs from `test/` (`worm`, `rain`, `firework`, `xmas` and others) that `build-examples.mjs` builds like the guides' listings, with `test/`'s own headers and `examples/sleep.c`. Their `status.json` entries have `hidden: true` and a `source` instead of a `shard`. The pretend shell keeps them in `/usr/games`, a folder like any other: `ls /usr/games` or `cd /usr/games` finds them, and since it's on the PATH they run by name from any folder, with any arguments typed after it. Each quits on its own key, which the smoke test presses instead of F1 (`SMOKE_QUIT`).
+`GAMES` in `scripts/examples.mjs` lists ncurses test programs from `test/` (`worm`, `rain`, `firework`, `xmas` and others) that `build-examples.mjs` builds like the guides' listings, with `test/`'s own headers and `examples/sleep.c`. Their `status.json` entries have `hidden: true` and a `source` instead of a `shard`. The pretend shell keeps them in `/usr/games`, a folder like any other: `ls /usr/games` or `cd /usr/games` finds them, and since it's on the PATH they run by name from any folder, with any arguments typed after it. Each quits on its own keys, which the smoke test presses instead of F1 (`SMOKE_QUIT`, one key or a few in a row: `bs` takes any key past its title, a ship's letter, then Ctrl-Q). `SMOKE_DEBUG=1` adds the screen to a no-quit report, and `KEEP=1 node scripts/build-examples.mjs` keeps a build that failed its smoke test so it can be run by hand.
+
+Ctrl-C works as on a terminal: while a program keeps `ISIG` in its terminal modes (`cbreak()`, or no mode call), `pty.js` turns it into `SIGINT`, so a program that quits on `SIGINT` quits; `raw()` turns `ISIG` off and the program reads Ctrl-C as a key, as the initialization guide says. `pty.js` keeps the modes a program sets with `tcsetattr()`, which Emscripten's terminal otherwise ignores.
 
 ### Build messages
 

@@ -19,6 +19,7 @@ export const GAMES = [
   { id: 'gdc', quit: 'q' },
   { id: 'hanoi', quit: 'q' },
   { id: 'blue', quit: 'q' },
+  { id: 'bs', quit: '\x11A\x11' },
 ];
 
 /** Guide shard directories, relative to the repository root. */
