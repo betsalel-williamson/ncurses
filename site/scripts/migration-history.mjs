@@ -124,6 +124,56 @@ export function current(units = readUnits()) {
   return counts({ files, errata, units, mergedPrs: new Set(merges().map((m) => m.pr)) });
 }
 
+/**
+ * The same progress as current(), weighed by each file's size instead of counting documents:
+ * `weigh(path)` gives a tracked file's weight, and each unit adds up the weights of its shards in
+ * the working tree, so a long manual page weighs more than a short one. A unit that isn't sharded
+ * yet has no shards to weigh and adds nothing; every unit is sharded today.
+ */
+export function weighedProgress(weigh, units = readUnits()) {
+  const files = git('ls-files').split('\n').filter(Boolean);
+  const mergedPrs = new Set(merges().map((m) => m.pr));
+  const size = (path) => files.filter((f) => f === path || f.startsWith(`${path}/`)).reduce((n, f) => n + weigh(f), 0);
+  const track = (us) => {
+    const t = { total: 0, sharded: 0, reviewed: 0 };
+    for (const u of us) {
+      const w = size(u.path);
+      t.total += w;
+      if (w) t.sharded += w;
+      if (w && u.reviewed_pr && mergedPrs.has(u.reviewed_pr)) t.reviewed += w;
+    }
+    return t;
+  };
+  // A manual page's shards are docs/man/<page> (its skeleton) and docs/man/<name>/ (its sections).
+  const pages = files.filter((f) => f.startsWith('docs/man/') && MAN_PAGE.test(f.slice(9)));
+  const reviewedMan = new Map(units.filter((u) => u.track === 'Manual pages').map((u) => [u.path, u]));
+  // term.5 and term.7 share docs/man/term/, so each path counts once.
+  const manShards = new Map();
+  for (const p of pages) {
+    const reviewed_pr = (reviewedMan.get(p) ?? reviewedMan.get(p.replace(/\.[^.]+$/, '')))?.reviewed_pr ?? null;
+    for (const path of [p, p.replace(/\.[^.]+$/, '')]) if (!manShards.has(path)) manShards.set(path, { path, reviewed_pr });
+  }
+  const man = track([...manShards.values()]);
+  return {
+    guides: track(units.filter((u) => u.track === 'Guides')),
+    man,
+    contributor: track(units.filter((u) => u.track === 'Contributor and install docs')),
+  };
+}
+
+/**
+ * weighedProgress() in tokens, one result per tokenizer, from the files' token counts in
+ * site/data/doc-sizes.json (`groups[].now.perFile`). A file it doesn't list weighs nothing.
+ */
+export function tokenProgress(sizes, units = readUnits()) {
+  return Object.fromEntries(
+    sizes.tokenizers.map(({ id }) => {
+      const tokens = new Map(sizes.groups.flatMap((g) => g.now.perFile.path.map((p, i) => [p, g.now.perFile[id][i]])));
+      return [id, weighedProgress((f) => tokens.get(f) ?? 0, units)];
+    }),
+  );
+}
+
 /** The stored history rows. */
 export function readHistory() {
   return JSON.parse(readFileSync(join(repo, HISTORY), 'utf8')).rows;

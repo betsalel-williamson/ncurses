@@ -1,29 +1,46 @@
 ---
 // The front page's Migration progress section: how far the move to Merlon Docs shards has got,
-// and what it took. Each guide chapter, manual page and contributor document counts once, in
-// two steps: sharded, then reviewed against its sources. Every count comes from git through
-// scripts/migration-history.mjs, which also checks the per-pull-request history CI verifies.
+// and what it took. Sharding is counted in documents (each guide chapter, manual page and
+// contributor document once); review is counted in tokens, so a long page weighs more than a
+// short one. The counts come from git through scripts/migration-history.mjs, which also checks
+// the per-pull-request history CI verifies; the tokens come from data/doc-sizes.json.
 // The session figures and the tracks' notes are in site/data/migration.json.
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-import { current, readHistory } from '../../scripts/migration-history.mjs';
+import { current, readHistory, tokenProgress } from '../../scripts/migration-history.mjs';
 import data from '../../data/migration.json';
+import sizes from '../../data/doc-sizes.json';
 
 // Astro builds from site/, so the repository is its parent.
 const repo = resolve(process.cwd(), '..');
 const now = current();
+const toks = tokenProgress(sizes);
 const note = (name: string) => data.tracks.find((t: any) => t.name === name)?.note ?? '';
 const tracks = [
   { name: 'Guides', unit: 'chapters', ...now.guides },
   { name: 'Manual pages', unit: 'pages', ...now.man },
   { name: 'Contributor and install docs', unit: 'documents', ...now.contributor },
 ].map((t) => ({ ...t, note: note(t.name) }));
+const tokKey = { Guides: 'guides', 'Manual pages': 'man', 'Contributor and install docs': 'contributor' } as Record<string, 'guides' | 'man' | 'contributor'>;
 const total = tracks.reduce((n: number, t: any) => n + t.total, 0);
 const sharded = tracks.reduce((n: number, t: any) => n + t.sharded, 0);
 const reviewed = tracks.reduce((n: number, t: any) => n + t.reviewed, 0);
-// Half a unit for sharding it, the other half for reviewing it.
+// Half a unit for sharding it, the other half for reviewing it (the history's measure).
 const percent = (s: number, r: number, of: number) => (of ? Math.round(((s + r) / (2 * of)) * 100) : 0);
+const pct = (n: number, of: number) => (of ? Math.round((n / of) * 100) : 0);
 const width = (n: number, of: number) => `${of ? (n / of) * 100 : 0}%`;
+// Reviewed tokens per tokenizer, for a track's key or for all of them.
+const reviewedTokens = (id: string, key?: string) => {
+  const ts = key ? [toks[id][key]] : Object.values(toks[id]);
+  return { reviewed: ts.reduce((n: number, t: any) => n + t.reviewed, 0), total: ts.reduce((n: number, t: any) => n + t.total, 0) };
+};
+// Done: half for the documents sharded, half for the tokens reviewed.
+const done = (docs: { sharded: number; total: number }, id: string, key?: string) => {
+  const r = reviewedTokens(id, key);
+  return Math.round(((docs.total ? docs.sharded / docs.total : 0) + (r.total ? r.reviewed / r.total : 0)) * 50);
+};
+// Per-tokenizer values for the dropdown to swap in: data-tok holds text, data-tok-width a bar width.
+const perTok = (f: (id: string) => string) => JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, f(t.id)])));
 
 let merged: number | undefined;
 try {
@@ -57,6 +74,20 @@ const days = (sec: number) => {
   return d ? `${d} d ${h} h` : `${h} h`;
 };
 const date = (iso: string) => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+// Sizes before and after, per tokenizer (data/doc-sizes.json, from scripts/doc-sizes.py).
+const sizeTotal = (side: 'before' | 'now') =>
+  sizes.groups.reduce((acc: any, g: any) => {
+    for (const [k, v] of Object.entries(g[side])) if (typeof v === 'number') acc[k] = (acc[k] ?? 0) + v;
+    return acc;
+  }, {});
+const sizeRows = [...sizes.groups, { name: 'All', from: '', before: sizeTotal('before'), now: sizeTotal('now') }];
+const change = (a: number, b: number) => (a ? `${b >= a ? '+' : '−'}${Math.abs(Math.round(((b - a) / a) * 100))}%` : '');
+const tok0 = sizes.tokenizers[0];
+// The violins' data: each side's per-file token counts (scripts/token-violins.js draws them).
+const violinData = {
+  tokenizers: sizes.tokenizers,
+  groups: sizes.groups.map((g: any) => ({ name: g.name, before: g.before.perFile, now: g.now.perFile })),
+};
 const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWriteTokens;
 ---
 
@@ -64,40 +95,138 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   <h2 id="nc-progress-title">Migration progress</h2>
   <p>
     This edition is moving every ncurses document into Merlon Docs shards, then reviewing each one against its sources.
-    Each guide chapter, manual page and contributor document counts once, in two steps: sharded, then reviewed.
+    It counts two steps. Sharding counts documents: each guide chapter, manual page and contributor document once.
+    Review counts tokens, so a long manual page weighs more than a short one; the tokenizer picker below changes them.
+    Done gives half for the documents sharded and half for the tokens reviewed.
   </p>
 
-  <p class="nc-progress-total"><strong>{percent(sharded, reviewed, total)}% done</strong>: {sharded} of {total} sharded, {reviewed} of {total} reviewed.</p>
+  <p class="nc-progress-total"><strong data-tok={perTok((id) => `${done({ sharded, total }, id)}% done`)}>{done({ sharded, total }, tok0.id)}% done</strong></p>
+  <p class="nc-bar-label">Sharded: {sharded} of {total} documents ({pct(sharded, total)}%)</p>
   <div class="nc-bar nc-bar-total" aria-hidden="true">
-    <span class="nc-seg nc-seg-reviewed" style={`width: ${width(reviewed, total)}`}></span>
-    <span class="nc-seg nc-seg-sharded" style={`width: ${width(sharded - reviewed, total)}`}></span>
+    <span class="nc-seg nc-seg-sharded" style={`width: ${width(sharded, total)}`}></span>
   </div>
-  <ul class="nc-legend">
-    <li><span class="nc-key nc-seg-reviewed"></span>Sharded and reviewed</li>
-    <li><span class="nc-key nc-seg-sharded"></span>Sharded, awaiting review</li>
-    <li><span class="nc-key nc-seg-todo"></span>Not started</li>
-  </ul>
+  <p class="nc-bar-label" data-tok={perTok((id) => { const r = reviewedTokens(id); return `Reviewed: ${n.format(r.reviewed)} of ${n.format(r.total)} tokens (${pct(r.reviewed, r.total)}%)`; })}>
+    Reviewed: {n.format(reviewedTokens(tok0.id).reviewed)} of {n.format(reviewedTokens(tok0.id).total)} tokens ({pct(reviewedTokens(tok0.id).reviewed, reviewedTokens(tok0.id).total)}%)
+  </p>
+  <div class="nc-bar nc-bar-total" aria-hidden="true">
+    <span class="nc-seg nc-seg-reviewed" data-tok-width={perTok((id) => width(reviewedTokens(id).reviewed, reviewedTokens(id).total))} style={`width: ${width(reviewedTokens(tok0.id).reviewed, reviewedTokens(tok0.id).total)}`}></span>
+  </div>
 
   <dl class="nc-tracks">
     {
-      tracks.map((t: any) => (
-        <div>
-          <dt>
-            {t.name} <span>{percent(t.sharded, t.reviewed, t.total)}%</span>
-          </dt>
-          <dd>
-            <div class="nc-bar" aria-hidden="true">
-              <span class="nc-seg nc-seg-reviewed" style={`width: ${width(t.reviewed, t.total)}`} />
-              <span class="nc-seg nc-seg-sharded" style={`width: ${width(t.sharded - t.reviewed, t.total)}`} />
-            </div>
-            <p>
-              {t.sharded} of {t.total} {t.unit} sharded, {t.reviewed} reviewed. {t.note}
-            </p>
-          </dd>
-        </div>
-      ))
+      tracks.map((t: any) => {
+        const k = tokKey[t.name];
+        const r = (id: string) => reviewedTokens(id, k);
+        return (
+          <div>
+            <dt>
+              {t.name} <span data-tok={perTok((id) => `${done(t, id, k)}% done`)}>{done(t, tok0.id, k)}% done</span>
+            </dt>
+            <dd>
+              <div class="nc-bar" aria-hidden="true">
+                <span class="nc-seg nc-seg-sharded" style={`width: ${width(t.sharded, t.total)}`} />
+              </div>
+              <div class="nc-bar" aria-hidden="true">
+                <span class="nc-seg nc-seg-reviewed" data-tok-width={perTok((id) => width(r(id).reviewed, r(id).total))} style={`width: ${width(r(tok0.id).reviewed, r(tok0.id).total)}`} />
+              </div>
+              <p>
+                <span>{t.sharded} of {t.total} {t.unit} sharded</span>;{' '}
+                <span data-tok={perTok((id) => `${n.format(r(id).reviewed)} of ${n.format(r(id).total)} tokens reviewed`)}>
+                  {n.format(r(tok0.id).reviewed)} of {n.format(r(tok0.id).total)} tokens reviewed
+                </span>
+                . {t.note}
+              </p>
+            </dd>
+          </div>
+        );
+      })
     }
   </dl>
+  <ul class="nc-legend">
+    <li><span class="nc-key nc-seg-sharded"></span>Documents sharded</li>
+    <li><span class="nc-key nc-seg-reviewed"></span>Tokens reviewed</li>
+    <li><span class="nc-key nc-seg-todo"></span>Not yet</li>
+  </ul>
+
+  <h3>The docs' size, before and after</h3>
+  <p>
+    What a reader, or a language model, has to take in: the documents this edition started from
+    (the upstream snapshot <code>{sizes.before.label}</code>) and the shards that replaced them, each read whole as stored.
+    Tokens depend on the model's tokenizer.
+  </p>
+  <p class="nc-size-pick">
+    <label for="nc-tokenizer">Tokenizer</label>
+    <select id="nc-tokenizer">
+      {sizes.tokenizers.map((t: any) => <option value={t.id} data-note={t.note}>{t.name}</option>)}
+    </select>
+    <span class="nc-stat-note" id="nc-tokenizer-note">{tok0.note}</span>
+  </p>
+  <div class="nc-history-scroll">
+    <table class="nc-sizes">
+      <thead>
+        <tr><th>Track</th><th>Before</th><th>Now</th><th>Tokens before</th><th>Tokens now</th><th>Change</th></tr>
+      </thead>
+      <tbody>
+        {
+          sizeRows.map((g: any) => (
+            <tr class={g.name === 'All' ? 'nc-sizes-all' : undefined}>
+              <td>{g.name}</td>
+              <td>{n.format(g.before.files)} files, {n.format(g.before.words)} words</td>
+              <td>{n.format(g.now.files)} files, {n.format(g.now.words)} words</td>
+              {['before', 'now'].map((side) => (
+                <td data-tok={JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, n.format(g[side][t.id])])))}>{n.format(g[side][tok0.id])}</td>
+              ))}
+              <td data-tok={JSON.stringify(Object.fromEntries(sizes.tokenizers.map((t: any) => [t.id, change(g.before[t.id], g.now[t.id])])))}>{change(g.before[tok0.id], g.now[tok0.id])}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="nc-stat-note">
+    Before: the guides' HTML (the HOWTO and Writing Programs with NCURSES), the troff pages in <code>man/</code>, and the hacker's guide, <code>INSTALL</code> and READMEs, the Ada page and the announcement.
+    Now: their shards under <code>docs/</code>. Words leave out markup. Measured by
+    <a href={`${repoUrl}/blob/master/site/scripts/doc-sizes.py`}><code>doc-sizes.py</code></a>; rerun it after a change to the docs.
+  </p>
+  <h4>Tokens per file</h4>
+  <p>
+    How the tokens are spread over files: a shard is read whole, so its size is what a reader, or a language model, takes in at once.
+    The tokenizer above switches the chart too.
+  </p>
+  <figure class="nc-violins" id="nc-violins">
+    <ul class="nc-v-legend" aria-hidden="true">
+      <li class="nc-v-before"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Before: upstream files</li>
+      <li class="nc-v-now"><svg viewBox="0 0 24 12"><path d="M0 6 Q12 -2 24 6 Q12 14 0 6Z" style="fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5"/></svg>Now: shards</li>
+      <li class="nc-v-now"><svg viewBox="0 0 24 12"><line x1="3" x2="21" y1="6" y2="6" style="stroke: var(--sl-color-gray-3); stroke-width: 4; stroke-linecap: round"/><circle cx="12" cy="6" r="4" style="fill: var(--sl-color-bg); stroke: var(--sl-color-gray-3); stroke-width: 2"/></svg>Median and middle half</li>
+      <li class="nc-v-before"><svg viewBox="0 0 24 12"><circle cx="12" cy="6" r="4" style="fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2"/></svg>One file, where there are few</li>
+    </ul>
+    <div class="nc-v-plot"></div>
+    <figcaption id="nc-violins-caption"></figcaption>
+    <details class="nc-v-table">
+      <summary>The same figures as a table</summary>
+      <div><table>
+        <thead><tr><th scope="col">Track</th><th scope="col">Files</th><th scope="col">25th percentile</th><th scope="col">Median</th><th scope="col">75th percentile</th><th scope="col">Largest</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </details>
+  </figure>
+  <script type="application/json" id="nc-violins-data" set:html={JSON.stringify(violinData)} />
+  <script>
+    import { ncInitViolins } from '../scripts/token-violins.js';
+    const fig = document.getElementById('nc-violins');
+    const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
+    const data = document.getElementById('nc-violins-data');
+    if (fig && pick && data) ncInitViolins(fig, JSON.parse(data.textContent!), pick);
+  </script>
+  <script>
+    const pick = document.getElementById('nc-tokenizer') as HTMLSelectElement | null;
+    pick?.addEventListener('change', () => {
+      for (const el of document.querySelectorAll<HTMLElement>('.nc-progress [data-tok]')) el.textContent = JSON.parse(el.dataset.tok!)[pick.value];
+      for (const el of document.querySelectorAll<HTMLElement>('.nc-progress [data-tok-width]')) el.style.width = JSON.parse(el.dataset.tokWidth!)[pick.value];
+      const note = document.getElementById('nc-tokenizer-note');
+      if (note) note.textContent = pick.selectedOptions[0]?.dataset.note ?? '';
+    });
+  </script>
 
   <h3>What it took so far</h3>
   <p>
@@ -106,7 +235,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   </p>
   <dl class="nc-stats">
     <div><dt>Tokens</dt><dd>{compact.format(tokens)}</dd><dd class="nc-stat-note">{compact.format(s.outputTokens)} output, {compact.format(s.inputTokens)} input, {compact.format(s.cacheReadTokens)} read from the prompt cache, {compact.format(s.cacheWriteTokens)} written to it</dd></div>
-    <div><dt>API cost</dt><dd>${n.format(Math.round(s.costUsd))}</dd><dd class="nc-stat-note">At list prices, as the session reports it</dd></div>
+    <div><dt>API cost*</dt><dd>${n.format(Math.round(s.costUsd))}</dd><dd class="nc-stat-note">At list prices, as the session reports it. *Not what was paid: the work ran on a flat-rate Claude subscription that includes this usage.</dd></div>
     <div><dt>Wall time</dt><dd>{days(elapsed)}</dd><dd class="nc-stat-note">From the first request to {date(s.asOf)}</dd></div>
     <div><dt>Agent working time</dt><dd>{hours(s.agentActiveSeconds)}</dd><dd class="nc-stat-note">Gaps of 5 minutes or less between the agent's steps; waits for CI and for the maintainer aren't counted</dd></div>
     <div><dt>Maintainer time</dt><dd>{hours(s.maintainerSeconds)}</dd><dd class="nc-stat-note">{s.maintainerMessages} messages; gaps of 15 minutes or less between them, so reading time is undercounted</dd></div>
@@ -137,7 +266,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     <div class="nc-history-scroll">
     <table>
       <thead>
-        <tr><th>Pull request</th><th>Merged</th><th>Done</th><th>Guides</th><th>Manual pages</th><th>Contributor docs</th><th>Errata</th></tr>
+        <tr><th>Pull request</th><th>Merged</th><th>Done (documents)</th><th>Guides</th><th>Manual pages</th><th>Contributor docs</th><th>Errata</th></tr>
       </thead>
       <tbody>
         {
@@ -156,7 +285,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
       </tbody>
     </table>
     </div>
-    <p class="nc-stat-note">Each track shows sharded/reviewed of its total.</p>
+    <p class="nc-stat-note">Each track shows sharded/reviewed of its total. The history counts review in documents, since tokens are measured only for the current shards.</p>
   </details>
 </section>
 
@@ -218,6 +347,14 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
   .nc-tracks dd {
     margin: 0.25rem 0 0;
   }
+  .nc-tracks .nc-bar + .nc-bar,
+  .nc-bar-label + .nc-bar {
+    margin-top: 0.2rem;
+  }
+  .nc-bar-label {
+    margin: 0.5rem 0 0;
+    font-size: var(--sl-text-sm);
+  }
   .nc-tracks dd p {
     margin-top: 0.25rem;
     font-size: var(--sl-text-sm);
@@ -240,6 +377,34 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     margin: 0;
     font-size: var(--sl-text-2xl);
     font-weight: 600;
+  }
+  .nc-size-pick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+  }
+  .nc-size-pick label {
+    font-weight: 600;
+  }
+  .nc-sizes {
+    font-size: var(--sl-text-sm);
+  }
+  .nc-sizes td,
+  .nc-sizes th {
+    white-space: nowrap;
+  }
+  .nc-sizes td:nth-child(n + 4) {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+  .nc-sizes-all td {
+    font-weight: 600;
+  }
+  .nc-size-pick .nc-stat-note,
+  .nc-progress > .nc-stat-note {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-2);
   }
   .nc-history summary {
     cursor: pointer;
@@ -268,4 +433,47 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     font-weight: 400;
     color: var(--sl-color-gray-2);
   }
+</style>
+
+<style is:global>
+  /* The violins are drawn by script, so their styles can't be scoped to the component. */
+.nc-violins { position: relative; margin: 1rem 0 0; }
+.nc-violins svg { display: block; width: 100%; height: auto; overflow: visible; }
+.nc-violins text { font-family: var(--sl-font); font-size: 12px; fill: var(--sl-color-gray-3); font-variant-numeric: tabular-nums; }
+.nc-violins .nc-v-track { font-size: 15px; font-weight: 600; fill: var(--sl-color-white); }
+.nc-violins .nc-v-lane { font-size: 13px; font-weight: 600; fill: var(--sl-color-text); }
+.nc-violins .nc-v-val { fill: var(--sl-color-text); }
+.nc-violins .nc-v-grid { stroke: var(--sl-color-hairline); stroke-width: 1; }
+.nc-violins .nc-v-grid-minor { stroke: var(--sl-color-hairline); stroke-width: 1; opacity: 0.45; }
+.nc-v-before { --nc-v-c: var(--sl-color-gray-3); }
+.nc-v-now { --nc-v-c: var(--sl-color-accent); }
+.nc-violins .nc-v-key { fill: var(--nc-v-c); }
+.nc-violins .nc-v-area { fill: color-mix(in srgb, var(--nc-v-c) 20%, transparent); stroke: var(--nc-v-c); stroke-width: 1.5; stroke-linejoin: round; }
+.nc-violins .nc-v-iqr { stroke: var(--nc-v-c); stroke-width: 4; stroke-linecap: round; }
+.nc-violins .nc-v-med { fill: var(--sl-color-bg); stroke: var(--nc-v-c); stroke-width: 2; }
+.nc-violins .nc-v-dot { fill: var(--nc-v-c); stroke: var(--sl-color-bg); stroke-width: 2; }
+.nc-violins .nc-v-hi { fill: var(--nc-v-c); stroke: var(--sl-color-white); stroke-width: 2; pointer-events: none; }
+.nc-violins .nc-v-hit { fill: transparent; cursor: crosshair; }
+.nc-violins .nc-v-hit:focus { outline: none; }
+.nc-violins .nc-v-hit:focus-visible { stroke: var(--sl-color-accent); stroke-width: 2; }
+.nc-v-tip {
+  position: absolute; z-index: 5; pointer-events: none; max-width: min(18rem, calc(100% - 8px));
+  padding: 0.4rem 0.6rem; border-radius: 0.25rem; box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+  background: var(--sl-color-white); color: var(--sl-color-black);
+  font-size: var(--sl-text-xs); line-height: 1.4;
+}
+.nc-v-tip b { font-size: var(--sl-text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.nc-v-tip code { display: block; font-family: var(--sl-font-mono); font-size: 0.95em; overflow-wrap: anywhere; }
+.nc-v-tip span { display: block; opacity: 0.8; }
+.nc-v-legend { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.75rem 0 1rem; padding: 0; list-style: none; font-size: var(--sl-text-sm); }
+.nc-v-legend li { margin: 0; display: inline-flex; align-items: center; gap: 0.4em; }
+.nc-v-legend svg { width: 1.6em; height: 1em; overflow: visible; }
+.nc-violins figcaption { margin-top: 0.5rem; font-size: var(--sl-text-sm); color: var(--sl-color-text); }
+.nc-v-table { margin-top: 0.75rem; font-size: var(--sl-text-sm); }
+.nc-v-table summary { cursor: pointer; font-weight: 600; }
+.nc-v-table > div { max-width: 100%; overflow-x: auto; }
+.nc-v-table table { border-collapse: collapse; margin-top: 0.5rem; }
+.nc-v-table th, .nc-v-table td { padding: 0.25rem 0.6rem; border-bottom: 1px solid var(--sl-color-hairline); white-space: nowrap; text-align: end; font-variant-numeric: tabular-nums; }
+.nc-v-table th:first-child, .nc-v-table td:first-child { text-align: start; }
+.nc-v-table thead th { color: var(--sl-color-white); font-weight: 600; }
 </style>
