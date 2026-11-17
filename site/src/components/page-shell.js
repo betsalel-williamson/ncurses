@@ -1,8 +1,9 @@
 /**
  * The pretend shell an example's terminal comes back to (run-example.ts). A web page has no real
  * shell, so this one reads a line at a time with its own echo, as a shell in cooked mode does,
- * and knows a few commands. It can run any example the site has built, by name, and it can
- * power the terminal off. A program that calls system() gets one too, nested under it: there
+ * and knows a few commands. The examples the site has built sit in folders under the home
+ * directory, one per guide (~/menus/menu-basics), with cd and ls to move around them, and any
+ * of them runs by its path. It can also power the terminal off. A program that calls system() gets one too, nested under it: there
  * `exit` goes back to the program, with the exit status a real system() reports.
  *
  * Easter eggs, not in help: ncurses's own test programs live in /usr/games and run by name
@@ -16,8 +17,9 @@ export const HALT = 'halt';
 /** Each line fits the narrowest terminal the page offers (60 columns). */
 export const HELP =
   'A pretend shell, since a web page has no real one.\r\n' +
-  'ls lists the programs on this site; ./name runs one.\r\n' +
-  'Tab completes a name. It also knows echo, pwd, date,\r\n' +
+  'The examples are in folders, one per guide: ls lists a\r\n' +
+  'folder, cd goes into one, and ./name runs a program.\r\n' +
+  'Tab completes a name. It also knows pwd, echo, date,\r\n' +
   'whoami, uname, clear and help.\r\n' +
   'exit leaves this shell; halt powers the terminal off.\r\n';
 
@@ -25,9 +27,25 @@ export const HELP =
 export const SHELL_NAMES = /^\s*(?:(?:\/usr)?\/bin\/)?(?:sh|bash|ksh|zsh|dash)\s*$|^\s*\$SHELL\s*$/;
 
 /** The commands the shell itself knows, for Tab. */
-export const BUILTINS = ['clear', 'date', 'echo', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
+export const BUILTINS = ['cd', 'clear', 'date', 'echo', 'exit', 'false', 'halt', 'help', 'ls', 'poweroff', 'pwd', 'shutdown', 'true', 'uname', 'whoami'];
 
 const GAMES_DIR = '/usr/games';
+const HOME = '/home/reader';
+
+/** A path made absolute against `cwd`, with ~, . and .. resolved. */
+export function resolvePath(path, cwd) {
+  const full = path === '~' || path.startsWith('~/') ? HOME + path.slice(1) : path.startsWith('/') ? path : `${cwd}/${path}`;
+  const parts = [];
+  for (const part of full.split('/')) {
+    if (!part || part === '.') continue;
+    if (part === '..') parts.pop();
+    else parts.push(part);
+  }
+  return `/${parts.join('/')}`;
+}
+
+/** A path as the prompt shows it, with the home directory as ~. */
+export const tilde = (path) => (path === HOME ? '~' : path.startsWith(`${HOME}/`) ? `~${path.slice(HOME.length)}` : path);
 
 /** Names in columns, as ls prints them to a terminal `width` columns wide. */
 export function columns(names, width) {
@@ -61,8 +79,33 @@ export function commonPrefix(names) {
  * exit status, or HALT when the terminal powered off while it ran; `cols()` and `rows()` are the
  * terminal's size. Keys go in through `feed`.
  */
-export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24 }) {
+export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24, cwd: start = HOME }) {
   const queue = [];
+  let cwd = start;
+
+  /**
+   * What is at an absolute path: { dir: [entries] }, with a folder's entries ending in /, or
+   * { program } for an example or a game, or null. programs() gives each example's path under
+   * the home directory, such as menus/menu-basics.
+   */
+  const node = (path) => {
+    const tree = new Map();
+    const add = (dir, entry) => (tree.get(dir) ?? tree.set(dir, new Set()).get(dir)).add(entry);
+    const files = new Map();
+    for (const p of [...programs().map((p) => `${HOME}/${p}`), ...games().map((g) => `${GAMES_DIR}/${g}`)]) {
+      const parts = p.split('/').filter(Boolean);
+      for (let i = 0; i < parts.length; i++) {
+        const dir = `/${parts.slice(0, i).join('/')}`;
+        add(dir, i === parts.length - 1 ? parts[i] : `${parts[i]}/`);
+      }
+      files.set(p, parts.at(-1));
+    }
+    add('/home', 'reader/');
+    if (files.has(path)) return { program: files.get(path) };
+    if (tree.has(path)) return { dir: [...tree.get(path)].sort() };
+    if (path === HOME) return { dir: [] };
+    return null;
+  };
   let waiter = null;
   const history = [];
   const say = (text) => write(text);
@@ -97,11 +140,14 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
   const candidates = (text) => {
     const words = text.split(' ');
     const word = words.at(-1);
-    const first = words.length === 1;
-    if (word.startsWith(`${GAMES_DIR}/`)) return games().map((g) => `${GAMES_DIR}/${g}`);
-    if (word.startsWith('./')) return programs().map((p) => `./${p}`);
-    if (first) return [...new Set([...BUILTINS, ...Object.keys(EDITORS), ...programs(), ...games()])].sort();
-    return [...programs(), `${GAMES_DIR}/`];
+    // A command is looked for on the PATH (the shell's own, the editors and /usr/games);
+    // anything with a / in it, and every argument, is a path.
+    if (words.length === 1 && !word.includes('/')) return [...new Set([...BUILTINS, ...Object.keys(EDITORS), ...games()])].sort();
+    const slash = word.lastIndexOf('/');
+    const dirPart = word.slice(0, slash + 1);
+    const at = node(resolvePath(dirPart || '.', cwd));
+    const only = words[0] === 'cd' ? (e) => e.endsWith('/') : () => true;
+    return (at?.dir ?? []).filter(only).map((e) => dirPart + e);
   };
 
   /** One line, echoed as it is typed; null at Ctrl-D on an empty line. */
@@ -141,8 +187,8 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         else if (found.length > 1 && tabs >= 2) {
           // A second Tab lists what the word could be, then the line again.
           say('\r\n');
-          await page(columns(found, cols()));
-          say(`$ ${text}`);
+          await page(columns(found.map((f) => f.slice(f.lastIndexOf('/', f.length - 2) + 1)), cols()));
+          say(`${prompt()}${text}`);
         } else say('\x07');
       } else if (k.length === 1 && k >= ' ' && k !== '\x7f') {
         text += k;
@@ -171,15 +217,31 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     }
   };
 
-  /** The program a command names: an example as `name`, `./name` or `/home/reader/name`, or a game as `name` or `/usr/games/name`. */
+  const prompt = () => `${tilde(cwd)}$ `;
+
+  /** The program a command names: a path to one (./menu-basics, ~/menus/menu-basics), or a game by name. */
   const program = (word) => {
-    if (word.startsWith(`${GAMES_DIR}/`)) {
-      const g = word.slice(GAMES_DIR.length + 1);
-      return games().includes(g) ? g : null;
+    if (!word.includes('/')) return games().includes(word) ? word : null;
+    return node(resolvePath(word, cwd))?.program ?? null;
+  };
+
+  /** Lists folders and files, as ls does: a folder's entries, or a file's own name. */
+  const ls = async (args) => {
+    const paths = args.filter((a) => !a.startsWith('-'));
+    let status = 0;
+    const lines = [];
+    for (const [i, p] of (paths.length ? paths : ['.']).entries()) {
+      const at = node(resolvePath(p, cwd));
+      if (!at) {
+        lines.push(`ls: cannot access '${p}': No such file or directory`);
+        status = 2;
+        continue;
+      }
+      if (paths.length > 1) lines.push(`${i ? '\n' : ''}${p}:`);
+      lines.push(...(at.program ? [p] : columns(at.dir, cols())));
     }
-    const name = word.replace(/^(?:\.|\/home\/reader)\//, '');
-    if (programs().includes(name)) return name;
-    return word.includes('/') || !games().includes(word) ? null : word;
+    await page(lines.flatMap((l) => l.split('\n')));
+    return status;
   };
 
   /** Runs one command line; resolves with its exit status, { exit } (null for the last status) or HALT. */
@@ -199,19 +261,24 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         out(args.join(' '));
         return 0;
       case 'pwd':
-        out('/home/reader');
+        out(cwd);
         return 0;
-      case 'ls': {
-        const dirs = args.filter((a) => !a.startsWith('-'));
-        const dir = (dirs[0] ?? '.').replace(/\/+$/, '') || '/';
-        if (dir === GAMES_DIR) await page(columns(games(), cols()));
-        else if (['.', '~', '/home/reader'].includes(dir)) await page(columns(programs(), cols()));
-        else {
-          out(`ls: cannot access '${dirs[0]}': No such file or directory`);
-          return 2;
+      case 'cd': {
+        const to = resolvePath(args[0] ?? '~', cwd);
+        const at = node(to);
+        if (!at) {
+          out(`sh: cd: ${args[0]}: No such file or directory`);
+          return 1;
         }
+        if (!at.dir) {
+          out(`sh: cd: ${args[0]}: Not a directory`);
+          return 1;
+        }
+        cwd = to;
         return 0;
       }
+      case 'ls':
+        return ls(args);
       case 'date':
         out(new Date().toString());
         return 0;
@@ -240,7 +307,14 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     if (EDITORS[cmd]) return runEditor(EDITORS[cmd], { write, key, rows, cols });
     const name = program(cmd);
     if (name) return launch(name, args);
-    out(cmd.includes('/') ? `sh: ${cmd}: No such file or directory` : `sh: ${cmd}: not found`);
+    if (cmd.includes('/')) {
+      const at = node(resolvePath(cmd, cwd));
+      out(at?.dir ? `sh: ${cmd}: Is a directory` : `sh: ${cmd}: No such file or directory`);
+      return at?.dir ? 126 : 127;
+    }
+    // An example typed by its bare name isn't on the PATH, as in a real shell: say where it is.
+    const where = programs().find((p) => p.endsWith(`/${cmd}`));
+    out(where ? `sh: ${cmd}: not found (it is in ~/${where.slice(0, -cmd.length - 1)}: cd there and type ./${cmd})` : `sh: ${cmd}: not found`);
     return 127;
   };
 
@@ -263,6 +337,8 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
       this.feed('\r');
     },
     run,
+    /** The working directory. */
+    cwd: () => cwd,
     /**
      * Prompts and runs commands until `exit` or Ctrl-D, and resolves with the exit status; the
      * top shell resolves with HALT then, as does `halt` anywhere.
@@ -270,7 +346,7 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     async session({ top = false } = {}) {
       let status = 0;
       for (;;) {
-        say('$ ');
+        say(prompt());
         const text = await line();
         if (text === null) {
           out('exit');

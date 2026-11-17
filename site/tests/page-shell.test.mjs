@@ -1,14 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { HALT, SHELL_NAMES, columns, commonPrefix, createShell } from '../src/components/page-shell.js';
+import { HALT, SHELL_NAMES, columns, commonPrefix, createShell, resolvePath, tilde } from '../src/components/page-shell.js';
 
-/** A shell over a fake 60x5 terminal, with two programs that exit with 3 and 0, and two games. */
+/**
+ * A shell over a fake 60x5 terminal, started in ~/start, with two programs there that exit with
+ * 3 and 0, and two games. A program named without a folder is in ~/start.
+ */
 function fixture(programs = ['hello', 'menus']) {
   const screen = [];
   const ran = [];
   const shell = createShell({
     write: (t) => screen.push(t),
-    programs: () => programs,
+    programs: () => programs.map((p) => (p.includes('/') ? p : `start/${p}`)),
+    cwd: '/home/reader/start',
     games: () => ['rain', 'worm'],
     launch: async (name, args = []) => {
       ran.push([name, ...args].join(' '));
@@ -20,10 +24,10 @@ function fixture(programs = ['hello', 'menus']) {
   return { shell, ran, text: () => screen.join('') };
 }
 
-test('a program runs by name, with or without ./', async () => {
+test('a program runs by its path: ./name, ~/folder/name or an absolute path', async () => {
   const { shell, ran } = fixture();
   const session = shell.session();
-  shell.feed('./hello\rmenus\r/home/reader/hello\rexit\r');
+  shell.feed('./hello\r~/start/menus\r/home/reader/start/hello\rexit\r');
   assert.equal(await session, 3);
   assert.deepEqual(ran, ['hello', 'menus', 'hello']);
 });
@@ -60,8 +64,8 @@ test('an unknown command is not found, and is the status exit reports', async ()
 test('the line editor takes Backspace, Ctrl-U and ignores cursor keys', async () => {
   const { shell, ran } = fixture();
   const session = shell.session();
-  shell.feed('hellx\x7fo\r');
-  shell.feed('junk\x15menus\x1b[C\r');
+  shell.feed('./hellx\x7fo\r');
+  shell.feed('junk\x15./menus\x1b[C\r');
   shell.feed('exit\r');
   await session;
   assert.deepEqual(ran, ['hello', 'menus']);
@@ -108,7 +112,7 @@ test('ls does not list the games', async () => {
 test('Tab finishes a name, or the part all the names share', async () => {
   const { shell, ran } = fixture(['menu-basics', 'menu-options', 'hello']);
   const session = shell.session();
-  shell.feed('hell\t\r');
+  shell.feed('./hell\t\r');
   shell.feed('./menu-b\t\r');
   shell.feed('wo\t\r');
   shell.feed('exit\r');
@@ -121,7 +125,7 @@ test('a second Tab lists the names a word could be', async () => {
   const session = shell.session();
   shell.feed('./menu\t\t\x15exit\r');
   await session;
-  assert.match(text(), /\.\/menu-basics\s+\.\/menu-options/);
+  assert.match(text(), /menu-basics\s+menu-options/);
 });
 
 test('ls pages a long list: Space for the next screen, q to stop', async () => {
@@ -149,7 +153,7 @@ test('commonPrefix', () => {
 test('Up brings back the last command', async () => {
   const { shell, ran } = fixture();
   const session = shell.session();
-  shell.feed('menus\r\x1b[A\rexit\r');
+  shell.feed('./menus\r\x1b[A\rexit\r');
   await session;
   assert.deepEqual(ran, ['menus', 'menus']);
 });
@@ -174,4 +178,60 @@ test('nano leaves on ^X, and emacs on C-x C-c', async () => {
   const session = shell.session();
   shell.feed('nano\r\x18emacs\r\x18\x03exit 5\r');
   assert.equal(await session, 5);
+});
+
+test('cd moves between folders, and pwd and the prompt follow', async () => {
+  const { shell, text } = fixture(['menus/menu-basics', 'panels/panel-basics']);
+  const session = shell.session();
+  shell.feed('cd ..\rpwd\rcd menus\rpwd\rcd\rpwd\rcd /usr/games\rexit\r');
+  await session;
+  assert.match(text(), /\/home\/reader\r\n.*\/home\/reader\/menus\r\n.*\/home\/reader\r\n/s);
+  assert.match(text(), /~\/menus\$ /);
+  assert.match(text(), /\/usr\/games\$ /);
+});
+
+test('ls ~ shows a folder per guide, and ls of a folder its programs', async () => {
+  const { shell, text } = fixture(['menus/menu-basics', 'panels/panel-basics']);
+  const session = shell.session();
+  shell.feed('ls ~\rls ~/menus\rexit\r');
+  await session;
+  assert.match(text(), /menus\/\s+panels\//);
+  assert.match(text(), /menu-basics/);
+});
+
+test('cd refuses a file and a missing folder', async () => {
+  const { shell, text } = fixture();
+  const session = shell.session();
+  shell.feed('cd hello\rcd nowhere\rexit\r');
+  await session;
+  assert.match(text(), /sh: cd: hello: Not a directory/);
+  assert.match(text(), /sh: cd: nowhere: No such file or directory/);
+});
+
+test('an example typed by its bare name says which folder it is in', async () => {
+  const { shell, ran, text } = fixture(['menus/menu-basics']);
+  const session = shell.session();
+  shell.feed('menu-basics\rexit\r');
+  await session;
+  assert.deepEqual(ran, []);
+  assert.match(text(), /it is in ~\/menus: cd there and type \.\/menu-basics/);
+});
+
+test('Tab completes a folder for cd, and a path through folders', async () => {
+  const { shell, ran, text } = fixture(['menus/menu-basics', 'panels/panel-basics']);
+  const session = shell.session();
+  shell.feed('cd ~/me\t\rpwd\r');
+  shell.feed('../pan\tpanel-b\t\r');
+  shell.feed('exit\r');
+  await session;
+  assert.match(text(), /\/home\/reader\/menus\r\n/);
+  assert.deepEqual(ran, ['panel-basics']);
+});
+
+test('resolvePath and tilde', () => {
+  assert.equal(resolvePath('../b/./c', '/home/reader/a'), '/home/reader/b/c');
+  assert.equal(resolvePath('~/x', '/usr'), '/home/reader/x');
+  assert.equal(resolvePath('..', '/'), '/');
+  assert.equal(tilde('/home/reader/menus'), '~/menus');
+  assert.equal(tilde('/usr/games'), '/usr/games');
 });

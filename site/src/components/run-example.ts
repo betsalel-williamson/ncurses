@@ -72,10 +72,11 @@ type Pty = {
 type Variant = { define: string; id: string; bytes?: number };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean; hidden?: boolean };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean; hidden?: boolean; shard?: string };
 
 /** A program the site has built, which the shell can run by name: each example, and each variant. */
-type Program = { args: string[]; bytes?: number; hidden?: boolean };
+/** `dir` is the guide's folder in the shell's home directory (menus), from its shard's path. */
+type Program = { args: string[]; bytes?: number; hidden?: boolean; dir?: string };
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -201,7 +202,7 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
   note.className = 'run-example-note';
   note.textContent =
     'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.' +
-    ' When it ends, a pretend shell takes over: ls lists the programs on this site, ./name runs one, and halt powers the terminal off.' +
+    ' When it ends, a pretend shell takes over: the examples sit in a folder per guide, which ls and cd find, ./name runs one, and halt powers the terminal off.' +
     (shell ? ' This program calls system(), which gets the same shell: type exit there to go back to it.' : '');
   const keys = keyGroup(wantedKeys, (k) => {
     if (!term || !frames.at(-1)?.pty) return;
@@ -368,10 +369,13 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
     main.textContent = powered ? '↻ Run again' : '▶ Run this example';
   };
 
-  const shellFor = () =>
+  /** The folder a program sits in, in the shell. */
+  const home = (example: string) => `/home/reader/${programs.get(example)?.dir ?? ''}`.replace(/\/$/, '');
+  const shellFor = (example = id) =>
     createShell({
       write: (text: string) => term?.write(text),
-      programs: () => [...programs].filter(([, p]) => !p.hidden).map(([name]) => name),
+      programs: () => [...programs].filter(([, p]) => !p.hidden).map(([name, p]) => `${p.dir}/${name}`),
+      cwd: home(example),
       games: () => [...programs].filter(([, p]) => p.hidden).map(([name]) => name),
       launch: (name: string, args: string[] = []) => launch(name, name === id ? title : name, false, false, args),
       cols: () => term?.cols ?? 80,
@@ -468,7 +472,7 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
             // a game gets the arguments typed after its name.
             arguments: program.args.length ? program.args : typed,
             // system() gets this page's shell (examples/pty.js).
-            shell: (command: string) => nested(command, gen),
+            shell: (command: string) => nested(command, gen, example),
             preRun: [
               (m: { ENV: Record<string, string>; pty: Pty }) => {
                 m.ENV.TERM = 'xterm-256color';
@@ -495,9 +499,9 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
    * one endwin() returned to, until exit; any other command runs once. Resolves with the exit
    * status. halt powers the terminal off, and the program waiting on it never resumes.
    */
-  const nested = async (command: string, gen: number): Promise<number> => {
+  const nested = async (command: string, gen: number, example: string): Promise<number> => {
     if (gen !== generation || !term) return never();
-    const sh = shellFor();
+    const sh = shellFor(example);
     const frame: Frame = { sink: (d) => sh.feed(d) };
     frames.push(frame);
     refresh();
@@ -583,7 +587,10 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
       typing = true;
       refresh();
       term?.focus();
-      void top.type(`./${example}`, reducedMotion() ? 0 : 40).then(() => {
+      // From the program's own folder ./name, as a reader would type it; from anywhere else its path.
+      const where = home(example);
+      const command = top.cwd() === where ? `./${example}` : `${where.replace(/^\/home\/reader/, '~')}/${example}`;
+      void top.type(command, reducedMotion() ? 0 : 40).then(() => {
         typing = false;
         refresh();
       });
@@ -662,8 +669,10 @@ if (boxes.length) {
     const programs = new Map<string, Program>();
     for (const s of [...(all?.values() ?? [])].sort((a, b) => a.id.localeCompare(b.id))) {
       if (s.status !== 'runs') continue;
-      programs.set(s.id, { args: s.args ?? [], bytes: s.bytes, hidden: s.hidden });
-      for (const v of s.variants ?? []) programs.set(v.id, { args: s.args ?? [], bytes: v.bytes });
+      // docs/client-library/menus/attributes.md is in ~/menus.
+      const dir = s.shard?.split('/').at(-2);
+      programs.set(s.id, { args: s.args ?? [], bytes: s.bytes, hidden: s.hidden, dir });
+      for (const v of s.variants ?? []) programs.set(v.id, { args: s.args ?? [], bytes: v.bytes, dir });
     }
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
