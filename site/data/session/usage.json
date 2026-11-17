@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-11-15T22:47:46Z",
-  "inputTokens": 126600,
-  "outputTokens": 3387817,
-  "cacheReadTokens": 1141997638,
-  "cacheWriteTokens": 13551020,
-  "costUsd": 370.58
+  "fetchedAt": "2026-11-17T00:38:22Z",
+  "inputTokens": 133424,
+  "outputTokens": 3480005,
+  "cacheReadTokens": 1175429001,
+  "cacheWriteTokens": 14413228,
+  "costUsd": 386.03
 }

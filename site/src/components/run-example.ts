@@ -8,6 +8,7 @@ import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 import { FULL_SIZE, STEP, fitFontSize, keySequence, offersFullSize, overflows } from './terminal-fit.js';
 import { bootScreen } from './boot-screen.js';
+import { HALT, HELP, SHELL_NAMES, createShell } from './page-shell.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const FONT_SIZE = FULL_SIZE;
@@ -71,7 +72,12 @@ type Pty = {
 type Variant = { define: string; id: string; bytes?: number };
 
 /** One program's build result, from public/examples/status.json (build-examples.mjs). */
-type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number };
+type Status = { id: string; status: string; detail?: string; variants?: Variant[]; args?: string[]; bytes?: number; shell?: boolean };
+
+/** A program the site has built, which the shell can run by name: each example, and each variant. */
+type Program = { args: string[]; bytes?: number };
+
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const REASONS: Record<string, string> = {
   'compile-error': "doesn't compile",
@@ -79,7 +85,6 @@ const REASONS: Record<string, string> = {
   crashed: 'stops with an error when run',
   'no-quit': "doesn't quit on F1",
   'no-output': 'draws nothing when run',
-  'needs-shell': 'starts a shell with system(), and a web page has no shell',
 };
 
 async function statuses(): Promise<Map<string, Status> | null> {
@@ -163,7 +168,7 @@ function keyGroup(wanted: string[], send: (key: string) => void) {
   return { group, stop };
 }
 
-function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: number) {
+function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Program>, shell = false) {
   const id = box.dataset.example!;
   const title = box.dataset.title ?? id;
   const wantedKeys = (box.dataset.keys ?? '').split(/\s+/).filter(Boolean);
@@ -195,9 +200,11 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
   const note = document.createElement('span');
   note.className = 'run-example-note';
   note.textContent =
-    'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.';
+    'Runs the listing above, compiled to WebAssembly. Press F1 or tap F1 Quit to quit. Shift+Run boots verbosely.' +
+    ' When it ends, a pretend shell takes over: ls lists the programs on this site, ./name runs one, and halt powers the terminal off.' +
+    (shell ? ' This program calls system(), which gets the same shell: type exit there to go back to it.' : '');
   const keys = keyGroup(wantedKeys, (k) => {
-    if (!term || !running) return;
+    if (!term || !frames.at(-1)?.pty) return;
     term.input(keySequence(k, term.modes.applicationCursorKeysMode), true);
   });
   bar.append(main, keys.group, ...extra.map((x) => x.b), sizeLabel, fitToggle, note);
@@ -213,8 +220,11 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
 
   const chosen = () => SIZES[size.selectedIndex];
   let term: Terminal | null = null;
-  let pty: Pty | null = null;
-  let running = false;
+  // What has the keys, the last on top: the shell the terminal comes back to, a program started
+  // from it, and the shell that program's system() starts, which can start another. A program's
+  // frame has its pty once it is loaded.
+  type Frame = { sink: (data: string) => void; pty?: Pty | null };
+  const frames: Frame[] = [];
 
   // A terminal wider than the column (80x24 on a phone, 100x30 on a laptop) shrinks until every
   // column fits, so the reader sees the whole screen without scrolling it, unless they turned Fit
@@ -266,7 +276,8 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
     if (!term) return;
     term.resize(cols, rows);
     fit();
-    if (running) pty?.resize(rows, cols);
+    // Every program learns the new size; one waiting under a shell sees it when it resumes.
+    for (const f of frames) f.pty?.resize(rows, cols);
   });
 
   const open = () => {
@@ -281,6 +292,7 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
         theme: terminalTheme(),
       });
       term.open(screen);
+      term.onData((d) => frames.at(-1)?.sink(d));
       const restyle = term;
       new MutationObserver(() => {
         restyle.options.theme = terminalTheme();
@@ -327,91 +339,261 @@ function setup(box: HTMLElement, variants: Variant[], args: string[], bytes?: nu
   // Blank, with no cursor, until the reader runs it.
   open().write('\x1b[?25l');
 
-  const run = async (example: string, label: string, clicked: HTMLButtonElement, size?: number, verbose = false) => {
-    if (running) return;
-    running = true;
-    for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = true;
-    const term = open();
-    term.focus();
-    // A boot screen plays while the program loads; its output waits until it has (boot-screen.js).
-    // A key typed during it may start an easter egg (r, Esc); any other key waits for the program.
-    const boot = bootScreen(term, example, { verbose });
-    scroller.setAttribute('aria-busy', 'true');
-    let shown: Promise<void> | null = null;
-    const show = (bytes: Uint8Array) => {
-      shown ??= boot.release().then(() => scroller.removeAttribute('aria-busy'));
-      void shown.then(() => term!.write(keepScreen(bytes)));
-    };
-    keys.group.hidden = false;
-    const encoder = new TextEncoder();
-    pty = null;
-    const input = term.onData((d) => {
-      if (!boot.done && boot.key(d)) return;
-      pty?.push(encoder.encode(d));
-    });
-    const done = (message: string) => {
-      // A program that ends before it draws (an error while loading) ends the boot screen too.
-      if (!shown) {
-        boot.stop();
-        term!.reset();
-        scroller.removeAttribute('aria-busy');
-      }
-      input.dispose();
-      pty = null;
-      // After the program's last screen, which may still be waiting on the boot screen.
-      const note = () => term!.write(`\r\n\x1b[2m${message}\x1b[0m\r\n`);
-      if (shown) void shown.then(note);
-      else note();
-      running = false;
+  // The terminal is off until the first Run, which boots it and runs the program. When the
+  // program ends, the pretend shell (page-shell.js) takes over: Run again types the program's
+  // name at its prompt, any program the site has built runs by name, and halt powers it off.
+  let powered = false;
+  // Each power-on is a generation; a program or shell from an earlier one does nothing more.
+  let generation = 0;
+  let halted: Promise<typeof HALT> = new Promise(() => {});
+  let fireHalt = () => {};
+  let top: ReturnType<typeof createShell> | null = null;
+  let typing = false;
+  const buttons = [main, ...extra.map((x) => x.b)];
+  const encoder = new TextEncoder();
+  const never = <T,>() => new Promise<T>(() => {});
+
+  /** The keys show while a program has the keyboard; the Run buttons work at the top prompt. */
+  const refresh = () => {
+    const program = !!frames.length && frames.at(-1)!.pty !== undefined;
+    if (!program) {
       keys.stop();
       const hadFocus = keys.group.contains(document.activeElement);
       keys.group.hidden = true;
-      for (const b of [main, ...extra.map((x) => x.b)]) b.disabled = false;
-      if (clicked === main) main.textContent = '↻ Run again';
-      if (hadFocus) clicked.focus();
-    };
-    try {
-      const [{ default: create }, wasmBinary] = await Promise.all([
-        import(/* @vite-ignore */ `${base}/examples/${example}.mjs`),
-        download(`${base}/examples/${example}.wasm`, size, (f) => boot.progress(f)),
-      ]);
-      await create({
-        // This Emscripten build fetches its .wasm itself and ignores wasmBinary, so the bytes
-        // downloaded above (for the boot screen's bar) are handed over here instead.
-        instantiateWasm: (
-          imports: WebAssembly.Imports,
-          receive: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
-        ) => {
-          WebAssembly.instantiate(wasmBinary, imports).then(
-            (r) => receive(r.instance, r.module),
-            (e: Error) => done(`Could not start ${label}: ${e.message}`),
-          );
-          return {};
-        },
-        locateFile: (f: string) => `${base}/examples/${f}`,
-        // A program that reads a file gets its own listing, embedded in the build as example.c.
-        arguments: args,
-        preRun: [
-          (m: { ENV: Record<string, string>; pty: Pty }) => {
-            m.ENV.TERM = 'xterm-256color';
-            m.ENV.ESCDELAY = '25';
-            pty = m.pty;
-            // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
-            [pty.cols, pty.rows] = chosen();
-            pty.write = show;
-          },
-        ],
-        onExit: (code: number) => done(`${label} exited (${code}).`),
-        onAbort: () => done(`${label} stopped with an error.`),
-      });
-    } catch (e) {
-      done(`Could not start ${label}: ${(e as Error).message}`);
-    }
+      if (hadFocus) term?.focus();
+    } else keys.group.hidden = false;
+    const idle = !powered || (frames.length === 1 && !typing);
+    for (const b of buttons) b.disabled = !idle;
+    main.textContent = powered ? '↻ Run again' : '▶ Run this example';
   };
 
-  main.addEventListener('click', (e) => run(id, title, main, bytes, e.shiftKey));
+  const shellFor = () =>
+    createShell({
+      write: (text: string) => term?.write(text),
+      programs: () => [...programs.keys()],
+      launch: (name: string) => launch(name, name === id ? title : name),
+      cols: () => term?.cols ?? 80,
+    });
+
+  /** Runs a program; resolves with its exit status, or HALT if the terminal powers off first. */
+  const launch = (example: string, label: string, boot = false, verbose = false): Promise<number | typeof HALT> => {
+    const gen = generation;
+    const live = () => gen === generation;
+    const t = term!;
+    const program = programs.get(example) ?? { args: [] };
+    const exited = new Promise<number>((resolve) => {
+      // The first program plays the boot screen while it loads; its output waits until it has
+      // (boot-screen.js). A key typed during it may start an easter egg (r, Esc); any other key
+      // waits for the program. A program started from the shell shows how much has loaded.
+      const booting = boot ? bootScreen(t, example, { verbose }) : null;
+      if (booting) scroller.setAttribute('aria-busy', 'true');
+      const loading = (f: number) => {
+        if (live() && !shown) t.write(`\r\x1b[2K\x1b[2mLoading ${example}… ${Math.round(f * 100)}%\x1b[0m`);
+      };
+      let shown: Promise<void> | null = null;
+      if (!booting) loading(0);
+      const show = (bytes: Uint8Array) => {
+        if (!live()) return;
+        if (!shown) {
+          if (booting) shown = booting.release().then(() => scroller.removeAttribute('aria-busy'));
+          else {
+            t.write('\r\x1b[2K');
+            shown = Promise.resolve();
+          }
+        }
+        void shown!.then(() => live() && t.write(keepScreen(bytes)));
+      };
+      const frame: Frame = {
+        pty: null,
+        sink: (d) => {
+          if (booting && !booting.done && booting.key(d)) return;
+          frame.pty?.push(encoder.encode(d));
+        },
+      };
+      frames.push(frame);
+      refresh();
+      let ended = false;
+      const done = (message: string, code: number) => {
+        if (ended || !live()) return;
+        ended = true;
+        // A program that ends before it draws (an error while loading) ends the loading too.
+        if (!shown) {
+          if (booting) {
+            booting.stop();
+            t.reset();
+            scroller.removeAttribute('aria-busy');
+          } else t.write('\r\x1b[2K');
+        }
+        frames.splice(frames.indexOf(frame), 1);
+        frame.pty = null;
+        // After the program's last screen, which may still be waiting on the boot screen. On the
+        // bottom row when it is empty: endwin() leaves the cursor there.
+        const note = () => {
+          if (!live()) return;
+          const buf = t.buffer.active;
+          const last = buf.getLine(buf.baseY + t.rows - 1)?.translateToString(true).trim();
+          t.write(last ? `\r\n\x1b[2m${message}\x1b[0m\r\n` : `\x1b[${t.rows};1H\x1b[2m${message}\x1b[0m\r\n`);
+          refresh();
+          resolve(code);
+        };
+        if (shown) void shown.then(note);
+        else note();
+      };
+      void (async () => {
+        try {
+          const [{ default: create }, wasmBinary] = await Promise.all([
+            import(/* @vite-ignore */ `${base}/examples/${example}.mjs`),
+            download(`${base}/examples/${example}.wasm`, program.bytes, (f) => (booting ? booting.progress(f) : loading(f))),
+          ]);
+          if (!live()) return;
+          await create({
+            // This Emscripten build fetches its .wasm itself and ignores wasmBinary, so the bytes
+            // downloaded above (for the progress) are handed over here instead.
+            instantiateWasm: (
+              imports: WebAssembly.Imports,
+              receive: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
+            ) => {
+              WebAssembly.instantiate(wasmBinary, imports).then(
+                (r) => receive(r.instance, r.module),
+                (e: Error) => done(`Could not start ${label}: ${e.message}`, 1),
+              );
+              return {};
+            },
+            locateFile: (f: string) => `${base}/examples/${f}`,
+            // A program that reads a file gets its own listing, embedded in the build as example.c.
+            arguments: program.args,
+            // system() gets this page's shell (examples/pty.js).
+            shell: (command: string) => nested(command, gen),
+            preRun: [
+              (m: { ENV: Record<string, string>; pty: Pty }) => {
+                m.ENV.TERM = 'xterm-256color';
+                m.ENV.ESCDELAY = '25';
+                frame.pty = m.pty;
+                // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
+                [m.pty.cols, m.pty.rows] = chosen();
+                m.pty.write = show;
+              },
+            ],
+            onExit: (code: number) => done(`${label} exited (${code}).`, code),
+            onAbort: () => done(`${label} stopped with an error.`, 134),
+          });
+        } catch (e) {
+          done(`Could not start ${label}: ${(e as Error).message}`, 1);
+        }
+      })();
+    });
+    return Promise.race([exited, halted]);
+  };
+
+  /**
+   * A program's system(). "sh" (or another shell's name) gets a prompt on the normal screen, the
+   * one endwin() returned to, until exit; any other command runs once. Resolves with the exit
+   * status. halt powers the terminal off, and the program waiting on it never resumes.
+   */
+  const nested = async (command: string, gen: number): Promise<number> => {
+    if (gen !== generation || !term) return never();
+    const sh = shellFor();
+    const frame: Frame = { sink: (d) => sh.feed(d) };
+    frames.push(frame);
+    refresh();
+    let r: number | typeof HALT;
+    if (SHELL_NAMES.test(command)) {
+      // 1047, not 1049, which the page drops so a program's last screen stays in view.
+      term.write(`\x1b[?1047l\x1b[?25h${HELP}`);
+      r = await Promise.race([sh.session(), halted]);
+    } else {
+      const x = await Promise.race([sh.run(command), halted]);
+      r = typeof x === 'object' ? (x.exit ?? 0) : x;
+    }
+    if (gen !== generation) return never();
+    if (r === HALT) {
+      void powerOff();
+      return never();
+    }
+    frames.splice(frames.indexOf(frame), 1);
+    refresh();
+    return r;
+  };
+
+  const powerOn = async (example: string, label: string, verbose: boolean) => {
+    const gen = ++generation;
+    halted = new Promise((resolve) => (fireHalt = () => resolve(HALT)));
+    powered = true;
+    frames.length = 0;
+    const t = open();
+    t.focus();
+    const sh = shellFor();
+    top = sh;
+    frames.push({ sink: (d) => sh.feed(d) });
+    const r = await launch(example, label, true, verbose);
+    if (gen !== generation || r === HALT) return;
+    t.write("\x1b[2mType help for this shell's commands, ls for the programs.\x1b[0m\r\n");
+    refresh();
+    await Promise.race([sh.session({ top: true }), halted]);
+    if (gen === generation) await powerOff();
+  };
+
+  /**
+   * halt, or exit at the top prompt: a web page can't shut anything down, so the terminal plays a
+   * CRT switching off and goes blank, and the next Run boots it again. Programs still running
+   * are left where they wait and never resume.
+   */
+  const powerOff = async (animate = true) => {
+    if (!powered || !term) return;
+    const t = term;
+    powered = false;
+    generation++;
+    fireHalt();
+    frames.length = 0;
+    top = null;
+    typing = false;
+    for (const b of buttons) b.disabled = true;
+    keys.stop();
+    keys.group.hidden = true;
+    const glass = screen.querySelector<HTMLElement>('.xterm-screen');
+    if (animate) {
+      t.write('\r\x1b[2mPowering off.\x1b[0m\x1b[?25l');
+      if (glass && !reducedMotion()) {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        await glass.animate(
+          [
+            { transform: 'scale(1, 1)', filter: 'brightness(1)', opacity: 1 },
+            { transform: 'scale(1, 0.006)', filter: 'brightness(3)', opacity: 1, offset: 0.5 },
+            { transform: 'scale(0.002, 0.006)', filter: 'brightness(5)', opacity: 1, offset: 0.85 },
+            { transform: 'scale(0, 0)', filter: 'brightness(5)', opacity: 0 },
+          ],
+          { duration: 600, easing: 'ease-in' },
+        ).finished;
+      }
+    }
+    t.reset();
+    t.write('\x1b[?25l');
+    refresh();
+  };
+
+  /** A Run button: boots the terminal, or types the program's name at the shell's prompt. */
+  const start = (example: string, label: string, verbose: boolean) => {
+    if (powered && !verbose) {
+      if (frames.length !== 1 || typing || !top) return;
+      typing = true;
+      refresh();
+      term?.focus();
+      void top.type(`./${example}`, reducedMotion() ? 0 : 40).then(() => {
+        typing = false;
+        refresh();
+      });
+      return;
+    }
+    // Shift+Run reboots, verbosely.
+    void (async () => {
+      if (powered) await powerOff(false);
+      await powerOn(example, label, verbose);
+    })();
+  };
+
+  main.addEventListener('click', (e) => start(id, title, e.shiftKey));
   for (const { v, b } of extra) {
-    b.addEventListener('click', (e) => run(v.id, `${title} (${v.define} defined)`, b, v.bytes, e.shiftKey));
+    b.addEventListener('click', (e) => start(v.id, `${title} (${v.define} defined)`, e.shiftKey));
   }
 }
 
@@ -455,8 +637,9 @@ async function download(url: string, size: number | undefined, progress: (fracti
  * Drops the "leave the alternate screen" sequence (rmcup, CSI ?1049 l) from a program's output.
  * endwin() sends it, and xterm.js would then switch back to the empty normal screen, so whatever
  * the program printed last, such as a choice it reports just before it ends, would vanish with
- * it. A real terminal shows the shell there; this page has no shell, so it keeps the program's
- * last screen in view instead.
+ * it. A real terminal shows the shell there; this page keeps the program's last screen in view
+ * instead. A program that shells out gets the pretend shell (examples/pty.js), which leaves the
+ * alternate screen itself with CSI ?1047 l.
  */
 const RMCUP = [0x1b, 0x5b, 0x3f, 0x31, 0x30, 0x34, 0x39, 0x6c];
 function keepScreen(bytes: Uint8Array): Uint8Array {
@@ -471,10 +654,16 @@ function keepScreen(bytes: Uint8Array): Uint8Array {
 const boxes = document.querySelectorAll<HTMLElement>('.run-example');
 if (boxes.length) {
   void statuses().then((all) => {
+    const programs = new Map<string, Program>();
+    for (const s of [...(all?.values() ?? [])].sort((a, b) => a.id.localeCompare(b.id))) {
+      if (s.status !== 'runs') continue;
+      programs.set(s.id, { args: s.args ?? [], bytes: s.bytes });
+      for (const v of s.variants ?? []) programs.set(v.id, { args: s.args ?? [], bytes: v.bytes });
+    }
     for (const box of boxes) {
       const s = all?.get(box.dataset.example!);
-      if (s?.status === 'runs') setup(box, s.variants ?? [], s.args ?? [], s.bytes);
-      else if (s) flag(box, `This program doesn't run in the browser${s.status === 'needs-shell' ? '' : ' yet'}: it ${REASONS[s.status] ?? s.status}.`, s.detail);
+      if (s?.status === 'runs') setup(box, s.variants ?? [], programs, s.shell);
+      else if (s) flag(box, `This program doesn't run in the browser yet: it ${REASONS[s.status] ?? s.status}.`, s.detail);
       else flag(box, 'This program has no browser build in this copy of the site.');
     }
   });

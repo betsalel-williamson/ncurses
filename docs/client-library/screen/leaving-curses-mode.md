@@ -36,4 +36,4 @@ main(void)
 }
 ```
 
-The program starts a shell with `system()`. Type commands at the shell prompt, and type `exit` to return to the program, which then prints what the shell returned and ends. A web page has no shell, so this example doesn't run on the site.
+The program starts a shell with `system()`. Type commands at the shell prompt, and type `exit` to return to the program, which then prints what the shell returned and ends. A web page has no shell, so when you run it here a small pretend shell answers instead. Type `help` to see the few commands it knows, `ls` to list the other examples on this site, and `./` and a name to run one from inside this program.

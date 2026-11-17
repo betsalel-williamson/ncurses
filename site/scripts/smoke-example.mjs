@@ -90,6 +90,13 @@ for (let press = 0; press < 3 && exited === null; press++) {
   for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
 }
 for (let i = 0; i < 10 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+// A program that shelled out is at the pretend shell's prompt (examples/pty.js): leave it.
+let shelled = false;
+if (exited === null && pty.inShell) {
+  shelled = true;
+  pty.push(new TextEncoder().encode('exit\r'));
+  for (let i = 0; i < 20 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
+}
 // getstr() and friends discard function keys until a line ends.
 for (const keys of [new TextEncoder().encode('\r'), F1]) {
   if (exited !== null) break;
@@ -117,6 +124,6 @@ if (exited === null) {
     for (let i = 0; i < 20 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
   }
 }
-const tried = `F1 three times, then Enter and F1${mouse ? ', then a click on Exit' : ''}${typed ? ', then the number of the Exit item' : ''}`;
+const tried = `F1 three times${shelled ? ', then exit at the shell prompt' : ''}, then Enter and F1${mouse ? ', then a click on Exit' : ''}${typed ? ', then the number of the Exit item' : ''}`;
 if (exited === null) report('no-quit', `still running after ${tried}`);
 report(exited === 0 ? 'runs' : 'crashed', exited === 0 ? '' : `exited (${exited}) after F1`);
