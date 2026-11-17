@@ -45,8 +45,8 @@ node site/scripts/migration-stats.mjs daily transcript.jsonl
 | `date` | The UTC day |
 | `first`, `last` | The day's first and last event |
 | `events` | How many events the transcript has that day: messages, the agent's steps, tool results and CI notices |
-| `agentSeconds` | **Agent working time:** the gaps of 5 minutes or less between consecutive events, so waits for CI or the maintainer aren't counted |
-| `maintainerSeconds` | **Maintainer time:** the gaps of 15 minutes or less between the maintainer's own messages |
-| `maintainerMessages` | The maintainer's messages |
+| `agentSeconds` | **Agent working time:** the gaps of 5 minutes or less between consecutive events, so waits for CI or the reviewer aren't counted |
+| `maintainerSeconds` | **Reviewer time:** the gaps of 15 minutes or less between the reviewer's own messages. The column keeps its old name; the reviewer is Betsalel Williamson, who runs this edition, not the ncurses maintainer |
+| `maintainerMessages` | The reviewer's messages |
 
 A gap belongs to the day of the event that ends it. The front page's time figures are the sums of the columns, and **wall time** runs from the first day's `first` to the last day's `last`.

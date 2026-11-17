@@ -5,8 +5,8 @@
  * - site/data/session/usage.json: the token counts and cost, copied field for field from the
  *   session API's get_session response (external_metadata.usage), with when it was fetched.
  * - site/data/session/daily.csv: one line per UTC day of the session, totalled from the transcript:
- *   the day's first and last event, how many events, the agent's and the maintainer's active
- *   seconds, and the maintainer's messages. No message text, and a line a day rather than a line
+ *   the day's first and last event, how many events, the agent's and the reviewer's active
+ *   seconds, and the reviewer's messages. No message text, and a line a day rather than a line
  *   an event, so the file stays small.
  *
  *   node site/scripts/migration-stats.mjs verify                  # recompute; fail if migration.json differs (CI)
@@ -21,8 +21,10 @@
  * daily lines, and each refresh is a commit, so the history of every figure is in git.
  *
  * - Agent working time adds up the gaps between consecutive events of 5 minutes or less, so time
- *   spent waiting for CI or for the maintainer isn't counted.
- * - Maintainer time adds up the gaps of 15 minutes or less between the maintainer's own messages.
+ *   spent waiting for CI or for the reviewer isn't counted.
+ * - Reviewer time adds up the gaps of 15 minutes or less between the reviewer's own messages. The
+ *   reviewer is the person running this edition, not the ncurses maintainer; the fields keep the
+ *   name maintainerSeconds.
  *   It undercounts reading time between messages, and counts each burst from its first message.
  * - A gap belongs to the UTC day of the event that ends it.
  */
@@ -48,7 +50,7 @@ export function activeSeconds(times, gap) {
   return Math.round(total);
 }
 
-/** Whether a transcript event is a message the maintainer wrote (not a relay, a bot or a tool). */
+/** Whether a transcript event is a message the reviewer wrote (not a relay, a bot or a tool). */
 export function fromMaintainer(event) {
   if (event.type !== 'user') return false;
   const c = event.message?.content;
