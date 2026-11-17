@@ -10,6 +10,12 @@ const NC_V = {
 const ncFmt = new Intl.NumberFormat('en');
 const ncCompact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
+/** 1st, 2nd, 3rd, 4th ... */
+function ncOrdinal(n) {
+  const t = n % 100, u = n % 10;
+  return `${ncFmt.format(n)}${t >= 11 && t <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][u] ?? 'th'}`;
+}
+
 /** Linear-interpolated quantile of an ascending array (the same method as numpy's default). */
 function ncQuantile(sorted, q) {
   const k = (sorted.length - 1) * q, i = Math.floor(k);
@@ -83,7 +89,7 @@ function ncRenderViolins(fig, data, tok) {
   ncEl(svg, 'text', { x: x1, y: H - 4, 'text-anchor': 'end' }, `Tokens per file, ${tokName}, log scale`);
 
   const tip = document.createElement('div');
-  tip.className = 'nc-v-tip';
+  tip.className = 'nc-v-tip not-content'; // not-content: keep Starlight's prose styles off it
   tip.hidden = true;
   plot.appendChild(tip);
 
@@ -158,16 +164,21 @@ function ncRenderViolins(fig, data, tok) {
         const b = tip.appendChild.bind(tip);
         tip.replaceChildren();
         const strong = document.createElement('b'); strong.textContent = `${ncFmt.format(f.v)} tokens`; b(strong);
-        const code = document.createElement('code'); code.textContent = f.path; b(code);
-        const meta = document.createElement('span');
-        meta.textContent = `${g.name}, ${label.toLowerCase()}: ${cur + 1} of ${ncFmt.format(s.n)} by size`;
+        // Not <code>: each site style restyles code, which made the path unreadable on the tip's background.
+        const path = document.createElement('div'); path.className = 'nc-v-path'; path.textContent = f.path; b(path);
+        const meta = document.createElement('div'); meta.className = 'nc-v-meta';
+        const rank = cur === s.n - 1 ? 'the largest' : cur === 0 ? 'the smallest' : `${ncOrdinal(s.n - cur)} largest`;
+        meta.textContent = `${g.name}, ${label.toLowerCase()}: ${rank} of ${ncFmt.format(s.n)} files`;
         b(meta);
         tip.hidden = false;
+        // Beside the file, centred on its lane, so the file and its lane stay in view: to the right
+        // of it, or to the left where there's no room.
         const pw = plot.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
-        const scale = pw / W;
-        let tx = fx * scale - tw / 2, ty = (cy - hh - 10) * scale - th;
-        tx = Math.max(4, Math.min(pw - tw - 4, tx));
-        if (ty < 0) ty = (cy + hh + 10) * scale;
+        const scale = pw / W, px = fx * scale, gap = 14;
+        let tx = px + gap + tw <= pw ? px + gap : px - gap - tw;
+        tx = Math.max(0, Math.min(pw - tw, tx));
+        let ty = (cy + (f.dy || 0)) * scale - th / 2;
+        ty = Math.max(0, ty);
         tip.style.left = `${tx}px`; tip.style.top = `${ty}px`;
       };
       const nearest = (v) => {
