@@ -1,12 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { HALT, SHELL_NAMES, columns, commonPrefix, createShell, resolvePath, tilde } from '../src/components/page-shell.js';
+import { HALT, SHELL_NAMES, columns, commonPrefix, createShell, entryNote, height, resolvePath, tilde, wrap } from '../src/components/page-shell.js';
 
 /**
  * A shell over a fake 60x5 terminal, started in ~/start, with two programs there that exit with
  * 3 and 0, and two games. A program named without a folder is in ~/start.
  */
-function fixture(programs = ['hello', 'menus']) {
+function fixture(programs = ['hello', 'menus'], more = {}) {
   const screen = [];
   const ran = [];
   const shell = createShell({
@@ -20,6 +20,7 @@ function fixture(programs = ['hello', 'menus']) {
     },
     cols: () => 60,
     rows: () => 5,
+    ...more,
   });
   // Colours left out, so a test reads the text as the reader does.
   return { shell, ran, text: () => screen.join('').replace(/\x1b\[[0-9;]*m/g, '') };
@@ -288,4 +289,111 @@ test('uname takes -s, -n, -r, -m and -a', async () => {
   await session;
   assert.match(text(), /uname -sm\r\nEmscripten wasm32\r\n/);
   assert.match(text(), /uname -a\r\nEmscripten ncurses 1\.0 wasm32\r\n/);
+});
+
+
+/** A build like the site's: no database, one entry compiled in, at the build's own prefix. */
+const TERMINFO = {
+  dir: '/opt/nc/share/terminfo',
+  database: false,
+  options: ['--disable-database', '--with-fallbacks=demo-term'],
+  entries: [{ name: 'demo-term', path: 'd/demo-term', bytes: 1234, source: 'demo-term|a demo,\n\tam, cols#80,' }],
+};
+const withTerminfo = (facts = TERMINFO) => fixture(['hello'], { terminfo: () => facts, rows: () => 40 });
+
+test('the terminfo directory holds each built-in entry where the build would look for it', async () => {
+  const { shell, text } = withTerminfo();
+  const session = shell.session();
+  shell.feed('ls /opt/nc/share/terminfo\rcd /opt/nc/share/terminfo/d\rls -lF\rexit\r');
+  await session;
+  assert.match(text(), /ls \/opt\/nc\/share\/terminfo\r\nd\r\n/);
+  // A plain file, root's, at its compiled size, with no * from -F.
+  assert.match(text(), /-rw-r--r-- 1 root root   1234 Nov 17 08:00 demo-term\r\n/);
+  assert.match(text(), /\/opt\/nc\/share\/terminfo\/d\$ /);
+});
+
+test('cat and file on an entry name the options that compiled it in', async () => {
+  const { shell, text } = withTerminfo();
+  const session = shell.session();
+  shell.feed('cat /opt/nc/share/terminfo/d/demo-term\recho $?\rfile /opt/nc/share/terminfo/d/demo-term\rexit\r');
+  await session;
+  const flat = text().replace(/\r\n/g, ' ');
+  assert.match(flat, /demo-term is not a file in this build: ncurses was configured with --disable-database --with-fallbacks=demo-term, so it reads no terminfo database/);
+  assert.match(text(), /echo \$\?\r\n0\r\n/);
+  assert.match(text(), /demo-term: Compiled terminfo entry "demo-term", built into the library \(--disable-database --with-fallbacks=demo-term\)/);
+});
+
+test("cat's note wraps to the terminal's width", async () => {
+  const { shell, text } = withTerminfo();
+  const session = shell.session();
+  shell.feed('cat /opt/nc/share/terminfo/d/demo-term\rexit\r');
+  await session;
+  const lines = text().split('\r\n');
+  const start = lines.findIndex((l) => l.startsWith('demo-term is not'));
+  assert.ok(start > 0);
+  for (const l of lines.slice(start, -2)) assert.ok(l.length <= 60, l);
+});
+
+test('cat says the entry is also read from disk when the build has a database', () => {
+  const note = entryNote(TERMINFO.entries[0], { ...TERMINFO, database: true });
+  assert.match(note, /compiled into the library as a fallback, and ncurses also reads this directory/);
+  assert.doesNotMatch(note, /reads no terminfo database/);
+});
+
+test("infocmp prints a built-in entry, $TERM's by default, and says which entries there are", async () => {
+  const xterm = { name: 'xterm-256color', path: 'x/xterm-256color', source: 'xterm-256color|xterm,' };
+  const { shell, text } = withTerminfo({ ...TERMINFO, entries: [...TERMINFO.entries, xterm] });
+  const session = shell.session();
+  shell.feed('infocmp demo-term\rinfocmp\rinfocmp -x vt100\rexit\r');
+  assert.equal(await session, 1);
+  assert.match(text(), /infocmp demo-term\r\ndemo-term\|a demo,\r\n\tam, cols#80,\r\n/);
+  assert.match(text(), /infocmp\r\nxterm-256color\|xterm,\r\n/);
+  assert.match(text(), /infocmp: couldn't open terminfo entry vt100 \(this build has demo-term, xterm-256color\)/);
+});
+
+test('without terminfo facts there is no terminfo directory, and infocmp says so', async () => {
+  const { shell, text } = fixture();
+  const session = shell.session();
+  shell.feed('ls /opt\rinfocmp\rexit\r');
+  await session;
+  assert.match(text(), /ls: cannot access '\/opt': No such file or directory/);
+  assert.match(text(), /infocmp: couldn't open terminfo entry xterm-256color\r\n/);
+});
+
+test('wrap breaks text at spaces within the width', () => {
+  assert.deepEqual(wrap('one two three four', 9), ['one two', 'three', 'four']);
+  assert.deepEqual(wrap('  a   b ', 10), ['a b']);
+  assert.deepEqual(wrap('', 10), []);
+});
+
+test('height counts the rows a line wraps onto, with tabs to stops of 8 and colours taking none', () => {
+  assert.equal(height('', 60), 1);
+  assert.equal(height('x'.repeat(60), 60), 1);
+  assert.equal(height('x'.repeat(61), 60), 2);
+  assert.equal(height('\tx', 8), 2);
+  assert.equal(height('ab\tcd', 10), 1);
+  assert.equal(height(`\x1b[1;34m${'x'.repeat(10)}\x1b[0m`, 10), 1);
+});
+
+test('a page counts the rows a wrapped line takes, and always shows a line', async () => {
+  const long = 'w'.repeat(150);
+  const entry = { name: 'demo-term', path: 'd/demo-term', source: ['l1', long, 'l3', 'l4', long, 'l6'].join('\n') };
+  const { shell, text } = fixture(['hello'], { terminfo: () => ({ ...TERMINFO, entries: [entry] }) });
+  const session = shell.session();
+  shell.feed('infocmp demo-term\r');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  // Four rows to a screen: l1 and the long line's three rows.
+  assert.match(text(), /w\r\n--More--/);
+  assert.doesNotMatch(text(), /l3/);
+  // Enter shows one more line; the next long line, taller than that one row, still shows.
+  shell.feed('\r');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  assert.match(text(), /l3\r\n/);
+  assert.doesNotMatch(text(), /l4/);
+  shell.feed('\r\r');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  assert.match(text(), /l4\r\n--More--\(66%\)\r\x1b\[2Kw{150}\r\n--More--\(83%\)$/);
+  shell.feed('qexit\r');
+  await session;
+  assert.doesNotMatch(text(), /l6/);
 });

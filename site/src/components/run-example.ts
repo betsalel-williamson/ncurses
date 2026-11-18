@@ -88,6 +88,21 @@ const REASONS: Record<string, string> = {
   'no-output': 'draws nothing when run',
 };
 
+/** What the examples' ncurses build does about the terminal database, from public/examples/terminfo.json (terminfo.mjs). */
+type TerminfoEntry = { name: string; path: string; bytes?: number; source?: string };
+type Terminfo = { dir: string; database: boolean; options: string[]; entries: TerminfoEntry[] };
+
+/** terminfo.json, once it has loaded; the shell shows its directory and infocmp from it. */
+let terminfo: Terminfo | null = null;
+async function loadTerminfo() {
+  try {
+    const res = await fetch(`${base}/examples/terminfo.json`);
+    if (res.ok) terminfo = await res.json();
+  } catch {
+    // Without it, the shell has no terminfo directory and infocmp says so.
+  }
+}
+
 async function statuses(): Promise<Map<string, Status> | null> {
   try {
     const res = await fetch(`${base}/examples/status.json`);
@@ -377,6 +392,7 @@ function setup(box: HTMLElement, variants: Variant[], programs: Map<string, Prog
       programs: () => [...programs].filter(([, p]) => !p.hidden).map(([name, p]) => `${p.dir}/${name}`),
       cwd: home(example),
       games: () => [...programs].filter(([, p]) => p.hidden).map(([name]) => name),
+      terminfo: () => terminfo,
       launch: (name: string, args: string[] = []) => launch(name, name === id ? title : name, false, false, args),
       cols: () => term?.cols ?? 80,
       rows: () => term?.rows ?? 24,
@@ -665,6 +681,7 @@ function keepScreen(bytes: Uint8Array): Uint8Array {
 
 const boxes = document.querySelectorAll<HTMLElement>('.run-example');
 if (boxes.length) {
+  void loadTerminfo();
   void statuses().then((all) => {
     const programs = new Map<string, Program>();
     for (const s of [...(all?.values() ?? [])].sort((a, b) => a.id.localeCompare(b.id))) {

@@ -55,7 +55,8 @@ Every complete C program in the guides (a listing with a `main()`) gets a "Run t
 | File | What it does |
 | --- | --- |
 | `scripts/examples.mjs` | Finds the programs in the guide shards and the libraries each one links. |
-| `scripts/build-examples.mjs` | Builds ncurses once with Emscripten, then compiles, links and smoke-tests each program. It writes `public/examples/<id>.{mjs,wasm}` and `status.json`. |
+| `scripts/build-examples.mjs` | Builds ncurses once with Emscripten, then compiles, links and smoke-tests each program. It writes `public/examples/<id>.{mjs,wasm}`, `status.json` and `terminfo.json`. |
+| `scripts/terminfo.mjs` | The options ncurses is configured with, and what that build does about the terminal database, for the shell. |
 | `scripts/smoke-example.mjs` | Runs one build in Node on a fake 80×24 xterm and decides whether it runs. |
 | `examples/main.c`, `examples/main-args.c` | Entry points. They call the listing's `main()`, renamed `example_main()`, and pass its result to `exit()`. |
 | `examples/pty.js` | The terminal bridge between the program and the page. |
@@ -111,6 +112,18 @@ A program that fails shows a note instead of a button, with its build log, and C
 
 Ctrl-C works as on a terminal: while a program keeps `ISIG` in its terminal modes (`cbreak()`, or no mode call), `pty.js` turns it into `SIGINT`, so a program that quits on `SIGINT` quits; `raw()` turns `ISIG` off and the program reads Ctrl-C as a key, as the initialization guide says. `pty.js` keeps the modes a program sets with `tcsetattr()`, which Emscripten's terminal otherwise ignores.
 
+### The shell's terminfo directory
+
+The examples' ncurses is configured with `--disable-database --with-fallbacks=xterm-256color`. It reads no terminfo database at run time. The xterm-256color entry is compiled into the library instead, as a fallback. The configure options live in `NCURSES_CONFIGURE` in `scripts/terminfo.mjs`, and `build-examples.mjs` configures with them.
+
+After the ncurses build, `build-examples.mjs` writes `public/examples/terminfo.json` from that build's own output:
+
+- The terminfo directory is `TERMINFO` in the build's `ncurses/Makefile`. With no `--prefix`, configure uses `/usr/local` for an Emscripten host, so the directory is `/usr/local/share/terminfo`, not `/usr/share/terminfo`. The library itself has no path built in, because `--disable-database` leaves `TERMINFO` undefined in `ncurses_cfg.h`.
+- The entry's folder is its first letter (`x/xterm-256color`) when `ncurses_cfg.h` defines `MIXEDCASE_FILENAMES`, and its hex code (`78/`) otherwise.
+- Each fallback entry is compiled from `misc/terminfo.src` with the `tic` and `infocmp` the Makefile names, as `MKfallback.sh` does for the library. That gives the entry's size and its `infocmp -x` text.
+
+The shell shows that directory with the entry in it. `ls -l` gives the entry's compiled size. `cat` and `file` say that the entry is compiled into the library and name the configure options. `infocmp`, or `infocmp xterm-256color`, prints the entry. Without `terminfo.json` the directory isn't there, and `infocmp` finds no entry.
+
 ### Build messages
 
 `build-examples.mjs` sorts what the ncurses build prints to stderr. Messages in its `EXPECTED` list are counted and hidden, each with the reason it is safe. Any other line is printed, and in CI it also becomes a warning annotation on the run. The expected messages are:
@@ -137,7 +150,7 @@ If no artifact matches, because `master` moved on after the pull request's last 
 
 Most of a cold CI run went to the runnable examples. The WebAssembly ncurses build took 46 seconds, and compiling and smoke-testing the examples one at a time took two minutes. Three caches skip that work:
 
-- **The WebAssembly ncurses build** (`.generated/ncurses-wasm`). It is keyed by every tracked file outside `docs/`, `site/`, `man/` and `.github/`, plus `build-examples.mjs` and the Emscripten version. A change to the docs or the site keeps the key, so the library restores and is not rebuilt.
+- **The WebAssembly ncurses build** (`.generated/ncurses-wasm`). It is keyed by every tracked file outside `docs/`, `site/`, `man/` and `.github/`, plus `build-examples.mjs`, `terminfo.mjs` and the Emscripten version. A change to the docs or the site keeps the key, so the library restores and is not rebuilt.
 - **Each example build** (`.generated/example-cache/<hash>`). `build-examples.mjs` keys each build of a listing by a hash of its inputs: the listing, its macros and arguments, the libraries it links, `examples/`, the smoke test, the script itself and the `emcc` version. A build whose hash is cached is copied with its smoke-test result. Only listings whose inputs changed are compiled and run, in parallel, one per CPU. CI restores the newest saved set (a partial restore), and the script deletes the entries the run didn't use, so the saved set matches the current examples.
 - **Emscripten itself and npm**, through `setup-emsdk` and `setup-node`.
 

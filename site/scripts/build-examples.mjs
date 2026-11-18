@@ -2,15 +2,15 @@
 /**
  * Build the guides' runnable examples to WebAssembly, so the site can run them in the page.
  * - ncurses (wide, static, xterm-256color compiled in, no terminfo database) is cross-built
- *   once with Emscripten into .generated/ncurses-wasm/.
+ *   once with Emscripten into .generated/ncurses-wasm/, with the options in terminfo.mjs.
  * - Every complete program in a guide (a ```c block that defines main(), see examples.mjs) is
  *   built, so the program that runs is exactly the listing on the page. Each is then run in
  *   Node (smoke-example.mjs); one that doesn't compile, link, or run is flagged, not built.
  * - examples/pty.js gives the program a terminal: stdin and poll() wait on the page's input
  *   with Asyncify, and stdout goes to xterm.js unbuffered.
- * Output: public/examples/<id>.{mjs,wasm} and status.json, the result for every program
- * (gitignored). Requires emcc on PATH; without it
- * this prints a note and exits 0, and the site shows the listings without a Run button.
+ * Output: public/examples/<id>.{mjs,wasm}, status.json, the result for every program, and
+ * terminfo.json, what the build does about the terminal database (gitignored). Requires emcc
+ * on PATH; without it this prints a note and exits 0, and the site shows the listings without a Run button.
  */
 import { execFile, execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -20,6 +20,7 @@ import { promisify } from 'node:util';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GAMES, GUIDE_DIRS, findPrograms } from './examples.mjs';
+import { NCURSES_CONFIGURE, buildFacts } from './terminfo.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const run = promisify(execFile);
@@ -89,11 +90,7 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
     join(repo, 'configure'),
     '--host=wasm32-unknown-emscripten',
     '--build=x86_64-pc-linux-gnu',
-    '--with-build-cc=cc',
-    '--without-shared', '--without-cxx', '--without-cxx-binding', '--without-ada',
-    '--without-progs', '--without-tests', '--without-manpages', '--without-debug',
-    '--disable-database', '--with-fallbacks=xterm-256color',
-    '--disable-stripping', '--enable-widec', '--without-pthread',
+    ...NCURSES_CONFIGURE,
   ], {
     // configure can't run its poll() test when cross-compiling, and without it ncurses waits
     // with select(), which Emscripten answers at once. examples/pty.js gives poll() a real wait,
@@ -117,6 +114,9 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
 
 const out = join(site, 'public/examples');
 mkdirSync(out, { recursive: true });
+// What this build of ncurses does about the terminal database, from its own Makefile and
+// ncurses_cfg.h, for the pretend shell's /usr/local/share/terminfo and infocmp (terminfo.mjs).
+writeFileSync(join(out, 'terminfo.json'), JSON.stringify(buildFacts(wasmBuild, NCURSES_CONFIGURE, repo), null, 2));
 const src = join(site, '.generated/examples');
 mkdirSync(src, { recursive: true });
 
