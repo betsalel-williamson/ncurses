@@ -4,6 +4,16 @@ description: Guides and every manual page for ncurses, the new curses library.
 template: splash
 hero:
   tagline: The guides and every manual page for ncurses, the free implementation of the System V curses API, in one searchable site.
+  # The demo terminal (home-terminal.ts), in the hero's image slot: beside the text on a wide
+  # screen, below it on a narrow one (Footer.astro's styles).
+  image:
+    html: >-
+      <section class="home-terminal not-content" data-home-terminal aria-label="Demo terminal: ncurses test programs"
+      aria-describedby="home-terminal-hint"><div class="run-example-scroller home-terminal-scroller"><div
+      class="run-example-screen home-terminal-screen"></div></div><div class="home-terminal-bar"><button type="button"
+      class="nc-key home-terminal-play" aria-pressed="false" disabled>Pause demos</button><p class="home-terminal-hint"
+      id="home-terminal-hint">ncurses's own test programs, 10 seconds each. Click the terminal to take over.</p></div><p
+      class="nc-sr-only home-terminal-status" role="status"></p></section>
   actions:
     - text: Getting started
       link: guides/getting-started/

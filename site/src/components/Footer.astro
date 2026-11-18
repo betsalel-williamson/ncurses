@@ -1,7 +1,7 @@
 ---
-// Starlight's footer, plus the page scripts: runnable guide examples (run-example.ts), the
-// header that hides on scroll (chrome-autohide.ts), the search field's hint (search-hint.ts) and
-// the search pull-down on desktop (search-panel.ts).
+// Starlight's footer, plus the page scripts: runnable guide examples (run-example.ts), the home
+// page's demo terminal (home-terminal.ts), the header that hides on scroll (chrome-autohide.ts),
+// the search field's hint (search-hint.ts) and the search pull-down on desktop (search-panel.ts).
 import Default from '@astrojs/starlight/components/Footer.astro';
 ---
 
@@ -9,6 +9,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
 
 <script>
   import './run-example.ts';
+  import './home-terminal.ts';
   import './chrome-autohide.ts';
   import './search-hint.ts';
   import './search-panel.ts';
@@ -158,6 +159,77 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     flex-basis: 100%;
     font-size: var(--sl-text-xs);
     color: var(--sl-color-gray-3);
+  }
+  /* The home page's demo terminal (home-terminal.ts), in the hero's image slot. Starlight puts
+     that slot above the text in a narrow column and beside it, 25rem wide, on a wide screen; the
+     terminal goes below the text on a phone and takes the larger column beside it once the
+     window is wide enough for 80 columns at a readable size. */
+  .hero > .hero-html:has(.home-terminal) {
+    order: 2;
+    width: 100%;
+    margin: 0;
+  }
+  @media (min-width: 64rem) {
+    .hero:has(> .hero-html .home-terminal:not([hidden])) {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+    }
+    /* The title's column is narrower than Starlight's, so its words are set to fit it. */
+    .hero:has(> .hero-html .home-terminal:not([hidden])) h1 {
+      font-size: clamp(var(--sl-text-3xl), calc(0.25rem + 3.2vw), var(--sl-text-5xl));
+      overflow-wrap: anywhere;
+    }
+  }
+  .home-terminal {
+    width: 100%;
+    min-width: 0;
+  }
+  .home-terminal .home-terminal-scroller {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .home-terminal .home-terminal-screen {
+    width: auto;
+    cursor: text;
+  }
+  /* The room the terminal takes before it is made, so nothing moves when it is. */
+  .home-terminal .home-terminal-screen:empty {
+    aspect-ratio: 80 / 25;
+  }
+  .home-terminal-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .home-terminal-bar > * {
+    margin: 0;
+  }
+  .home-terminal-play {
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    box-sizing: border-box;
+    height: 2.25rem;
+    padding: 0 0.8rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    white-space: nowrap;
+    background: var(--nc-key-bg, transparent);
+    color: var(--nc-key-fg, var(--sl-color-white));
+    border: var(--nc-key-border, 1px solid);
+    border-color: var(--nc-key-border-color, var(--sl-color-gray-3));
+    box-shadow: var(--nc-key-shadow, none);
+  }
+  .home-terminal-play:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .home-terminal-hint {
+    flex: 1 1 14rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
   }
   .run-example-flag {
     font-size: var(--sl-text-sm);
