@@ -1,0 +1,33 @@
+ncurses 6.6.20261107
+
+before newterm                             define_key("\E[99~", 1000) = ERR
+xterm kf1 = \EOP, KEY_F(1) = 265, KEY_F(2) = 266
+
+1. new string, new code                    define_key("\E[99~", 1000) = OK
+    key_defined("\033[99~") = 1000
+2. same string, same code again            define_key("\E[99~", 1000) = OK
+    key_defined("\033[99~") = 1000
+3. same string, another code               define_key("\E[99~", 1001) = OK
+    key_defined("\033[99~") = 1001
+4. NULL, a code that is bound              define_key(NULL, 1001) = OK
+    key_defined("\033[99~") = 0
+5. NULL, a code never bound                define_key(NULL, 1002) = ERR
+6. unbound string, code 0                  define_key("\E[98~", 0) = ERR
+7a. bind a string                          define_key("\E[98~", 1003) = OK
+7b. the bound string, code 0               define_key("\E[98~", 0) = OK
+    key_defined("\033[98~") = 0
+7c. bind it again                          define_key("\E[98~", 1003) = OK
+7d. the bound string, code -5              define_key("\E[98~", -5) = OK
+    key_defined("\033[98~") = 0
+8. NULL, code 0                            define_key(NULL, 0) = ERR
+9. a prefix of bound strings               define_key("\E[", 1004) = ERR
+10. a bound string (kf1) plus one char     define_key("\EOPx", 1005) = ERR
+11. empty string                           define_key("", 1006) = ERR
+12. kf1's string, a new code               define_key("\EOP", 1007) = OK
+    key_defined(f1) = 1007
+    has_key(KEY_F(1)) = 0
+13. NULL, KEY_F(2) (bound by terminfo)     define_key(NULL, 266) = OK
+    has_key(KEY_F(2)) = 0
+14. a code above 65535                     define_key("\E[97~", 66539) = OK
+    key_defined("\033[97~") = 1003
+    wgetch() after the input \E[97~ = 1003
