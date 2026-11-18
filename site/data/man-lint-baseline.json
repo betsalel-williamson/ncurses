@@ -2,8 +2,7 @@
  "about": "Messages each manual page has today from mandoc, groff and pandoc, without line numbers. man-check.mjs lint fails on any that are new. Rewrite with: node site/scripts/man-check.mjs baseline",
  "pages": {
   "captoinfo.1m": {
-   "mandoc: STYLE: lower case character in document title: TH captoinfo": 1,
-   "pandoc: Skipped 'TABLE'": 1
+   "mandoc: STYLE: lower case character in document title: TH captoinfo": 1
   },
   "clear.1": {
    "mandoc: STYLE: lower case character in document title: TH clear": 1,
@@ -28,9 +27,6 @@
    "mandoc: STYLE: lower case character in document title: TH curs_addch": 1,
    "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
    "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
-   "pandoc: Skipped 'unknown string ~'": 1,
-   "pandoc: Skipped 'unknown string ''": 1,
-   "pandoc: Skipped 'unknown string ^'": 1,
    "pandoc: Skipped '.ne'": 1,
    "pandoc: Skipped '.nf'": 1,
    "pandoc: Skipped '.fi'": 1
@@ -50,8 +46,7 @@
    "mandoc: STYLE: fill mode already enabled, skipping: EE": 2,
    "pandoc: Skipped '.nf'": 2,
    "pandoc: Skipped '.fi'": 2,
-   "pandoc: Skipped '.ne'": 3,
-   "pandoc: Skipped 'TABLE'": 1
+   "pandoc: Skipped '.ne'": 3
   },
   "curs_beep.3x": {
    "mandoc: STYLE: lower case character in document title: TH curs_beep": 1
@@ -209,8 +204,6 @@
   },
   "curs_terminfo.3x": {
    "mandoc: STYLE: lower case character in document title: TH curs_terminfo": 1,
-   "pandoc: Skipped 'unknown string ``'": 3,
-   "pandoc: Skipped 'unknown string '''": 3,
    "pandoc: Skipped '.ne'": 1
   },
   "curs_threads.3x": {
@@ -322,9 +315,6 @@
   "infocmp.1m": {
    "mandoc: STYLE: lower case character in document title: TH infocmp": 1,
    "groff: warning: table row does not fit": 1,
-   "pandoc: Skipped 'unknown string ``'": 1,
-   "pandoc: Skipped 'unknown string '''": 1,
-   "pandoc: Skipped 'unknown string ''": 6,
    "pandoc: Skipped '.HP'": 1
   },
   "infotocap.1m": {
@@ -452,13 +442,9 @@
    "mandoc: STYLE: lower case character in document title: TH term": 1,
    "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
    "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
-   "pandoc: Skipped '\\s-1'": 1,
-   "pandoc: Skipped '\\s+1'": 1,
-   "pandoc: Skipped 'unknown string ''": 1,
    "pandoc: Skipped '.nf'": 1,
    "pandoc: Skipped '.fi'": 1,
    "pandoc: Skipped '.ft'": 2,
-   "pandoc: Skipped 'TABLE'": 1,
    "pandoc: Skipped '.in'": 1
   },
   "term.7": {
@@ -468,19 +454,11 @@
    "mandoc: STYLE: lower case character in document title: TH terminfo": 1,
    "mandoc: STYLE: fill mode already disabled, skipping: nf": 3,
    "mandoc: STYLE: fill mode already enabled, skipping: EE": 3,
-   "pandoc: Skipped '\\s-2'": 1,
-   "pandoc: Skipped '\\s-1'": 10,
-   "pandoc: Skipped '\\s0'": 5,
-   "pandoc: Skipped '\\s+1'": 6,
-   "pandoc: Skipped '\\s-133'": 1,
    "pandoc: Skipped '\\d'": 10,
    "pandoc: Skipped '\\u'": 10,
-   "pandoc: Skipped 'unknown string ^'": 9,
-   "pandoc: Skipped 'unknown string ~'": 2,
    "pandoc: Skipped '.ps'": 2,
    "pandoc: Skipped '.ne'": 3,
-   "pandoc: Skipped 'TABLE'": 9,
-   "pandoc: Skipped '.na'": 292,
+   "pandoc: Skipped '.na'": 464,
    "pandoc: Skipped '.nf'": 3,
    "pandoc: Skipped '.fi'": 3
   },

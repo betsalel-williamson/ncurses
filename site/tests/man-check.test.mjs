@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { changedPages, compare, normalize, sections, shardFor } from '../scripts/man-check.mjs';
-import { resolveConditionals } from '../scripts/man-render.mjs';
+import { expandStrings, forPandoc, resolveConditionals, tablesForPandoc } from '../scripts/man-render.mjs';
 
 test('resolveConditionals takes the branch groff takes', () => {
   const src = [
@@ -70,4 +70,35 @@ test('changedPages maps shards, man/ files and the terminfo sources to pages', (
     ['curs_getch.3x', 'terminfo.5', 'tput.1'],
   );
   assert.deepEqual([...changedPages(['docs/man/term/02-description.5'], files)].sort(), ['term.5', 'term.7']);
+});
+
+test('expandStrings replaces strings the page defines and leaves the rest', () => {
+  const src = ['.ds d \\(de', '.ds td \\" empty', '.ds qc "quoted', 'a\\*d b\\*(qc\\*[d] \\*u \\\\*d', '.\\" \\*d'].join('\n');
+  const out = expandStrings(src).split('\n');
+  assert.equal(out[3], 'a\\(de bquoted\\(de \\*u \\\\*d');
+  assert.equal(out[4], '.\\" \\*d');
+  assert.equal(expandStrings('.ds td \\" empty\nx\\*(tdy').split('\n')[1], 'xy');
+});
+
+test('tablesForPandoc merges a spanned header into one row', () => {
+  const src = ['.TS', 'center;', 'Cb S L', 'Cb Cb Cb', 'L L L.', 'Code', 'Old\tNew\tWho', '_', 'sb\tsr\tBSD', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(src), ['.TS', 'center;', 'Cb Cb Cb', 'L L L.', 'Old (Code)\tNew (Code)\tWho', '_', 'sb\tsr\tBSD', '.TE'].join('\n'));
+});
+
+test('tablesForPandoc empties the label of a column spanned in the last header row', () => {
+  const src = ['.TS', 'L S L', 'L L L.', 'Pair\tName', '_', 'a\tb\tc', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(src), ['.TS', 'L L L', 'L L L.', 'Pair\t\tName', '_', 'a\tb\tc', '.TE'].join('\n'));
+});
+
+test('tablesForPandoc turns a one-column table without tabs into an example', () => {
+  assert.equal(tablesForPandoc('.TS\nl.\n0000  1a 01\n0010  00 00\n.TE'), '.EX\n0000  1a 01\n0010  00 00\n.EE');
+});
+
+test('tablesForPandoc leaves a table pandoc reads as it was', () => {
+  const src = '.TS\nCb Cb\nL L.\nA\tB\n_\n1\t2\n.TE';
+  assert.equal(tablesForPandoc(src), src);
+});
+
+test('forPandoc drops point-size changes but keeps escaped backslashes', () => {
+  assert.equal(forPandoc('\\s-1SMALL\\s0 and \\\\s-133'), 'SMALL and \\\\s-133');
 });
