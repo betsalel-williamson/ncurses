@@ -39,16 +39,24 @@ check visibility of a menu item
 \fBbool item_visible(const ITEM *\fIitem\fP);
 .fi
 .SH DESCRIPTION
-A menu item is visible when it is in the portion of a posted menu that
-is mapped onto the screen (if the menu is scrollable, in particular, this
-portion will be smaller than the whole menu).
+A menu item is visible when it is in the part of a posted menu that
+the menu's subwindow shows.
+In a scrollable menu, that part is smaller than the whole menu;
+\fBtop_row\fP (see \fB\%mitem_current\fP(3X)) gives the menu row it starts at.
+.SH RETURN VALUE
+\fBitem_visible\fP returns \fBTRUE\fP if \fIitem\fP is visible.
+It returns \fBFALSE\fP if it is not,
+if \fIitem\fP is null,
+or if \fIitem\fP is not connected to a posted menu.
 .SH PORTABILITY
-These routines emulate the System V menu library.
-They were not supported on
+This routine emulates the System V menu library.
+It was not supported on
 Version 7 or BSD versions.
 .SH AUTHORS
 Juergen Pfeifer.
 Manual pages and adaptation for new curses by Eric S. Raymond.
 .SH SEE ALSO
 \fB\%curses\fP(3X),
-\fB\%menu\fP(3X)
+\fB\%menu\fP(3X),
+\fB\%menu_post\fP(3X),
+\fB\%mitem_current\fP(3X)

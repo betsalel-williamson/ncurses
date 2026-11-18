@@ -1,4 +1,5 @@
 .SH DESCRIPTION
-A menu item is visible when it is in the portion of a posted menu that
-is mapped onto the screen (if the menu is scrollable, in particular, this
-portion will be smaller than the whole menu).
+A menu item is visible when it is in the part of a posted menu that
+the menu's subwindow shows.
+In a scrollable menu, that part is smaller than the whole menu;
+\fBtop_row\fP (see \fB\%mitem_current\fP(3X)) gives the menu row it starts at.

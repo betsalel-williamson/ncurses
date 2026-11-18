@@ -1,0 +1,521 @@
+{
+ "about": "Messages each manual page has today from mandoc, groff and pandoc, without line numbers. man-check.mjs lint fails on any that are new. Rewrite with: node site/scripts/man-check.mjs baseline",
+ "pages": {
+  "captoinfo.1m": {
+   "mandoc: STYLE: lower case character in document title: TH captoinfo": 1,
+   "pandoc: Skipped 'TABLE'": 1
+  },
+  "clear.1": {
+   "mandoc: STYLE: lower case character in document title: TH clear": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "curs_add_wch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_add_wch": 1,
+   "groff: warning: special character 'u2603' not defined": 1,
+   "groff: warning: special character 'u2327' not defined": 1,
+   "groff: warning: special character 'u256C' not defined": 1,
+   "groff: warning: special character 'u2612' not defined": 1,
+   "pandoc: Skipped '.ne'": 1,
+   "pandoc: Skipped '.na'": 3
+  },
+  "curs_add_wchstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_add_wchstr": 1
+  },
+  "curs_addch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_addch": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped 'unknown string ~'": 1,
+   "pandoc: Skipped 'unknown string ''": 1,
+   "pandoc: Skipped 'unknown string ^'": 1,
+   "pandoc: Skipped '.ne'": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "curs_addchstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_addchstr": 1
+  },
+  "curs_addstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_addstr": 1
+  },
+  "curs_addwstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_addwstr": 1
+  },
+  "curs_attr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_attr": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 2,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 2,
+   "pandoc: Skipped '.nf'": 2,
+   "pandoc: Skipped '.fi'": 2,
+   "pandoc: Skipped '.ne'": 3,
+   "pandoc: Skipped 'TABLE'": 1
+  },
+  "curs_beep.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_beep": 1
+  },
+  "curs_bkgd.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_bkgd": 1
+  },
+  "curs_bkgrnd.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_bkgrnd": 1
+  },
+  "curs_border_set.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_border_set": 1
+  },
+  "curs_border.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_border": 1
+  },
+  "curs_clear.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_clear": 1
+  },
+  "curs_color.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_color": 1
+  },
+  "curs_delch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_delch": 1
+  },
+  "curs_deleteln.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_deleteln": 1
+  },
+  "curs_extend.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_extend": 1
+  },
+  "curs_get_wch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_get_wch": 1
+  },
+  "curs_get_wstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_get_wstr": 1
+  },
+  "curs_getcchar.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_getcchar": 1
+  },
+  "curs_getch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_getch": 1,
+   "pandoc: Skipped '.ne'": 1
+  },
+  "curs_getstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_getstr": 1
+  },
+  "curs_getyx.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_getyx": 1
+  },
+  "curs_in_wch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_in_wch": 1
+  },
+  "curs_in_wchstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_in_wchstr": 1
+  },
+  "curs_inch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_inch": 1
+  },
+  "curs_inchstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_inchstr": 1
+  },
+  "curs_initscr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_initscr": 1
+  },
+  "curs_inopts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_inopts": 1
+  },
+  "curs_ins_wch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_ins_wch": 1
+  },
+  "curs_ins_wstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_ins_wstr": 1
+  },
+  "curs_insch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_insch": 1
+  },
+  "curs_insstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_insstr": 1
+  },
+  "curs_instr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_instr": 1
+  },
+  "curs_inwstr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_inwstr": 1
+  },
+  "curs_kernel.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_kernel": 1
+  },
+  "curs_legacy.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_legacy": 1
+  },
+  "curs_memleaks.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_memleaks": 1
+  },
+  "curs_mouse.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_mouse": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "curs_move.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_move": 1
+  },
+  "curs_opaque.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_opaque": 1
+  },
+  "curs_outopts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_outopts": 1
+  },
+  "curs_overlay.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_overlay": 1
+  },
+  "curs_pad.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_pad": 1
+  },
+  "curs_print.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_print": 1
+  },
+  "curs_printw.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_printw": 1
+  },
+  "curs_refresh.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_refresh": 1
+  },
+  "curs_scanw.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_scanw": 1
+  },
+  "curs_scr_dump.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_scr_dump": 1,
+   "pandoc: Skipped '.na'": 1,
+   "pandoc: Skipped '.ad'": 1
+  },
+  "curs_scroll.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_scroll": 1
+  },
+  "curs_slk.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_slk": 1
+  },
+  "curs_sp_funcs.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_sp_funcs": 1
+  },
+  "curs_termattrs.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_termattrs": 1
+  },
+  "curs_termcap.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_termcap": 1,
+   "pandoc: Skipped '.ie'": 1,
+   "pandoc: Skipped '\\m[.hy]'": 1,
+   "pandoc: Skipped '.el'": 1,
+   "pandoc: Skipped '\\m(mH'": 1,
+   "pandoc: Skipped '.UR'": 1,
+   "pandoc: Skipped '.UE'": 1
+  },
+  "curs_terminfo.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_terminfo": 1,
+   "pandoc: Skipped 'unknown string ``'": 3,
+   "pandoc: Skipped 'unknown string '''": 3,
+   "pandoc: Skipped '.ne'": 1
+  },
+  "curs_threads.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_threads": 1
+  },
+  "curs_touch.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_touch": 1
+  },
+  "curs_trace.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_trace": 1,
+   "pandoc: Skipped '\\m(.j'": 2,
+   "pandoc: Skipped '.na'": 1,
+   "pandoc: Skipped '.rr'": 1
+  },
+  "curs_util.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_util": 1,
+   "pandoc: Skipped '.IP'": 1,
+   "pandoc: Skipped '.na'": 1,
+   "pandoc: Skipped '.ad'": 1
+  },
+  "curs_variables.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_variables": 1,
+   "pandoc: Skipped '.ie'": 1,
+   "pandoc: Skipped '\\m[.hy]'": 1,
+   "pandoc: Skipped '.el'": 1,
+   "pandoc: Skipped '\\m(mH'": 1
+  },
+  "curs_window.3x": {
+   "mandoc: STYLE: lower case character in document title: TH curs_window": 1
+  },
+  "default_colors.3x": {
+   "mandoc: STYLE: lower case character in document title: TH default_colors": 1
+  },
+  "define_key.3x": {
+   "mandoc: STYLE: lower case character in document title: TH define_key": 1
+  },
+  "form_cursor.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_cursor": 1
+  },
+  "form_data.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_data": 1
+  },
+  "form_driver.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_driver": 1
+  },
+  "form_field_attributes.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_attributes": 1
+  },
+  "form_field_buffer.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_buffer": 1
+  },
+  "form_field_info.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_info": 1
+  },
+  "form_field_just.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_just": 1
+  },
+  "form_field_new.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_new": 1
+  },
+  "form_field_opts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_opts": 1
+  },
+  "form_field_userptr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_userptr": 1
+  },
+  "form_field_validation.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field_validation": 1
+  },
+  "form_field.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_field": 1
+  },
+  "form_fieldtype.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_fieldtype": 1
+  },
+  "form_hook.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_hook": 1
+  },
+  "form_new_page.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_new_page": 1
+  },
+  "form_new.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_new": 1
+  },
+  "form_opts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_opts": 1
+  },
+  "form_page.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_page": 1
+  },
+  "form_post.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_post": 1
+  },
+  "form_requestname.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_requestname": 1
+  },
+  "form_userptr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_userptr": 1
+  },
+  "form_variables.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_variables": 1
+  },
+  "form_win.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form_win": 1
+  },
+  "form.3x": {
+   "mandoc: STYLE: lower case character in document title: TH form": 1
+  },
+  "infocmp.1m": {
+   "mandoc: STYLE: lower case character in document title: TH infocmp": 1,
+   "groff: warning: table row does not fit": 1,
+   "pandoc: Skipped 'unknown string ``'": 1,
+   "pandoc: Skipped 'unknown string '''": 1,
+   "pandoc: Skipped 'unknown string ''": 6,
+   "pandoc: Skipped '.HP'": 1
+  },
+  "infotocap.1m": {
+   "mandoc: STYLE: lower case character in document title: TH infotocap": 1
+  },
+  "key_defined.3x": {
+   "mandoc: STYLE: lower case character in document title: TH key_defined": 1
+  },
+  "keybound.3x": {
+   "mandoc: STYLE: lower case character in document title: TH keybound": 1
+  },
+  "keyok.3x": {
+   "mandoc: STYLE: lower case character in document title: TH keyok": 1
+  },
+  "legacy_coding.3x": {
+   "mandoc: STYLE: lower case character in document title: TH legacy_coding": 1
+  },
+  "menu_attributes.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_attributes": 1
+  },
+  "menu_cursor.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_cursor": 1
+  },
+  "menu_driver.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_driver": 1
+  },
+  "menu_format.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_format": 1
+  },
+  "menu_hook.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_hook": 1
+  },
+  "menu_items.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_items": 1
+  },
+  "menu_mark.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_mark": 1
+  },
+  "menu_new.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_new": 1
+  },
+  "menu_opts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_opts": 1
+  },
+  "menu_pattern.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_pattern": 1
+  },
+  "menu_post.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_post": 1
+  },
+  "menu_requestname.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_requestname": 1
+  },
+  "menu_spacing.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_spacing": 1
+  },
+  "menu_userptr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_userptr": 1
+  },
+  "menu_win.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu_win": 1
+  },
+  "menu.3x": {
+   "mandoc: STYLE: lower case character in document title: TH menu": 1
+  },
+  "mitem_current.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_current": 1
+  },
+  "mitem_name.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_name": 1
+  },
+  "mitem_new.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_new": 1
+  },
+  "mitem_opts.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_opts": 1
+  },
+  "mitem_userptr.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_userptr": 1
+  },
+  "mitem_value.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_value": 1
+  },
+  "mitem_visible.3x": {
+   "mandoc: STYLE: lower case character in document title: TH mitem_visible": 1
+  },
+  "ncurses.3x": {
+   "mandoc: STYLE: lower case character in document title: TH ncurses": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 4,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 4,
+   "pandoc: Skipped '.if'": 5,
+   "pandoc: Skipped '.nf'": 4,
+   "pandoc: Skipped '.fi'": 4,
+   "pandoc: Skipped '.RE'": 1,
+   "pandoc: Skipped '.ns'": 3
+  },
+  "new_pair.3x": {
+   "mandoc: STYLE: lower case character in document title: TH new_pair": 1
+  },
+  "panel.3x": {
+   "mandoc: STYLE: lower case character in document title: TH panel": 1
+  },
+  "resizeterm.3x": {
+   "mandoc: STYLE: lower case character in document title: TH resizeterm": 1
+  },
+  "scr_dump.5": {
+   "mandoc: STYLE: lower case character in document title: TH scr_dump": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 7,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 7,
+   "pandoc: Skipped '.nf'": 7,
+   "pandoc: Skipped '.fi'": 7,
+   "pandoc: Skipped '.ne'": 2
+  },
+  "tabs.1": {
+   "mandoc: STYLE: lower case character in document title: TH tabs": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "term_variables.3x": {
+   "mandoc: STYLE: lower case character in document title: TH term_variables": 1
+  },
+  "term.5": {
+   "mandoc: STYLE: lower case character in document title: TH term": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '\\s-1'": 1,
+   "pandoc: Skipped '\\s+1'": 1,
+   "pandoc: Skipped 'unknown string ''": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1,
+   "pandoc: Skipped '.ft'": 2,
+   "pandoc: Skipped 'TABLE'": 1,
+   "pandoc: Skipped '.in'": 1
+  },
+  "term.7": {
+   "mandoc: STYLE: lower case character in document title: TH term": 1
+  },
+  "terminfo.5": {
+   "mandoc: STYLE: lower case character in document title: TH terminfo": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 3,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 3,
+   "pandoc: Skipped '\\s-2'": 1,
+   "pandoc: Skipped '\\s-1'": 10,
+   "pandoc: Skipped '\\s0'": 5,
+   "pandoc: Skipped '\\s+1'": 6,
+   "pandoc: Skipped '\\s-133'": 1,
+   "pandoc: Skipped '\\d'": 10,
+   "pandoc: Skipped '\\u'": 10,
+   "pandoc: Skipped 'unknown string ^'": 9,
+   "pandoc: Skipped 'unknown string ~'": 2,
+   "pandoc: Skipped '.ps'": 2,
+   "pandoc: Skipped '.ne'": 3,
+   "pandoc: Skipped 'TABLE'": 9,
+   "pandoc: Skipped '.na'": 292,
+   "pandoc: Skipped '.nf'": 3,
+   "pandoc: Skipped '.fi'": 3
+  },
+  "tic.1m": {
+   "mandoc: STYLE: lower case character in document title: TH tic": 1
+  },
+  "toe.1m": {
+   "mandoc: STYLE: lower case character in document title: TH toe": 1,
+   "pandoc: Skipped '.ft'": 4,
+   "pandoc: Skipped '.na'": 3
+  },
+  "tput.1": {
+   "mandoc: STYLE: input text line longer than 80 bytes: initialize a termina...": 1,
+   "mandoc: STYLE: lower case character in document title: TH tput": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '.ne'": 2,
+   "pandoc: Skipped '.RS'": 1,
+   "pandoc: Skipped '.RE'": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "tset.1": {
+   "mandoc: STYLE: lower case character in document title: TH tset": 1
+  },
+  "user_caps.5": {
+   "mandoc: STYLE: lower case character in document title: TH user_caps": 1,
+   "mandoc: STYLE: fill mode already disabled, skipping: nf": 1,
+   "mandoc: STYLE: fill mode already enabled, skipping: EE": 1,
+   "pandoc: Skipped '.nf'": 1,
+   "pandoc: Skipped '.IP'": 1,
+   "pandoc: Skipped '.fi'": 1
+  },
+  "wresize.3x": {
+   "mandoc: STYLE: lower case character in document title: TH wresize": 1
+  }
+ }
+}
