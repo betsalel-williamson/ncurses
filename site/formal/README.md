@@ -66,3 +66,14 @@ with an xterm entry compiled from `misc/terminfo.src`:
 ```
 
 `evidence/define-key/` holds its output with ncurses 6.6.20261107.
+
+## key_defined(3X)
+
+`key-defined-check.c` asks key_defined about bound strings, unbound ones, prefixes of bound
+strings, and bound strings with more after them. Run it with the same runner:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst key-defined
+```
+
+`evidence/key-defined/` holds its output with ncurses 6.6.20261107.
