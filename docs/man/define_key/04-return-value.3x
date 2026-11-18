@@ -4,12 +4,35 @@ returns
 .B ERR
 if
 .bP
+no screen has been initialized,
+.bP
 .I definition
 is
 .I NULL
 and
 .I key-code
 is nonpositive,
+.bP
+.I definition
+is
+.I NULL
+and no binding for
+.I key-code
+exists,
+.bP
+.I key-code
+is nonpositive
+and no binding for
+.I definition
+exists,
+.bP
+.I definition
+is an empty string,
+.bP
+.I definition
+is a prefix of a bound string,
+or a bound string is a prefix of
+.IR definition ","
 or
 .bP
 insufficient memory is available to bind
