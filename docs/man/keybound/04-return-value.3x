@@ -12,5 +12,10 @@ returns
 .I NULL
 if
 .I key-code
-is not positive
-or if it does not correspond to a key code definition.
+is not positive,
+if it does not correspond to a key code definition,
+if
+.I count
+is negative or not less than the number of bindings of
+.IR key-code ","
+or if no screen has been initialized.

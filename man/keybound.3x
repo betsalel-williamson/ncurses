@@ -56,17 +56,23 @@ By default,
 such bindings are string capabilities from the
 .I \%term\%info
 database entry corresponding to the terminal type.
-The application can non-destructively and repeatedly
-override such definitions with
+The application can bind more strings to the same
+.I key-code
+with
 \fB\%define_key\fP(3X),
-as if by pushing new definitions onto a stack.
+and each of them yields
+.I key-code
+on input.
 The
 .I count
-parameter accesses the
-.IR n th
-most recently defined binding;
+parameter selects one of these bindings:
 .B 0
-selects the binding that is used on input.
+the first,
+.B 1
+the second,
+and so on,
+in an order that depends on the strings,
+not on the order in which they were defined.
 .SH RETURN VALUE
 If
 .I key-code
@@ -81,8 +87,13 @@ returns
 .I NULL
 if
 .I key-code
-is not positive
-or if it does not correspond to a key code definition.
+is not positive,
+if it does not correspond to a key code definition,
+if
+.I count
+is negative or not less than the number of bindings of
+.IR key-code ","
+or if no screen has been initialized.
 .SH EXTENSIONS
 .B \%keybound
 is an
