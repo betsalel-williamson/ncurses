@@ -1,0 +1,8 @@
+# The manual pages are troff (man macros). Linguist knows most of their extensions, but not
+# terminfo.head and .tail or the shards' section files under every name, so say it outright:
+# GitHub then highlights them as Roff in pull request diffs and file views.
+man/*.[1-9]* linguist-language=Roff
+man/terminfo.head linguist-language=Roff
+man/terminfo.tail linguist-language=Roff
+docs/man/** linguist-language=Roff
+docs/man/stitch.sh -linguist-language

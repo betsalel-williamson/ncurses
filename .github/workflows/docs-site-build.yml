@@ -55,6 +55,24 @@ jobs:
             printf '%-24s man/ %s  stitched %s  %s\n' "$name" "$want" "$got" "$mark"
           done
           docs/man/stitch.sh && git diff --exit-code man/ && exit "$status"
+      - name: Install mandoc and groff
+        # The manual pages' linters. apt's lists on the runner are usually fresh enough; update
+        # them only when the install fails.
+        run: |
+          sudo apt-get install -y -q --no-install-recommends mandoc groff-base \
+            || { sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends mandoc groff-base; }
+      - name: Lint the manual pages' troff
+        # mandoc, groff and pandoc's man reader on every page, against the messages each page has
+        # today (site/data/man-lint-baseline.json). Fails on a new message, and on a fixed one the
+        # baseline still lists.
+        run: node site/scripts/man-check.mjs lint
+      - name: Show the manual pages' rendered changes
+        # Each changed page as the site renders it, before and after, as a word diff in the job
+        # summary, for reviewers to read in place of the troff.
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: node site/scripts/man-check.mjs diff "$BASE"
       - name: Require an errata entry when a pull request changes the docs
         # docs/appendix/errata.csv is the running list of every change this edition makes. A pull
         # request that changes a shard adds its rows there, or carries the no-errata label.
