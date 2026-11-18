@@ -108,13 +108,102 @@ export function resolveConditionals(text) {
  * Rewrite troff that means the same but that pandoc's man reader can't parse: conditionals
  * (resolveConditionals), a line ending in
  * a backslash continues on the next line (it stopped pandoc inside a table in curs_terminfo),
- * and a table's format lines can name a two-letter font as f(BI), which pandoc reads only as
- * fBI (infocmp).
+ * a table's format lines can name a two-letter font as f(BI), which pandoc reads only as
+ * fBI (infocmp), tables pandoc drops whole (tablesForPandoc), and point-size changes (\\s-1),
+ * which pandoc skips with a warning and which a web page sets in its own type.
  */
 export function forPandoc(text) {
-  return resolveConditionals(text)
+  return tablesForPandoc(expandStrings(resolveConditionals(text)))
     .replace(/(^|[^\\])\\\n/g, '$1')
-    .replace(/(^\.TS\n(?:.*;\n)?)([\s\S]*?\.\n)/gm, (m, head, format) => head + format.replace(/f\((..)\)/g, 'f$1'));
+    .replace(/(^\.TS\n(?:.*;\n)?)([\s\S]*?\.\n)/gm, (m, head, format) => head + format.replace(/f\((..)\)/g, 'f$1'))
+    .replace(/(?<!\\)\\s(?:[-+]?\(\d\d|[-+]?\[\d+\]|[-+]\d|[1-3]?\d)/g, '');
+}
+
+/**
+ * Replace each use of a string the page defines (\\*x, \\*(xx, \\*[name]) with its value, as
+ * defined by the last .ds before it. pandoc expands strings in running text but not inside a
+ * table, so curs_addch's table lost ACS_DEGREE's ' and ACS_BULLET's ~. A string the page
+ * doesn't define is left for pandoc.
+ */
+export function expandStrings(text) {
+  const defs = new Map();
+  return text
+    .split('\n')
+    .map((line) => {
+      const d = /^\.\s*ds\s+(\S+)\s?(.*)$/.exec(line);
+      if (d) {
+        defs.set(d[1], d[2].replace(/\\".*$/, '').replace(/^\s*"?/, '').trimEnd());
+        return line;
+      }
+      if (line.startsWith('.\\"')) return line;
+      return line.replace(/(?<!\\)\\\*(?:\[([^\]]+)\]|\((..)|(.))/g, (m, a, b, c) => defs.get(a ?? b ?? c) ?? m);
+    })
+    .join('\n');
+}
+
+/**
+ * Rewrite the tables pandoc's man reader drops whole (it prints "TABLE" in their place) into
+ * tables or blocks it reads:
+ * - A header that spans columns (S), in one row or several (captoinfo, curs_attr, terminfo's
+ *   colour table): pandoc reads one header row without spans, so the rows become one, each
+ *   column's label followed by the upper rows' labels over it in parentheses ("Obsolete
+ *   (termcap Code)"), and a spanned column of the last row gets an empty label.
+ * - A header stacked over rows without spans (curs_add_wch, curs_addch: "Unicode" over
+ *   "Default"): each column's labels become the lines of one cell, which man-inlines.lua writes
+ *   with <br>, so the site shows the header on two lines as the printed page does.
+ * - A table of one column with no tabs in it, used to keep preformatted lines together (term(5)'s
+ *   hex dump): it becomes an example block (.EX/.EE), which pandoc shows as code.
+ * Any other table is left as it was.
+ */
+export function tablesForPandoc(text) {
+  return text.replace(/^\.TS\n([\s\S]*?)^\.TE$/gm, (whole, body) => {
+    const lines = body.replace(/\n$/, '').split('\n');
+    let i = 0;
+    if (lines[0]?.trim().endsWith(';')) i = 1;
+    const format = [];
+    while (i < lines.length) {
+      const l = lines[i++];
+      format.push(l.replace(/\.\s*$/, ''));
+      if (/\.\s*$/.test(l)) break;
+    }
+    const data = lines.slice(i);
+    const specs = (f) => f.trim().split(/\s+/).filter(Boolean);
+    if (format.length === 1 && specs(format[0]).length === 1 && data.every((l) => !l.includes('\t')))
+      return `.EX\n${data.join('\n')}\n.EE`;
+    const rule = data.findIndex((l) => /^[_=]$/.test(l.trim()));
+    const spans = (r) => specs(format[r] ?? '').some((s) => /^[sS]/.test(s));
+    if (rule < 1 || rule >= format.length || (rule === 1 && !spans(0))) return whole;
+    const cols = specs(format[format.length - 1]).length;
+    // Each header row's label for every column.
+    const labels = data.slice(0, rule).map((row, r) => {
+      const cells = row.split('\t').map((c) => (c.trim() === '\\&' ? '' : c.trim()));
+      const out = [];
+      let k = 0;
+      // A spanned column (S) shares the label before it; in the last header row it is left empty.
+      const last = r === rule - 1;
+      for (const s of specs(format[r]).slice(0, cols)) out.push(/^[sS]/.test(s) ? (last ? '' : out[out.length - 1] ?? '') : cells[k++] ?? '');
+      return out;
+    });
+    // Without spans each upper label belongs to the one column under it, as one phrase read top
+    // to bottom ("Unicode" over "Default"): the cell keeps its rows, as lines of one text block.
+    // With spans an upper label groups the columns under it: "Obsolete (termcap Code)".
+    const stacked = rule > 1 && !format.slice(0, rule).some((f) => specs(f).some((s) => /^[sS]/.test(s)));
+    const header = Array.from({ length: cols }, (_, c) => {
+      const own = labels[labels.length - 1][c] ?? '';
+      // Every cell keeps all its rows, an empty one too, so each label sits on the bottom line.
+      if (stacked) {
+        const rows = labels.map((l) => l[c] ?? '');
+        return `T{\n${rows.map((r) => r || '\\&').join('\n.br\n')}\nT}`;
+      }
+      const over = [...new Set(labels.slice(0, -1).map((l) => l[c]).filter(Boolean))].join(' ');
+      return over ? `${own} (${over})`.trim() : own;
+    });
+    // The header row's format, with each span (S) made a plain column, since its label is now empty.
+    const rows = [...format.slice(rule - 1, -1), format[format.length - 1]];
+    rows[0] = specs(rows[0]).map((s) => (/^[sS]/.test(s) ? 'L' : s)).join(' ');
+    rows[rows.length - 1] += '.';
+    return ['.TS', ...lines.slice(0, lines[0]?.trim().endsWith(';') ? 1 : 0), ...rows, header.join('\t'), ...data.slice(rule), '.TE'].join('\n');
+  });
 }
 
 /** The manual page sources in man/, plus terminfo.5, which man/MKterminfo.sh builds, as {file, text}. */

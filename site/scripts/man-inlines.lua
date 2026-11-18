@@ -69,4 +69,11 @@ local function html_tags(inlines)
   return out
 end
 
-return { { Strong = tidy, Emph = tidy }, { Inlines = html_tags } }
+-- A line break inside a table cell (a header stacked over two rows, see tablesForPandoc in
+-- man-render.mjs) as a <br> tag: a GFM table can't hold a line break, and pandoc would write the
+-- whole table as HTML instead, out of reach of the site's markdown link rewriting.
+local function table_breaks(tbl)
+  return pandoc.walk_block(tbl, { LineBreak = function() return pandoc.RawInline('html', '<br>') end })
+end
+
+return { { Strong = tidy, Emph = tidy }, { Inlines = html_tags }, { Table = table_breaks } }
