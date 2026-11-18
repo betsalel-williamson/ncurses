@@ -9,6 +9,7 @@ The manual pages and guides are moving into Merlon Docs shards under `docs/`. Th
 - Man page shards: `docs/man/<page>.<ext>` is the skeleton of `.so` lines, and `docs/man/<name>/NN-<section>.<ext>` holds the sections. `sh docs/man/stitch.sh` rebuilds `man/`, and CI fails when `man/` doesn't match.
 - Before a man page change: `node site/scripts/man-check.mjs lint`, then `node site/scripts/man-check.mjs diff origin/master` to read the rendered word diff, and `cd site && node --test tests/*.test.mjs`.
 - Check every statement against the code, and cite the file and line.
+- A page that holds up gets no change, and no filler, such as a failure case that nearly every curses function shares. Commit its check output as evidence, and record the review in `site/data/migration-units.csv` with the evidence path in the `evidence` column.
 
 ## Pull requests
 

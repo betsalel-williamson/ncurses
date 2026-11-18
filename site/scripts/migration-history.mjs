@@ -11,8 +11,9 @@
  *   whose path exists (sharded), and those whose review pull request has merged by then (reviewed).
  * - Errata: the rows in docs/appendix/errata.csv, and how many correct errors in the original text.
  *
- * verify also checks each unit's review claim: the review pull request merged, it changed files
- * under the unit's path, and errata.csv records corrections it made there.
+ * verify also checks each unit's review claim: the review pull request merged, and either it changed
+ * files under the unit's path and errata.csv records those changes, or the review found nothing to
+ * change, and the unit's `evidence` path names the check output that pull request added.
  *
  * The agent's token, cost and time figures (site/data/migration.json) come from its own usage
  * report and can't be recomputed from the repository, so they aren't part of this history.
@@ -98,21 +99,36 @@ export function rowAt(merge, earlier, units) {
   return { pr: merge.pr, merge: merge.commit.slice(0, 12), mergedAt: merge.date, ...counts({ files, errata: show(merge.commit, 'docs/appendix/errata.csv'), units, mergedPrs }) };
 }
 
+/**
+ * The problems with one unit's review claim, given the files its pull request changed and the
+ * errata rows. A review that changed the unit needs an errata row from that pull request under the
+ * unit's path. A review that found nothing to change leaves the unit alone, and the unit's
+ * `evidence` names the check output that pull request added instead.
+ */
+export function unitProblems(unit, changed, rows) {
+  const at = `${UNITS}: ${unit.unit}, reviewed in #${unit.reviewed_pr}`;
+  if (!present(changed, unit.path)) {
+    if (!unit.evidence) return [`${at}: that pull request changed nothing under ${unit.path}, and the unit names no evidence`];
+    if (!present(changed, unit.evidence)) return [`${at}: that pull request changed nothing under ${unit.path} or its evidence ${unit.evidence}`];
+    return [];
+  }
+  if (!rows.some((r) => r.pr === String(unit.reviewed_pr) && present([r.where.replace(/\/$/, '')], unit.path)))
+    return [`${at}: errata.csv has no row from that pull request under ${unit.path}`];
+  return [];
+}
+
 /** Problems with the units' review claims, checked against the review pull requests' merges. */
 export function checkUnits(units, history) {
   const problems = [];
   const byPr = new Map(history.map((m) => [m.pr, m]));
+  // errata.csv came in with #6, and its rows for earlier pull requests were added then, so the
+  // rows are read from HEAD. The errata check already requires each row's commit to be in history.
+  const rows = table(readFileSync(join(repo, 'docs/appendix/errata.csv'), 'utf8'));
   for (const u of units.filter((x) => x.reviewed_pr)) {
     const m = byPr.get(u.reviewed_pr);
     if (!m) continue; // not merged yet: it counts as reviewed once it is
-    const at = `${UNITS}: ${u.unit}, reviewed in #${u.reviewed_pr}`;
     const changed = git('diff', '--name-only', `${m.commit}^1`, m.commit).split('\n');
-    if (!present(changed, u.path)) problems.push(`${at}: that pull request changed nothing under ${u.path}`);
-    // errata.csv came in with #6, and its rows for earlier pull requests were added then, so the
-    // rows are read from HEAD. The errata check already requires each row's commit to be in history.
-    const rows = table(readFileSync(join(repo, 'docs/appendix/errata.csv'), 'utf8'));
-    if (!rows.some((r) => r.pr === String(u.reviewed_pr) && present([r.where.replace(/\/$/, '')], u.path)))
-      problems.push(`${at}: errata.csv has no row from that pull request under ${u.path}`);
+    problems.push(...unitProblems(u, changed, rows));
   }
   return problems;
 }
