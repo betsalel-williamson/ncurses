@@ -118,7 +118,7 @@ The examples' ncurses is configured with `--disable-database --with-fallbacks=xt
 
 After the ncurses build, `build-examples.mjs` writes `public/examples/terminfo.json` from that build's own output:
 
-- The terminfo directory is `TERMINFO` in the build's `ncurses/Makefile`. With no `--prefix`, configure uses `/usr/local` for an Emscripten host, so the directory is `/usr/local/share/terminfo`, not `/usr/share/terminfo`. The library itself has no path built in, because `--disable-database` leaves `TERMINFO` undefined in `ncurses_cfg.h`.
+- The terminfo directory is `TERMINFO` in the build's `ncurses/Makefile`. The build is configured with `--prefix=/usr`, as Linux distributions build ncurses, so the directory is `/usr/share/terminfo`, the path the manual pages show. Without it, configure would pick `/usr/local` for an Emscripten host. The library itself has no path built in, because `--disable-database` leaves `TERMINFO` undefined in `ncurses_cfg.h`.
 - The entry's folder is its first letter (`x/xterm-256color`) when `ncurses_cfg.h` defines `MIXEDCASE_FILENAMES`, and its hex code (`78/`) otherwise.
 - Each fallback entry is compiled from `misc/terminfo.src` with the `tic` and `infocmp` the Makefile names, as `MKfallback.sh` does for the library. That gives the entry's size and its `infocmp -x` text.
 

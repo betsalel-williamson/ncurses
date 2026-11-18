@@ -2,7 +2,7 @@
  * How the examples' ncurses is configured, and what that build does about the terminal
  * database. build-examples.mjs configures ncurses with NCURSES_CONFIGURE and then writes
  * public/examples/terminfo.json from the build's own output, so the pretend shell can show
- * /usr/local/share/terminfo (or wherever that build points) as the build has it.
+ * /usr/share/terminfo (or wherever that build points) as the build has it.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
@@ -11,6 +11,9 @@ import { join } from 'node:path';
 
 /** The configure options for the WebAssembly ncurses build, after --host and --build. */
 export const NCURSES_CONFIGURE = [
+  // configure picks /usr/local for an Emscripten host; /usr is what Linux distributions use,
+  // and what the manual pages' paths (@TERMINFO@) are filled with.
+  '--prefix=/usr',
   '--with-build-cc=cc',
   '--without-shared', '--without-cxx', '--without-cxx-binding', '--without-ada',
   '--without-progs', '--without-tests', '--without-manpages', '--without-debug',

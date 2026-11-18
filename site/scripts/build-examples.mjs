@@ -115,7 +115,7 @@ if (!existsSync(join(wasmBuild, 'lib/libncursesw.a'))) {
 const out = join(site, 'public/examples');
 mkdirSync(out, { recursive: true });
 // What this build of ncurses does about the terminal database, from its own Makefile and
-// ncurses_cfg.h, for the pretend shell's /usr/local/share/terminfo and infocmp (terminfo.mjs).
+// ncurses_cfg.h, for the pretend shell's /usr/share/terminfo and infocmp (terminfo.mjs).
 writeFileSync(join(out, 'terminfo.json'), JSON.stringify(buildFacts(wasmBuild, NCURSES_CONFIGURE, repo), null, 2));
 const src = join(site, '.generated/examples');
 mkdirSync(src, { recursive: true });
