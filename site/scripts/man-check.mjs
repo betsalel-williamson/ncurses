@@ -162,7 +162,7 @@ function diff(base) {
       const shards = shardFiles.filter((f) => f.startsWith(`docs/man/${name}/`));
       const a = sections(before.get(file) ?? '');
       const b = sections(after.get(file) ?? '');
-      const headings = [...new Map([...a, ...b].map((s) => [s.heading, s.section])).entries()];
+      const headings = [...new Map([...b, ...a].map((s) => [s.heading, s.section])).entries()];
       const parts = [];
       for (const [h, section] of headings) {
         const d = wordDiff(a.find((s) => s.heading === h)?.text ?? '', b.find((s) => s.heading === h)?.text ?? '');

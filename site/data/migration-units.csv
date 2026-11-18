@@ -18,3 +18,4 @@ Contributor and install docs,Hacker's guide,docs/contributor/hackguide,doc/html/
 Contributor and install docs,Installation,docs/contributor/install,"INSTALL, README, README.MinGW, README.emx",49
 Contributor and install docs,Ada binding,docs/contributor/ada,"doc/html/Ada95.html, Ada95/README, Ada95/samples/README",50
 Contributor and install docs,Announcement,docs/contributor/announce,"announce.html.in (source of ANNOUNCE and doc/html/announce.html)",52
+Manual pages,mitem_visible(3X),docs/man/mitem_visible,man/mitem_visible.3x,78
