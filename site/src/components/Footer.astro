@@ -1,7 +1,7 @@
 ---
-// Starlight's footer, plus the page scripts: runnable guide examples (run-example.ts), the
-// header that hides on scroll (chrome-autohide.ts), the search field's hint (search-hint.ts) and
-// the search pull-down on desktop (search-panel.ts).
+// Starlight's footer, plus the page scripts: runnable guide examples (run-example.ts), the home
+// page's demo terminal (home-terminal.ts), the header that hides on scroll (chrome-autohide.ts),
+// the search field's hint (search-hint.ts) and the search pull-down on desktop (search-panel.ts).
 import Default from '@astrojs/starlight/components/Footer.astro';
 ---
 
@@ -9,6 +9,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
 
 <script>
   import './run-example.ts';
+  import './home-terminal.ts';
   import './chrome-autohide.ts';
   import './search-hint.ts';
   import './search-panel.ts';
@@ -158,6 +159,75 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     flex-basis: 100%;
     font-size: var(--sl-text-xs);
     color: var(--sl-color-gray-3);
+  }
+  /* The home page's demo terminal (home-terminal.ts), in the hero's image slot. Starlight puts
+     that slot above the text in a narrow column and beside it, 25rem wide, on a wide screen; the
+     terminal goes below the text on a phone and takes the larger column beside it once the
+     window is wide enough for 80 columns at a readable size. */
+  .hero > .hero-html:has(.home-terminal) {
+    order: 2;
+    width: 100%;
+    margin: 0;
+  }
+  @media (min-width: 64rem) {
+    .hero:has(> .hero-html .home-terminal:not([hidden])) {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+    }
+    /* The title's column is narrower than Starlight's, so its words are set to fit it. */
+    .hero:has(> .hero-html .home-terminal:not([hidden])) h1 {
+      font-size: clamp(var(--sl-text-3xl), calc(0.25rem + 3.2vw), var(--sl-text-5xl));
+      overflow-wrap: anywhere;
+    }
+  }
+  .home-terminal {
+    width: 100%;
+    min-width: 0;
+  }
+  .home-terminal .home-terminal-scroller {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  /* The frame hugs xterm.js's screen, as under a guide's listing. Stretched to the column, the
+     frame left a strip of the terminal's own background (white in Workstation) beside the screen,
+     since the fitted columns don't fill the column to the pixel. The leftover goes to the frame's
+     left, so its right edge lines up with the page. */
+  .home-terminal .home-terminal-screen {
+    margin-left: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    cursor: text;
+  }
+  /* Until the script runs: a still screen with a cursor, in the terminal's colors and at the
+     terminal's size, so nothing moves when the terminal takes its place. */
+  .home-terminal .home-terminal-screen:has(> .home-terminal-still) {
+    width: 100%;
+  }
+  .home-terminal-still {
+    aspect-ratio: 5 / 3;
+    background: var(--nc-term-bg, #1e1e1e);
+  }
+  /* Text mode's VT323 cells are shorter. */
+  :root[data-style='textmode'] .home-terminal-still {
+    aspect-ratio: 25 / 14;
+  }
+  .home-terminal-cursor {
+    display: block;
+    width: 0.6em;
+    height: 1.1em;
+    font-size: clamp(8px, 1.2vw, 15px);
+    background: var(--nc-term-cursor, #ffffff);
+    animation: home-terminal-blink 1.2s steps(1) infinite;
+  }
+  @keyframes home-terminal-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-terminal-cursor {
+      animation: none;
+    }
   }
   .run-example-flag {
     font-size: var(--sl-text-sm);
