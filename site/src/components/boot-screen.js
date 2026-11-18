@@ -1,8 +1,8 @@
 // The boot screen a runnable example's terminal plays while its WebAssembly build loads
-// (run-example.ts): a CRT's power-on line, a short ncurses boot report naming the program, a
-// progress bar and, on a long boot, a few dated lines of curses history. It is ANSI text written
-// into the same xterm.js terminal, so it shifts no layout, and the terminal is reset before the
-// program's first byte is shown.
+// (run-example.ts, and the home page's terminal in home-terminal.ts): a CRT's power-on line, a
+// short ncurses boot report naming the program, a progress bar and, on a long boot, a few dated
+// lines of curses history. It is ANSI text written into the same xterm.js terminal, so it shifts
+// no layout, and the terminal is reset before the program's first byte is shown.
 //
 // A reader's first run plays it slowly (FIRST_MS), as a bit of theatre; later runs play the same
 // sequence faster (AGAIN_MS) but still slowly enough to see rather than flash. The program's output

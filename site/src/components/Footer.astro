@@ -188,48 +188,46 @@ import Default from '@astrojs/starlight/components/Footer.astro';
     padding: 0;
     overflow: hidden;
   }
+  /* The frame hugs xterm.js's screen, as under a guide's listing. Stretched to the column, the
+     frame left a strip of the terminal's own background (white in Workstation) beside the screen,
+     since the fitted columns don't fill the column to the pixel. The leftover goes to the frame's
+     left, so its right edge lines up with the page. */
   .home-terminal .home-terminal-screen {
-    width: auto;
+    margin-left: auto;
+    max-width: 100%;
+    box-sizing: border-box;
     cursor: text;
   }
-  /* The room the terminal takes before it is made, so nothing moves when it is. */
-  .home-terminal .home-terminal-screen:empty {
-    aspect-ratio: 80 / 25;
+  /* Until the script runs: a still screen with a cursor, in the terminal's colors and at the
+     terminal's size, so nothing moves when the terminal takes its place. */
+  .home-terminal .home-terminal-screen:has(> .home-terminal-still) {
+    width: 100%;
   }
-  .home-terminal-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 0.75rem;
-    margin-top: 0.75rem;
+  .home-terminal-still {
+    aspect-ratio: 5 / 3;
+    background: var(--nc-term-bg, #1e1e1e);
   }
-  .home-terminal-bar > * {
-    margin: 0;
+  /* Text mode's VT323 cells are shorter. */
+  :root[data-style='textmode'] .home-terminal-still {
+    aspect-ratio: 25 / 14;
   }
-  .home-terminal-play {
-    font: inherit;
-    font-size: var(--sl-text-sm);
-    box-sizing: border-box;
-    height: 2.25rem;
-    padding: 0 0.8rem;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    white-space: nowrap;
-    background: var(--nc-key-bg, transparent);
-    color: var(--nc-key-fg, var(--sl-color-white));
-    border: var(--nc-key-border, 1px solid);
-    border-color: var(--nc-key-border-color, var(--sl-color-gray-3));
-    box-shadow: var(--nc-key-shadow, none);
+  .home-terminal-cursor {
+    display: block;
+    width: 0.6em;
+    height: 1.1em;
+    font-size: clamp(8px, 1.2vw, 15px);
+    background: var(--nc-term-cursor, #ffffff);
+    animation: home-terminal-blink 1.2s steps(1) infinite;
   }
-  .home-terminal-play:disabled {
-    opacity: 0.6;
-    cursor: default;
+  @keyframes home-terminal-blink {
+    50% {
+      opacity: 0;
+    }
   }
-  .home-terminal-hint {
-    flex: 1 1 14rem;
-    font-size: var(--sl-text-sm);
-    line-height: 1.4;
-    color: var(--sl-color-gray-2);
+  @media (prefers-reduced-motion: reduce) {
+    .home-terminal-cursor {
+      animation: none;
+    }
   }
   .run-example-flag {
     font-size: var(--sl-text-sm);

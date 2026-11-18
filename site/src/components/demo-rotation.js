@@ -12,7 +12,7 @@
 // - 'off': nothing has started yet, or no program would load.
 // - 'auto': the demos rotate.
 // - 'manual': the reader took the terminal over. The program on screen keeps running and the
-//   rotation does nothing more until play() is called again.
+//   rotation does nothing more; it does not start again (the home page starts it once per load).
 // While the terminal is out of view (setVisible(false)), an automatic rotation quits the program
 // on screen and starts no other; back in view, it goes on with the next one.
 
@@ -91,15 +91,17 @@ export function createRotation({
   };
 
   return {
-    /** Starts or restarts the rotation. A program already running gets the full dwell from now. */
+    /**
+     * Starts the rotation, unless the reader has already taken over. A program already running
+     * gets the full dwell from now.
+     */
     play() {
-      if (mode === 'auto') return;
+      if (mode !== 'off') return;
       mode = 'auto';
-      disarm();
       proceed(0);
       changed();
     },
-    /** The reader takes over: the program on screen keeps running, and nothing more is started. */
+    /** The reader takes over, for good: the program on screen keeps running, and nothing more is started. */
     stop() {
       if (mode === 'manual') return;
       disarm();

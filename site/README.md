@@ -69,19 +69,21 @@ Every complete C program in the guides (a listing with a `main()`) gets a "Run t
 
 ### The home page's demo terminal
 
-The front page has a terminal in its hero, beside the title on a wide screen and below the buttons on a phone. It plays ncurses's own test programs from `/usr/games` in turn: `firework`, `xmas` (the season's greetings), `rain` and `worm`. These four animate on their own and quit on q. Each one runs for 10 seconds. Before each program, the terminal types `clear` and the program's path at the shell's prompt, so the reader sees what is running. The terminal is 80×24 everywhere, because `xmas` draws its tree out to column 80, and it shrinks its font to fit the column.
+The front page has a terminal in its hero, beside the title on a wide screen and below the buttons on a phone. It plays ncurses's own test programs from `/usr/games` in turn: `firework`, `xmas` (the season's greetings), `rain` and `worm`. These four animate on their own and quit on q. Each one runs for 10 seconds. Before each program after the first, the terminal types `clear` and the program's path at the shell's prompt, so the reader sees what is running. The terminal is 80×24 everywhere, because `xmas` draws its tree out to column 80, and it shrinks its font to fit the column. Its frame hugs xterm.js's screen, as under a guide's listing, so no strip of the terminal's background shows beside the screen when the fitted columns fall short of the column.
 
-A click, a tap, a key or focus in the terminal stops the rotation. The program on the screen keeps running and belongs to the reader. Its quit key brings back the pretend shell, which works as it does under a guide's listing. The Pause demos button stops the rotation from the keyboard, and Play demos starts it again. Shift+Tab leaves the terminal, since Tab completes names in the shell.
+Until its script runs, the markup shows a still screen with a blinking cursor, in the terminal's colors and at its size, so the page doesn't move when the terminal takes its place. The terminal is made only when the page scrolls near it. When it comes into view, it plays the boot screen that a guide's first Run plays, while the first demo's WebAssembly downloads behind it. The first demo shows once the boot has played and the program has loaded, whichever is later, and its 10 seconds count from then.
 
-The terminal is made only when the page scrolls near it. No program's WebAssembly loads until the terminal is in view. When the terminal leaves the view, or the tab is hidden, the running demo quits and the rotation waits. With reduced motion, the terminal shows a still prompt, and nothing plays until the reader presses Play demos. Without the games' builds, as in a local build without `emcc`, the terminal is hidden and the hero keeps its usual layout.
+A click, a tap, a key or focus in the terminal stops the rotation for good. The program on the screen keeps running and belongs to the reader. Its quit key brings back the pretend shell, which works as it does under a guide's listing, with a line on `help` and `ls /usr/games`. The rotation starts again only when the page is loaded again. Shift+Tab leaves the terminal, since Tab completes names in the shell. Nothing shows outside the terminal: its state is in a visually hidden description and a live region for screen readers.
+
+When the terminal leaves the view, or the tab is hidden, the running demo quits and the rotation waits. With reduced motion, the terminal shows a still prompt with a line saying where the programs are, and loads no WebAssembly until the reader runs one. Without the games' builds, as in a local build without `emcc`, the terminal is hidden and the hero keeps its usual layout.
 
 | File | What it does |
 | --- | --- |
-| `src/content/docs/index.mdx` | The terminal's markup, in the hero's image slot. |
-| `src/components/home-terminal.ts` | Makes the terminal and drives it: the rotation, the takeover, the line under it and the visibility checks. |
+| `src/content/docs/index.mdx` | The terminal's markup, in the hero's image slot, with the still screen it shows before its script runs. |
+| `src/components/home-terminal.ts` | Makes the terminal and drives it: the boot, the rotation, the takeover, the screen reader's description and the visibility checks. |
 | `src/components/demo-rotation.js` | The order and timing of the demos, with the timers passed in (tests/demo-rotation.test.mjs). |
 | `src/components/terminal-runner.ts` | The terminal, program loader and shell that the home page shares with the Run buttons. |
-| `src/components/Footer.astro` | The layout: the terminal's column in the hero, and its button and hint. |
+| `src/components/Footer.astro` | The layout: the terminal's column in the hero, its frame and the still screen. |
 
 ### The terminal bridge waits on events
 

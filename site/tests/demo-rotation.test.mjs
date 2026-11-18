@@ -97,23 +97,7 @@ test('stop() leaves the program running and starts nothing more', () => {
   assert.equal(r.state.running, null);
 });
 
-test('play() after stop() gives a running program a fresh dwell, then moves on', () => {
-  const { r, log, advance } = rig(['a', 'b']);
-  r.play();
-  advance(0);
-  r.started('a');
-  advance(9_000);
-  r.stop();
-  r.play();
-  advance(9_999);
-  assert.ok(!log.includes('quit'));
-  advance(1);
-  r.ended();
-  advance(500);
-  assert.deepEqual(log, ['launch a', 'quit', 'launch b']);
-});
-
-test('play() at an idle prompt launches the next demo at once', () => {
+test('stop() is for good: play() does not start the rotation again', () => {
   const { r, log, advance } = rig(['a', 'b']);
   r.play();
   advance(0);
@@ -121,25 +105,40 @@ test('play() at an idle prompt launches the next demo at once', () => {
   r.stop();
   r.ended(); // the reader quit it
   r.play();
-  advance(0);
-  // The reader has seen a, so the rotation goes on with b.
-  assert.deepEqual(log, ['launch a', 'launch b']);
+  advance(60_000);
+  assert.deepEqual(log, ['launch a']);
+  assert.equal(r.state.mode, 'manual');
 });
 
-test("a program the reader started isn't counted as a demo", () => {
+test('taken over before it starts (during the boot screen), the rotation never plays', () => {
+  const { r, log, advance } = rig(['a', 'b']);
+  r.stop();
+  r.started('a'); // the first demo, launched behind the boot screen
+  r.play();
+  advance(60_000);
+  assert.deepEqual(log, []);
+  assert.equal(r.state.running, 'a');
+});
+
+test('play() with the first demo already running gives it the dwell, then moves on', () => {
+  const { r, log, advance } = rig(['a', 'b']);
+  r.started('a'); // launched behind the boot screen, not by the rotation
+  advance(30_000);
+  r.play();
+  advance(9_999);
+  assert.deepEqual(log, []);
+  advance(1);
+  assert.deepEqual(log, ['quit']);
+  r.ended();
+  advance(500);
+  assert.deepEqual(log, ['quit', 'launch b']);
+});
+
+test('play() at an idle prompt launches the first demo at once', () => {
   const { r, log, advance } = rig(['a', 'b']);
   r.play();
   advance(0);
-  r.started('a');
-  r.stop();
-  r.ended();
-  r.started('worm');
-  r.play();
-  advance(10_000);
-  assert.equal(log.at(-1), 'quit');
-  r.ended();
-  advance(500);
-  assert.equal(log.at(-1), 'launch b');
+  assert.deepEqual(log, ['launch a']);
 });
 
 test('out of view, the running demo quits and no other starts until it is back', () => {

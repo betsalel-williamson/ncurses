@@ -121,7 +121,10 @@ export type RunnerOptions = {
   fitChoice?: (offered: boolean | null) => boolean;
   /** After anything the controls around the terminal show changes: a program, a shell, power. */
   onChange?: () => void;
-  /** A program has loaded and reads keys (its pty is ready), and when it has ended. */
+  /**
+   * A program has loaded and reads keys (its pty is ready), or, behind the boot screen, once the
+   * boot has played and the program's screen shows; and when it has ended.
+   */
   onStart?: (name: string) => void;
   onEnd?: (name: string, code: number) => void;
 };
@@ -281,7 +284,11 @@ export function createRunner(o: RunnerOptions) {
       const show = (bytes: Uint8Array) => {
         if (!live()) return;
         if (!shown) {
-          if (booting) shown = booting.release().then(() => scroller.removeAttribute('aria-busy'));
+          if (booting)
+            shown = booting.release().then(() => {
+              scroller.removeAttribute('aria-busy');
+              if (live()) o.onStart?.(example);
+            });
           else {
             t.write('\r\x1b[2K');
             shown = Promise.resolve();
@@ -361,7 +368,8 @@ export function createRunner(o: RunnerOptions) {
                 // The program asks the terminal for its size (TIOCGWINSZ), so a resize can change it.
                 [m.pty.cols, m.pty.rows] = o.size();
                 m.pty.write = show;
-                if (live()) o.onStart?.(example);
+                // Behind the boot screen, the program starts for the page once the boot has played.
+                if (live() && !booting) o.onStart?.(example);
               },
             ],
             onExit: (code: number) => done(`${label} exited (${code}).`, code),
