@@ -238,7 +238,7 @@ const tokens = s.inputTokens + s.outputTokens + s.cacheReadTokens + s.cacheWrite
     <div><dt>Tokens</dt><dd>{compact.format(tokens)}</dd><dd class="nc-stat-note">{compact.format(s.outputTokens)} output, {compact.format(s.inputTokens)} input, {compact.format(s.cacheReadTokens)} read from the prompt cache, {compact.format(s.cacheWriteTokens)} written to it</dd></div>
     <div><dt>API cost*</dt><dd>${n.format(Math.round(s.costUsd))}</dd><dd class="nc-stat-note">At list prices, as the session reports it. *Not what was paid: the work ran on a flat-rate Claude subscription that includes this usage.</dd></div>
     <div><dt>Wall time</dt><dd>{days(elapsed)}</dd><dd class="nc-stat-note">From the first request to {date(s.asOf)}</dd></div>
-    <div><dt>Agent working time</dt><dd>{hours(s.agentActiveSeconds)}</dd><dd class="nc-stat-note">Gaps of 5 minutes or less between the agent's steps; waits for CI and for the reviewer aren't counted</dd></div>
+    <div><dt>Agent working time</dt><dd>{hours(s.agentActiveSeconds)}</dd><dd class="nc-stat-note">Gaps of 5 minutes or less between the agent's steps, its subagents' included; waits for CI and for the reviewer aren't counted</dd></div>
     <div><dt>Reviewer time</dt><dd>{hours(s.reviewerSeconds)}</dd><dd class="nc-stat-note">{s.reviewerMessages} messages; gaps of 15 minutes or less between them, so reading time is undercounted</dd></div>
     {merged !== undefined && <div><dt>Pull requests merged</dt><dd>{merged}</dd><dd class="nc-stat-note">Each one reviewed and merged by Betsalel Williamson</dd></div>}
     <div><dt>Errata recorded</dt><dd>{errata}</dd><dd class="nc-stat-note">{fixed} errors in the original text, each checked against the library; see <a href="appendix/">Errata</a></dd></div>

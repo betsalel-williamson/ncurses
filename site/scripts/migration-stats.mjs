@@ -6,7 +6,8 @@
  *   session API's get_session response (external_metadata.usage), with when it was fetched.
  * - site/data/session/daily.csv: one line per UTC day of the session, totalled from the transcript:
  *   the day's first and last event, how many events, the agent's and the reviewer's active
- *   seconds, and the reviewer's messages. No message text, and a line a day rather than a line
+ *   seconds, and the reviewer's messages. The agent's events include its subagents'
+ *   (transcriptFiles). No message text, and a line a day rather than a line
  *   an event, so the file stays small.
  *
  *   node site/scripts/migration-stats.mjs verify                  # recompute; fail if migration.json differs (CI)
@@ -28,7 +29,7 @@
  * - A gap belongs to the UTC day of the event that ends it.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -70,6 +71,17 @@ export function timeline(lines) {
     if (e.timestamp) events.push({ time: e.timestamp, actor: fromReviewer(e) ? 'reviewer' : 'agent' });
   }
   return events.sort((a, b) => Date.parse(a.time) - Date.parse(b.time));
+}
+
+/**
+ * A session's transcript files: the main one, then each subagent's, which Claude Code keeps in
+ * <transcript without .jsonl>/subagents/*.jsonl. Subagents work while the main thread waits, so
+ * agent time counts their events too; time when several work at once counts once.
+ */
+export function transcriptFiles(transcript) {
+  const dir = join(transcript.replace(/\.jsonl$/, ''), 'subagents');
+  const subagents = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.jsonl')).sort().map((f) => join(dir, f)) : [];
+  return [transcript, ...subagents];
 }
 
 /** Seconds of each kind of gap, per UTC day of the event that ends it. */
@@ -155,9 +167,10 @@ function main([cmd, file, transcript]) {
     return main(['verify']);
   }
   if (cmd === 'daily' && file) {
-    const days = daily(timeline(readFileSync(file, 'utf8').split('\n')));
+    const files = transcriptFiles(file);
+    const days = daily(timeline(files.flatMap((f) => readFileSync(f, 'utf8').split('\n'))));
     writeFileSync(join(repo, DAILY), dailyCsv(days));
-    console.log(`${DAILY}: ${days.length} days`);
+    console.log(`${DAILY}: ${days.length} days, from ${files.length} transcript(s): the main one and ${files.length - 1} subagent(s)`);
   } else if (cmd === 'usage' && file) {
     const usage = usageFrom(JSON.parse(readFileSync(file, 'utf8')), new Date().toISOString().replace(/\.\d+Z$/, 'Z'));
     writeFileSync(join(repo, USAGE), `${JSON.stringify(usage, null, 2)}\n`);

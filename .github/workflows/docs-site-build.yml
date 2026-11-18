@@ -125,10 +125,10 @@ jobs:
       - name: Key the WebAssembly ncurses build by its sources
         id: ncurses-key
         # Every tracked file outside the docs, the site and CI, so a docs change keeps the key,
-        # plus the script that configures the build.
+        # plus the scripts that configure the build (terminfo.mjs holds the configure options).
         run: |
           sources=$(git ls-files -s -- . ':!docs' ':!site' ':!man' ':!.github' | sha256sum | cut -c1-16)
-          script=$(sha256sum site/scripts/build-examples.mjs | cut -c1-16)
+          script=$(cat site/scripts/build-examples.mjs site/scripts/terminfo.mjs | sha256sum | cut -c1-16)
           echo "key=ncurses-wasm-emsdk-7.0.0-$sources-$script" >> "$GITHUB_OUTPUT"
       - name: Restore the WebAssembly ncurses build
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
@@ -141,7 +141,7 @@ jobs:
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: site/.generated/example-cache
-          key: examples-v1-${{ steps.ncurses-key.outputs.key }}-${{ hashFiles('docs/client-library/**/*.md', 'site/examples/**', 'site/scripts/build-examples.mjs', 'site/scripts/examples.mjs', 'site/scripts/smoke-example.mjs') }}
+          key: examples-v1-${{ steps.ncurses-key.outputs.key }}-${{ hashFiles('docs/client-library/**/*.md', 'site/examples/**', 'site/scripts/build-examples.mjs', 'site/scripts/terminfo.mjs', 'site/scripts/examples.mjs', 'site/scripts/smoke-example.mjs') }}
           restore-keys: |
             examples-v1-${{ steps.ncurses-key.outputs.key }}-
             examples-v1-

@@ -34,7 +34,7 @@ Nothing else from the response is kept: no session or account IDs, no environmen
 
 ## `daily.csv`
 
-One line per UTC day of the session, totalled from the agent's transcript, so the file grows by a line a day rather than a line an event. It holds no message text. The agent writes it from its transcript with:
+One line per UTC day of the session, totalled from the agent's transcript and each of its subagents' transcripts (kept beside it in `<transcript>/subagents/`), so the file grows by a line a day rather than a line an event. It holds no message text. The agent writes it from its transcript with:
 
 ```sh
 node site/scripts/migration-stats.mjs daily transcript.jsonl
@@ -44,8 +44,8 @@ node site/scripts/migration-stats.mjs daily transcript.jsonl
 |---|---|
 | `date` | The UTC day |
 | `first`, `last` | The day's first and last event |
-| `events` | How many events the transcript has that day: messages, the agent's steps, tool results and CI notices |
-| `agentSeconds` | **Agent working time:** the gaps of 5 minutes or less between consecutive events, so waits for CI or the reviewer aren't counted |
+| `events` | How many events the transcripts have that day: messages, the agent's steps, tool results and CI notices |
+| `agentSeconds` | **Agent working time:** the gaps of 5 minutes or less between consecutive events of the agent and its subagents together, so a subagent's work counts while the main thread waits, time when several work at once counts once, and waits for CI or the reviewer aren't counted |
 | `reviewerSeconds` | **Reviewer time:** the gaps of 15 minutes or less between the reviewer's own messages. The reviewer is Betsalel Williamson, who runs this edition, not the ncurses maintainer |
 | `reviewerMessages` | The reviewer's messages |
 

@@ -8,6 +8,10 @@
  *
  * Easter eggs, not in help: ncurses's own test programs live in /usr/games and run by name
  * (worm, rain, …), and vi, nano and emacs open pretend editors (pretend-editors.js).
+ *
+ * The terminfo directory the examples' ncurses was configured for (terminfo.json, written by
+ * build-examples.mjs) holds the entries compiled into the library, so ls, cat and file there say
+ * how that build finds its terminal description, and infocmp prints the entry.
  */
 import { EDITORS, runEditor } from './pretend-editors.js';
 
@@ -22,6 +26,7 @@ export const HELP =
   'Tab completes a name, Up brings back the last command.\r\n' +
   'It also knows pwd, echo, cat, which, history, env, date,\r\n' +
   'uname, whoami, id, hostname, uptime, sleep, man and clear.\r\n' +
+  'infocmp prints the terminal description ncurses has.\r\n' +
   'exit leaves this shell; halt powers the terminal off.\r\n';
 
 /** Names a shell is started by, so system("sh") gets a prompt rather than one command. */
@@ -30,7 +35,7 @@ export const SHELL_NAMES = /^\s*(?:(?:\/usr)?\/bin\/)?(?:sh|bash|ksh|zsh|dash)\s
 /** The commands the shell itself knows, for Tab. */
 export const BUILTINS = [
   'cat', 'cd', 'clear', 'command', 'cp', 'date', 'echo', 'env', 'exit', 'false', 'file', 'groups', 'halt', 'help', 'history',
-  'hostname', 'id', 'logout', 'ls', 'man', 'mkdir', 'mv', 'poweroff', 'printenv', 'pwd', 'reset', 'rm', 'rmdir', 'shutdown',
+  'hostname', 'id', 'infocmp', 'logout', 'ls', 'man', 'mkdir', 'mv', 'poweroff', 'printenv', 'pwd', 'reset', 'rm', 'rmdir', 'shutdown',
   'sleep', 'su', 'sudo', 'touch', 'true', 'tty', 'type', 'uname', 'uptime', 'whoami', 'which',
 ];
 
@@ -86,6 +91,41 @@ export function columns(names, width, paint = (n) => n) {
   return lines;
 }
 
+/**
+ * The rows a line takes on a terminal `width` columns wide: a tab goes to the next stop of 8, a
+ * colour escape takes no room, and a line that doesn't fit wraps.
+ */
+export function height(line, width) {
+  let col = 0;
+  for (const ch of line.replace(/\x1b\[[0-9;]*m/g, '')) col = ch === '\t' ? col + 8 - (col % 8) : col + 1;
+  return Math.max(1, Math.ceil(col / width));
+}
+
+/** Text broken into lines of at most `width` columns, at spaces. */
+export function wrap(text, width) {
+  const lines = [];
+  let line = '';
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    if (line && line.length + 1 + word.length > width) {
+      lines.push(line);
+      line = word;
+    } else line = line ? `${line} ${word}` : word;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/**
+ * What cat shows for a terminfo entry the build has in its library: where the entry really is,
+ * and the configure options that put it there. `facts` is terminfo.json.
+ */
+export function entryNote(entry, facts) {
+  const opts = facts.options.join(' ');
+  return facts.database
+    ? `${entry.name} is compiled into the library as a fallback, and ncurses also reads this directory (${opts}). infocmp ${entry.name} prints it.`
+    : `${entry.name} is not a file in this build: ncurses was configured with ${opts}, so it reads no terminfo database, and ${entry.name} is compiled into the library as a fallback entry. infocmp ${entry.name} prints it.`;
+}
+
 /** The longest start every name shares. */
 export function commonPrefix(names) {
   if (!names.length) return '';
@@ -96,11 +136,21 @@ export function commonPrefix(names) {
 
 /**
  * A shell. `write` sends text to the terminal; `programs()` names the examples it can run, and
- * `games()` the test programs in /usr/games; `launch(name, args)` runs one and resolves with its
- * exit status, or HALT when the terminal powered off while it ran; `cols()` and `rows()` are the
- * terminal's size. Keys go in through `feed`.
+ * `games()` the test programs in /usr/games; `terminfo()` is what build-examples.mjs found about
+ * the build's terminal database (terminfo.json), or null; `launch(name, args)` runs one and
+ * resolves with its exit status, or HALT when the terminal powered off while it ran; `cols()` and
+ * `rows()` are the terminal's size. Keys go in through `feed`.
  */
-export function createShell({ write, programs, games = () => [], launch, cols = () => 80, rows = () => 24, cwd: start = HOME }) {
+export function createShell({
+  write,
+  programs,
+  games = () => [],
+  terminfo = () => null,
+  launch,
+  cols = () => 80,
+  rows = () => 24,
+  cwd: start = HOME,
+}) {
   const queue = [];
   let cwd = start;
   let previous = start;
@@ -126,23 +176,28 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
 
   /**
    * What is at an absolute path: { dir: [entries] }, with a folder's entries ending in /, or
-   * { program } for an example or a game, or null. programs() gives each example's path under
-   * the home directory, such as menus/menu-basics.
+   * { program } for an example or a game, or { entry } for a terminfo entry, or null. programs()
+   * gives each example's path under the home directory, such as menus/menu-basics.
    */
   const node = (path) => {
     const tree = new Map();
     const add = (dir, entry) => (tree.get(dir) ?? tree.set(dir, new Set()).get(dir)).add(entry);
     const files = new Map();
-    for (const p of [...programs().map((p) => `${HOME}/${p}`), ...games().map((g) => `${GAMES_DIR}/${g}`)]) {
+    const place = (p, file) => {
       const parts = p.split('/').filter(Boolean);
       for (let i = 0; i < parts.length; i++) {
         const dir = `/${parts.slice(0, i).join('/')}`;
         add(dir, i === parts.length - 1 ? parts[i] : `${parts[i]}/`);
       }
-      files.set(p, parts.at(-1));
+      files.set(p, file);
+    };
+    for (const p of [...programs().map((p) => `${HOME}/${p}`), ...games().map((g) => `${GAMES_DIR}/${g}`)]) {
+      place(p, { program: p.slice(p.lastIndexOf('/') + 1) });
     }
+    const facts = terminfo();
+    for (const entry of facts?.entries ?? []) place(resolvePath(entry.path, facts.dir), { entry });
     add('/home', 'reader/');
-    if (files.has(path)) return { program: files.get(path) };
+    if (files.has(path)) return files.get(path);
     if (tree.has(path)) return { dir: [...tree.get(path)].sort() };
     if (path === HOME) return { dir: [] };
     return null;
@@ -247,7 +302,14 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     let shown = 0;
     let room = rows() - 1;
     while (shown < lines.length) {
-      for (; room > 0 && shown < lines.length; room--) out(lines[shown++]);
+      // A line wider than the terminal wraps, and takes the rows it wraps onto; each screen
+      // shows at least one line, however long.
+      for (let first = true; shown < lines.length; first = false) {
+        const h = height(lines[shown], cols());
+        if (h > room && !first) break;
+        out(lines[shown++]);
+        room -= h;
+      }
       if (shown >= lines.length) break;
       say(`\x1b[7m--More--(${Math.floor((shown / lines.length) * 100)}%)\x1b[0m`);
       let k;
@@ -277,26 +339,35 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
     }
     // Folders in bold blue and programs in bold green, as ls --color shows them.
     // -F marks folders with / and programs with *.
-    const mark = (e) => (!flags.has('F') ? e.replace(/\/$/, '') : e.endsWith('/') ? e : `${e}*`);
+    // A terminfo entry is a plain file: no mark, no colour, not executable.
+    let dirPath = cwd;
+    const entryAt = (e) => (e.endsWith('/') ? null : node(resolvePath(e, dirPath))?.entry);
+    const mark = (e) => (!flags.has('F') ? e.replace(/\/$/, '') : e.endsWith('/') || entryAt(e) ? e : `${e}*`);
     const colour = (e) => (e.endsWith('/') ? '1;34' : '1;32');
-    const show = (e) => `\x1b[${colour(e)}m${mark(e)}\x1b[0m`;
+    const show = (e) => (entryAt(e) ? mark(e) : `\x1b[${colour(e)}m${mark(e)}\x1b[0m`);
     const long = (e) => {
       const dir = e.endsWith('/');
-      const mode = dir ? 'drwxr-xr-x' : '-rwxr-xr-x';
-      return `${mode} 1 reader reader ${String(dir ? 4096 : 65536).padStart(6)} Nov 17 08:00 ${show(e)}`;
+      const entry = entryAt(e);
+      const mode = dir ? 'drwxr-xr-x' : entry ? '-rw-r--r--' : '-rwxr-xr-x';
+      // The home directory is the reader's; the rest of the file system is root's.
+      const owner = resolvePath(e, dirPath).startsWith(`${HOME}/`) ? 'reader' : 'root';
+      const size = dir ? 4096 : (entry?.bytes ?? 65536);
+      return `${mode} 1 ${owner} ${owner} ${String(size).padStart(6)} Nov 17 08:00 ${show(e)}`;
     };
     let status = 0;
     const lines = [];
     for (const [i, p] of (paths.length ? paths : ['.']).entries()) {
-      const at = node(resolvePath(p, cwd));
+      const full = resolvePath(p, cwd);
+      const at = node(full);
       if (!at) {
         lines.push(`ls: cannot access '${p}': No such file or directory`);
         status = 2;
         continue;
       }
       if (paths.length > 1) lines.push(`${i ? '\n' : ''}${p}:`);
-      const entries = at.program ? [p] : [...(flags.has('a') ? ['./', '../'] : []), ...at.dir];
-      if (flags.has('l')) lines.push(...(at.program ? [] : [`total ${entries.length * 64}`]), ...entries.map(long));
+      dirPath = at.dir ? full : cwd;
+      const entries = at.dir ? [...(flags.has('a') ? ['./', '../'] : []), ...at.dir] : [p];
+      if (flags.has('l')) lines.push(...(at.dir ? [`total ${entries.length * 64}`] : []), ...entries.map(long));
       else if (flags.has('1')) lines.push(...entries.map(show));
       else {
         const byName = new Map(entries.map((e) => [mark(e), e]));
@@ -339,6 +410,10 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
         let status = 0;
         for (const a of args) {
           const at = node(resolvePath(a, cwd));
+          if (at?.entry) {
+            await page(wrap(entryNote(at.entry, terminfo()), cols()));
+            continue;
+          }
           if (!at) out(`cat: ${a}: No such file or directory`);
           else if (at.dir) out(`cat: ${a}: Is a directory`);
           else out(`cat: ${a}: a WebAssembly program, not text (run it: ${a.includes('/') ? a : `./${a}`})`);
@@ -349,9 +424,29 @@ export function createShell({ write, programs, games = () => [], launch, cols = 
       case 'file':
         for (const a of args) {
           const at = node(resolvePath(a, cwd));
-          out(`${a}: ${!at ? 'cannot open (No such file or directory)' : at.dir ? 'directory' : 'WebAssembly (wasm) binary module version 0x1 (MVP)'}`);
+          const what = !at
+            ? 'cannot open (No such file or directory)'
+            : at.dir
+              ? 'directory'
+              : at.entry
+                ? `Compiled terminfo entry "${at.entry.name}", built into the library (${terminfo().options.join(' ')})`
+                : 'WebAssembly (wasm) binary module version 0x1 (MVP)';
+          out(`${a}: ${what}`);
         }
         return 0;
+      case 'infocmp': {
+        // The entry the library has built in, as infocmp prints it; $TERM's with no name given.
+        const name = options(args).rest[0] ?? environ().TERM;
+        const facts = terminfo();
+        const entry = facts?.entries.find((e) => e.name === name);
+        if (!entry?.source) {
+          const have = facts?.entries.map((e) => e.name).join(', ');
+          out(`infocmp: couldn't open terminfo entry ${name}${have ? ` (this build has ${have})` : ''}`);
+          return 1;
+        }
+        await page(entry.source.split('\n'));
+        return 0;
+      }
       case 'which':
       case 'command':
       case 'type': {
