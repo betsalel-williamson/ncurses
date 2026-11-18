@@ -77,3 +77,14 @@ strings, and bound strings with more after them. Run it with the same runner:
 ```
 
 `evidence/key-defined/` holds its output with ncurses 6.6.20261107.
+
+## keybound(3X)
+
+`keybound-check.c` binds several strings to one key code in a known order, reads them back with
+keybound for each count, and feeds them all to wgetch:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst keybound
+```
+
+`evidence/keybound/` holds its output with ncurses 6.6.20261107.
