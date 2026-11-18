@@ -102,3 +102,9 @@ test('tablesForPandoc leaves a table pandoc reads as it was', () => {
 test('forPandoc drops point-size changes but keeps escaped backslashes', () => {
   assert.equal(forPandoc('\\s-1SMALL\\s0 and \\\\s-133'), 'SMALL and \\\\s-133');
 });
+
+test('tablesForPandoc keeps a header stacked without spans as lines of one cell', () => {
+  const src = ['.TS', 'Lb Lb Lb', 'Lb Lb Lb', 'L L L.', '\\&\tUnicode\t\\&', 'Symbol\tDefault\tName', '_', 'a\tb\tc', '.TE'].join('\n');
+  const head = 'T{\n\\&\n.br\nSymbol\nT}\tT{\nUnicode\n.br\nDefault\nT}\tT{\n\\&\n.br\nName\nT}';
+  assert.equal(tablesForPandoc(src), ['.TS', 'Lb Lb Lb', 'L L L.', head, '_', 'a\tb\tc', '.TE'].join('\n'));
+});

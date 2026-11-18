@@ -148,6 +148,9 @@ export function expandStrings(text) {
  *   colour table): pandoc reads one header row without spans, so the rows become one, each
  *   column's label followed by the upper rows' labels over it in parentheses ("Obsolete
  *   (termcap Code)"), and a spanned column of the last row gets an empty label.
+ * - A header stacked over rows without spans (curs_add_wch, curs_addch: "Unicode" over
+ *   "Default"): each column's labels become the lines of one cell, which man-inlines.lua writes
+ *   with <br>, so the site shows the header on two lines as the printed page does.
  * - A table of one column with no tabs in it, used to keep preformatted lines together (term(5)'s
  *   hex dump): it becomes an example block (.EX/.EE), which pandoc shows as code.
  * Any other table is left as it was.
@@ -181,8 +184,17 @@ export function tablesForPandoc(text) {
       for (const s of specs(format[r]).slice(0, cols)) out.push(/^[sS]/.test(s) ? (last ? '' : out[out.length - 1] ?? '') : cells[k++] ?? '');
       return out;
     });
+    // Without spans each upper label belongs to the one column under it, as one phrase read top
+    // to bottom ("Unicode" over "Default"): the cell keeps its rows, as lines of one text block.
+    // With spans an upper label groups the columns under it: "Obsolete (termcap Code)".
+    const stacked = rule > 1 && !format.slice(0, rule).some((f) => specs(f).some((s) => /^[sS]/.test(s)));
     const header = Array.from({ length: cols }, (_, c) => {
       const own = labels[labels.length - 1][c] ?? '';
+      // Every cell keeps all its rows, an empty one too, so each label sits on the bottom line.
+      if (stacked) {
+        const rows = labels.map((l) => l[c] ?? '');
+        return `T{\n${rows.map((r) => r || '\\&').join('\n.br\n')}\nT}`;
+      }
       const over = [...new Set(labels.slice(0, -1).map((l) => l[c]).filter(Boolean))].join(' ');
       return over ? `${own} (${over})`.trim() : own;
     });
