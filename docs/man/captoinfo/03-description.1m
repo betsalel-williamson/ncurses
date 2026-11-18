@@ -21,16 +21,20 @@ If no
 .IR file s
 are specified,
 .B \%@CAPTOINFO@
-interprets the content of the environment variable
-.I \%TERMCAP
-as a file name,
-and extracts only the entry for the terminal type named
+translates only the entry for the terminal type named
 in the environment variable
-.I TERM
-from it.
-If the environment variable
+.IR TERM ","
+reading it from the environment variable
+.IR \%TERMCAP "."
+If the value of
 .I \%TERMCAP
-is not set,
+names an existing file,
+.B \%@CAPTOINFO@
+reads that file;
+otherwise it takes the value as the
+.I termcap
+entry itself.
+If either variable is not set,
 .B \%@CAPTOINFO@
 reads
 .IR \%/etc/termcap "."
@@ -74,6 +78,7 @@ Cb Cb C  Lb.
 \f(BItermcap\fP Code
 Obsolete	Standard	Origin	\f(BIterminfo\fP capability
 _
+sb	sr	BSD	scroll_reverse
 BO	mr	AT&T	enter_reverse_mode
 CI	vi	AT&T	cursor_invisible
 CV	ve	AT&T	cursor_normal
@@ -82,6 +87,8 @@ EE	me	AT&T	exit_attribute_mode
 FE	LF	AT&T	label_on
 FL	LO	AT&T	label_off
 XS	mk	AT&T	enter_secure_mode
+CF	vi	XENIX	cursor_invisible
+CO	ve	XENIX	cursor_normal
 EN	@7	XENIX	key_end
 GE	ae	XENIX	exit_alt_charset_mode
 GS	as	XENIX	enter_alt_charset_mode
@@ -101,6 +108,7 @@ KE	F4	Tektronix	key_f14
 KF	F5	Tektronix	key_f15
 BC	Sb	Tektronix	set_background
 FC	Sf	Tektronix	set_foreground
+kq	%1	IBM	key_help
 HS	mh	IRIX	enter_dim_mode
 .TE
 .PP

@@ -4,4 +4,8 @@ request code.
 .br
 The function \fBmenu_request_by_name\fP searches in the name-table for a request
 with the given name and returns its request code.
-Otherwise E_NO_MATCH is returned.
+A request's name is its constant without the
+.B REQ_
+prefix, such as
+.BR NEXT_ITEM ","
+and the search ignores case.
