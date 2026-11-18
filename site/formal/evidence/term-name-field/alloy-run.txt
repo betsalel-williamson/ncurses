@@ -1,0 +1,4 @@
+00. check NameNeverExceeds128      0    1/1     SAT
+01. check LimitIs511               0       UNSAT
+02. check LongerNamesMisalign      0       UNSAT
+03. run   Witness200               0    1/1     SAT

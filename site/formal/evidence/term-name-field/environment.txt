@@ -1,0 +1,9 @@
+# Environment, 2026-11-18T19:56:44Z
+source commit: 1998d6d82168b74b25c6828c33b51400d6d84f6f (master a5f9280 + #82)
+tic: ncurses 6.6.20261107
+infocmp: ncurses 6.6.20261107
+configure: --without-ada --without-cxx-binding --without-manpages --without-tests --disable-db-install
+java: openjdk version "21.0.12.1" 2026-08-18
+alloy jar sha256: 6037cbeee0e8423c1c468447ed10f5fcf2f2743a2ffc39cb1c81f2905c0fdb9d
+uname: Linux 6.18.44-fc-v595 x86_64
+ncurses sources changed since the build's tree: 0 lines of diffstat (0 = identical)

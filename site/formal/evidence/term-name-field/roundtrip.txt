@@ -1,0 +1,10 @@
+$ site/formal/term-name-field-roundtrip.sh $BIN
+128: read back a 128-character name; am,cols#80,bel=^G,clear=\E[H,
+129: read back a 129-character name; am,cols#80,bel=^G,clear=\E[H,
+200: read back a 200-character name; am,cols#80,bel=^G,clear=\E[H,
+400: read back a 400-character name; am,cols#80,bel=^G,clear=\E[H,
+510: read back a 510-character name; am,cols#80,bel=^G,clear=\E[H,
+511: read back a 511-character name; am,cols#80,bel=^G,clear=\E[H,
+512: not readable: "DB/t/t512": corrupt data found in convert_strings
+513: not readable: "DB/t/t513": corrupt data found in convert_strings
+600: not readable: "DB/t/t600": corrupt data found in convert_strings
