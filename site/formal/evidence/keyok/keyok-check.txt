@@ -1,0 +1,20 @@
+ncurses 6.6.20261107
+
+before newterm                               keyok(265, FALSE) = ERR
+xterm kf1 = \EOP, KEY_F(1) = 265, KEY_F(2) = 266
+
+1. enable a key that is enabled              keyok(266, TRUE) = ERR
+2. key code 0                                keyok(0, FALSE) = ERR
+3. negative key code                         keyok(-1, FALSE) = ERR
+4. a key code with no binding                keyok(1500, FALSE) = ERR
+
+Bind \E[zz1 to KEY_F(1) too: define_key = OK
+    has_key(265) = 1; keybound: "\EOP" "\E[zz1"
+5. disable KEY_F(1)                          keyok(265, FALSE) = OK
+    has_key(265) = 0; keybound: none
+    wgetch on \EOP while disabled: ESC 'O' 'P'
+6. disable it again                          keyok(265, FALSE) = ERR
+7. enable it                                 keyok(265, TRUE) = OK
+    has_key(265) = 1; keybound: "\EOP" "\E[zz1"
+    wgetch on \EOP \E[zz1 after enabling: 265 265
+8. enable it again                           keyok(265, TRUE) = ERR

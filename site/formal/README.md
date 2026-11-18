@@ -88,3 +88,14 @@ keybound for each count, and feeds them all to wgetch:
 ```
 
 `evidence/keybound/` holds its output with ncurses 6.6.20261107.
+
+## keyok(3X)
+
+`keyok-check.c` disables and re-enables function keys, including one with two bindings, and
+reports what keyok returns, what keybound and has_key report, and what wgetch reads:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst keyok
+```
+
+`evidence/keyok/` holds its output with ncurses 6.6.20261107.
