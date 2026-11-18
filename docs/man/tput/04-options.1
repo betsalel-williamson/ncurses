@@ -8,16 +8,12 @@ The capabilities must be passed to
 from the standard
 input stream instead of from the command line
 (see section \*(``EXAMPLES\*('' below).
-Only one
-.I cap-code
-is allowed per line.
+A line may hold more than one
+.IR cap-code ","
+each followed by its parameters.
 The
 .B \-S
-option changes the meanings of the
-.B 0
-and
-.B 1
-exit statuses
+option changes the meanings of the exit statuses
 (see section \*(``EXIT STATUS\*('' below).
 .IP
 Some capabilities use string parameters rather than numeric ones.
