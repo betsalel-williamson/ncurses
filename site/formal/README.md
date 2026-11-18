@@ -53,3 +53,16 @@ above, then:
 
 `evidence/tput-clear-tabs/` holds its output with ncurses 6.6.20261107, and a table of each claim,
 its result and the code behind it.
+
+## define_key(3X)
+
+`define-key-check.c` calls define_key in each case its page covers, and some it does not, and
+prints what it returns and what key_defined, has_key and wgetch report after. `define-key-check.sh`
+builds it against an install of this tree, which also needs `make install.includes`, and runs it
+with an xterm entry compiled from `misc/terminfo.src`:
+
+```sh
+/path/to/ncurses/site/formal/define-key-check.sh /tmp/nc/inst
+```
+
+`evidence/define-key/` holds its output with ncurses 6.6.20261107.
