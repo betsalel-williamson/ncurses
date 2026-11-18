@@ -15,14 +15,14 @@
     }
   ],
   "session": {
-    "asOf": "2026-11-18T20:00:34Z",
+    "asOf": "2026-11-18T20:10:33Z",
     "started": "2026-11-12T16:50:27Z",
     "inputTokens": 146045,
     "outputTokens": 4228980,
     "cacheReadTokens": 1417053082,
     "cacheWriteTokens": 18158271,
     "costUsd": 476.87,
-    "agentActiveSeconds": 78211,
+    "agentActiveSeconds": 78809,
     "reviewerSeconds": 33117,
     "reviewerMessages": 156
   }
