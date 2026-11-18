@@ -1968,6 +1968,30 @@
     "rows": 425,
     "originalErrors": 158
    }
+  },
+  {
+   "pr": 84,
+   "merge": "df02522ca40f",
+   "mergedAt": "2026-11-18T12:29:57-08:00",
+   "guides": {
+    "total": 15,
+    "sharded": 15,
+    "reviewed": 15
+   },
+   "man": {
+    "total": 133,
+    "sharded": 133,
+    "reviewed": 6
+   },
+   "contributor": {
+    "total": 4,
+    "sharded": 4,
+    "reviewed": 4
+   },
+   "errata": {
+    "rows": 432,
+    "originalErrors": 161
+   }
   }
  ]
 }
