@@ -3,12 +3,18 @@
 returns the first key code to which
 .I definition
 is bound if any exists.
-If none does,
+If a bound definition is a prefix of
+.IR definition ","
+.B \%key_defined
+returns that definition's key code.
+If neither is so,
 it returns
 .BR 0 "."
 If
 .I definition
-is a prefix of another bound definition,
+is a prefix of another bound definition
+or is
+.IR NULL ","
 .B \%key_defined
 returns
 .BR \-1 "."

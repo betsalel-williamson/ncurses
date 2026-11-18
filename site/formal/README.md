@@ -57,12 +57,23 @@ its result and the code behind it.
 ## define_key(3X)
 
 `define-key-check.c` calls define_key in each case its page covers, and some it does not, and
-prints what it returns and what key_defined, has_key and wgetch report after. `define-key-check.sh`
+prints what it returns and what key_defined, has_key and wgetch report after. `key-check.sh`
 builds it against an install of this tree, which also needs `make install.includes`, and runs it
 with an xterm entry compiled from `misc/terminfo.src`:
 
 ```sh
-/path/to/ncurses/site/formal/define-key-check.sh /tmp/nc/inst
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst define-key
 ```
 
 `evidence/define-key/` holds its output with ncurses 6.6.20261107.
+
+## key_defined(3X)
+
+`key-defined-check.c` asks key_defined about bound strings, unbound ones, prefixes of bound
+strings, and bound strings with more after them. Run it with the same runner:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst key-defined
+```
+
+`evidence/key-defined/` holds its output with ncurses 6.6.20261107.

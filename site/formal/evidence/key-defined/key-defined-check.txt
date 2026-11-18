@@ -1,0 +1,15 @@
+ncurses 6.6.20261107
+
+before newterm                             key_defined("\EOP") = -1
+xterm kf1 = \EOP, KEY_F(1) = 265
+
+1. kf1's string                            key_defined("\EOP") = 265
+2. a string bound by define_key            key_defined("\E[99~") = 1000
+3. an unbound string                       key_defined("\E[98~") = 0
+4. a prefix of bound strings               key_defined("\E[") = -1
+5. the escape character alone              key_defined("\E") = -1
+6. kf1's string plus one char              key_defined("\EOPx") = 265
+7. \E[99~ plus one char                    key_defined("\E[99~x") = 1000
+8. empty string                            key_defined("") = 0
+9. NULL                                    key_defined(NULL) = -1
+10. a string starting with an unused char  key_defined("zz") = 0
