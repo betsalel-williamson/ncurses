@@ -19,6 +19,7 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'nod
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderErrata } from './errata.mjs';
+import { FILL, fill, manSources, toMarkdown } from './man-render.mjs';
 import { findPrograms } from './examples.mjs';
 import { linkProse } from '../prose-links.mjs';
 
@@ -121,69 +122,10 @@ for (const g of GUIDES) {
 }
 
 // ---------- man pages ----------
-const dist = readFileSync(join(repo, 'dist.mk'), 'utf8');
-const ver = (k) => new RegExp(`^${k}\\s*=\\s*(\\S+)`, 'm').exec(dist)[1];
-const FILL = {
-  NCURSES_MAJOR: ver('NCURSES_MAJOR'),
-  NCURSES_MINOR: ver('NCURSES_MINOR'),
-  NCURSES_PATCH: ver('NCURSES_PATCH'),
-  TERMINFO: '/usr/share/terminfo',
-  TERMINFO_DIRS: '/usr/share/terminfo',
-  DATADIR: '/usr/share',
-  NCURSES_OSPEED: 'short',
-};
-const fill = (t) => t.replace(/@([A-Z_]+)@/g, (m, k) => FILL[k] ?? k.toLowerCase());
-
-/**
- * Replace each \\fP ("previous font") with the font it returns to. pandoc's man reader tracks
- * the previous font wrongly, so \\fB…\\fP and \\fI…\\fP left bold running on, and the pages
- * showed stray ** around page references and after italic words. Fonts reset at each
- * paragraph or section macro, as in the man macros.
- */
-const PARAGRAPH = /^\.(SH|SS|PP|LP|P|TP|IP|HP|bP|TH)\b/;
-function resolvePreviousFont(text) {
-  let cur = 'R';
-  let prev = 'R';
-  return text
-    .split('\n')
-    .map((line) => {
-      if (PARAGRAPH.test(line)) cur = prev = 'R';
-      if (line.startsWith('.\\"')) return line;
-      return line.replace(/\\f(\(..|\[[^\]]*\]|.)/g, (m, f) => {
-        let font = f.replace(/^\(|^\[|\]$/g, '') || 'P';
-        if (font === 'P') font = prev;
-        prev = cur;
-        cur = font;
-        return font.length === 1 ? `\\f${font}` : `\\f[${font}]`;
-      });
-    })
-    .join('\n');
-}
-
-/**
- * Rewrite troff that means the same but that pandoc's man reader can't parse: a line ending in
- * a backslash continues on the next line (it stopped pandoc inside a table in curs_terminfo),
- * and a table's format lines can name a two-letter font as f(BI), which pandoc reads only as
- * fBI (infocmp).
- */
-function forPandoc(text) {
-  return text
-    .replace(/(^|[^\\])\\\n/g, '$1')
-    .replace(/(^\.TS\n(?:.*;\n)?)([\s\S]*?\.\n)/gm, (m, head, format) => head + format.replace(/f\((..)\)/g, 'f$1'));
-}
-
 const manDir = join(repo, 'man');
 const tmp = join(site, '.generated');
 mkdirSync(tmp, { recursive: true });
-const sources = readdirSync(manDir)
-  .filter((f) => /\.(3x|1|1m|5|7)$/.test(f))
-  .map((f) => ({ file: f, text: readFileSync(join(manDir, f), 'utf8') }));
-const terminfo = execFileSync(
-  'sh',
-  ['MKterminfo.sh', 'terminfo.head', '../include/Caps', '../include/Caps-ncurses', 'terminfo.tail'],
-  { cwd: manDir, encoding: 'utf8', maxBuffer: 64 << 20 },
-);
-sources.push({ file: 'terminfo.5', text: terminfo });
+const sources = manSources(manDir);
 
 const pages = sources.map(({ file, text }) => {
   const dot = file.lastIndexOf('.');
@@ -192,12 +134,7 @@ const pages = sources.map(({ file, text }) => {
   let md;
   let failed = false;
   try {
-    md = execFileSync('pandoc', ['-f', 'man', '-t', 'gfm', '--wrap=none', '--lua-filter', join(site, 'scripts/man-inlines.lua')], {
-      input: resolvePreviousFont(forPandoc(fill(text))),
-      encoding: 'utf8',
-      maxBuffer: 64 << 20,
-      stdio: ['pipe', 'pipe', 'pipe'],
-    });
+    md = toMarkdown(text);
   } catch {
     failed = true;
     // A fence longer than any run of backticks in the page (troff quotes with ``).
