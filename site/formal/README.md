@@ -39,3 +39,17 @@ make && make install.progs install.libs
 With ncurses 6.6.20261107, names of up to 511 characters read back whole with every capability.
 At 512 characters or more, tic writes an entry without complaint, but infocmp reports "corrupt
 data found in convert_strings" and `tput -T` reports an unknown terminal.
+
+## tput(1), clear(1) and tabs(1)
+
+`utilities-check.sh` runs tput, clear and tabs built from this tree against what their pages
+say, and prints each command's exit status, output and errors. It compiles the entries it needs
+from `misc/terminfo.src`, so the system's terminal database plays no part. Build the programs as
+above, then:
+
+```sh
+/path/to/ncurses/site/formal/utilities-check.sh /tmp/nc/inst/bin
+```
+
+`evidence/tput-clear-tabs/` holds its output with ncurses 6.6.20261107, and a table of each claim,
+its result and the code behind it.

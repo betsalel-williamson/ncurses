@@ -1,0 +1,13 @@
+# Environment, 2026-11-18T20:08:49Z
+source commit: a422f86fe6631e311acdf2bc384f748e930ac27e (master 1f788f2 + the tput(1) change)
+tic: ncurses 6.6.20261107
+tput: ncurses 6.6.20261107
+clear: ncurses 6.6.20261107
+tabs: ncurses 6.6.20261107
+configure: --without-ada --without-cxx-binding --without-manpages --without-tests --disable-db-install
+terminfo entries: compiled by the script from misc/terminfo.src, sha256 efd13b671985d9765fa767a4f633091291c9a0e8f574240b277e3cac466af92a
+setsid: setsid from util-linux 2.39.3
+date: date (GNU coreutils) 9.4
+sh: dash
+uname: Linux 6.18.44-fc-v595 x86_64
+ncurses sources changed since origin/master: 0 lines of diff (0 = identical)

@@ -1,0 +1,12 @@
+# 282 is 0432, the legacy magic number. tic warnings are on the lines starting with the source file.
+"e511.src", line 1, col 513, terminal 't511': older tic versions may treat the description field as an alias
+$ od -An -tu2 -N4 DB/t/t511   # magic, name_size
+   282   512
+$ TERMINFO=DB tput -T t511 cols
+80
+"e512.src", line 1, col 514, terminal 't512': older tic versions may treat the description field as an alias
+$ od -An -tu2 -N4 DB/t/t512   # magic, name_size
+   282   513
+$ TERMINFO=DB tput -T t512 cols
+"DB/t/t512": corrupt data found in convert_strings
+tput: unknown terminal "t512"

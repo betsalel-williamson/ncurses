@@ -116,7 +116,11 @@ Before using a value returned on the standard output,
 the application should test
 .BR \%@TPUT@ 's
 exit status
-to be sure it is 0;
+to be sure it is 0.
+The status is 0 for a numeric capability even when it is absent,
+so test for a value of
+.B \-1
+as well;
 see section \*(``EXIT STATUS\*('' below.
 .SS Operands
 Generally,
@@ -378,16 +382,12 @@ The capabilities must be passed to
 from the standard
 input stream instead of from the command line
 (see section \*(``EXAMPLES\*('' below).
-Only one
-.I cap-code
-is allowed per line.
+A line may hold more than one
+.IR cap-code ","
+each followed by its parameters.
 The
 .B \-S
-option changes the meanings of the
-.B 0
-and
-.B 1
-exit statuses
+option changes the meanings of the exit statuses
 (see section \*(``EXIT STATUS\*('' below).
 .IP
 Some capabilities use string parameters rather than numeric ones.
@@ -442,13 +442,28 @@ Lb Lb
 Lb Lx.
 Status	Meaning When \-S Not Specified
 _
-0	Boolean or string capability present
-1	Boolean or numeric capability absent
-2	usage error or no terminal type specified
+0	T{
+Boolean or string capability present,
+or any numeric \%capability
+T}
+1	Boolean or string capability absent
+2	T{
+usage error,
+no terminal type specified,
+or \fBclear\fP operand and no \fBclear\fP capability
+T}
 3	unrecognized terminal type
 4	unrecognized capability code
 >4	system error (4 + \fBerrno\fP)
 .TE
+.PP
+A numeric capability gives status 0 whether or not the terminal has it;
+an absent one is written as
+.BR \-1 "."
+Given more than one operand,
+.B \%@TPUT@
+stops at the first one whose status is not 0,
+and exits with that status.
 .PP
 When the
 .B \-S
@@ -464,7 +479,14 @@ Status	Meaning When \-S Specified
 _
 0	all operands interpreted
 1	unused
-4	some operands not interpreted
+4	T{
+unrecognized capability code;
+later operands not interpreted
+T}
+>4	T{
+4 + the number of operands whose status was not 0,
+or system error (4 + \fBerrno\fP)
+T}
 .TE
 .SH ENVIRONMENT
 .B \%@TPUT@

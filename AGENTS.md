@@ -31,7 +31,7 @@ Every change to the docs' content, formatting or structure gets a row in `docs/a
 
 ## Bugs in ncurses itself
 
-When a review finds a bug in the ncurses code or data, rather than in its documentation, add it to the single tracking issue, "Bugs in ncurses found while migrating the docs". Don't open a separate issue for each bug, and don't change the ncurses sources.
+When a review finds a bug in the ncurses code or data, rather than in its documentation, add it to the single tracking issue, [#83](https://github.com/betsalel-williamson/ncurses/issues/83), "Bugs in ncurses found while migrating the docs". Don't open a separate issue for each bug, and don't change the ncurses sources.
 
 Each entry gives:
 
@@ -46,3 +46,7 @@ When the bug also makes a page wrong, the page fix gets its own errata row, whic
 ## Proofs
 
 When a claim about the code is easier to prove than to argue, such as a limit, a boundary or a state machine, put a model in `site/formal/` and list its commands and expected results in `site/formal/README.md`. Models use Alloy 6.2.0, the version Merlon Docs pins. Pair each model with an executable check that runs the real programs built from this tree.
+
+## Evidence
+
+A claim that work was done is not evidence. Commit the raw output of every check behind a finding, under `site/formal/evidence/<topic>/`, with an `environment.txt` giving the versions, the source commit and any tool checksums. Post the same output in the pull request, and link it from the errata row or the tracking issue. Strip local paths and anything personal before committing.

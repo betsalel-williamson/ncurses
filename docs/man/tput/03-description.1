@@ -51,7 +51,11 @@ Before using a value returned on the standard output,
 the application should test
 .BR \%@TPUT@ 's
 exit status
-to be sure it is 0;
+to be sure it is 0.
+The status is 0 for a numeric capability even when it is absent,
+so test for a value of
+.B \-1
+as well;
 see section \*(``EXIT STATUS\*('' below.
 .SS Operands
 Generally,
