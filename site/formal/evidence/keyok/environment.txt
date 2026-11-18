@@ -1,5 +1,5 @@
-# Environment, 2026-11-18T20:51:29Z
-source commit: 02cda81b703d703d0c7a41cc710dcd5b5de614db (master df02522 + #85 + #86 + #88 + the keyok(3X) change)
+# Environment, 2026-11-18T22:08:22Z
+source commit: 8fccc9cbcee1b5d7b09adbd679186f728f3e7c19 (master + #86 + #88 + the keyok(3X) review; rerun, output unchanged)
 library: 6.6.20261107 (libncursesw.a, static)
 tic: ncurses 6.6.20261107
 configure: --without-ada --without-cxx-binding --without-manpages --without-tests --disable-db-install
