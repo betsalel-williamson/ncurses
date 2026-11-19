@@ -119,14 +119,20 @@ but the input character reading function can report only one key code.
 Most
 .I curses
 implementations
-(including
-.IR \%ncurses )
 load key definitions in the order
 they appear in the
 .B \%strfnames
 array of string capability names;
 see \fB\%term_variables\fP(3X).
-.\" ncurses/tinfo/parse_entry.c:lookup_fullname, I think --GBR
+.I \%ncurses
+instead loads them in the order of their key code names,
+sorted as text
+.RB ( \%KEY_A1 ,
+.BR \%KEY_A3 ,
+.BR \%KEY_B2 ,
+.BR \%KEY_BACKSPACE ,
+\&...).
+.\" ncurses/Makefile.in sorts keys.list; ncurses/tinfo/init_keytry.c loads it in that order
 The
 .I last
 capability read using a particular definition
