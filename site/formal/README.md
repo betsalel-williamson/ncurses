@@ -57,12 +57,45 @@ its result and the code behind it.
 ## define_key(3X)
 
 `define-key-check.c` calls define_key in each case its page covers, and some it does not, and
-prints what it returns and what key_defined, has_key and wgetch report after. `define-key-check.sh`
+prints what it returns and what key_defined, has_key and wgetch report after. `key-check.sh`
 builds it against an install of this tree, which also needs `make install.includes`, and runs it
 with an xterm entry compiled from `misc/terminfo.src`:
 
 ```sh
-/path/to/ncurses/site/formal/define-key-check.sh /tmp/nc/inst
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst define-key
 ```
 
 `evidence/define-key/` holds its output with ncurses 6.6.20261107.
+
+## key_defined(3X)
+
+`key-defined-check.c` asks key_defined about bound strings, unbound ones, prefixes of bound
+strings, and bound strings with more after them. Run it with the same runner:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst key-defined
+```
+
+`evidence/key-defined/` holds its output with ncurses 6.6.20261107.
+
+## keybound(3X)
+
+`keybound-check.c` binds several strings to one key code in a known order, reads them back with
+keybound for each count, and feeds them all to wgetch:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst keybound
+```
+
+`evidence/keybound/` holds its output with ncurses 6.6.20261107.
+
+## keyok(3X)
+
+`keyok-check.c` disables and re-enables function keys, including one with two bindings, and
+reports what keyok returns, what keybound and has_key report, and what wgetch reads:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst keyok
+```
+
+`evidence/keyok/` holds its output with ncurses 6.6.20261107.

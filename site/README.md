@@ -177,7 +177,7 @@ A pull request can restore caches saved only on its own branch or on `master`. W
 
 ## Manual pages: troff checks
 
-The manual pages are troff, and their review keeps two things apart: what a page says, which is reviewed the same way as every other document (claims checked against the library, an errata row for each correction, the page's row in `data/migration-units.csv`), and the troff itself, which only these pages need.
+The manual pages are troff, and their review keeps two things apart: what a page says, which is reviewed the same way as every other document (claims checked against the library, an errata row for each correction, the page's row in `data/migration-units.csv`, whose `evidence` column names the check output when the page needed no change), and the troff itself, which only these pages need.
 
 - **`scripts/man-render.mjs`** turns a page's source into the Markdown the site shows: it fills the autoconf placeholders, takes the branch of each `.ie`/`.if` that groff takes (pandoc's man reader skips conditionals, and with them the pages' quote strings), and runs pandoc. `sync.mjs` builds the site's pages with it.
 - **`node site/scripts/man-check.mjs lint`** runs `mandoc -T lint -W style`, `groff -t -man -ww -z` and pandoc's man reader on every page. Each page's messages today are in `data/man-lint-baseline.json`, without line numbers. CI fails on a new message, and on one that went away while the baseline still lists it; `man-check.mjs baseline` rewrites it. pandoc's messages matter as much as the linters': a table or string pandoc skips is text missing from the site.
