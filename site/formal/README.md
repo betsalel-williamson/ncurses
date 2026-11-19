@@ -99,3 +99,15 @@ reports what keyok returns, what keybound and has_key report, and what wgetch re
 ```
 
 `evidence/keyok/` holds its output with ncurses 6.6.20261107.
+
+## curs_inopts(3X)
+
+`curs-inopts-check.c` runs the input options after `setupterm` alone and after `newterm`, tries
+halfdelay's range, reads an invalid escape sequence with keypad on, and reads two strings that
+two standard key capabilities share, from the `dupkeys` entry in `curs-inopts-check.ti`:
+
+```sh
+/path/to/ncurses/site/formal/key-check.sh /tmp/nc/inst curs-inopts
+```
+
+`evidence/curs-inopts/` holds its output with ncurses 6.6.20261107.

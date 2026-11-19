@@ -170,7 +170,9 @@ to indicate the availability of a function key code in its
 .I wch
 parameter.)
 If the sequence is invalid,
-the input character reading function returns only its last character.
+the input character reading function returns its characters
+one per call,
+in the order they occurred in the input.
 If disabled
 .RI ( bf
 is

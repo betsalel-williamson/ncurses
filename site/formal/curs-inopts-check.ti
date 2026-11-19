@@ -1,0 +1,5 @@
+# Test entry for curs-inopts-check.c: two pairs of standard key capabilities with the same string.
+# In strfnames order kbs comes before ka1 and khome before kc1.
+dupkeys|two keys with one string,
+	cols#80, lines#24,
+	ka1=\E[x, kbs=\E[x, kc1=\E[y, khome=\E[y,
