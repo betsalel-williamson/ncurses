@@ -22,5 +22,12 @@ test('the named evidence must come from that pull request', () => {
 test('a review that changed the unit needs an errata row from that pull request', () => {
   const changed = ['docs/man/keyok/04-return-value.3x'];
   assert.deepEqual(unitProblems(unit, changed, [row('docs/man/keyok/04-return-value.3x')]), []);
-  assert.match(unitProblems(unit, changed, [row('docs/man/keyok/04-return-value.3x', '89')])[0], /no row from that pull request/);
+  assert.match(unitProblems(unit, changed, [row('docs/man/keyok/04-return-value.3x', '89')])[0], /no row under docs\/man\/keyok/);
+});
+
+test('a stack merged through one pull request counts the rows its merge brought in', () => {
+  const changed = ['docs/man/keyok/04-return-value.3x'];
+  const stacked = { ...row('docs/man/keyok/04-return-value.3x', '88'), brought: true };
+  assert.deepEqual(unitProblems(unit, changed, [stacked]), []);
+  assert.equal(unitProblems(unit, changed, [{ ...stacked, brought: false }]).length, 1);
 });
