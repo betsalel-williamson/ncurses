@@ -44,6 +44,18 @@ Each entry gives:
 
 When the bug also makes a page wrong, the page fix gets its own errata row, which links to the issue. Report a bug to the maintainer only with the owner's go-ahead.
 
+## Changing a page's wording
+
+We change the docs to match the code, never the code to match the docs. The manual pages carry a very high bar: change one only when it states something the library demonstrably contradicts, and a program written by its text would behave differently from what the reader expects. A statement that is imprecise but true in the cases programs normally meet stays as it is. Before proposing new wording for a passage:
+
+1. **Define its terms from the pages themselves.** Find where the ncurses pages define each term the passage uses, such as TERMINAL in curs_terminfo(3X) and SCREEN in curs_initscr(3X), and use those terms. Don't coin new ones.
+2. **Show the contradiction.** Link the code with GitHub permalinks pinned to a commit, each on its own line and covering the whole function, so the logic can be followed step by step. Pair it with a test program that runs the library and shows the behavior.
+3. **Make the smallest edit.** Keep the page's sentence and change only the words that are wrong. Don't drop claims you can't check, such as claims about other implementations, and don't add parentheticals, new cases or filler.
+4. **Reuse a sibling page's wording** when another page already describes the same behavior correctly.
+5. **Say who the old text misleads,** and in what situation. If no reader would be misled, leave the passage alone.
+
+In the pull request, give each change its Was, Now and Why, with the permalinks and the test case behind it.
+
 ## Proofs
 
 When a claim about the code is easier to prove than to argue, such as a limit, a boundary or a state machine, put a model in `site/formal/` and list its commands and expected results in `site/formal/README.md`. Models use Alloy 6.2.0, the version Merlon Docs pins. Pair each model with an executable check that runs the real programs built from this tree.
