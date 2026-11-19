@@ -1,0 +1,9 @@
+# Environment, 2026-11-19T18:30:23Z
+source commit: 109761ac80951d37a55ee1a3714fbf41d9de5b37 (master d2d8919 + #92's record + the curs_inopts(3X) change)
+library: 6.6.20261107 (libncursesw.a, static)
+tic: ncurses 6.6.20261107
+configure: --without-ada --without-cxx-binding --without-manpages --without-tests --disable-db-install
+cc: cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+terminfo entries: xterm, compiled by the script from misc/terminfo.src, sha256 efd13b671985d9765fa767a4f633091291c9a0e8f574240b277e3cac466af92a; dupkeys from site/formal/curs-inopts-check.ti
+uname: Linux 6.18.44-fc-v653 x86_64
+ncurses sources changed since origin/master: 0 lines of diff (0 = identical)

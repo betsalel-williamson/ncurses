@@ -1,0 +1,49 @@
+ncurses 6.6.20261107
+
+1. before setupterm
+    is_cbreak() = -1, is_echo() = -1, is_nl() = -1, is_raw() = -1
+2. after setupterm("xterm") on a pseudo-terminal, with no screen
+    is_cbreak() = -1, is_echo() = -1, is_nl() = -1, is_raw() = -1
+    cbreak()                 = ERR
+    nocbreak()               = ERR
+    echo()                   = ERR
+    noecho()                 = ERR
+    nl()                     = ERR
+    nonl()                   = ERR
+    raw()                    = ERR
+    noraw()                  = ERR
+    halfdelay(5)             = ERR
+    intrflush(NULL, TRUE)    = ERR
+    meta(NULL, TRUE)         = ERR
+    typeahead(-1)            = ERR
+    is_cbreak() = -1, is_echo() = -1, is_nl() = -1, is_raw() = -1
+3. after newterm("xterm") on a file, so the terminal-mode calls have no terminal
+    is_cbreak() = 0, is_echo() = 1, is_nl() = 1, is_raw() = 0
+    cbreak()                 = ERR
+    nocbreak()               = ERR
+    echo()                   = OK
+    noecho()                 = OK
+    nl()                     = OK
+    nonl()                   = OK
+    raw()                    = ERR
+    noraw()                  = ERR
+    halfdelay(5)             = OK
+    intrflush(NULL, TRUE)    = ERR
+    meta(NULL, TRUE)         = OK
+    typeahead(-1)            = OK
+4. halfdelay's range, after newterm
+    halfdelay(0)             = ERR
+    halfdelay(1)             = OK
+    halfdelay(255)           = OK
+    halfdelay(256)           = ERR
+    halfdelay(-1)            = ERR
+5. NULL windows
+    keypad(NULL, TRUE)       = ERR
+    nodelay(NULL, TRUE)      = ERR
+    notimeout(NULL, TRUE)    = ERR
+6. keypad on, xterm, an invalid sequence: \E[zzq, then \EOzq
+    wgetch on \E[zzq: ESC '[' 'z' 'z' 'q'
+    wgetch on \EOzq: ESC 'O' 'z' 'q'
+7. keypad on, dupkeys: kbs and ka1 are both \E[x, khome and kc1 are both \E[y
+    strfnames order: kbs (263) before ka1, khome before kc1
+    wgetch on \E[x \E[y: 263 (KEY_BACKSPACE) 262 (KEY_HOME)
