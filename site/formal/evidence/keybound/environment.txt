@@ -1,0 +1,9 @@
+# Environment, 2026-11-18T20:49:32Z
+source commit: d804d8a2ad3a40ddbb120402763ab5298811ecbf (master df02522 + #85 + #86 + the keybound(3X) change)
+library: 6.6.20261107 (libncursesw.a, static)
+tic: ncurses 6.6.20261107
+configure: --without-ada --without-cxx-binding --without-manpages --without-tests --disable-db-install
+cc: cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+terminfo entries: xterm, compiled by the script from misc/terminfo.src, sha256 efd13b671985d9765fa767a4f633091291c9a0e8f574240b277e3cac466af92a
+uname: Linux 6.18.44-fc-v595 x86_64
+ncurses sources changed since origin/master: 0 lines of diff (0 = identical)

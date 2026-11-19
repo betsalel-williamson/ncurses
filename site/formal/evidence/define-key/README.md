@@ -1,6 +1,6 @@
 # Evidence: define_key(3X)
 
-The raw output of `../../define-key-check.sh`, run on 2026-11-18 against the static library built
+The raw output of `../../key-check.sh`, run on 2026-11-18 against the static library built
 from this tree. `environment.txt` gives the versions and the source commit.
 
 | Case | Result | Code |

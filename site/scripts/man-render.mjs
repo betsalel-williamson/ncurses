@@ -156,7 +156,7 @@ export function expandStrings(text) {
  * Any other table is left as it was.
  */
 export function tablesForPandoc(text) {
-  return text.replace(/^\.TS\n([\s\S]*?)^\.TE$/gm, (whole, body) => {
+  return mergeContinuedTables(text).replace(/^\.TS\n([\s\S]*?)^\.TE$/gm, (whole, body) => {
     const lines = body.replace(/\n$/, '').split('\n');
     let i = 0;
     if (lines[0]?.trim().endsWith(';')) i = 1;
@@ -172,7 +172,11 @@ export function tablesForPandoc(text) {
       return `.EX\n${data.join('\n')}\n.EE`;
     const rule = data.findIndex((l) => /^[_=]$/.test(l.trim()));
     const spans = (r) => specs(format[r] ?? '').some((s) => /^[sS]/.test(s));
-    if (rule < 1 || rule >= format.length || (rule === 1 && !spans(0))) return whole;
+    // A rule between body rows groups them on the printed page; a markdown table has no such
+    // line, and pandoc shows it as a row of its own, so the rows after the header drop it.
+    const kept = rule < 0 ? data : [...data.slice(0, rule + 1), ...data.slice(rule + 1).filter((l) => !/^[_=]$/.test(l.trim()))];
+    if (rule < 1 || rule >= format.length || (rule === 1 && !spans(0)))
+      return kept.length === data.length ? whole : ['.TS', ...lines.slice(0, i), ...kept, '.TE'].join('\n');
     const cols = specs(format[format.length - 1]).length;
     // Each header row's label for every column.
     const labels = data.slice(0, rule).map((row, r) => {
@@ -202,7 +206,33 @@ export function tablesForPandoc(text) {
     const rows = [...format.slice(rule - 1, -1), format[format.length - 1]];
     rows[0] = specs(rows[0]).map((s) => (/^[sS]/.test(s) ? 'L' : s)).join(' ');
     rows[rows.length - 1] += '.';
-    return ['.TS', ...lines.slice(0, lines[0]?.trim().endsWith(';') ? 1 : 0), ...rows, header.join('\t'), ...data.slice(rule), '.TE'].join('\n');
+    return ['.TS', ...lines.slice(0, lines[0]?.trim().endsWith(';') ? 1 : 0), ...rows, header.join('\t'), ...kept.slice(rule), '.TE'].join('\n');
+  });
+}
+
+/**
+ * Join a table to the one before it when the page ends one and starts the next on the following
+ * line, with the same number of columns and no header of its own. MKterminfo.sh splits each
+ * capability table of terminfo(5) into such pieces, which pandoc would show as separate tables,
+ * each after the first with an empty header row and columns of its own widths.
+ */
+export function mergeContinuedTables(text) {
+  const cols = (f) => f.trim().replace(/\.\s*$/, '').split(/\s+/).filter(Boolean).length;
+  // A table's option line (ending in ;) and its format lines, up to the one ending in a period.
+  const head = (lines) => {
+    let i = lines[0]?.trim().endsWith(';') ? 1 : 0;
+    while (i < lines.length && !/\.\s*$/.test(lines[i])) i++;
+    return i + 1;
+  };
+  return text.replace(/^\.TE\n\.TS\n([\s\S]*?)^\.TE$/gm, (whole, body, offset) => {
+    const before = `\n${text.slice(0, offset)}`.lastIndexOf('\n.TS\n');
+    const prior = text.slice(before + 4, offset).split('\n');
+    const lines = body.replace(/\n$/, '').split('\n');
+    const n = head(lines);
+    const priorFormat = prior[head(prior) - 1] ?? '';
+    const ownHeader = lines.slice(n, n + 3).some((l) => /^[_=]$/.test(l.trim()));
+    if (before < 0 || ownHeader || cols(lines[n - 1]) !== cols(priorFormat)) return whole;
+    return [...lines.slice(n), '.TE'].join('\n');
   });
 }
 

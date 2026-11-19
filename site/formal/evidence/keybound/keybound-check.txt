@@ -1,0 +1,31 @@
+ncurses 6.6.20261107
+
+before newterm                       keybound(265, 0) = NULL
+xterm kf1 = \EOP, KEY_F(1) = 265
+
+terminfo only                        keybound(265, 0) = "\EOP"
+terminfo only                        keybound(265, 1) = NULL
+
+Bind three more strings to KEY_F(1), in this order:
+define_key("\E[zz1", 265) = OK
+define_key("\E[aa2", 265) = OK
+define_key("\EOz3", 265) = OK
+after the three                      keybound(265, 0) = "\EOP"
+after the three                      keybound(265, 1) = "\EOz3"
+after the three                      keybound(265, 2) = "\E[zz1"
+after the three                      keybound(265, 3) = "\E[aa2"
+after the three                      keybound(265, 4) = NULL
+
+Input \E[aa2 \EOz3 \E[zz1 \EOP; wgetch returns: 265 265 265 265
+
+Then remove the one defined last:
+define_key("\EOz3", 0) = OK
+after removing \EOz3                 keybound(265, 0) = "\EOP"
+after removing \EOz3                 keybound(265, 1) = "\E[zz1"
+after removing \EOz3                 keybound(265, 2) = "\E[aa2"
+after removing \EOz3                 keybound(265, 3) = NULL
+
+negative count                       keybound(265, -1) = NULL
+key code 0                           keybound(0, 0) = NULL
+negative key code                    keybound(-1, 0) = NULL
+unbound key code                     keybound(1500, 0) = NULL

@@ -108,3 +108,20 @@ test('tablesForPandoc keeps a header stacked without spans as lines of one cell'
   const head = 'T{\n\\&\n.br\nSymbol\nT}\tT{\nUnicode\n.br\nDefault\nT}\tT{\n\\&\n.br\nName\nT}';
   assert.equal(tablesForPandoc(src), ['.TS', 'Lb Lb Lb', 'L L L.', head, '_', 'a\tb\tc', '.TE'].join('\n'));
 });
+
+test('tablesForPandoc joins a table to the headerless piece that continues it', () => {
+  const src = ['.TS', 'center;', 'Lb Lb.', 'Name\tCode', '_', 'a\t1', '.TE', '.TS', 'center;', 'L L.', 'b\t2', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(src), ['.TS', 'center;', 'Lb Lb.', 'Name\tCode', '_', 'a\t1', 'b\t2', '.TE'].join('\n'));
+});
+
+test('tablesForPandoc keeps apart tables with different columns or their own header', () => {
+  const cols = ['.TS', 'L.', 'x', '.TE', '.TS', 'L L.', 'a\tb', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(cols), cols.replace('.TS\nL.\nx\n.TE', '.EX\nx\n.EE'));
+  const own = ['.TS', 'L L.', 'A\tB', '_', 'a\tb', '.TE', '.TS', 'L L.', 'C\tD', '_', 'c\td', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(own), own);
+});
+
+test('tablesForPandoc drops the rules between body rows', () => {
+  const src = ['.TS', 'Rb Lb', 'R L.', 'Name\tCode', '_', 'a\t1', '_', 'b\t2', '.TE'].join('\n');
+  assert.equal(tablesForPandoc(src), ['.TS', 'Rb Lb', 'R L.', 'Name\tCode', '_', 'a\t1', 'b\t2', '.TE'].join('\n'));
+});

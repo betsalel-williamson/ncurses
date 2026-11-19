@@ -2,7 +2,7 @@
  * Call define_key() in each case its manual page covers, and some it does not,
  * and print what it returns and what key_defined() and has_key() report after.
  * The executable check behind the errata rows for define_key(3X).
- * Built and run by define-key-check.sh.
+ * Built and run by key-check.sh.
  */
 #include <curses.h>
 #include <term.h>
