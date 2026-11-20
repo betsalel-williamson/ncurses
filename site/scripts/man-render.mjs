@@ -224,7 +224,9 @@ export function mergeContinuedTables(text) {
     while (i < lines.length && !/\.\s*$/.test(lines[i])) i++;
     return i + 1;
   };
-  return text.replace(/^\.TE\n\.TS\n([\s\S]*?)^\.TE$/gm, (whole, body, offset) => {
+  // The closing .TE is only looked ahead to, not taken, so that it can end the next match
+  // too: a table split in three or more pieces has a break after each.
+  return text.replace(/^\.TE\n\.TS\n([\s\S]*?)(?=^\.TE$)/gm, (whole, body, offset) => {
     const before = `\n${text.slice(0, offset)}`.lastIndexOf('\n.TS\n');
     const prior = text.slice(before + 4, offset).split('\n');
     const lines = body.replace(/\n$/, '').split('\n');
@@ -232,7 +234,7 @@ export function mergeContinuedTables(text) {
     const priorFormat = prior[head(prior) - 1] ?? '';
     const ownHeader = lines.slice(n, n + 3).some((l) => /^[_=]$/.test(l.trim()));
     if (before < 0 || ownHeader || cols(lines[n - 1]) !== cols(priorFormat)) return whole;
-    return [...lines.slice(n), '.TE'].join('\n');
+    return `${lines.slice(n).join('\n')}\n`;
   });
 }
 
